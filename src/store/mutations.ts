@@ -1,0 +1,113 @@
+import { setLocalStorage }  from "@/utils/storage";
+import { RootState, MyInfo, ChildList } from "./state";
+
+export enum RootMutationTypes {
+  UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
+  UpdateLoginNavIndex = "UpdateLoginNavIndex",
+  UpdateRegisterNavIndex = "UpdateRegisterNavIndex",
+  UpdateIsCheckProtocol = "UpdateIsCheckProtocol",
+  UpdateIsShowProtocol = "UpdateIsShowProtocol",
+}
+
+export default {
+  // 更新验证码倒计时状态
+  [RootMutationTypes.UpdateVerificationCodeNumber](
+    state: RootState,
+    verificationCodeNumber: number
+  ) {
+    state.verificationCodeNumber = verificationCodeNumber;
+  },
+  // 更新登录导航切换
+  [RootMutationTypes.UpdateLoginNavIndex](
+    state: RootState,
+    loginNavIndex: number
+  ) {
+    state.loginNavIndex = loginNavIndex;
+  },
+  // 更新注册导航切换
+  [RootMutationTypes.UpdateRegisterNavIndex](
+    state: RootState,
+    registerNavIndex: number
+  ) {
+    state.registerNavIndex = registerNavIndex;
+  },
+  // 更新是否选择协议
+  [RootMutationTypes.UpdateIsCheckProtocol](
+    state: RootState,
+    isCheckProtocol: boolean
+  ) {
+    state.isCheckProtocol = isCheckProtocol;
+  },
+  // 更新是否查看协议
+  [RootMutationTypes.UpdateIsShowProtocol](
+    state: RootState,
+    isShowProtocol: boolean
+  ) {
+    state.isShowProtocol = isShowProtocol;
+  },
+
+
+  // 更新token
+  ["updateAccessToken"](state: RootState, accessToken: string = "") {
+    if (accessToken) {
+      state.accessToken = accessToken;
+      setLocalStorage("accessToken", accessToken);
+    }
+  },
+  // 更新platform
+  ["updatePlatform"](state: RootState, platform: string = "") {
+    state.platform = platform;
+  },
+
+  
+
+  // 更新孩子列表
+  ["updateMyInfo"](state: RootState, myInfo: MyInfo) {
+    state.myInfo = myInfo;
+  },
+  // 更新孩子信息
+  ["updateChildInfo"](state: RootState, parameter: any) {
+    const { childInfo } = state;
+    const obj: any = {};
+    for (const i in parameter) {
+      obj[i] = parameter[i];
+    }
+    state.childInfo = Object.assign(childInfo, obj);
+  },
+  // 更新提分训练
+  ["updateTrainRecommend"](state: RootState, parameter: any) {
+    const { trainRecommend } = state;
+    const obj: any = {};
+    for (const i in parameter) {
+      obj[i] = parameter[i];
+    }
+    state.trainRecommend = Object.assign(trainRecommend, obj);
+  },
+  // 更新每周同步训练
+  ["updateWeeklySynchronousTrain"](state: RootState, parameter: any) {
+    const { weeklySynchronousTrain } = state;
+    const obj: any = {};
+    for (const i in parameter) {
+      obj[i] = parameter[i];
+    }
+    state.weeklySynchronousTrain = Object.assign(weeklySynchronousTrain, obj);
+  },
+  // 更新定制冲刺
+  ["updateCustomizedSprintPaper"](state: RootState, parameter: any) {
+    const { customizedSprintPaper } = state;
+    const obj: any = {};
+    for (const i in parameter) {
+      obj[i] = parameter[i];
+    }
+    state.customizedSprintPaper = Object.assign(customizedSprintPaper, obj);
+  },
+  // 更新错题本
+  ["updateWrongBook"](state: RootState, parameter: any) {
+    const { wrongBook } = state;
+    const obj: any = {};
+    for (const i in parameter) {
+      obj[i] = parameter[i];
+    }
+    state.wrongBook = Object.assign(wrongBook, obj);
+  },
+};
