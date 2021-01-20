@@ -34,7 +34,7 @@ switch(NODE_ENV) {
     // 测试环境
     BASE_API_URL = "http://testsupplierapi.hotpick.com";
     BASE_IMAGE_URL = "http://testsupplierapi.hotpick.com/upload";
-    WX_APPID = "wxbd935b8482dffb36"
+    WX_APPID = "wx483c7d15d7b94566"
     WX_REDIRECT_URL = "https://pc.hotpick.com/#/homePage"
     console.log(`
         项目环境：测试环境（${NODE_ENV}）；

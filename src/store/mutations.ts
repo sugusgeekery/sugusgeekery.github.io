@@ -1,5 +1,5 @@
 import { setLocalStorage }  from "@/utils/storage";
-import { RootState, MyInfo, ChildList } from "./state";
+import { RootState, Navigation, MyInfo, ChildList } from "./state";
 
 export enum RootMutationTypes {
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
@@ -7,6 +7,8 @@ export enum RootMutationTypes {
   UpdateRegisterNavIndex = "UpdateRegisterNavIndex",
   UpdateIsCheckProtocol = "UpdateIsCheckProtocol",
   UpdateIsShowProtocol = "UpdateIsShowProtocol",
+  UpdateNavigationIndex = "UpdateNavigationIndex",
+  UpdateNavigationList = "UpdateNavigationList",
 }
 
 export default {
@@ -44,6 +46,21 @@ export default {
     isShowProtocol: boolean
   ) {
     state.isShowProtocol = isShowProtocol;
+  },
+
+  // 更新导航下标
+  [RootMutationTypes.UpdateNavigationIndex](
+    state: RootState,
+    navigationIndex: number
+  ) {
+    state.navigationIndex = navigationIndex;
+  },
+  // 更新导航列表
+  [RootMutationTypes.UpdateNavigationList](
+    state: RootState,
+    navigationList: Navigation[]
+  ) {
+    state.navigationList = navigationList;
   },
 
 

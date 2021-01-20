@@ -20,5 +20,24 @@ export default [
       },
     ]
   },
-  
+  {
+    path: "/account",
+    name: "Account",
+    component: () => import(/* webpackChunkName: "Account" */ "@/views/account/Index.vue"),
+  },
+  {
+    path: "/bidding",
+    name: "Bidding",
+    component: () => import(/* webpackChunkName: "Bidding" */ "@/views/bidding/Index.vue"),
+  },
+  {
+    path: "/home",
+    name: "Home",
+    component: () => import(/* webpackChunkName: "Home" */ "@/views/home/Index.vue"),
+  },
+  {
+    path: "/order",
+    name: "Order",
+    component: () => import(/* webpackChunkName: "Order" */ "@/views/order/Index.vue"),
+  },
 ];

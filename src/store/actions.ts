@@ -40,7 +40,7 @@ export enum RootActionTypes {
   VerificationCodelogin = "VerificationCodelogin",
   WechatLogin = "WechatLogin",
   Register = "Register",
-  // GetWeeklyReport = "GetWeeklyReport",
+  UpdateNavigationIndex = "UpdateNavigationIndex",
 }
 
 // 提分训练，每周同步训练，对图片具体宽高度值转化成百分比数值
@@ -252,6 +252,28 @@ export default {
       throw new Error(e);
     }
   },
+
+  // 导航跳转
+  [RootActionTypes.UpdateNavigationIndex](store: Store, parameter: { navigationIndex: number; itemIndex: number; }) {
+    const { state, dispatch, commit } = store;
+    const { navigationIndex = -1, itemIndex = -1 } = parameter || {};
+    const { navigationList = [] } = state;
+    const { itemList = [] } = navigationList[navigationIndex] || {};
+    if (itemList.length > 0) {
+      const { path, query } = itemList[itemIndex] || {};
+      commit(RootMutationTypes.UpdateNavigationIndex, itemIndex);
+      navigationList[navigationIndex].itemIndex = itemIndex;
+      commit(RootMutationTypes.UpdateNavigationList, navigationList);
+      router.push({ path, query });
+    } else {
+      const { path, query } = navigationList[navigationIndex] || {};
+      commit(RootMutationTypes.UpdateNavigationIndex, itemIndex);
+      navigationList[navigationIndex].itemIndex = itemIndex;
+      router.push({ path, query });
+    }
+  },
+
+
 
   // 退出登录
   async ["logout"](store: Store) {
