@@ -6,7 +6,7 @@ import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
 
 import router from "@/router";
-import { Message, MessageBox } from "mint-ui";
+import { Message, MessageBox } from "element-ui";
 // import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {

@@ -7,7 +7,7 @@
           <Navigation></Navigation>
         </div>
         <div class="section">
-          <router-view />
+          <BiddingHome></BiddingHome>
         </div>
       </div>
     </div>
@@ -20,12 +20,14 @@ import { State, Getter, Action, Mutation } from "vuex-class";
 
 import Header from "@/components/Header.vue";
 import Navigation from "@/components/Navigation.vue";
+import BiddingHome from "./BiddingHome.vue";
 
 @Component({
   name: "Bidding",
   components: {
     Header,
-    Navigation
+    Navigation,
+    BiddingHome
   }
 })
 export default class Bidding extends Vue {}

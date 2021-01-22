@@ -3,6 +3,8 @@ import fetch from "@/axios";
 // 获取oss的TST授权信息
 export const GetOssfsToken = (data: object = {}): object => fetch({ url: "/sz/api/common/common/getOssfsTokenFileExt", data });
 
+
+
 // 获取验证码
 export const GetVerificationCode = (params: object = {}): object => fetch({ url: "/supplier/oauth/sendCode", method: "GET", params });
 
@@ -14,6 +16,9 @@ export const WechatLogin = (data: object = {}): object => fetch({ url: "/supplie
 
 // 注册
 export const Register = (data: object = {}): object => fetch({ url: "/supplier/oauth/register", data });
+
+
+
 
 
 // 获取我的信息
