@@ -9,6 +9,9 @@ export const GetSelectMyBidding = (params: object = {}): object => fetch({ url: 
 // 竞价
 export const JoinBidding = (data: object = {}): object => fetch({ url: "/supplier/userMouldBidding/joinMouldBidding", data });
 
+// 修改竞价详情
+export const UpdateMouldBidding = (data: object = {}): object => fetch({ url: "/supplier/userMouldBidding/updateMouldBidding", data });
+
 // 获取竞价单详情
 export const GetMouldBiddingDetail = (params: any): object => {
   const { headId = "" } = params;

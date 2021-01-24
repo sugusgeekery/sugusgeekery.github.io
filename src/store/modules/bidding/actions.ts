@@ -13,6 +13,7 @@ import {
   GetSelectByUser,
   GetSelectMyBidding,
   JoinBidding,
+  UpdateMouldBidding,
   GetMouldBiddingDetail,
   GetProductTechnology,
   GetMaterialAndColor,
@@ -38,9 +39,12 @@ export enum ActionTypes {
   UpdatePayDate = "UpdatePayDate",
   UpdateProvinceCityCountry = "UpdateProvinceCityCountry",
   JoinBidding = "JoinBidding",
+  UpdateMouldBidding = "UpdateMouldBidding",
   GetBiddingDetail = "GetBiddingDetail",
   GetMouldBiddingDetail = "GetMouldBiddingDetail",
+  GetBiddingTechnology = "GetBiddingTechnology",
   GetProductTechnology = "GetProductTechnology",
+  GetBiddingMaterial = "GetBiddingMaterial",
   GetMaterialAndColor = "GetMaterialAndColor"
 }
 
@@ -159,7 +163,7 @@ export default {
     const { biddingIndex = 0, biddingList = [] } = state;
     const { list = [] } = biddingList[biddingIndex] || {}; 
     const { id } = list[index] || {};
-    commit(MutationTypes.UpdateBiddingDetail, { isShow: true, headId: id });
+    commit(MutationTypes.UpdateBiddingDetail, { isShow: true, headId: id, biddingIndex });
     dispatch(ActionTypes.GetMouldBiddingDetail);
   },
   // 获取竞价单详情
@@ -178,6 +182,31 @@ export default {
       throw new Error(e);
     }
   },
+  // 竞价
+  async [ActionTypes.UpdateMouldBidding](store: Store, index: number) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { biddingDetail } = state;
+      const { amount, headId, id, workPeriod } = biddingDetail || {}; 
+      const { code = "000", msg, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id, workPeriod });
+      if (code == "999") {
+        dispatch(ActionTypes.GetMouldBiddingDetail);
+      } else {
+        Message.error(msg);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 更新竞价单二次工艺
+  [ActionTypes.GetBiddingTechnology](store: Store) {
+    const { state, dispatch, commit } = store;
+    const { biddingDetail } = state;
+    const { headId } = biddingDetail || {}; 
+    commit(MutationTypes.UpdateBiddingTechnology, { isShow: true, headId });
+    dispatch(ActionTypes.GetProductTechnology);
+  },
   // 获取竞价单二次工艺
   async [ActionTypes.GetProductTechnology](store: Store) {
     try {
@@ -193,6 +222,15 @@ export default {
     } catch (e) {
       throw new Error(e);
     }
+  },
+
+  // 更新竞价单材料颜色
+  [ActionTypes.GetBiddingMaterial](store: Store) {
+    const { state, dispatch, commit } = store;
+    const { biddingDetail } = state;
+    const { headId } = biddingDetail || {}; 
+    commit(MutationTypes.UpdateBiddingMaterial, { isShow: true, headId });
+    dispatch(ActionTypes.GetMaterialAndColor);
   },
   // 获取竞价单材料颜色
   async [ActionTypes.GetMaterialAndColor](store: Store) {

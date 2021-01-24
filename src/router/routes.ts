@@ -39,5 +39,17 @@ export default [
     path: "/order",
     name: "Order",
     component: () => import(/* webpackChunkName: "Order" */ "@/views/order/Index.vue"),
+    children: [
+      {
+        path: "orderHome",
+        name: "OrderHome",
+        component: () => import(/* webpackChunkName: "OrderHome" */ "@/views/order/OrderHome.vue")
+      },
+      {
+        path: "orderDetail",
+        name: "OrderDetail",
+        component: () => import(/* webpackChunkName: "OrderDetail" */ "@/views/order/OrderDetail.vue")
+      },
+    ]
   },
 ];

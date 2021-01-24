@@ -261,14 +261,13 @@ export default {
     const { itemList = [] } = navigationList[navigationIndex] || {};
     if (itemList.length > 0) {
       const { path, query } = itemList[itemIndex] || {};
-      commit(RootMutationTypes.UpdateNavigationIndex, itemIndex);
+      commit(RootMutationTypes.UpdateNavigationIndex, navigationIndex);
       navigationList[navigationIndex].itemIndex = itemIndex;
       commit(RootMutationTypes.UpdateNavigationList, navigationList);
       router.push({ path, query });
     } else {
       const { path, query } = navigationList[navigationIndex] || {};
-      commit(RootMutationTypes.UpdateNavigationIndex, itemIndex);
-      navigationList[navigationIndex].itemIndex = itemIndex;
+      commit(RootMutationTypes.UpdateNavigationIndex, navigationIndex);
       router.push({ path, query });
     }
   },
