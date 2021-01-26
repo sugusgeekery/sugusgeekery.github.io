@@ -132,13 +132,14 @@ export default class Login extends Vue {
   public init() {
     this.iframeSrc = getWxLoginCodeUrl({
       appid: WX_APPID,
-      redirectUri: encodeURIComponent(WX_REDIRECT_URL)
+      redirectUri: encodeURIComponent(WX_REDIRECT_URL + "/#/user/login")
     });
     this.login();
   }
   public login() {
     // 微信扫码登录所需code码
     const jsCode = getUrlParas("code");
+    console.log(jsCode);
     if (jsCode) {
       this.wechatLogin({ jsCode });
     }
@@ -170,7 +171,7 @@ export default class Login extends Vue {
       this.$message.error("请输入手机号码");
       return;
     }
-    this.getVerificationCode({ phone, type: 1 });
+    this.getVerificationCode({ phone, type: 0 });
   }
   public verificationLoginCtl() {
     const { phone = "", code = "" } = this;
@@ -235,7 +236,8 @@ export default class Login extends Vue {
           color $color-text-blue
       &-iframe
         width 100%
-        height 400px
+        padding 20px
+        height 440px
       &-form
         padding 34px
         display flex

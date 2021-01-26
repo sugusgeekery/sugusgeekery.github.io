@@ -34,8 +34,8 @@ switch(NODE_ENV) {
     // 测试环境
     BASE_API_URL = "http://testsupplierapi.hotpick.com";
     BASE_IMAGE_URL = "http://testsupplierapi.hotpick.com/upload";
-    WX_APPID = "wx483c7d15d7b94566"
-    WX_REDIRECT_URL = "https://pc.hotpick.com/#/homePage"
+    WX_APPID = "wx483c7d15d7b94566";
+    WX_REDIRECT_URL = "http://testsupplier.hotpick.com";
     console.log(`
         项目环境：测试环境（${NODE_ENV}）；
         项目版本：${APPLICATION_VERSION}；
@@ -45,10 +45,10 @@ switch(NODE_ENV) {
     break;
   case "production":
     // 正式环境
-    BASE_API_URL = 'https://api.sharingschool.com';
-    BASE_IMAGE_URL = 'https://img.sharingschool.com';
-    WX_APPID = "wxbd935b8482dffb36"
-    WX_REDIRECT_URL = "http://testsupplier.hotpick.com"
+    BASE_API_URL = "http://supplierapi.hotpick.com";
+    BASE_IMAGE_URL = "http://supplierapi.hotpick.com/upload";
+    WX_APPID = "wxbd935b8482dffb36";
+    WX_REDIRECT_URL = "http://supplier.hotpick.com";
     console.log(`
         项目环境：主正式环境（${NODE_ENV}）；
         项目版本：${APPLICATION_VERSION}；

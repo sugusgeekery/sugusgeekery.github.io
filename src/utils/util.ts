@@ -141,9 +141,9 @@ const formatUrl = (url: string, obj: any): string => {
  */
 const getUrlParas = (name: string, url?: string): string => {
   const exp = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
-  let s = url || window.location.hash;
-  if (s.indexOf("#/?") > -1) {
-    s = s.substr(3);
+  let s = url || window.location.href;
+  if (s.indexOf("?") > -1) {
+    s = s.split("?")[1];
   }
   const v = s.match(exp);
   if (v) {

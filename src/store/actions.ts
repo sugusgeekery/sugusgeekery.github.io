@@ -39,6 +39,7 @@ export enum RootActionTypes {
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   VerificationCodelogin = "VerificationCodelogin",
   WechatLogin = "WechatLogin",
+  UpdateRegisterWxCode = "UpdateRegisterWxCode",
   Register = "Register",
   UpdateNavigationIndex = "UpdateNavigationIndex",
 }
@@ -173,7 +174,7 @@ export default {
   async [RootActionTypes.GetVerificationCode](store: Store, parameter: any = {}) {
     try {
       const { dispatch } = store;
-      const { phone = "", type = 1 } = parameter || {};
+      const { phone = "", type = 0 } = parameter || {};
       if (!phone) {
         Message("请输入手机号");
         return
@@ -236,6 +237,12 @@ export default {
     }
   },
 
+  // 保存注册微信code
+  [RootActionTypes.UpdateRegisterWxCode](store: Store, code: string) {
+    const { dispatch, commit } = store;
+    commit(RootMutationTypes.UpdateRegisterWxCode, code);
+    commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
+  },
   // 注册
   async [RootActionTypes.Register](store: Store, parameter: { companyName: string; userName: string; phone: string; code: string; }) {
     try {

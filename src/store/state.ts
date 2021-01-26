@@ -194,6 +194,7 @@ export interface RootState {
   loginNavList: Array<LoginNav>;
   isCheckProtocol: boolean;
   isShowProtocol: boolean;
+  registerWxCode: string;
   registerNavIndex: number;
   registerNavList: Array<RegisterNav>;
   navigationIndex: number;
@@ -246,6 +247,7 @@ const state: RootState = {
   ],
   isCheckProtocol: true,
   isShowProtocol: false,
+  registerWxCode: "",
   registerNavIndex: 0,
   registerNavList: [
     {

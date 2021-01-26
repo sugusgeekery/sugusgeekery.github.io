@@ -170,9 +170,13 @@ export default class Register extends Vue {
   public register!: Function;
   @Action(RootActionTypes.WechatLogin)
   public wechatLogin!: Function;
+  @Action(RootActionTypes.UpdateRegisterWxCode)
+  public updateRegisterWxCode!: Function;
 
   @Mutation(RootMutationTypes.UpdateIsCheckProtocol)
   public updateIsCheckProtocol!: Function;
+  @Mutation(RootMutationTypes.UpdateRegisterNavIndex)
+  public updateRegisterNavIndex!: Function;
 
   @Watch("$route")
   public WatchRoute() {
@@ -186,7 +190,7 @@ export default class Register extends Vue {
   public init() {
     this.iframeSrc = getWxLoginCodeUrl({
       appid: WX_APPID,
-      redirectUri: encodeURIComponent(WX_REDIRECT_URL)
+      redirectUri: encodeURIComponent(WX_REDIRECT_URL + "/#/user/register")
     });
     this.login();
   }
@@ -195,6 +199,7 @@ export default class Register extends Vue {
     const jsCode = getUrlParas("code");
     if (jsCode) {
       this.wechatLogin({ jsCode });
+      // this.updateRegisterWxCode(jsCode);
     }
   }
   public validateCtl(text: string) {
@@ -307,7 +312,8 @@ export default class Register extends Vue {
         align-items center
       &-iframe
         width 100%
-        height 400px
+        padding 20px
+        height 440px
       &-form
         min-width 380px
         padding 34px

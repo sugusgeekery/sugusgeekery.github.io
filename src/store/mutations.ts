@@ -4,6 +4,7 @@ import { RootState, Navigation, MyInfo, ChildList } from "./state";
 export enum RootMutationTypes {
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   UpdateLoginNavIndex = "UpdateLoginNavIndex",
+  UpdateRegisterWxCode = "UpdateRegisterWxCode",
   UpdateRegisterNavIndex = "UpdateRegisterNavIndex",
   UpdateIsCheckProtocol = "UpdateIsCheckProtocol",
   UpdateIsShowProtocol = "UpdateIsShowProtocol",
@@ -25,6 +26,13 @@ export default {
     loginNavIndex: number
   ) {
     state.loginNavIndex = loginNavIndex;
+  },
+  // 更新注册微信code
+  [RootMutationTypes.UpdateRegisterWxCode](
+    state: RootState,
+    registerWxCode: string
+  ) {
+    state.registerWxCode = registerWxCode;
   },
   // 更新注册导航切换
   [RootMutationTypes.UpdateRegisterNavIndex](
