@@ -418,6 +418,7 @@ const state: State = {
   biddingDetail: {
     isShow: false,
     headId: 0,
+    biddingIndex: 0,
     "biddingHeadInfo": {
       "accuracy": 0,
       "address": "",
@@ -461,15 +462,52 @@ const state: State = {
   biddingTechnology: {
     isShow: false,
     headId: 0,
-    "colorType": "",
-		"colorValue": "",
-		"componentNum": 0,
-		"isCustomerSupport": 0,
-		"subsidiaryFileUrl": "",
-		"technologyName": "",
-		"technologySpecName": "",
-		"technologyValue": "",
-		"type": 0
+    list: [
+      {
+        "colorType": "",
+        "colorValue": "",
+        "componentNum": 0,
+        "isCustomerSupport": 0,
+        "subsidiaryFileUrl": "",
+        "technologyName": "",
+        "technologySpecName": "",
+        "technologyValue": "",
+        "type": 0
+      },
+      {
+        "colorType": "",
+        "colorValue": "",
+        "componentNum": 0,
+        "isCustomerSupport": 0,
+        "subsidiaryFileUrl": "",
+        "technologyName": "",
+        "technologySpecName": "",
+        "technologyValue": "",
+        "type": 1
+      },
+      {
+        "colorType": "",
+        "colorValue": "",
+        "componentNum": 0,
+        "isCustomerSupport": 0,
+        "subsidiaryFileUrl": "",
+        "technologyName": "",
+        "technologySpecName": "",
+        "technologyValue": "",
+        "type": 2
+      },
+      {
+        "colorType": "",
+        "colorValue": "",
+        "componentNum": 0,
+        "isCustomerSupport": 0,
+        "subsidiaryFileUrl": "",
+        "technologyName": "",
+        "technologySpecName": "",
+        "technologyValue": "",
+        "type": 1
+      },
+    ]
   },
   biddingMaterial: {
     isShow: false,

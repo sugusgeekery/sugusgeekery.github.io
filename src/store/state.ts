@@ -275,7 +275,7 @@ const state: RootState = {
       id: "2",
       text: "订单中心",
       icon: require("../assets/images/n_order.png"),
-      path: "/order",
+      path: "/order/orderHome",
       query: {},
       itemIndex: -1,
       itemList: []

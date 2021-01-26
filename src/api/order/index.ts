@@ -1,7 +1,5 @@
 import fetch from "@/axios";
 
-// 获取oss的TST授权信息
-export const GetOssfsToken = (data: object = {}): object => fetch({ url: "/sz/api/common/common/getOssfsTokenFileExt", data });
+// 获取订单列表
+export const GetOrderList = (params: any): object => fetch({ url: `/supplier/mouldBiddingHead/list`, method: "GET", params });
 
-// 家长端验证码登录
-export const Login = (data: object = {}): object => fetch({ url: "/sz/api/parents/parents/V2/phoneLogin", data });

@@ -13,7 +13,8 @@
         <div
           class="navigation-li-content-text"
           :class="{
-            'navigation-li-content-text-active': b == navigationIndex
+            'navigation-li-content-text-active':
+              b == navigationIndex && a.itemList.length === 0
           }"
         >
           {{ a.text }}
@@ -33,7 +34,8 @@
             <div
               class="navigation-li-cell-content-text"
               :class="{
-                'navigation-li-cell-content-text-active': d == a.itemIndex
+                'navigation-li-cell-content-text-active':
+                  b == navigationIndex && d == a.itemIndex
               }"
             >
               {{ c.text }}

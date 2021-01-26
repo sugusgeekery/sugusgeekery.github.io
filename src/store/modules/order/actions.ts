@@ -10,7 +10,7 @@ import { Message, MessageBox } from "element-ui";
 // import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
-
+  GetOrderList
 } from "@/api/order";
 
 interface Store {
@@ -23,8 +23,13 @@ interface Store {
 }
 
 export enum ActionTypes {
-  // InitWeeklyReport = "InitWeeklyReport",
-  // GetWeeklyReport = "GetWeeklyReport",
+  GetOrderList = "GetOrderList",
+  UpdatePageNum = "UpdatePageNum",
+  UpdatePageSize = "UpdatePageSize",
+  UpdateProjectIndex = "UpdateProjectIndex",
+  UpdateStatusIndex = "UpdateStatusIndex",
+  UpdateMouldNo = "UpdateMouldNo",
+  GetOrderDetail = "GetOrderDetail",
 }
 
 export default {
@@ -35,29 +40,64 @@ export default {
   //   commit(MutationTypes.UpdateWeeklyReport, { platform, accessToken, vipId, subject, beginTime, endTime });
   //   dispatch(ActionTypes.GetWeeklyReport);
   // },
-  // 获取
-  // async [ActionTypes.GetWeeklyReport](store: Store) {
-  //   try {
-  //     const { state, dispatch, commit } = store;
-  //     const { weeklyReport } = state;
-  //     const { accessToken = "", vipId = "", subject = "", beginTime = "", endTime = "" } = weeklyReport;
-  //     if (!vipId) {
-  //       Message.error("vipId为空，不知道是要展示谁的周报哦！！！");
-  //       return;
-  //     }
-  //     const { code = "000", msg, data }: any = await GetLearningGrowthReportV2({ vipId, subject, beginTime, endTime }, { accessToken });
-  //     if (code == "999") {
-  //       const weeklyReport = (report => {
-  //         return report;
-  //       })(data || {});
-  //       commit(MutationTypes.UpdateWeeklyReport, weeklyReport);
-  //     } else {
-  //       Message.error(msg);
-  //     }
-  //   } catch (e) {
-  //     throw new Error(e);
-  //   }
-  // },
+  // 获取订单列表
+  async [ActionTypes.GetOrderList](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { order } = state;
+      const { pageNum = 1, pageSize = 10, mouldNo = "", projectIndex = 0, projectList = [], statusIndex = 0, statusList = [] } = order;
+      const { type = "" } = projectList[projectIndex] || {};
+      const { status = "" } = statusList[statusIndex] || {};
+      const { code = "000", msg, data }: any = await GetOrderList({ pageNum, pageSize, status, type, mouldNo });
+      if (code == "999") {
+        const { records = [], total } = data || {};
+        commit(MutationTypes.UpdateOrder, { list: records, total });
+      } else {
+        Message.error(msg);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 更新订单页码
+  [ActionTypes.UpdatePageNum](store: Store, pageNum: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateOrder, { pageNum });
+    dispatch(ActionTypes.GetOrderList);
+  },
+  // 更新竞订单每页条数
+  [ActionTypes.UpdatePageSize](store: Store, pageSize: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateOrder, { pageSize });
+    dispatch(ActionTypes.UpdatePageNum, 1);
+  },
+  // 更新订单项目类型下标
+  [ActionTypes.UpdateProjectIndex](store: Store, projectIndex: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateOrder, { projectIndex });
+    dispatch(ActionTypes.UpdatePageNum, 1);
+  },
+  // 更新订单全部状态下标
+  [ActionTypes.UpdateStatusIndex](store: Store, statusIndex: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateOrder, { statusIndex });
+    dispatch(ActionTypes.UpdatePageNum, 1);
+  },
+  // 更新订单搜索内容
+  [ActionTypes.UpdateMouldNo](store: Store, mouldNo: string) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateOrder, { mouldNo });
+    dispatch(ActionTypes.UpdatePageNum, 1);
+  },
 
+  // 跳转到订单详情
+  [ActionTypes.GetOrderDetail](store: Store, index: number) {
+    const { state, dispatch, commit } = store;
+    const { order } = state;
+    const { list = [] } = order || {};
+    const { id = "" } = list[index] || {};
+    // commit(MutationTypes.UpdateOrderDetail, {});
+    // dispatch(ActionTypes.UpdatePageNum, 1);
+  },
   
 }

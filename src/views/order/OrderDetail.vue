@@ -191,7 +191,6 @@
         </div>
       </div>
     </div>
-    <BiddingDetail></BiddingDetail>
   </div>
 </template>
 
@@ -205,15 +204,11 @@ import { ActionTypes } from "@/store/modules/bidding/actions";
 
 import { ElementUIProvinces, ElementUICasCader } from "@/utils/provinces";
 
-import BiddingDetail from "./BiddingDetail.vue";
-
 @Component({
-  name: "BiddingHome",
-  components: {
-    BiddingDetail
-  }
+  name: "OrderDetail",
+  components: {}
 })
-export default class BiddingHome extends Vue {
+export default class OrderDetail extends Vue {
   @State("biddingIndex")
   public biddingIndex!: number;
   @State("biddingList")
