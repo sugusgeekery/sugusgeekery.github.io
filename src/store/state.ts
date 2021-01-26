@@ -187,14 +187,14 @@ export interface WrongBookList {
 
 // 状态管理对象
 export interface RootState {
-  accessToken: string;
+  logInfo: LogInfo;
   userInfo: UserInfo;
   verificationCodeNumber: number;
   loginNavIndex: number;
   loginNavList: Array<LoginNav>;
   isCheckProtocol: boolean;
   isShowProtocol: boolean;
-  registerWxCode: string;
+  // registerWxCode: string;
   registerNavIndex: number;
   registerNavList: Array<RegisterNav>;
   navigationIndex: number;
@@ -208,6 +208,13 @@ export interface RootState {
   customizedSprintPaper: CustomizedSprintPaperType;
   wrongBook: WrongBookType;
 };
+
+// 登录信息
+export interface LogInfo {
+  accessToken: string;
+  isExist: boolean;
+  openId: string;
+}
 
 // 用户信息
 export interface UserInfo {
@@ -233,7 +240,11 @@ export interface Navigation {
 };
 
 const state: RootState = {
-  accessToken: "",
+  logInfo: {
+    accessToken: "",
+    isExist: false,
+    openId: "",
+  },
   userInfo: {},
   verificationCodeNumber: 0,
   loginNavIndex: 0,
@@ -247,7 +258,7 @@ const state: RootState = {
   ],
   isCheckProtocol: true,
   isShowProtocol: false,
-  registerWxCode: "",
+  // registerWxCode: "",
   registerNavIndex: 0,
   registerNavList: [
     {

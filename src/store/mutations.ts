@@ -1,10 +1,12 @@
-import { setLocalStorage }  from "@/utils/storage";
-import { RootState, Navigation, MyInfo, ChildList } from "./state";
+import { setLocalStorage, setSessionStorage }  from "@/utils/storage";
+import { RootState, LogInfo, UserInfo, Navigation, MyInfo, ChildList } from "./state";
 
 export enum RootMutationTypes {
+  UpdateLogInfo = "UpdateLogInfo",
+  UpdateUserInfo = "UpdateUserInfo",
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   UpdateLoginNavIndex = "UpdateLoginNavIndex",
-  UpdateRegisterWxCode = "UpdateRegisterWxCode",
+  // UpdateRegisterWxCode = "UpdateRegisterWxCode",
   UpdateRegisterNavIndex = "UpdateRegisterNavIndex",
   UpdateIsCheckProtocol = "UpdateIsCheckProtocol",
   UpdateIsShowProtocol = "UpdateIsShowProtocol",
@@ -13,6 +15,33 @@ export enum RootMutationTypes {
 }
 
 export default {
+  // 更新登录信息
+  [RootMutationTypes.UpdateLogInfo](state: RootState, params: LogInfo) {
+    const { logInfo } = state;
+    const { accessToken } = logInfo || {};
+    if (accessToken) {
+      setSessionStorage("accessToken", accessToken);
+      setLocalStorage("accessToken", accessToken);
+    }
+    const temp: LogInfo = logInfo;
+    (function<T>(state: RootState, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.logInfo = Object.assign(logInfo, temp);
+    })(state, params, temp);
+  },
+  // 更新用户信息
+  [RootMutationTypes.UpdateUserInfo](state: RootState, params: UserInfo) {
+    const { userInfo } = state;
+    const temp: UserInfo = userInfo;
+    (function<T>(state: RootState, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.userInfo = Object.assign(userInfo, temp);
+    })(state, params, temp);
+  },
   // 更新验证码倒计时状态
   [RootMutationTypes.UpdateVerificationCodeNumber](
     state: RootState,
@@ -28,12 +57,12 @@ export default {
     state.loginNavIndex = loginNavIndex;
   },
   // 更新注册微信code
-  [RootMutationTypes.UpdateRegisterWxCode](
-    state: RootState,
-    registerWxCode: string
-  ) {
-    state.registerWxCode = registerWxCode;
-  },
+  // [RootMutationTypes.UpdateRegisterWxCode](
+  //   state: RootState,
+  //   registerWxCode: string
+  // ) {
+  //   state.registerWxCode = registerWxCode;
+  // },
   // 更新注册导航切换
   [RootMutationTypes.UpdateRegisterNavIndex](
     state: RootState,
@@ -73,12 +102,12 @@ export default {
 
 
   // 更新token
-  ["updateAccessToken"](state: RootState, accessToken: string = "") {
-    if (accessToken) {
-      state.accessToken = accessToken;
-      setLocalStorage("accessToken", accessToken);
-    }
-  },
+  // ["updateAccessToken"](state: RootState, accessToken: string = "") {
+  //   if (accessToken) {
+  //     state.accessToken = accessToken;
+  //     setLocalStorage("accessToken", accessToken);
+  //   }
+  // },
   // 更新platform
   ["updatePlatform"](state: RootState, platform: string = "") {
     state.platform = platform;

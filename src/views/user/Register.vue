@@ -121,8 +121,8 @@
           <div class="model-tip">
             <div class="model-tip-circle"></div>
             <div class="model-tip-black">注册成功</div>
-            <div class="model-tip-gray">3S之后开始跳转</div>
-            <div class="model-tip-blue" @click="toLogin()">无跳转点击此处</div>
+            <div class="model-tip-gray">{{ tipNumber }}S之后开始跳转</div>
+            <div class="model-tip-blue" @click="toHome()">无跳转点击此处</div>
           </div>
         </div>
       </div>
@@ -152,6 +152,7 @@ export default class Register extends Vue {
   public phone?: string = "";
   public code?: string = "";
   public iframeSrc?: string = "";
+  public tipNumber?: number = 3;
 
   @State("verificationCodeNumber")
   public verificationCodeNumber!: number;
@@ -170,8 +171,6 @@ export default class Register extends Vue {
   public register!: Function;
   @Action(RootActionTypes.WechatLogin)
   public wechatLogin!: Function;
-  @Action(RootActionTypes.UpdateRegisterWxCode)
-  public updateRegisterWxCode!: Function;
 
   @Mutation(RootMutationTypes.UpdateIsCheckProtocol)
   public updateIsCheckProtocol!: Function;
@@ -181,6 +180,19 @@ export default class Register extends Vue {
   @Watch("$route")
   public WatchRoute() {
     this.login();
+  }
+  @Watch("registerNavIndex")
+  public WatchRegisterNavIndex() {
+    if (this.registerNavIndex === 2) {
+      const numberInterval = setInterval(() => {
+        if (this.tipNumber) {
+          this.tipNumber--;
+        } else {
+          clearInterval(numberInterval);
+          router.push("/home");
+        }
+      }, 1000);
+    }
   }
 
   public created() {
@@ -199,7 +211,6 @@ export default class Register extends Vue {
     const jsCode = getUrlParas("code");
     if (jsCode) {
       this.wechatLogin({ jsCode });
-      // this.updateRegisterWxCode(jsCode);
     }
   }
   public validateCtl(text: string) {
@@ -251,8 +262,8 @@ export default class Register extends Vue {
     }
     this.register({ companyName, userName, phone, code });
   }
-  public toLogin() {
-    router.push("/user/login");
+  public toHome() {
+    router.push("/home");
   }
 }
 </script>

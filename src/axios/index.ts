@@ -54,16 +54,16 @@ service.interceptors.response.use(
       data = {},
       statusText = INTERFACE_ERROR_TEXT
     } = response;
-    const { msg = INTERFACE_ERROR_TEXT } = data;
+    const { message = INTERFACE_ERROR_TEXT } = data;
     if (status >= 200 && status < 300) {
       return Promise.resolve({
         ...data,
-        msg: msg || statusText || INTERFACE_ERROR_TEXT
+        message: message || statusText || INTERFACE_ERROR_TEXT
       });
     } else {
       return Promise.resolve({
         code: "000",
-        msg: msg || statusText || INTERFACE_ERROR_TEXT
+        message: message || statusText || INTERFACE_ERROR_TEXT
       });
     }
   },
@@ -83,7 +83,7 @@ service.interceptors.response.use(
       data = {},
       statusText = INTERFACE_ERROR_TEXT
     } = response;
-    let { msg = INTERFACE_ERROR_TEXT, type = 0 } = data;
+    let { message = INTERFACE_ERROR_TEXT, type = 0 } = data;
     switch (status) {
       case 401:
         // Message.error("登录已失效，请重新登录");
@@ -123,16 +123,16 @@ service.interceptors.response.use(
         // }
         store.dispatch("notifyTokenExpired");
         return Promise.reject({
-          msg: msg || statusText || INTERFACE_ERROR_TEXT,
+          message: message || statusText || INTERFACE_ERROR_TEXT,
           code: "401"
         });
       default:
         if (isTimeOut && isTimeOut.length > 0) {
-          msg = "网络响应超时！请稍后重试！";
+          message = "网络响应超时！请稍后重试！";
         }
     }
     return Promise.resolve({
-      msg: msg || statusText || INTERFACE_ERROR_TEXT,
+      message: message || statusText || INTERFACE_ERROR_TEXT,
       code: "000"
     });
   }
@@ -150,12 +150,16 @@ export default async ({
     params: Object.assign(
       {},
       {
-        accessToken:
-          store.state.accessToken || getSessionStorage("accessToken") || getLocalStorage("accessToken") || "",
+        // accessToken:
+        //   store.state.logInfo.accessToken || getSessionStorage("accessToken") || getLocalStorage("accessToken") || "",
         ...params
       }
     ),
-    data
+    data,
+    headers: {
+      token:
+          store.state.logInfo.accessToken || getSessionStorage("accessToken") || getLocalStorage("accessToken") || "",
+    }
   };
   return service(config);
 };

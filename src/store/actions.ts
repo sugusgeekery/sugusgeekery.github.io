@@ -39,7 +39,7 @@ export enum RootActionTypes {
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   VerificationCodelogin = "VerificationCodelogin",
   WechatLogin = "WechatLogin",
-  UpdateRegisterWxCode = "UpdateRegisterWxCode",
+  // UpdateRegisterWxCode = "UpdateRegisterWxCode",
   Register = "Register",
   UpdateNavigationIndex = "UpdateNavigationIndex",
 }
@@ -179,12 +179,12 @@ export default {
         Message("请输入手机号");
         return
       }
-      const { code = "000", msg }: any = await GetVerificationCode({ phone, type });
-      if (code == "999") {
-        Message.success(msg);
+      const { code, message }: any = await GetVerificationCode({ phone, type });
+      if (code === 0) {
+        Message.success(message);
         dispatch(RootActionTypes.UpdateVerificationCodeNumber);
       } else {
-        Message(msg);
+        Message(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -208,29 +208,54 @@ export default {
   async [RootActionTypes.VerificationCodelogin](store: Store, parameter: { phone: string; code: string; }) {
     try {
       const { dispatch, commit } = store;
-      const { code = "000", msg, data }: any = await VerificationCodeLogin(parameter);
-      if (code == "999") {
-        const { accessToken = "" } = data || {};
-        commit("updateAccessToken", accessToken);
-        dispatch("getMyInfo");
+      const { code, message, data }: any = await VerificationCodeLogin(parameter);
+      if (code === 0) {
+        // const { accessToken = "" } = data || {};
+        // commit(RootMutationTypes.UpdateLogInfo, { accessToken });
+        const { accessToken = "", isExist = false, openId = "", token, user } = data || {};
+        commit(RootMutationTypes.UpdateLogInfo, { accessToken: accessToken || token, isExist, openId });
+        if (!isExist) {
+          if (openId) {
+            commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
+            router.push("/user/register");
+          } else {
+            Message.error("请扫码重试！");
+          }
+        } else {
+          commit(RootMutationTypes.UpdateUserInfo, { ...user });
+          router.push("/home");
+        }
+        // dispatch("getMyInfo");
+        // router.push("/home");
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
     }
   },
-  // 验证码登陆
+  // 微信扫码登陆
   async [RootActionTypes.WechatLogin](store: Store, parameter: { jsCode: string; }) {
     try {
       const { dispatch, commit } = store;
-      const { code = "000", msg, data }: any = await WechatLogin(parameter);
-      if (code == "999") {
-        const { accessToken = "" } = data || {};
-        commit("updateAccessToken", accessToken);
-        dispatch("getMyInfo");
+      const { code, message, data }: any = await WechatLogin(parameter);
+      if (code === 0) {
+        const { accessToken = "", isExist = false, openId = "", token, user } = data || {};
+        commit(RootMutationTypes.UpdateLogInfo, { accessToken: accessToken || token, isExist, openId });
+        if (!isExist) {
+          if (openId) {
+            commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
+            router.push("/user/register");
+          } else {
+            Message.error("请扫码重试！");
+          }
+        } else {
+          commit(RootMutationTypes.UpdateUserInfo, { ...user });
+          router.push("/home");
+        }
+        // dispatch("getMyInfo");
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -238,22 +263,30 @@ export default {
   },
 
   // 保存注册微信code
-  [RootActionTypes.UpdateRegisterWxCode](store: Store, code: string) {
-    const { dispatch, commit } = store;
-    commit(RootMutationTypes.UpdateRegisterWxCode, code);
-    commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
-  },
+  // [RootActionTypes.UpdateRegisterWxCode](store: Store, code: string) {
+  //   const { dispatch, commit } = store;
+  //   commit(RootMutationTypes.UpdateRegisterWxCode, code);
+  //   commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
+  // },
   // 注册
   async [RootActionTypes.Register](store: Store, parameter: { companyName: string; userName: string; phone: string; code: string; }) {
     try {
-      const { dispatch, commit } = store;
-      const { code = "000", msg, data }: any = await Register(parameter);
-      if (code == "999") {
-        const { accessToken = "" } = data || {};
-        commit("updateAccessToken", accessToken);
-        dispatch("getMyInfo");
+      const { state, dispatch, commit } = store;
+      const { logInfo } = state;
+      const { accessToken, openId } = logInfo || {};
+      const { code, message, data }: any = await Register({ ...parameter, accessToken, openId });
+      if (code === 0) {
+        const { token, user } = data || {};
+        commit(RootMutationTypes.UpdateLogInfo, { accessToken: token });
+        commit(RootMutationTypes.UpdateRegisterNavIndex, 2);
+        commit(RootMutationTypes.UpdateUserInfo, { ...user });
+        // setTimeout(() => {
+        //   router.push("/home");
+        // }, 3000);
+        // commit("updateAccessToken", accessToken);
+        // dispatch("getMyInfo");
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);

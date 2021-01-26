@@ -25,7 +25,10 @@ export default class App extends Vue {
 
     // 在页面刷新时将vuex里的信息保存到sessionStorage里
     window.addEventListener("beforeunload", () => {
-      setSessionStorage("accessToken", this.$store.state.accessToken || "");
+      setSessionStorage(
+        "accessToken",
+        this.$store.state.logInfo.accessToken || ""
+      );
       setSessionStorage("store", this.$store.state);
     });
 

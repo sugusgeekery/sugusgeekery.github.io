@@ -7,7 +7,8 @@
           <Navigation></Navigation>
         </div>
         <div class="section">
-          <router-view />
+          <HomeComponent></HomeComponent>
+          <!-- <router-view /> -->
         </div>
       </div>
     </div>
@@ -20,12 +21,14 @@ import { State, Getter, Action, Mutation } from "vuex-class";
 
 import Header from "@/components/Header.vue";
 import Navigation from "@/components/Navigation.vue";
+import HomeComponent from "./HomeComponent.vue";
 
 @Component({
   name: "Home",
   components: {
     Header,
-    Navigation
+    Navigation,
+    HomeComponent
   }
 })
 export default class Home extends Vue {}

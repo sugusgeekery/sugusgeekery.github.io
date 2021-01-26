@@ -48,7 +48,6 @@
 
 function download(href = "", filename = "") {
   if (href) {
-    console.log(href);
     const a = document.createElement("a");
     a.download = filename;
     a.href = href;
@@ -60,7 +59,6 @@ function download(href = "", filename = "") {
 
 function downloadFile(url = "", filename = "") {
   if (url) {
-    console.log(url);
     fetch(url, {
       headers: new Headers({
         Origin: location.origin

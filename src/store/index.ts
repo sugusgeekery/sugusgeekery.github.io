@@ -6,6 +6,7 @@ import getters from "./getters";
 import actions from "./actions";
 import mutations from "./mutations";
 
+import home from "./modules/home";
 import bidding from "./modules/bidding";
 import order from "./modules/order";
 
@@ -17,6 +18,7 @@ const store: StoreOptions<RootState> = {
   actions,
   mutations,
   modules: {
+    home,
     bidding,
     order,
   }

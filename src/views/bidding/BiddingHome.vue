@@ -145,7 +145,7 @@
                   <div class="item-flex">
                     <img
                       class="item-icon"
-                      src="../../assets/images/phone.png"
+                      src="../../assets/images/address.png"
                       alt=""
                     />
                     <span class="item-text">
@@ -157,7 +157,7 @@
                   <div class="item-flex">
                     <img
                       class="item-icon"
-                      src="../../assets/images/phone.png"
+                      src="../../assets/images/date.png"
                       alt=""
                     />
                     <span class="item-text">
@@ -221,6 +221,8 @@ export default class BiddingHome extends Vue {
 
   public provinces: ElementUICasCader[] = ElementUIProvinces;
 
+  // @Action(ActionTypes.UpdatePageNum)
+  // public updatePageNum!: Function;
   @Action(ActionTypes.UpdateBiddingIndex)
   public updateBiddingIndex!: Function;
   @Action(ActionTypes.UpdatePageNum)
@@ -239,6 +241,10 @@ export default class BiddingHome extends Vue {
   public joinBidding!: Function;
   @Action(ActionTypes.GetBiddingDetail)
   public getBiddingDetail!: Function;
+
+  public created() {
+    this.updatePageNum(1);
+  }
 }
 </script>
 
