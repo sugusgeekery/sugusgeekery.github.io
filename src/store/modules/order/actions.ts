@@ -10,6 +10,7 @@ import { Message, MessageBox } from "element-ui";
 // import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
+  GetMyBidAdvantage,
   GetOrderList
 } from "@/api/order";
 
@@ -23,35 +24,44 @@ interface Store {
 }
 
 export enum ActionTypes {
+  GetMyBidAdvantage = "GetMyBidAdvantage",
   GetOrderList = "GetOrderList",
   UpdatePageNum = "UpdatePageNum",
   UpdatePageSize = "UpdatePageSize",
   UpdateProjectIndex = "UpdateProjectIndex",
   UpdateStatusIndex = "UpdateStatusIndex",
-  UpdateMouldNo = "UpdateMouldNo",
+  UpdateOrderNo = "UpdateOrderNo",
   GetOrderDetail = "GetOrderDetail",
 }
 
 export default {
-  // 初始化模块默认值
-  // [ActionTypes.InitWeeklyReport](store: Store, params: any) {
-  //   const { state, dispatch, commit } = store;
-  //   const { platform = "", accessToken = "", vipId = "", subject = "", beginTime = "", endTime = "" } = params || {};
-  //   commit(MutationTypes.UpdateWeeklyReport, { platform, accessToken, vipId, subject, beginTime, endTime });
-  //   dispatch(ActionTypes.GetWeeklyReport);
-  // },
+  // 获取竞价指标
+  async [ActionTypes.GetMyBidAdvantage](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { code, msg, data }: any = await GetMyBidAdvantage();
+      if (code === 0) {
+        const { accuracy, anerror } = data || {};
+        commit(MutationTypes.UpdateAdvantage, { accuracy, anerror });
+      } else {
+        Message.error(msg);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
   // 获取订单列表
   async [ActionTypes.GetOrderList](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { order } = state;
-      const { pageNum = 1, pageSize = 10, mouldNo = "", projectIndex = 0, projectList = [], statusIndex = 0, statusList = [] } = order;
+      const { pageNum = 1, pageSize = 10, orderNo = "", projectIndex = 0, projectList = [], statusIndex = 0, statusList = [] } = order;
       const { type = "" } = projectList[projectIndex] || {};
       const { status = "" } = statusList[statusIndex] || {};
-      const { code = "000", msg, data }: any = await GetOrderList({ pageNum, pageSize, status, type, mouldNo });
-      if (code == "999") {
-        const { records = [], total } = data || {};
-        commit(MutationTypes.UpdateOrder, { list: records, total });
+      const { code, msg, data }: any = await GetOrderList({ pageNum, pageSize, status, type, orderNo });
+      if (code === 0) {
+        const { list = [], total } = data || {};
+        commit(MutationTypes.UpdateOrder, { list, total: Number(total) });
       } else {
         Message.error(msg);
       }
@@ -84,9 +94,9 @@ export default {
     dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新订单搜索内容
-  [ActionTypes.UpdateMouldNo](store: Store, mouldNo: string) {
+  [ActionTypes.UpdateOrderNo](store: Store, orderNo: string) {
     const { state, dispatch, commit } = store;
-    commit(MutationTypes.UpdateOrder, { mouldNo });
+    commit(MutationTypes.UpdateOrder, { orderNo });
     dispatch(ActionTypes.UpdatePageNum, 1);
   },
 

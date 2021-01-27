@@ -119,6 +119,8 @@ export default class Login extends Vue {
 
   @Mutation(RootMutationTypes.UpdateLoginNavIndex)
   public updateLoginNavIndex!: Function;
+  @Mutation(RootMutationTypes.UpdateVerificationCodeNumber)
+  public updateVerificationCodeNumber!: Function;
 
   @Watch("$route")
   public WatchRoute() {
@@ -134,6 +136,7 @@ export default class Login extends Vue {
       appid: WX_APPID,
       redirectUri: encodeURIComponent(WX_REDIRECT_URL + "/#/user/login")
     });
+    this.updateVerificationCodeNumber(0);
     this.login();
   }
   public login() {

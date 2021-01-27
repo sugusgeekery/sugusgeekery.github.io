@@ -1,5 +1,8 @@
 import fetch from "@/axios";
 
 // 获取订单列表
-export const GetOrderList = (params: any): object => fetch({ url: `/supplier/mouldBiddingHead/list`, method: "GET", params });
+export const GetOrderList = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/list`, method: "GET", params });
+
+// 获取订单竞价指标
+export const GetMyBidAdvantage = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getMyBidAdvantage`, method: "GET", params });
 

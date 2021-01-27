@@ -1,526 +1,104 @@
 export interface State {
-  biddingIndex: number;
-  biddingList: Array<BiddingList>;
-  biddingDetail: any | BiddingDetail;
-  biddingTechnology: any | BiddingTechnology;
-  biddingMaterial: any | BiddingMaterial;
+  orderMessageList: Array<OrderMessage>;
+  jobList: Array<Job>;
+  userMessageList: Array<UserMessage>;
 };
 
-// 竞价导航
-export interface BiddingList {
+// 订单消息
+export interface OrderMessage {
   text: string;
-  type: number;
-  pageNum: number;
-  pageSize: number;
-  pageSizes: number[];
-  total: number;
-  minPrice?: string | number;
-  maxPrice?: string | number;
-  payDate?: string;
-  provinceCityCountry?: string[];
-  list: Array<BiddingObject | BiddingObjectMyself>;
+  count: number;
 }
-export interface BiddingObject {
-  address: string;
-  amount: number;
+// 待办任务
+export interface Job {
+  taskName: string;
   id: number;
-  isUserBid: number;
-  joinSupplierCount: number;
-  mouldNo: string;
-  termTime: string;
-  type: string;
-  typeDesc: string;
-  unit: string;
-  unitDesc: string;
-  workPeriod: number;
+  orderNo: string;
+  time: string;
+  title: string;
+  url: string;
 }
-export interface BiddingObjectMyself {
-  amount: number;
-  biddingStatus: string;
-  biddingStatusDesc: string;
-  biddingTime: string;
-  id: number;
-  mouldNo: string;
-  type: string;
-  typeDesc: string;
-  unit: string;
-  workPeriod: number;
-}
+// 个人消息
+export interface UserMessage {
 
-export interface BiddingDetail {}
-export interface BiddingTechnology {}
-export interface BiddingMaterial {}
+}
 
 const state: State = {
-  biddingIndex: 0,
-  biddingList: [
+  orderMessageList: [
     {
-      text: "竞价单",
-      type: 0,
-      pageNum: 1,
-      pageSize: 10,
-      pageSizes: [10, 20, 50, 100],
-      total: 0,
-      minPrice: "",
-      maxPrice: "",
-      payDate: "",
-      provinceCityCountry: [],
-      list: [
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        },
-      ]
+      text: "新竞价单",
+      count: 0,
     },
     {
-      text: "竞价中",
-      type: 1,
-      pageNum: 1,
-      pageSize: 10,
-      pageSizes: [10, 20, 50, 100],
-      total: 0,
-      minPrice: "",
-      maxPrice: "",
-      payDate: "",
-      provinceCityCountry: [],
-      list: [
-        {
-          "address": "",
-          "amount": 0,
-          "id": 0,
-          "isUserBid": 0,
-          "joinSupplierCount": 0,
-          "mouldNo": "",
-          "termTime": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "unitDesc": "",
-          "workPeriod": 0
-        }
-      ]
+      text: "未完成订单",
+      count: 0,
     },
     {
-      text: "我的中标",
-      type: 0,
-      pageNum: 1,
-      pageSize: 10,
-      pageSizes: [10, 20, 50, 100],
-      total: 0,
-      minPrice: "",
-      maxPrice: "",
-      payDate: "",
-      provinceCityCountry: [],
-      list: [
-        {
-          "amount": 0,
-          "biddingStatus": "",
-          "biddingStatusDesc": "",
-          "biddingTime": "",
-          "id": 0,
-          "mouldNo": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "workPeriod": 0
-        }
-      ]
+      text: "待处理订单",
+      count: 0,
     },
     {
-      text: "竞价历史",
-      type: 1,
-      pageNum: 1,
-      pageSize: 10,
-      pageSizes: [10, 20, 50, 100],
-      total: 0,
-      minPrice: "",
-      maxPrice: "",
-      payDate: "",
-      provinceCityCountry: [],
-      list: [
-        {
-          "amount": 0,
-          "biddingStatus": "",
-          "biddingStatusDesc": "",
-          "biddingTime": "",
-          "id": 0,
-          "mouldNo": "",
-          "type": "",
-          "typeDesc": "",
-          "unit": "",
-          "workPeriod": 0
-        }
-      ]
+      text: "新消息",
+      count: 0,
     },
   ],
-  biddingDetail: {
-    isShow: false,
-    headId: 0,
-    biddingIndex: 0,
-    "biddingHeadInfo": {
-      "accuracy": 0,
-      "address": "",
-      "amount": "",
-      "anerror": 0,
-      "termTime": "",
-      "unit": "",
-      "unitDesc": "",
-      "workPeriod": ""
+  jobList: [
+    // {
+    //   "id": 12,
+    //   "orderNo": "7687634534543435",
+    //   "time": "2021-02-11",
+    //   "title": "需要确认图纸",
+    //   "url": "www.baidu.com"
+    // },
+    // {
+    //   "id": 12,
+    //   "orderNo": "7687634534543435",
+    //   "time": "2021-02-11",
+    //   "title": "需要确认图纸",
+    //   "url": "www.baidu.com"
+    // },
+    // {
+    //   "id": 12,
+    //   "orderNo": "7687634534543435",
+    //   "time": "2021-02-11",
+    //   "title": "需要确认图纸",
+    //   "url": "www.baidu.com"
+    // },
+  ],
+  userMessageList: [
+    {
+      "id": 12,
+      "orderNo": "7687634534543435",
+      "time": "2021-02-11",
+      "img": "",
+      name: "enen",
+      "msg": "www.baidu.com"
     },
-    "biddingState": 0,
-    "joinBiddingInfo": {
-      "amount": 0,
-      "supplierBiddingId": 0,
-      "workPeriod": 0
+    {
+      "id": 12,
+      "orderNo": "7687634534543435",
+      "time": "2021-02-11",
+      "img": "",
+      name: "enen",
+      "msg": "www.baidu.com"
     },
-    "lifetime": "",
-    "productInfos": [
-      {
-        "id": 0,
-        "productHeight": "",
-        "productLength": "",
-        "productNo": "",
-        "productNum": 0,
-        "productWeight": "",
-        "productWidth": "",
-        "surfaceTreatment": ""
-      }
-    ],
-    "realMouldNo": "",
-    "selectedUserBiddingInfo": {
-      "amount": 0,
-      "supplierBiddingId": 0,
-      "workPeriod": 0
+    {
+      "id": 12,
+      "orderNo": "7687634534543435",
+      "time": "2021-02-11",
+      "img": "",
+      name: "enen",
+      "msg": "www.baidu.com"
     },
-    "status": "",
-    "toleranceValue": "",
-    "type": "",
-    "typeDesc": ""
-  },
-  biddingTechnology: {
-    isShow: false,
-    headId: 0,
-    list: [
-      {
-        "colorType": "",
-        "colorValue": "",
-        "componentNum": 0,
-        "isCustomerSupport": 0,
-        "subsidiaryFileUrl": "",
-        "technologyName": "",
-        "technologySpecName": "",
-        "technologyValue": "",
-        "type": 0
-      },
-      {
-        "colorType": "",
-        "colorValue": "",
-        "componentNum": 0,
-        "isCustomerSupport": 0,
-        "subsidiaryFileUrl": "",
-        "technologyName": "",
-        "technologySpecName": "",
-        "technologyValue": "",
-        "type": 1
-      },
-      {
-        "colorType": "",
-        "colorValue": "",
-        "componentNum": 0,
-        "isCustomerSupport": 0,
-        "subsidiaryFileUrl": "",
-        "technologyName": "",
-        "technologySpecName": "",
-        "technologyValue": "",
-        "type": 2
-      },
-      {
-        "colorType": "",
-        "colorValue": "",
-        "componentNum": 0,
-        "isCustomerSupport": 0,
-        "subsidiaryFileUrl": "",
-        "technologyName": "",
-        "technologySpecName": "",
-        "technologyValue": "",
-        "type": 1
-      },
-    ]
-  },
-  biddingMaterial: {
-    isShow: false,
-    headId: 0,
-    "additiveType": "",
-    "additiveValue": "",
-    "brandNumber": "",
-    "colorType": 0,
-    "colorValue": "",
-    "materialName": "",
-    "purpose": "",
-    "specialType": ""
-  }
+    {
+      "id": 12,
+      "orderNo": "7687634534543435",
+      "time": "2021-02-11",
+      "img": "",
+      name: "enen",
+      "msg": "www.baidu.com"
+    },
+  ]
 };
 
 export default state;

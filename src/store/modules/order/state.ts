@@ -1,13 +1,18 @@
 export interface State {
+  advantage: Advantage;
   order: Order;
 };
 
+export interface Advantage {
+  accuracy: number;
+  anerror: number;
+}
 export interface Order {
   pageNum: number;
   pageSize: number;
   pageSizes: number[];
   total: number;
-  mouldNo: string;
+  orderNo: string;
   projectIndex: number;
   projectList: Array<ProjectList>;
   statusIndex: number;
@@ -15,14 +20,20 @@ export interface Order {
   list: Array<OrderList>;
 }
 export interface OrderList {
+  amount: string;
+  completeTime: string;
   createTime: string;
   id: number;
   mouldNo: string;
+  orderNo: string;
+  remainTime: number;
   status: string;
   statusDesc: string;
-  termTime: string;
   type: string;
   typeDesc: string;
+  unit: string;
+  unitDesc: string;
+  workPeriod: string;
 }
 export interface ProjectList {
   text: string;
@@ -35,12 +46,16 @@ export interface StatusList {
 
 
 const state: State = {
+  advantage: {
+    accuracy: 0,
+    anerror: 0
+  },
   order: {
     pageNum: 1,
     pageSize: 10,
     pageSizes: [10, 20, 50, 100],
     total: 0,
-    mouldNo: "",
+    orderNo: "",
     projectIndex: 0,
     projectList: [
       {
@@ -81,14 +96,20 @@ const state: State = {
     ],
     list: [
       {
+        "amount": "",
+        "completeTime": "",
         "createTime": "",
         "id": 0,
         "mouldNo": "",
+        "orderNo": "",
+        "remainTime": 0,
         "status": "",
         "statusDesc": "",
-        "termTime": "",
         "type": "",
-        "typeDesc": ""
+        "typeDesc": "",
+        "unit": "",
+        "unitDesc": "",
+        "workPeriod": ""
       }
     ]
   }

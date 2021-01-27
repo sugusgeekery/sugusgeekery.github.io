@@ -10,14 +10,9 @@ import { Message, MessageBox } from "element-ui";
 // import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
-  GetSelectByUser,
-  GetSelectMyBidding,
-  JoinBidding,
-  UpdateMouldBidding,
-  GetMouldBiddingDetail,
-  GetProductTechnology,
-  GetMaterialAndColor,
-} from "@/api/bidding";
+  GetStatistics,
+  GetToBeDeal
+} from "@/api/home";
 
 interface Store {
   rootState: RootState;
@@ -29,126 +24,36 @@ interface Store {
 }
 
 export enum ActionTypes {
-  // InitWeeklyReport = "InitWeeklyReport",
-  UpdateBiddingIndex = "UpdateBiddingIndex",
-  GetBiddingList = "GetBiddingList",
-  UpdatePageNum = "UpdatePageNum",
-  UpdatePageSize = "UpdatePageSize",
-  UpdateMinPrice = "UpdateMinPrice",
-  UpdateMaxPrice = "UpdateMaxPrice",
-  UpdatePayDate = "UpdatePayDate",
-  UpdateProvinceCityCountry = "UpdateProvinceCityCountry",
-  JoinBidding = "JoinBidding",
-  UpdateMouldBidding = "UpdateMouldBidding",
-  GetBiddingDetail = "GetBiddingDetail",
-  GetMouldBiddingDetail = "GetMouldBiddingDetail",
-  GetBiddingTechnology = "GetBiddingTechnology",
-  GetProductTechnology = "GetProductTechnology",
-  GetBiddingMaterial = "GetBiddingMaterial",
-  GetMaterialAndColor = "GetMaterialAndColor"
+  GetStatistics = "GetStatistics",
+  GetToBeDeal = "GetToBeDeal",
 }
 
 export default {
-  // 初始化模块默认值
-  // [ActionTypes.InitWeeklyReport](store: Store, params: any) {
-  //   const { state, dispatch, commit } = store;
-  //   const { platform = "", accessToken = "", vipId = "", subject = "", beginTime = "", endTime = "" } = params || {};
-  //   commit(MutationTypes.UpdateWeeklyReport, { platform, accessToken, vipId, subject, beginTime, endTime });
-  //   dispatch(ActionTypes.GetWeeklyReport);
-  // },
-
-  // 更新竞价导航下标
-  [ActionTypes.UpdateBiddingIndex](store: Store, biddingIndex: number) {
-    const { state, dispatch, commit } = store;
-    commit(MutationTypes.UpdateBiddingIndex, biddingIndex);
-    dispatch(ActionTypes.GetBiddingList);
-  },
-  // 获取竞价导航列表
-  async [ActionTypes.GetBiddingList](store: Store) {
+  // 获取个人统计信息
+  async [ActionTypes.GetStatistics](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { biddingIndex = 0, biddingList = [] } = state;
-      const { type = 0, pageNum = 1, pageSize = 10 } = biddingList[biddingIndex] || {}; 
-      let fn = null;
-      if (biddingIndex === 0 || biddingIndex === 1) {
-        fn = await GetSelectByUser({ type, pageNum, pageSize });
-      } else if (biddingIndex === 2 || biddingIndex === 3) {
-        fn = await GetSelectMyBidding({ type, pageNum, pageSize });
-      }
-      const { code = "000", msg, data }: any = fn;
-      if (code == "999") {
-        const { records = [], total = 0 } = data || {};
-        biddingList[biddingIndex].list = records;
-        biddingList[biddingIndex].total = total;
-        commit(MutationTypes.UpdateBiddingList, biddingList);
-      } else {
-        Message.error(msg);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
-  
-  // 更新竞价导航页码
-  [ActionTypes.UpdatePageNum](store: Store, pageNum: number) {
-    const { state, dispatch, commit } = store;
-    const { biddingIndex = 0, biddingList = [] } = state;
-    biddingList[biddingIndex].pageNum = pageNum;
-    commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.GetBiddingList);
-  },
-  // 更新竞价导航每页条数
-  [ActionTypes.UpdatePageSize](store: Store, pageSize: number) {
-    const { state, dispatch, commit } = store;
-    const { biddingIndex = 0, biddingList = [] } = state;
-    biddingList[biddingIndex].pageSize = pageSize;
-    commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
-  },
-  // 更新竞价导航最少价格
-  [ActionTypes.UpdateMinPrice](store: Store, minPrice: string | number) {
-    const { state, dispatch, commit } = store;
-    const { biddingIndex = 0, biddingList = [] } = state;
-    biddingList[biddingIndex].minPrice = Number(minPrice);
-    commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
-  },
-  // 更新竞价导航最多价格
-  [ActionTypes.UpdateMaxPrice](store: Store, maxPrice: string | number) {
-    const { state, dispatch, commit } = store;
-    const { biddingIndex = 0, biddingList = [] } = state;
-    biddingList[biddingIndex].maxPrice = Number(maxPrice);
-    commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
-  },
-  // 更新竞价导航交付日期
-  [ActionTypes.UpdatePayDate](store: Store, payDate: string) {
-    const { state, dispatch, commit } = store;
-    const { biddingIndex = 0, biddingList = [] } = state;
-    console.log(payDate)
-    biddingList[biddingIndex].payDate = payDate;
-    commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
-  },
-  // 更新竞价导航交付地区
-  [ActionTypes.UpdateProvinceCityCountry](store: Store, provinceCityCountry: string[]) {
-    const { state, dispatch, commit } = store;
-    const { biddingIndex = 0, biddingList = [] } = state;
-    biddingList[biddingIndex].provinceCityCountry = provinceCityCountry;
-    commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
-  },
-
-  // 竞价
-  async [ActionTypes.JoinBidding](store: Store, index: number) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { biddingIndex = 0, biddingList = [] } = state;
-      const { list = [] } = biddingList[biddingIndex] || {}; 
-      const { amount, id, workPeriod } = list[index] || {};
-      const { code = "000", msg, data }: any = await JoinBidding({ amount, biddingHeadId: id, workPeriod });
-      if (code == "999") {
-        dispatch(ActionTypes.GetBiddingList);
+      const { code, msg, data }: any = await GetStatistics();
+      if (code === 0) {
+        const { inCompleteOrderCount = 0, messageCount = 0, newBiddingCount = 0, pendingOrderCount = 0 } = data || {};
+        const orderMessageList = [];
+        orderMessageList.push({
+          text: "新竞价单",
+          count: newBiddingCount
+        });
+        orderMessageList.push({
+          text: "未完成订单",
+          count: inCompleteOrderCount
+        });
+        orderMessageList.push({
+          text: "待处理订单",
+          count: pendingOrderCount
+        });
+        orderMessageList.push({
+          text: "新消息",
+          count: messageCount
+        });
+        commit(MutationTypes.UpdateOrderMessageList, orderMessageList);
       } else {
         Message.error(msg);
       }
@@ -157,24 +62,13 @@ export default {
     }
   },
 
-  // 更新竞价详情
-  [ActionTypes.GetBiddingDetail](store: Store, index: number) {
-    const { state, dispatch, commit } = store;
-    const { biddingIndex = 0, biddingList = [] } = state;
-    const { list = [] } = biddingList[biddingIndex] || {}; 
-    const { id } = list[index] || {};
-    commit(MutationTypes.UpdateBiddingDetail, { isShow: true, headId: id, biddingIndex });
-    dispatch(ActionTypes.GetMouldBiddingDetail);
-  },
-  // 获取竞价单详情
-  async [ActionTypes.GetMouldBiddingDetail](store: Store) {
+  // 获取待办任务
+  async [ActionTypes.GetToBeDeal](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { biddingDetail } = state;
-      const { headId = "" } = biddingDetail || {};
-      const { code = "000", msg, data }: any = await GetMouldBiddingDetail({ headId });
-      if (code == "999") {
-        commit(MutationTypes.UpdateBiddingDetail, data || {});
+      const { code, msg, data }: any = await GetToBeDeal();
+      if (code === 0) {
+        commit(MutationTypes.UpdateJobList, data || []);
       } else {
         Message.error(msg);
       }
@@ -182,71 +76,4 @@ export default {
       throw new Error(e);
     }
   },
-  // 竞价
-  async [ActionTypes.UpdateMouldBidding](store: Store, index: number) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { biddingDetail } = state;
-      const { amount, headId, id, workPeriod } = biddingDetail || {}; 
-      const { code = "000", msg, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id, workPeriod });
-      if (code == "999") {
-        dispatch(ActionTypes.GetMouldBiddingDetail);
-      } else {
-        Message.error(msg);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
-
-  // 更新竞价单二次工艺
-  [ActionTypes.GetBiddingTechnology](store: Store) {
-    const { state, dispatch, commit } = store;
-    const { biddingDetail } = state;
-    const { headId } = biddingDetail || {}; 
-    commit(MutationTypes.UpdateBiddingTechnology, { isShow: true, headId });
-    dispatch(ActionTypes.GetProductTechnology);
-  },
-  // 获取竞价单二次工艺
-  async [ActionTypes.GetProductTechnology](store: Store) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { biddingDetail } = state;
-      const { headId = "" } = biddingDetail || {};
-      const { code = "000", msg, data }: any = await GetProductTechnology({ headId });
-      if (code == "999") {
-        commit(MutationTypes.UpdateBiddingTechnology, data || {});
-      } else {
-        Message.error(msg);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
-
-  // 更新竞价单材料颜色
-  [ActionTypes.GetBiddingMaterial](store: Store) {
-    const { state, dispatch, commit } = store;
-    const { biddingDetail } = state;
-    const { headId } = biddingDetail || {}; 
-    commit(MutationTypes.UpdateBiddingMaterial, { isShow: true, headId });
-    dispatch(ActionTypes.GetMaterialAndColor);
-  },
-  // 获取竞价单材料颜色
-  async [ActionTypes.GetMaterialAndColor](store: Store) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { biddingDetail } = state;
-      const { headId = "" } = biddingDetail || {};
-      const { code = "000", msg, data }: any = await GetMaterialAndColor({ headId });
-      if (code == "999") {
-        commit(MutationTypes.UpdateBiddingMaterial, data || {});
-      } else {
-        Message.error(msg);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
-  
 }

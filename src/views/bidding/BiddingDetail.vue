@@ -17,8 +17,19 @@
         <div class="model-flex">
           <div class="model-flex-title">模具信息</div>
           <div class="model-flex-row">
-            <div class="model-flex-left"></div>
-            <div class="model-flex-content">
+            <div class="model-flex-arrow" @click="updateProductInfoIndex(2)">
+              <img
+                class="model-flex-arrow-icon"
+                src="../../assets/images/arrow_left.png"
+                alt=""
+              />
+            </div>
+            <div
+              class="model-flex-content"
+              v-for="(a, b) in biddingDetail.productInfos"
+              :key="'_产品列表_' + b"
+              v-show="b === biddingDetail.productInfoIndex"
+            >
               <div class="model-flex-context">
                 <div class="model-flex-text">
                   <span>模具寿命：</span>
@@ -26,7 +37,7 @@
                 </div>
                 <div class="model-flex-text">
                   <span class="model-flex-text-black">产品：</span>
-                  <span>{{ biddingDetail.productInfos.productNo || "" }}</span>
+                  <span>{{ a.productNo || "" }}</span>
                 </div>
                 <div class="model-flex-image">
                   <img src="" alt="" />
@@ -40,28 +51,26 @@
                 <div class="model-flex-text">
                   <span>表面要求：</span>
                   <span>
-                    {{ biddingDetail.productInfos.surfaceTreatment || "" }}
+                    {{ a.surfaceTreatment || "" }}
                   </span>
                 </div>
                 <div class="model-flex-text">
                   <span>产品数量：</span>
                   <span>
-                    {{ biddingDetail.productInfos.productNum || "" }}
+                    {{ a.productNum || "" }}
                   </span>
                 </div>
                 <div class="model-flex-text">
                   <span>重量(g)：</span>
                   <span>
-                    {{ biddingDetail.productInfos.productWeight || "" }}
+                    {{ a.productWeight || "" }}
                   </span>
                 </div>
                 <div class="model-flex-text">
                   <span>尺寸(mm)：</span>
                   <span>
-                    {{ biddingDetail.productInfos.productLength || "" }}
-                    *{{ biddingDetail.productInfos.productWidth || "" }} *{{
-                      biddingDetail.productInfos.productHeight || ""
-                    }}
+                    {{ a.productLength || "" }}
+                    *{{ a.productWidth || "" }} *{{ a.productHeight || "" }}
                   </span>
                 </div>
                 <div class="model-flex-text">
@@ -84,7 +93,13 @@
                 </div>
               </div>
             </div>
-            <div class="model-flex-right"></div>
+            <div class="model-flex-arrow" @click="updateProductInfoIndex(2)">
+              <img
+                class="model-flex-arrow-icon"
+                src="../../assets/images/arrow_right.png"
+                alt=""
+              />
+            </div>
           </div>
         </div>
         <div class="model-flex">
@@ -172,25 +187,26 @@
                 <div class="model-flex-text">
                   <span>中标交期</span>
                 </div>
-                <div class="model-flex-button model-flex-button-blue">竞价</div>
               </div>
               <div class="model-flex-context">
                 <div class="model-flex-text">
                   <span>￥</span>
                   <span>
-                    {{ biddingDetail.selectedUserBiddingInfo.amount || "" }}
+                    {{ biddingDetail.selectedUserBiddingInfo.amount || 0 }}
                   </span>
                 </div>
                 <div class="model-flex-text">
                   <span>
-                    {{ biddingDetail.selectedUserBiddingInfo.workPeriod || "" }}
+                    {{ biddingDetail.selectedUserBiddingInfo.workPeriod || 0 }}
                   </span>
                   <span>小时</span>
                 </div>
               </div>
             </div>
           </div>
-          <div class="model-flex-title">竞价信息</div>
+          <div class="model-flex-title">
+            竞价信息
+          </div>
           <div class="model-flex-row">
             <div class="model-flex-content">
               <div class="model-flex-context">
@@ -228,7 +244,7 @@
                     "
                   />
                   <span v-else>{{
-                    biddingDetail.joinBiddingInfo.amount || ""
+                    biddingDetail.joinBiddingInfo.amount || 0
                   }}</span>
                 </div>
                 <div class="model-flex-text">
@@ -246,7 +262,7 @@
                     "
                   />
                   <span v-else>
-                    {{ biddingDetail.joinBiddingInfo.workPeriod || "" }}
+                    {{ biddingDetail.joinBiddingInfo.workPeriod || 0 }}
                   </span>
                   <span>小时</span>
                 </div>
@@ -284,6 +300,8 @@ export default class BiddingDetailModel extends Vue {
   @State("biddingDetail")
   public biddingDetail!: any | BiddingDetail;
 
+  @Action(ActionTypes.UpdateProductInfoIndex)
+  public updateProductInfoIndex!: Function;
   @Action(ActionTypes.GetBiddingTechnology)
   public getBiddingTechnology!: Function;
   @Action(ActionTypes.GetBiddingMaterial)
@@ -376,16 +394,15 @@ export default class BiddingDetailModel extends Vue {
       display flex
       justify-content space-between
       align-items center
-    &-left
+    &-arrow
       width 20px
       height 20px
       margin-right 20px
-      background red
-    &-right
-      width 20px
-      height 20px
-      margin-left 20px
-      background red
+      cursor pointer
+      &-icon
+        width 100%
+        height 100%
+        object-fit cover
     &-content
       display flex
       justify-content flex-start
@@ -413,6 +430,7 @@ export default class BiddingDetailModel extends Vue {
         color $color-text-black
       &-blue
         color $color-text-blue
+        cursor pointer
     &-input
       max-width 80px
       min-height 30px

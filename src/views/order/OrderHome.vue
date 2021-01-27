@@ -41,7 +41,7 @@
               <div class="filter-item-content">
                 <el-input
                   :value="order.mouldNo"
-                  @input="v => updateMouldNo(v)"
+                  @input="v => updateOrderNo(v)"
                   placeholder="请搜索你想要的订单"
                 ></el-input>
               </div>
@@ -98,8 +98,8 @@
       </div>
       <div class="tip">
         <div class="tip-title">我的竞价指标</div>
-        <div class="tip-text">交期准时率:：96%</div>
-        <div class="tip-text">交付失误率：97%</div>
+        <div class="tip-text">交期准时率:：{{ advantage.accuracy || 0 }}%</div>
+        <div class="tip-text">交付失误率：{{ advantage.anerror || 0 }}%</div>
       </div>
     </div>
   </div>
@@ -110,7 +110,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order");
 
-import { Order } from "@/store/modules/order/state";
+import { Advantage, Order } from "@/store/modules/order/state";
 import { ActionTypes } from "@/store/modules/order/actions";
 
 @Component({
@@ -118,9 +118,13 @@ import { ActionTypes } from "@/store/modules/order/actions";
   components: {}
 })
 export default class OrderHome extends Vue {
+  @State("advantage")
+  public advantage!: Advantage;
   @State("order")
   public order!: Order;
 
+  @Action(ActionTypes.GetMyBidAdvantage)
+  public getMyBidAdvantage!: Function;
   @Action(ActionTypes.UpdatePageNum)
   public updatePageNum!: Function;
   @Action(ActionTypes.UpdatePageSize)
@@ -129,10 +133,15 @@ export default class OrderHome extends Vue {
   public updateProjectIndex!: Function;
   @Action(ActionTypes.UpdateStatusIndex)
   public updateStatusIndex!: Function;
-  @Action(ActionTypes.UpdateMouldNo)
-  public updateMouldNo!: Function;
+  @Action(ActionTypes.UpdateOrderNo)
+  public updateOrderNo!: Function;
   @Action(ActionTypes.GetOrderDetail)
   public getOrderDetail!: Function;
+
+  public created() {
+    this.getMyBidAdvantage();
+    this.updatePageNum(1);
+  }
 }
 </script>
 

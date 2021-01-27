@@ -13,19 +13,19 @@ export const JoinBidding = (data: object = {}): object => fetch({ url: "/supplie
 export const UpdateMouldBidding = (data: object = {}): object => fetch({ url: "/supplier/userMouldBidding/updateMouldBidding", data });
 
 // 获取竞价单详情
-export const GetMouldBiddingDetail = (params: any): object => {
+export const GetMouldBiddingDetail = (params: any = {}): object => {
   const { headId = "" } = params;
   return fetch({ url: `/supplier/userMouldBidding/getMouldBiddingDetail/${headId}`, method: "GET", params: {} });
 };
 
 // 获取竞价单详情的二次工艺信息
-export const GetProductTechnology = (params: any): object => {
+export const GetProductTechnology = (params: any = {}): object => {
   const { headId = "" } = params;
   return fetch({ url: `/supplier/userMouldBidding/getProductTechnology/${headId}`, method: "GET", params: {} });
 };
 
 // 获取竞价单详情的材料和颜色
-export const GetMaterialAndColor = (params: any): object => {
+export const GetMaterialAndColor = (params: any = {}): object => {
   const { headId = "" } = params;
   return fetch({ url: `/supplier/userMouldBidding/getMaterialAndColor/${headId}`, method: "GET", params: {} });
 };

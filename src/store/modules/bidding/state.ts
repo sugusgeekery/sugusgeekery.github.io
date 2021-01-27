@@ -21,6 +21,7 @@ export interface BiddingList {
   list: Array<BiddingObject | BiddingObjectMyself>;
 }
 export interface BiddingObject {
+  biddingHeadId?: string;
   address: string;
   amount: number;
   id: number;
@@ -35,6 +36,7 @@ export interface BiddingObject {
   workPeriod: number;
 }
 export interface BiddingObjectMyself {
+  biddingHeadId?: string;
   amount: number;
   biddingStatus: string;
   biddingStatusDesc: string;
@@ -436,6 +438,7 @@ const state: State = {
       "workPeriod": 0
     },
     "lifetime": "",
+    productInfoIndex: -1,
     "productInfos": [
       {
         "id": 0,

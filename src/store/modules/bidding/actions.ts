@@ -41,6 +41,7 @@ export enum ActionTypes {
   JoinBidding = "JoinBidding",
   UpdateMouldBidding = "UpdateMouldBidding",
   GetBiddingDetail = "GetBiddingDetail",
+  UpdateProductInfoIndex = "UpdateProductInfoIndex",
   GetMouldBiddingDetail = "GetMouldBiddingDetail",
   GetBiddingTechnology = "GetBiddingTechnology",
   GetProductTechnology = "GetProductTechnology",
@@ -75,11 +76,11 @@ export default {
       } else if (biddingIndex === 2 || biddingIndex === 3) {
         fn = await GetSelectMyBidding({ type, pageNum, pageSize });
       }
-      const { code = "000", msg, data }: any = fn;
-      if (code == "999") {
-        const { records = [], total = 0 } = data || {};
-        biddingList[biddingIndex].list = records;
-        biddingList[biddingIndex].total = total;
+      const { code, msg, data }: any = fn;
+      if (code === 0) {
+        const { list = [], total = 0 } = data || {};
+        biddingList[biddingIndex].list = list;
+        biddingList[biddingIndex].total = Number(total);
         commit(MutationTypes.UpdateBiddingList, biddingList);
       } else {
         Message.error(msg);
@@ -146,8 +147,8 @@ export default {
       const { biddingIndex = 0, biddingList = [] } = state;
       const { list = [] } = biddingList[biddingIndex] || {}; 
       const { amount, id, workPeriod } = list[index] || {};
-      const { code = "000", msg, data }: any = await JoinBidding({ amount, biddingHeadId: id, workPeriod });
-      if (code == "999") {
+      const { code, msg, data }: any = await JoinBidding({ amount, biddingHeadId: id, workPeriod });
+      if (code === 0) {
         dispatch(ActionTypes.GetBiddingList);
       } else {
         Message.error(msg);
@@ -162,8 +163,8 @@ export default {
     const { state, dispatch, commit } = store;
     const { biddingIndex = 0, biddingList = [] } = state;
     const { list = [] } = biddingList[biddingIndex] || {}; 
-    const { id } = list[index] || {};
-    commit(MutationTypes.UpdateBiddingDetail, { isShow: true, headId: id, biddingIndex });
+    const { biddingHeadId } = list[index] || {};
+    commit(MutationTypes.UpdateBiddingDetail, { isShow: true, headId: biddingHeadId, biddingIndex });
     dispatch(ActionTypes.GetMouldBiddingDetail);
   },
   // 获取竞价单详情
@@ -172,14 +173,33 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { headId = "" } = biddingDetail || {};
-      const { code = "000", msg, data }: any = await GetMouldBiddingDetail({ headId });
-      if (code == "999") {
-        commit(MutationTypes.UpdateBiddingDetail, data || {});
+      const { code, msg, data }: any = await GetMouldBiddingDetail({ headId });
+      if (code === 0) {
+        const { productInfos = [] } = data || {};
+        commit(MutationTypes.UpdateBiddingDetail, { ...(data || {}), productInfoIndex: productInfos.length ? 0 : -1 });
       } else {
         Message.error(msg);
       }
     } catch (e) {
       throw new Error(e);
+    }
+  },
+  // 切换产品列表
+  [ActionTypes.UpdateProductInfoIndex](store: Store, status: number) {
+    const { state, dispatch, commit } = store;
+    const { biddingDetail } = state;
+    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+    if (productInfoIndex < 0) {
+      return;
+    }
+    if (status === 1) {
+      if (productInfoIndex < productInfos.length - 1) {
+        commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: productInfoIndex + 1 });
+      }
+    } else if (status === 2) {
+      if (productInfoIndex > 0) {
+        commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: productInfoIndex - 1 });
+      }
     }
   },
   // 竞价
@@ -188,8 +208,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { amount, headId, id, workPeriod } = biddingDetail || {}; 
-      const { code = "000", msg, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id, workPeriod });
-      if (code == "999") {
+      const { code, msg, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id, workPeriod });
+      if (code === 0) {
         dispatch(ActionTypes.GetMouldBiddingDetail);
       } else {
         Message.error(msg);
@@ -213,8 +233,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { headId = "" } = biddingDetail || {};
-      const { code = "000", msg, data }: any = await GetProductTechnology({ headId });
-      if (code == "999") {
+      const { code, msg, data }: any = await GetProductTechnology({ headId });
+      if (code === 0) {
         commit(MutationTypes.UpdateBiddingTechnology, data || {});
       } else {
         Message.error(msg);
@@ -238,8 +258,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { headId = "" } = biddingDetail || {};
-      const { code = "000", msg, data }: any = await GetMaterialAndColor({ headId });
-      if (code == "999") {
+      const { code, msg, data }: any = await GetMaterialAndColor({ headId });
+      if (code === 0) {
         commit(MutationTypes.UpdateBiddingMaterial, data || {});
       } else {
         Message.error(msg);

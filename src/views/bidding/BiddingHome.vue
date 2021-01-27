@@ -19,7 +19,7 @@
               </div>
             </div>
           </div>
-          <div class="filter-items">
+          <div class="filter-items" v-if="biddingIndex < 2">
             <div class="filter-item">
               <div class="filter-item-label">建议价格</div>
               <div class="filter-item-content">
