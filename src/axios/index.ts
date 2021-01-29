@@ -142,7 +142,8 @@ export default async ({
   method = "post",
   url = "",
   data = {},
-  params = {}
+  params = {},
+  headers = {},
 }: AxiosRequestConfig = {}) => {
   const config: AxiosRequestConfig = {
     url,
@@ -158,7 +159,8 @@ export default async ({
     data,
     headers: {
       token:
-          store.state.logInfo.accessToken || getSessionStorage("accessToken") || getLocalStorage("accessToken") || "",
+        store.state.logInfo.accessToken || getSessionStorage("accessToken") || getLocalStorage("accessToken") || "",
+      ...headers
     }
   };
   return service(config);

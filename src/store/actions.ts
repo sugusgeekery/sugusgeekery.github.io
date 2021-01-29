@@ -30,7 +30,6 @@ export enum RootActionTypes {
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   VerificationCodelogin = "VerificationCodelogin",
   WechatLogin = "WechatLogin",
-  // UpdateRegisterWxCode = "UpdateRegisterWxCode",
   Register = "Register",
   UpdateNavigationIndex = "UpdateNavigationIndex",
 }
@@ -128,12 +127,6 @@ export default {
     }
   },
 
-  // 保存注册微信code
-  // [RootActionTypes.UpdateRegisterWxCode](store: Store, code: string) {
-  //   const { dispatch, commit } = store;
-  //   commit(RootMutationTypes.UpdateRegisterWxCode, code);
-  //   commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
-  // },
   // 注册
   async [RootActionTypes.Register](store: Store, parameter: { companyName: string; userName: string; phone: string; code: string; }) {
     try {

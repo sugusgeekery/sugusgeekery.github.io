@@ -1,8 +1,10 @@
-import { State, Advantage, Order } from "./state";
+import { State, Advantage, Order, NavigationList } from "./state";
 
 export enum MutationTypes {
   UpdateAdvantage = "UpdateAdvantage",
   UpdateOrder = "UpdateOrder",
+  UpdateNavigationList = "UpdateNavigationList",
+  UpdateNavigationIndex = "UpdateNavigationIndex"
 }
 
 export default {
@@ -27,5 +29,14 @@ export default {
       }
       state.order = Object.assign(order, temp);
     })(state, params, temp);
+  },
+
+  // 更新导航列表
+  [MutationTypes.UpdateNavigationList](state: State, navigationList: Array<NavigationList>) {
+    state.navigationList = navigationList;
+  },
+  // 更新导航下标
+  [MutationTypes.UpdateNavigationIndex](state: State, navigationIndex: number) {
+    state.navigationIndex = navigationIndex;
   },
 }

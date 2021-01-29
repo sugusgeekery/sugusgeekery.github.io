@@ -1,6 +1,8 @@
 export interface State {
   advantage: Advantage;
   order: Order;
+  navigationIndex: number;
+  navigationList: Array<NavigationList>;
 };
 
 export interface Advantage {
@@ -17,6 +19,7 @@ export interface Order {
   projectList: Array<ProjectList>;
   statusIndex: number;
   statusList: Array<StatusList>;
+  index: number;
   list: Array<OrderList>;
 }
 export interface OrderList {
@@ -43,7 +46,10 @@ export interface StatusList {
   text: string;
   status: string;
 }
-
+export interface NavigationList {
+  text: string;
+  path: string;
+};
 
 const state: State = {
   advantage: {
@@ -79,7 +85,7 @@ const state: State = {
     statusList: [
       {
         text: "全部状态",
-        status: "全部状态",
+        status: "",
       },
       {
         text: "待开始",
@@ -94,25 +100,41 @@ const state: State = {
         status: "已完成",
       },
     ],
+    index: -1,
     list: [
-      {
-        "amount": "",
-        "completeTime": "",
-        "createTime": "",
-        "id": 0,
-        "mouldNo": "",
-        "orderNo": "",
-        "remainTime": 0,
-        "status": "",
-        "statusDesc": "",
-        "type": "",
-        "typeDesc": "",
-        "unit": "",
-        "unitDesc": "",
-        "workPeriod": ""
-      }
+      // {
+      //   "amount": "",
+      //   "completeTime": "",
+      //   "createTime": "",
+      //   "id": 0,
+      //   "mouldNo": "",
+      //   "orderNo": "",
+      //   "remainTime": 0,
+      //   "status": "",
+      //   "statusDesc": "",
+      //   "type": "",
+      //   "typeDesc": "",
+      //   "unit": "",
+      //   "unitDesc": "",
+      //   "workPeriod": ""
+      // }
     ]
-  }
+  },
+  navigationIndex: 1,
+  navigationList: [
+    // {
+    //   text: "DFM报告",
+    //   path: "/order/report",
+    // },
+    // {
+    //   text: "方案设计",
+    //   path: "/order/design",
+    // },
+    // {
+    //   text: "模具信息",
+    //   path: "/order/information",
+    // },
+  ],
 };
 
 export default state;

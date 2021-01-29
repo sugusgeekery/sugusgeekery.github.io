@@ -1,5 +1,5 @@
 <template>
-  <div id="Home" class="body">
+  <div class="body">
     <Header></Header>
     <div class="container">
       <div class="wrapper">
@@ -21,15 +21,15 @@ import { State, Getter, Action, Mutation } from "vuex-class";
 
 import Header from "@/components/Header.vue";
 import Navigation from "@/components/Navigation.vue";
-import HomeComponent from "./HomeComponent.vue";
+import HomeComponent from "./templates/HomeTemplate.vue";
 
 @Component({
-  name: "Home",
+  name: "HomeView",
   components: {
     Header,
     Navigation,
     HomeComponent
   }
 })
-export default class Home extends Vue {}
+export default class HomeView extends Vue {}
 </script>

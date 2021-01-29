@@ -4,7 +4,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import {
+  getSessionStorage,
+  setSessionStorage,
+  getLocalStorage,
+  setLocalStorage
+} from "@/utils/storage";
 import { isEmptyObj } from "@/utils/util";
 
 @Component({

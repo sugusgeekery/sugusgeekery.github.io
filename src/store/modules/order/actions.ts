@@ -32,6 +32,7 @@ export enum ActionTypes {
   UpdateStatusIndex = "UpdateStatusIndex",
   UpdateOrderNo = "UpdateOrderNo",
   GetOrderDetail = "GetOrderDetail",
+  UpdateNavigationIndex = "UpdateNavigationIndex"
 }
 
 export default {
@@ -105,9 +106,82 @@ export default {
     const { state, dispatch, commit } = store;
     const { order } = state;
     const { list = [] } = order || {};
-    const { id = "" } = list[index] || {};
-    // commit(MutationTypes.UpdateOrderDetail, {});
-    // dispatch(ActionTypes.UpdatePageNum, 1);
+    const { status } = list[index] || {};
+    commit(MutationTypes.UpdateOrder, { index });
+    dispatch("order/design/Init", {...list[index]}, { root: true });
+    // dispatch("order/information", {...list[index]}, { root: true });
+    // dispatch("order/report", {...list[index]}, { root: true });
+    const navigationList = [];
+    if (status === "加工供应商") {
+      navigationList.push(...[
+        {
+          text: "DFM报告",
+          path: "/order/report",
+        },
+        {
+          text: "方案设计",
+          path: "/order/design",
+        },
+        {
+          text: "模具信息",
+          path: "/order/information",
+        },
+      ])
+    } else if (status === "DFM供应商") {
+      navigationList.push(...[
+        {
+          text: "DFM报告",
+          path: "/order/report",
+        },
+        {
+          text: "方案设计",
+          path: "/order/design",
+        },
+        {
+          text: "模具信息",
+          path: "/order/information",
+        },
+      ])
+    } else if (status === "注塑供应商") {
+      navigationList.push(...[
+        {
+          text: "DFM报告",
+          path: "/order/report",
+        },
+        {
+          text: "方案设计",
+          path: "/order/design",
+        },
+        {
+          text: "模具信息",
+          path: "/order/information",
+        },
+      ])
+    } else {
+      navigationList.push(...[
+        {
+          text: "DFM报告",
+          path: "/order/report",
+        },
+        {
+          text: "方案设计",
+          path: "/order/design",
+        },
+        {
+          text: "模具信息",
+          path: "/order/information",
+        },
+      ])
+    }
+    commit(MutationTypes.UpdateNavigationList, navigationList);
+    dispatch(ActionTypes.UpdateNavigationIndex, 1);
   },
-  
+  // 导航跳转
+  [ActionTypes.UpdateNavigationIndex](store: Store, navigationIndex: number) {
+    const { state, dispatch, commit } = store;
+    const { navigationList = [] } = state;
+    const { path } = navigationList[navigationIndex] || {};
+    commit(MutationTypes.UpdateNavigationIndex, navigationIndex);
+    router.push({ path });
+  },
 }

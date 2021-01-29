@@ -1,5 +1,5 @@
 <template>
-  <div id="Account" class="body">
+  <div class="body">
     <Header></Header>
     <div class="container">
       <div class="wrapper">
@@ -22,11 +22,11 @@ import Header from "@/components/Header.vue";
 import Navigation from "@/components/Navigation.vue";
 
 @Component({
-  name: "Account",
+  name: "AccountView",
   components: {
     Header,
     Navigation
   }
 })
-export default class Account extends Vue {}
+export default class AccountView extends Vue {}
 </script>

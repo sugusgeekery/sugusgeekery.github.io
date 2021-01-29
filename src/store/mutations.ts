@@ -1,12 +1,11 @@
 import { setLocalStorage, setSessionStorage }  from "@/utils/storage";
-import { RootState, LogInfo, UserInfo, Navigation, MyInfo, ChildList } from "./state";
+import { RootState, LogInfo, UserInfo, Navigation } from "./state";
 
 export enum RootMutationTypes {
   UpdateLogInfo = "UpdateLogInfo",
   UpdateUserInfo = "UpdateUserInfo",
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   UpdateLoginNavIndex = "UpdateLoginNavIndex",
-  // UpdateRegisterWxCode = "UpdateRegisterWxCode",
   UpdateRegisterNavIndex = "UpdateRegisterNavIndex",
   UpdateIsCheckProtocol = "UpdateIsCheckProtocol",
   UpdateIsShowProtocol = "UpdateIsShowProtocol",
@@ -56,13 +55,6 @@ export default {
   ) {
     state.loginNavIndex = loginNavIndex;
   },
-  // 更新注册微信code
-  // [RootMutationTypes.UpdateRegisterWxCode](
-  //   state: RootState,
-  //   registerWxCode: string
-  // ) {
-  //   state.registerWxCode = registerWxCode;
-  // },
   // 更新注册导航切换
   [RootMutationTypes.UpdateRegisterNavIndex](
     state: RootState,
@@ -98,70 +90,5 @@ export default {
     navigationList: Navigation[]
   ) {
     state.navigationList = navigationList;
-  },
-
-
-  // 更新token
-  // ["updateAccessToken"](state: RootState, accessToken: string = "") {
-  //   if (accessToken) {
-  //     state.accessToken = accessToken;
-  //     setLocalStorage("accessToken", accessToken);
-  //   }
-  // },
-  // 更新platform
-  ["updatePlatform"](state: RootState, platform: string = "") {
-    state.platform = platform;
-  },
-
-  
-
-  // 更新孩子列表
-  ["updateMyInfo"](state: RootState, myInfo: MyInfo) {
-    state.myInfo = myInfo;
-  },
-  // 更新孩子信息
-  ["updateChildInfo"](state: RootState, parameter: any) {
-    const { childInfo } = state;
-    const obj: any = {};
-    for (const i in parameter) {
-      obj[i] = parameter[i];
-    }
-    state.childInfo = Object.assign(childInfo, obj);
-  },
-  // 更新提分训练
-  ["updateTrainRecommend"](state: RootState, parameter: any) {
-    const { trainRecommend } = state;
-    const obj: any = {};
-    for (const i in parameter) {
-      obj[i] = parameter[i];
-    }
-    state.trainRecommend = Object.assign(trainRecommend, obj);
-  },
-  // 更新每周同步训练
-  ["updateWeeklySynchronousTrain"](state: RootState, parameter: any) {
-    const { weeklySynchronousTrain } = state;
-    const obj: any = {};
-    for (const i in parameter) {
-      obj[i] = parameter[i];
-    }
-    state.weeklySynchronousTrain = Object.assign(weeklySynchronousTrain, obj);
-  },
-  // 更新定制冲刺
-  ["updateCustomizedSprintPaper"](state: RootState, parameter: any) {
-    const { customizedSprintPaper } = state;
-    const obj: any = {};
-    for (const i in parameter) {
-      obj[i] = parameter[i];
-    }
-    state.customizedSprintPaper = Object.assign(customizedSprintPaper, obj);
-  },
-  // 更新错题本
-  ["updateWrongBook"](state: RootState, parameter: any) {
-    const { wrongBook } = state;
-    const obj: any = {};
-    for (const i in parameter) {
-      obj[i] = parameter[i];
-    }
-    state.wrongBook = Object.assign(wrongBook, obj);
   },
 };
