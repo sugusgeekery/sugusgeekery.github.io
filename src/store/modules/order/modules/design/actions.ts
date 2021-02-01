@@ -59,8 +59,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldNo } = initOption;
-      const { code, msg, data }: any = await GetStep({ mouldNo });
-      if (code === 0) {
+      const { success, msg, data }: any = await GetStep({ mouldNo });
+      if (success) {
         commit(MutationTypes.UpdateDesign, { step: data || 0 });
         dispatch(ActionTypes.GetStepDetail);
       } else {
@@ -76,8 +76,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldNo } = initOption;
-      const { code, msg, data }: any = await GetStepDetail({ mouldNo });
-      if (code === 0) {
+      const { success, msg, data }: any = await GetStepDetail({ mouldNo });
+      if (success) {
         const stepList = (ls => {
           const arr = [];
           if (ls.length) {
@@ -127,8 +127,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldNo } = initOption;
-      const { code, msg, data }: any = await GetBOMList({ mouldNo });
-      if (code === 0) {
+      const { success, msg, data }: any = await GetBOMList({ mouldNo });
+      if (success) {
         commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true, showType });
       } else {
         Message.error(msg);
@@ -145,8 +145,8 @@ export default {
       const { mouldNo } = initOption;
       const formData = new FormData();
       formData.append("file", file);
-      const { code, msg, data }: any = await ImportBom(formData, { mouldNo });
-      if (code === 0) {
+      const { success, msg, data }: any = await ImportBom(formData, { mouldNo });
+      if (success) {
         // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
         dispatch(ActionTypes.GetBOMList);
       } else {
@@ -163,8 +163,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldNo } = initOption;
-      const { code, msg, data }: any = await GetBOMImageInfo({ mouldNo });
-      if (code === 0) {
+      const { success, msg, data }: any = await GetBOMImageInfo({ mouldNo });
+      if (success) {
         const list = (ls => {
           for (const [a, b] of ls.entries()) {
             ls[a]["isSelected"] = false;
@@ -223,8 +223,8 @@ export default {
       const { mouldNo } = initOption;
       const formData = new FormData();
       formData.append("file", file);
-      const { code, msg, data }: any = await ImportSpareImage(formData, { mouldNo });
-      if (code === 0) {
+      const { success, msg, data }: any = await ImportSpareImage(formData, { mouldNo });
+      if (success) {
         // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
         dispatch(ActionTypes.GetBOMImageInfo);
       } else {
@@ -243,8 +243,8 @@ export default {
       // const { mouldNo } = initOption;
       const formData = new FormData();
       formData.append("file", file);
-      const { code, msg, data }: any = await UpdateSpareImage(formData, { infoId });
-      if (code === 0) {
+      const { success, msg, data }: any = await UpdateSpareImage(formData, { infoId });
+      if (success) {
         // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
         dispatch(ActionTypes.GetBOMImageInfo);
       } else {
@@ -263,8 +263,8 @@ export default {
     const { mouldNo } = initOption;
     const fn = async(datas = {}) => {
       try {
-        const { code, msg, data }: any = await CheckProgramme(datas);
-        if (code === 0) {
+        const { success, msg, data }: any = await CheckProgramme(datas);
+        if (success) {
           // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
           // dispatch(ActionTypes.GetBOMImageInfo);
         } else {
@@ -326,8 +326,8 @@ export default {
     }
     const fn = async(datas = {}) => {
       try {
-        const { code, msg, data }: any = await CheckImage(datas);
-        if (code === 0) {
+        const { success, msg, data }: any = await CheckImage(datas);
+        if (success) {
           // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
           // dispatch(ActionTypes.GetBOMImageInfo);
         } else {

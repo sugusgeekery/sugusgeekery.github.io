@@ -6,3 +6,8 @@ export const GetOrderList = (params: any = {}): object => fetch({ url: `/supplie
 // 获取订单竞价指标
 export const GetMyBidAdvantage = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getMyBidAdvantage`, method: "GET", params });
 
+// 获取订单倒计时
+export const GetOrderTime = (params: any = {}): object => {
+  const { orderId = "" } = params;
+  return fetch({ url: `/supplier/downTime/getOrderTime/${orderId}`, method: "GET", params: {} });
+};

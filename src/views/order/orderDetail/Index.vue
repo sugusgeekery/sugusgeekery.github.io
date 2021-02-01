@@ -2,7 +2,7 @@
   <div class="context">
     <div class="context-title">
       订单中心
-      <span v-if="mouldNo">/{{ mouldNo }}</span>
+      <span v-if="orderObject.orderNo">/{{ orderObject.orderNo }}</span>
     </div>
     <div class="context-body">
       <div class="list">
@@ -31,11 +31,12 @@
           <router-view />
         </div>
       </div>
-      <div class="tip">
+      <DownTimeTemplate></DownTimeTemplate>
+      <!-- <div class="tip">
         <div class="tip-title">我的竞价指标</div>
         <div class="tip-text">交期准时率:：%</div>
         <div class="tip-text">交付失误率：%</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -49,9 +50,13 @@ import { NavigationList } from "@/store/modules/order/state";
 import { GetterTypes } from "@/store/modules/order/getters";
 import { ActionTypes } from "@/store/modules/order/actions";
 
+import DownTimeTemplate from "../templates/DownTimeTemplate.vue";
+
 @Component({
   name: "OrderDetailView",
-  components: {}
+  components: {
+    DownTimeTemplate
+  }
 })
 export default class OrderDetailView extends Vue {
   @State("navigationIndex")
@@ -59,8 +64,8 @@ export default class OrderDetailView extends Vue {
   @State("navigationList")
   public navigationList!: Array<NavigationList>;
 
-  @Getter(GetterTypes.MouldNo)
-  public mouldNo!: string;
+  @Getter(GetterTypes.OrderObject)
+  public orderObject!: object;
 
   @Action(ActionTypes.UpdateNavigationIndex)
   public updateNavigationIndex!: Function;

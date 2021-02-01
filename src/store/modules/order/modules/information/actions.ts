@@ -41,8 +41,8 @@ export default {
   async [ActionTypes.GetStep](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { code, msg, data }: any = await GetStep();
-      if (code === 0) {
+      const { success, msg, data }: any = await GetStep();
+      if (success) {
         const { accuracy, anerror } = data || {};
         // commit(MutationTypes.UpdateAdvantage, { accuracy, anerror });
       } else {

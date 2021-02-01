@@ -44,8 +44,8 @@ export default {
         Message("请输入手机号");
         return
       }
-      const { code, message }: any = await GetVerificationCode({ phone, type });
-      if (code === 0) {
+      const { success, message }: any = await GetVerificationCode({ phone, type });
+      if (success) {
         Message.success(message);
         dispatch(RootActionTypes.UpdateVerificationCodeNumber);
       } else {
@@ -73,8 +73,8 @@ export default {
   async [RootActionTypes.VerificationCodelogin](store: Store, parameter: { phone: string; code: string; }) {
     try {
       const { dispatch, commit } = store;
-      const { code, message, data }: any = await VerificationCodeLogin(parameter);
-      if (code === 0) {
+      const { success, message, data }: any = await VerificationCodeLogin(parameter);
+      if (success) {
         // const { accessToken = "" } = data || {};
         // commit(RootMutationTypes.UpdateLogInfo, { accessToken });
         const { accessToken = "", isExist = false, openId = "", token, user } = data || {};
@@ -103,8 +103,8 @@ export default {
   async [RootActionTypes.WechatLogin](store: Store, parameter: { jsCode: string; }) {
     try {
       const { dispatch, commit } = store;
-      const { code, message, data }: any = await WechatLogin(parameter);
-      if (code === 0) {
+      const { success, message, data }: any = await WechatLogin(parameter);
+      if (success) {
         const { accessToken = "", isExist = false, openId = "", token, user } = data || {};
         commit(RootMutationTypes.UpdateLogInfo, { accessToken: accessToken || token, isExist, openId });
         if (!isExist) {
@@ -133,8 +133,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { logInfo } = state;
       const { accessToken, openId } = logInfo || {};
-      const { code, message, data }: any = await Register({ ...parameter, accessToken, openId });
-      if (code === 0) {
+      const { success, message, data }: any = await Register({ ...parameter, accessToken, openId });
+      if (success) {
         const { token, user } = data || {};
         commit(RootMutationTypes.UpdateLogInfo, { accessToken: token });
         commit(RootMutationTypes.UpdateRegisterNavIndex, 2);

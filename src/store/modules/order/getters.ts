@@ -3,15 +3,15 @@ import { RootState } from "@/store/state";
 import { State } from "./state";
 
 export enum GetterTypes {
-  MouldNo = "MouldNo",
+  OrderObject = "OrderObject",
 };
 
 const getters: GetterTree<State, RootState> = {
-  [GetterTypes.MouldNo](state: State) {
+  [GetterTypes.OrderObject](state: State) {
     const { order } = state;
     const { list = [], index = -1 } = order || {};
-    const { mouldNo = "" } = list[index] || {};
-    return mouldNo;
+    const orderObject = list[index] || {};
+    return orderObject;
   }
 };
 export default getters;

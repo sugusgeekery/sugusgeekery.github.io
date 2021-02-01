@@ -11,7 +11,9 @@ import { Message, MessageBox } from "element-ui";
 
 import {
   GetMyBidAdvantage,
-  GetOrderList
+  GetOrderList,
+
+  GetOrderTime,
 } from "@/api/order";
 
 interface Store {
@@ -32,7 +34,9 @@ export enum ActionTypes {
   UpdateStatusIndex = "UpdateStatusIndex",
   UpdateOrderNo = "UpdateOrderNo",
   GetOrderDetail = "GetOrderDetail",
-  UpdateNavigationIndex = "UpdateNavigationIndex"
+  UpdateNavigationIndex = "UpdateNavigationIndex",
+
+  GetOrderTime = "GetOrderTime",
 }
 
 export default {
@@ -40,8 +44,8 @@ export default {
   async [ActionTypes.GetMyBidAdvantage](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { code, msg, data }: any = await GetMyBidAdvantage();
-      if (code === 0) {
+      const { success, msg, data }: any = await GetMyBidAdvantage();
+      if (success) {
         const { accuracy, anerror } = data || {};
         commit(MutationTypes.UpdateAdvantage, { accuracy, anerror });
       } else {
@@ -59,8 +63,8 @@ export default {
       const { pageNum = 1, pageSize = 10, orderNo = "", projectIndex = 0, projectList = [], statusIndex = 0, statusList = [] } = order;
       const { type = "" } = projectList[projectIndex] || {};
       const { status = "" } = statusList[statusIndex] || {};
-      const { code, msg, data }: any = await GetOrderList({ pageNum, pageSize, status, type, orderNo });
-      if (code === 0) {
+      const { success, msg, data }: any = await GetOrderList({ pageNum, pageSize, status, type, orderNo });
+      if (success) {
         const { list = [], total } = data || {};
         commit(MutationTypes.UpdateOrder, { list, total: Number(total) });
       } else {
@@ -183,5 +187,24 @@ export default {
     const { path } = navigationList[navigationIndex] || {};
     commit(MutationTypes.UpdateNavigationIndex, navigationIndex);
     router.push({ path });
+  },
+
+  // 获取竞价指标
+  async [ActionTypes.GetOrderTime](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { order } = state;
+      const { list = [], index = -1 } = order || {};
+      const { id } = list[index] || {};
+      const { success, msg, data }: any = await GetOrderTime({ orderId: id });
+      if (success) {
+        // const { accuracy, anerror } = data || {};
+        // commit(MutationTypes.UpdateAdvantage, { accuracy, anerror });
+      } else {
+        Message.error(msg);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
   },
 }
