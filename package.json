@@ -21,6 +21,7 @@
     "lib-flexible": "^0.3.2",
     "localforage": "^1.7.4",
     "mint-ui": "^2.2.13",
+    "swiper": "^6.4.10",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",

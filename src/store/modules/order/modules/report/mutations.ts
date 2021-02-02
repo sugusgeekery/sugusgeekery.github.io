@@ -1,25 +1,25 @@
-import { State } from "./state";
+import { State, InitOption, ReportList } from "./state";
 
 export enum MutationTypes {
-  UpdateNavigationIndex = "UpdateNavigationIndex",
-  // UpdateOrder = "UpdateOrder",
+  UpdateInitOption = "UpdateInitOption",
+  UpdateReportList = "UpdateReportList",
 }
 
 export default {
-  // 更新导航下标
-  [MutationTypes.UpdateNavigationIndex](state: State, navigationIndex: number) {
-    state.navigationIndex = navigationIndex;
+  // 更新初始化通用参数
+  [MutationTypes.UpdateInitOption](state: State, params: InitOption) {
+    const { initOption } = state;
+    const temp: InitOption = initOption;
+    (function<T>(state: State, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.initOption = Object.assign(initOption, temp);
+    })(state, params, temp);
   },
 
-  // 更新订单数据
-  // [MutationTypes.UpdateOrder](state: State, params: Order) {
-  //   const { order } = state;
-  //   const temp: Order = order;
-  //   (function<T>(state: State, params: T, temp: T) {
-  //     for (const key in params) {
-  //       temp[key] = params[key];
-  //     }
-  //     state.order = Object.assign(order, temp);
-  //   })(state, params, temp);
-  // },
+  // 更新报告列表
+  [MutationTypes.UpdateReportList](state: State, reportList: Array<ReportList>) {
+    state.reportList = reportList;
+  },
 }

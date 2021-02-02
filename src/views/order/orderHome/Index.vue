@@ -174,7 +174,7 @@ export default class OrderHomeView extends Vue {
       background $color-bg-white
       border-radius 8px
       overflow auto
-      margin 0 20px
+      margin 0 0 0 20px
       padding 20px
       min-width 300px
       &-title

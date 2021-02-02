@@ -51,6 +51,17 @@ export interface NavigationList {
   path: string;
 };
 
+
+// 供应商对应的类型值
+export enum Supplier {
+  // 加工供应商
+  Machining = "machining",
+  // DFM供应商
+  Dfm = "DFM",
+  // 注塑供应商
+  Injection = "Injection"
+};
+
 const state: State = {
   advantage: {
     accuracy: 0,
@@ -135,6 +146,9 @@ const state: State = {
     //   path: "/order/information",
     // },
   ],
+  downtime: {
+
+  }
 };
 
 export default state;

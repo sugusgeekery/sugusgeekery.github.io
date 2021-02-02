@@ -1,6 +1,6 @@
 import { RootState } from "@/store/state";
 import rootGetters, { RootGetterTypes } from "@/store/getters";
-import { State } from "./state";
+import { State, Supplier } from "./state";
 import getters, { GetterTypes } from "./getters";
 import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
@@ -110,75 +110,70 @@ export default {
     const { state, dispatch, commit } = store;
     const { order } = state;
     const { list = [] } = order || {};
-    const { status } = list[index] || {};
+    const { type } = list[index] || {};
     commit(MutationTypes.UpdateOrder, { index });
-    dispatch("order/design/Init", {...list[index]}, { root: true });
-    // dispatch("order/information", {...list[index]}, { root: true });
-    // dispatch("order/report", {...list[index]}, { root: true });
     const navigationList = [];
-    if (status === "加工供应商") {
-      navigationList.push(...[
-        {
-          text: "DFM报告",
-          path: "/order/report",
-        },
-        {
-          text: "方案设计",
-          path: "/order/design",
-        },
-        {
-          text: "模具信息",
-          path: "/order/information",
-        },
-      ])
-    } else if (status === "DFM供应商") {
-      navigationList.push(...[
-        {
-          text: "DFM报告",
-          path: "/order/report",
-        },
-        {
-          text: "方案设计",
-          path: "/order/design",
-        },
-        {
-          text: "模具信息",
-          path: "/order/information",
-        },
-      ])
-    } else if (status === "注塑供应商") {
-      navigationList.push(...[
-        {
-          text: "DFM报告",
-          path: "/order/report",
-        },
-        {
-          text: "方案设计",
-          path: "/order/design",
-        },
-        {
-          text: "模具信息",
-          path: "/order/information",
-        },
-      ])
-    } else {
-      navigationList.push(...[
-        {
-          text: "DFM报告",
-          path: "/order/report",
-        },
-        {
-          text: "方案设计",
-          path: "/order/design",
-        },
-        {
-          text: "模具信息",
-          path: "/order/information",
-        },
-      ])
+    switch(type) {
+      case Supplier.Dfm:
+        dispatch("order/report/Init", {...list[index]}, { root: true });
+        dispatch("order/design/Init", {...list[index]}, { root: true });
+        // dispatch("order/information/Init", {...list[index]}, { root: true });
+        navigationList.push(...[
+          {
+            text: "DFM报告",
+            path: "/order/report",
+          },
+          {
+            text: "方案设计",
+            path: "/order/design",
+          },
+          {
+            text: "模具信息",
+            path: "/order/information",
+          },
+        ]);
+        break;
+      case Supplier.Machining:
+        dispatch("order/report/Init", {...list[index]}, { root: true });
+        dispatch("order/design/Init", {...list[index]}, { root: true });
+        // dispatch("order/information/Init", {...list[index]}, { root: true });
+        navigationList.push(...[
+          {
+            text: "DFM报告验收",
+            path: "/order/report",
+          },
+          {
+            text: "方案设计验收",
+            path: "/order/design",
+          },
+          {
+            text: "模具信息",
+            path: "/order/information",
+          },
+        ]);
+        break;
+      case Supplier.Injection:
+        dispatch("order/report/Init", {...list[index]}, { root: true });
+        dispatch("order/design/Init", {...list[index]}, { root: true });
+        // dispatch("order/information/Init", {...list[index]}, { root: true });
+        navigationList.push(...[
+          {
+            text: "DFM报告验收",
+            path: "/order/report",
+          },
+          {
+            text: "方案设计验收",
+            path: "/order/design",
+          },
+          {
+            text: "模具信息",
+            path: "/order/information",
+          },
+        ]);
+        break;
     }
     commit(MutationTypes.UpdateNavigationList, navigationList);
-    dispatch(ActionTypes.UpdateNavigationIndex, 1);
+    dispatch(ActionTypes.UpdateNavigationIndex, 0);
   },
   // 导航跳转
   [ActionTypes.UpdateNavigationIndex](store: Store, navigationIndex: number) {

@@ -26,11 +26,21 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order");
 
+import { Advantage, Order } from "@/store/modules/order/state";
+import { ActionTypes } from "@/store/modules/order/actions";
+
 @Component({
   name: "DownTimeTemplate",
   components: {}
 })
-export default class DownTimeTemplate extends Vue {}
+export default class DownTimeTemplate extends Vue {
+  @Action(ActionTypes.GetOrderTime)
+  public getOrderTime!: Function;
+
+  public created() {
+    this.getOrderTime();
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
