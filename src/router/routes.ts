@@ -24,6 +24,23 @@ export default [
     path: "/account",
     name: "AccountView",
     component: () => import(/* webpackChunkName: "AccountView" */ "@/views/account/Index.vue"),
+    children: [
+      {
+        path: "information",
+        name: "InformationView",
+        component: () => import(/* webpackChunkName: "InformationView" */ "@/views/account/information/Index.vue")
+      },
+      {
+        path: "application",
+        name: "ApplicationView",
+        component: () => import(/* webpackChunkName: "ApplicationView" */ "@/views/account/application/Index.vue")
+      },
+      {
+        path: "management",
+        name: "ManagementView",
+        component: () => import(/* webpackChunkName: "ManagementView" */ "@/views/account/management/Index.vue")
+      },
+    ]
   },
   {
     path: "/bidding",
@@ -66,9 +83,24 @@ export default [
             component: () => import(/* webpackChunkName: "DesignAcceptanceView" */ "@/views/order/orderDetail/design/DesignAcceptance.vue")
           },
           {
-            path: "/order/information",
-            name: "InformationView",
-            component: () => import(/* webpackChunkName: "InformationView" */ "@/views/order/orderDetail/information/Index.vue")
+            path: "/order/process",
+            name: "ProcessView",
+            component: () => import(/* webpackChunkName: "ProcessView" */ "@/views/order/orderDetail/process/Index.vue")
+          },
+          {
+            path: "/order/prototype",
+            name: "PrototypeView",
+            component: () => import(/* webpackChunkName: "PrototypeView" */ "@/views/order/orderDetail/prototype/Index.vue")
+          },
+          {
+            path: "/order/question",
+            name: "QuestionView",
+            component: () => import(/* webpackChunkName: "QuestionView" */ "@/views/order/orderDetail/question/Index.vue")
+          },
+          {
+            path: "/order/mould",
+            name: "MouldView",
+            component: () => import(/* webpackChunkName: "MouldView" */ "@/views/order/orderDetail/mould/Index.vue")
           },
         ]
       },

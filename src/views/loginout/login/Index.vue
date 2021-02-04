@@ -116,6 +116,8 @@ export default class LoginView extends Vue {
   public verificationCodelogin!: Function;
   @Action(RootActionTypes.WechatLogin)
   public wechatLogin!: Function;
+  @Action(RootActionTypes.PhoneLogin)
+  public phoneLogin!: Function;
 
   @Mutation(RootMutationTypes.UpdateLoginNavIndex)
   public updateLoginNavIndex!: Function;
@@ -143,7 +145,10 @@ export default class LoginView extends Vue {
     // 微信扫码登录所需code码
     const jsCode = getUrlParas("code");
     console.log(jsCode);
-    if (jsCode) {
+    const phoneNo = getUrlParas("phoneNo");
+    if (phoneNo) {
+      this.phoneLogin({ phoneNo });
+    } else if (jsCode) {
       this.wechatLogin({ jsCode });
     }
   }

@@ -5,7 +5,10 @@ import mutations from "./mutations";
 
 import report from "./modules/report";
 import design from "./modules/design";
-import information from "./modules/information";
+import process from "./modules/process";
+import prototype from "./modules/prototype";
+import question from "./modules/question";
+import mould from "./modules/mould";
 
 export default {
   namespaced: true,
@@ -16,6 +19,9 @@ export default {
   modules: {
     report,
     design,
-    information,
+    process,
+    prototype,
+    question,
+    mould,
   }
 }

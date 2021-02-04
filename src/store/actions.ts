@@ -15,6 +15,7 @@ import {
   VerificationCodeLogin,
   GetVerificationCode,
   WechatLogin,
+  PhoneLogin,
   Register,
 } from "@/api";
 
@@ -31,6 +32,7 @@ export enum RootActionTypes {
   VerificationCodelogin = "VerificationCodelogin",
   WechatLogin = "WechatLogin",
   Register = "Register",
+  PhoneLogin = "PhoneLogin",
   UpdateNavigationIndex = "UpdateNavigationIndex",
 }
 
@@ -119,6 +121,36 @@ export default {
           router.push("/home");
         }
         // dispatch("getMyInfo");
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 微信扫码登陆
+  async [RootActionTypes.PhoneLogin](store: Store, parameter: { phoneNo: string; }) {
+    try {
+      const { dispatch, commit } = store;
+      const { success, message, data }: any = await PhoneLogin(parameter);
+      if (success) {
+        // const { accessToken = "" } = data || {};
+        // commit(RootMutationTypes.UpdateLogInfo, { accessToken });
+        const { accessToken = "", isExist = false, openId = "", token, user } = data || {};
+        commit(RootMutationTypes.UpdateLogInfo, { accessToken: accessToken || token, isExist, openId });
+        // if (!isExist) {
+        //   if (openId) {
+        //     commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
+        //     router.push("/user/register");
+        //   } else {
+        //     Message.error("请扫码重试！");
+        //   }
+        // } else {
+          commit(RootMutationTypes.UpdateUserInfo, { ...user });
+          router.push("/home");
+        // }
+        // dispatch("getMyInfo");
+        // router.push("/home");
       } else {
         Message.error(message);
       }

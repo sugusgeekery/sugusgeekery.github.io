@@ -117,7 +117,7 @@ const state: RootState = {
           id: "4_1",
           text: "资料信息",
           icon: "",
-          path: "/account/infomation",
+          path: "/account/information",
           query: {},
         },
         {

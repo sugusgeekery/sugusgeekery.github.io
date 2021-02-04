@@ -145,10 +145,7 @@ const state: State = {
     //   text: "模具信息",
     //   path: "/order/information",
     // },
-  ],
-  downtime: {
-
-  }
+  ]
 };
 
 export default state;

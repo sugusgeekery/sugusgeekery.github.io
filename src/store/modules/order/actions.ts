@@ -117,7 +117,7 @@ export default {
       case Supplier.Dfm:
         dispatch("order/report/Init", {...list[index]}, { root: true });
         dispatch("order/design/Init", {...list[index]}, { root: true });
-        // dispatch("order/information/Init", {...list[index]}, { root: true });
+        dispatch("order/information/Init", {...list[index]}, { root: true });
         navigationList.push(...[
           {
             text: "DFM报告",
@@ -136,18 +136,33 @@ export default {
       case Supplier.Machining:
         dispatch("order/report/Init", {...list[index]}, { root: true });
         dispatch("order/design/Init", {...list[index]}, { root: true });
-        // dispatch("order/information/Init", {...list[index]}, { root: true });
+        dispatch("order/process/Init", {...list[index]}, { root: true });
+        dispatch("order/prototype/Init", {...list[index]}, { root: true });
+        dispatch("order/question/Init", {...list[index]}, { root: true });
+        dispatch("order/information/Init", {...list[index]}, { root: true });
         navigationList.push(...[
           {
             text: "DFM报告验收",
             path: "/order/report",
           },
           {
-            text: "方案设计验收",
+            text: "设计验收",
             path: "/order/design",
           },
           {
-            text: "模具信息",
+            text: "加工",
+            path: "/order/process",
+          },
+          {
+            text: "样件验收",
+            path: "/order/prototype",
+          },
+          {
+            text: "问题回复",
+            path: "/order/question",
+          },
+          {
+            text: "修模报价",
             path: "/order/information",
           },
         ]);
@@ -155,19 +170,19 @@ export default {
       case Supplier.Injection:
         dispatch("order/report/Init", {...list[index]}, { root: true });
         dispatch("order/design/Init", {...list[index]}, { root: true });
-        // dispatch("order/information/Init", {...list[index]}, { root: true });
+        dispatch("order/process/Init", {...list[index]}, { root: true });
         navigationList.push(...[
           {
             text: "DFM报告验收",
             path: "/order/report",
           },
           {
-            text: "方案设计验收",
+            text: "设计验收",
             path: "/order/design",
           },
           {
-            text: "模具信息",
-            path: "/order/information",
+            text: "注塑",
+            path: "/order/process",
           },
         ]);
         break;

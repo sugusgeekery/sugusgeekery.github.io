@@ -17,6 +17,9 @@ export const VerificationCodeLogin = (data: object = {}): object => fetch({ url:
 // 微信扫码登录
 export const WechatLogin = (data: object = {}): object => fetch({ url: "/supplier/oauth/wxLogin", data });
 
+// 微信扫码登录
+export const PhoneLogin = (params: object = {}): object => fetch({ url: "/supplier/common/loginByPhone", method: "GET", params });
+
 // 注册
 export const Register = (data: object = {}): object => fetch({ url: "/supplier/oauth/register", data });
 

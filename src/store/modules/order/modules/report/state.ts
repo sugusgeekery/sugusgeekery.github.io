@@ -1,6 +1,7 @@
 
 export interface State {
   initOption: any | InitOption;
+  timestamp: number;
   reportList: any | Array<ReportList>;
 };
 
@@ -9,6 +10,7 @@ export interface ReportList {};
 
 const state: State = {
   initOption: {},
+  timestamp: 0,
   reportList: [
     {
       "customerApprovalInfo": {

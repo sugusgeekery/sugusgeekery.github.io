@@ -36,6 +36,7 @@ export enum ActionTypes {
   Init = "Init",
   GetDfmReportList = "GetDfmReportList",
   UploadForm = "UploadForm",
+  DeleteReportFile = "DeleteReportFile",
   UpdateReportData = "UpdateReportData",
   CommitReport = "CommitReport",
   ApprovalDfmReport = "ApprovalDfmReport"
@@ -78,21 +79,35 @@ export default {
   },
   
   // 上传文件
-  async [ActionTypes.UploadForm](store: Store, files: any = []) {
+  async [ActionTypes.UploadForm](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
+      const { reportList = [] } = state;
+      const { file, index } = params || {};
+      const { fileList } = reportList[index] || {};
       const formData = new FormData();
-      formData.append("files", files);
-      console.log(files)
+      formData.append("files", file);
       const { success, msg, data }: any = await UploadForm(formData);
       if (success) {
-        // commit(MutationTypes.UpdateReportList, data || []);
+        const { pics = [] } = data || {};
+        const { filePath = "" } = pics[0];
+        reportList[index].fileList = [...(fileList || []), filePath];
+        commit(MutationTypes.UpdateReportList, reportList);
+        commit(MutationTypes.UpdateTimestamp, new Date().getTime());
       } else {
         Message.error(msg);
       }
     } catch (e) {
       throw new Error(e);
     }
+  },
+  // 删除图片
+  [ActionTypes.DeleteReportFile](store: Store, params: any) {
+      const { state, dispatch, commit } = store;
+      const { reportList = [] } = state;
+      const { index, key } = params || {};
+      reportList[index].fileList.splice(key, 1);
+      commit(MutationTypes.UpdateReportList, reportList);
   },
 
   // 更新报告信息

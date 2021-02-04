@@ -3,6 +3,7 @@ import { State, InitOption, ReportList } from "./state";
 export enum MutationTypes {
   UpdateInitOption = "UpdateInitOption",
   UpdateReportList = "UpdateReportList",
+  UpdateTimestamp = "UpdateTimestamp",
 }
 
 export default {
@@ -21,5 +22,10 @@ export default {
   // 更新报告列表
   [MutationTypes.UpdateReportList](state: State, reportList: Array<ReportList>) {
     state.reportList = reportList;
+  },
+
+  // 更新时间戳
+  [MutationTypes.UpdateTimestamp](state: State, timestamp: number) {
+    state.timestamp = timestamp;
   },
 }

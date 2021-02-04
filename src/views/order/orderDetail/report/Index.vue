@@ -16,19 +16,39 @@
     >
       <div class="item-title">
         <div class="item-title-text">
-          {{ a.reportTitle
-          }}{{
-            (initOption.type === Supplier.Dfm) +
-              "---" +
-              initOption.type +
-              "---" +
-              Supplier.Dfm
-          }}
+          {{ a.reportTitle }}
         </div>
         <img class="item-title-icon" src="" alt="" v-if="a.state === 2" />
-        <div class="item-title-button" v-else-if="a.state === 3">修改</div>
+        <div
+          class="item-title-button"
+          v-else-if="a.state === 3"
+          @click="
+            updateReportData({
+              index: b,
+              name: 'state',
+              value: 0
+            })
+          "
+        >
+          修改
+        </div>
       </div>
       <div class="item-swiper">
+        <!-- <swiper
+          class="swiper-container"
+          :slides-per-view="4"
+          :space-between="10"
+          navigation
+          :pagination="{ clickable: true }"
+          :scrollbar="{ draggable: true }"
+          @swiper="onSwiper"
+          @slideChange="onSlideChange"
+        >
+          <swiper-slide>Slide 1</swiper-slide>
+          <swiper-slide>Slide 2</swiper-slide>
+          <swiper-slide>Slide 3</swiper-slide>
+          ...
+        </swiper> -->
         <div class="swiper-container">
           <div class="swiper-wrapper">
             <div
@@ -37,24 +57,44 @@
               v-for="(c, d) in a.fileList"
               :key="d"
             >
-              <img class="swiper-slide-image" :src="c" alt="" />
+              <div class="swiper-slide-box">
+                <img
+                  class="swiper-slide-image"
+                  :src="BASE_IMAGE_URL + c"
+                  alt=""
+                />
+                <div
+                  class="swiper-slide-delete"
+                  v-if="!a.state && initOption.type === Supplier.Dfm"
+                  @click="deleteReportFile({ index: b, key: d })"
+                >
+                  X
+                </div>
+              </div>
             </div>
-            <div class="swiper-slide" v-if="!a.state" @click="selectFile()">
-              <div class="swiper-slide-button">+图片</div>
+            <div
+              class="swiper-slide"
+              v-if="!a.state && initOption.type === Supplier.Dfm"
+              @click="selectFile(b)"
+            >
+              <div class="swiper-slide-box">
+                <div class="swiper-slide-button">+图片</div>
+              </div>
             </div>
           </div>
-          <div
-            class="swiper-button-prev"
-            v-if="a.fileList && a.fileList.length > 4"
-          ></div>
-          <div
-            class="swiper-button-next"
-            v-if="a.fileList && a.fileList.length > 4"
-          ></div>
+          <!-- <div class="swiper-button-prev"></div> -->
+          <!-- v-if="a.fileList && a.fileList.length > 4"
+          @click="swiperPrev()" -->
+          <!-- <div class="swiper-button-next"></div> -->
+          <!-- v-if="a.fileList && a.fileList.length > 4"
+          @click="swiperNext()" -->
         </div>
       </div>
       <div class="item-content">
-        <div class="item-content-textarea" v-if="!a.state">
+        <div
+          class="item-content-textarea"
+          v-if="!a.state && initOption.type === Supplier.Dfm"
+        >
           <textarea
             name=""
             id=""
@@ -462,7 +502,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/report");
 
@@ -473,8 +513,11 @@ import {
 } from "@/store/modules/order/modules/report/state";
 import { ActionTypes } from "@/store/modules/order/modules/report/actions";
 
+import { BASE_IMAGE_URL } from "@/config";
+
 // import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import Swiper from "swiper";
+// import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/swiper-bundle.min.css";
 
 // import "swiper/swiper.scss";
@@ -486,16 +529,24 @@ import "swiper/swiper-bundle.min.css";
 
 @Component({
   name: "ReportView",
-  components: {}
+  components: {
+    // Swiper,
+    // SwiperSlide
+  }
 })
 export default class ReportView extends Vue {
   // 供应商类型列表
   public Supplier = Supplier;
 
+  // 图片域名
+  public BASE_IMAGE_URL = BASE_IMAGE_URL;
+
   @State("initOption")
   public initOption!: InitOption;
   @State("reportList")
   public reportList!: Array<ReportList>;
+  @State("timestamp")
+  public timestamp!: number;
 
   @Action(ActionTypes.GetDfmReportList)
   public getDfmReportList!: Function;
@@ -507,6 +558,8 @@ export default class ReportView extends Vue {
   public commitReport!: Function;
   @Action(ActionTypes.ApprovalDfmReport)
   public approvalDfmReport!: Function;
+  @Action(ActionTypes.DeleteReportFile)
+  public deleteReportFile!: Function;
 
   public created() {
     this.getDfmReportList();
@@ -515,37 +568,65 @@ export default class ReportView extends Vue {
     this.initSwiper();
   }
 
-  public selectFile() {
+  public index = -1;
+  public selectFile(b: number) {
+    this.index = b;
     const dom: any = document.querySelector("#fileElement");
     dom.click();
   }
   public uploadFile(e: any) {
     const files = e.target.files;
-    this.uploadForm(files);
+    let len = files.length;
+    while (len > 0) {
+      this.uploadForm({ file: files[files.length - len], index: this.index });
+      len--;
+    }
   }
 
+  @Watch("timestamp")
+  public watchTimestamp() {
+    // console.log(1);
+    // this.initSwiper();
+    // this.swiper && this.swiper.updateSlides();
+    // this.swiper[index] && this.swiper[index].slideNext();
+    // console.log(2);
+  }
+
+  public swiper: any = null;
+  public swiperOptions: any = {
+    slidesPerView: 4,
+    spaceBetween: 10,
+    slidesPerGroup: 1,
+    loop: false,
+    loopFillGroupWithBlank: true,
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev"
+    }
+  };
   public initSwiper() {
-    const swiper = new Swiper(".swiper-container", {
-      slidesPerView: 3,
-      spaceBetween: 10,
-      slidesPerGroup: 1,
-      loop: false,
-      loopFillGroupWithBlank: true,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev"
-      }
-    });
+    this.swiper = new Swiper(".swiper-container", this.swiperOptions);
+    console.log(this.swiper);
+  }
+
+  public swiperPrev(index: number) {
+    this.swiper[index] && this.swiper[index].slidePrev();
+  }
+  public swiperNext(index: number) {
+    this.swiper[index] && this.swiper[index].slideNext();
   }
 
   public onSwiper(swiper: any) {
     console.log(swiper);
   }
-  public onSlideChange(swiper: any = "swiper--") {
+  public onSlideChange(swiper: any) {
     console.log(swiper);
   }
 }
@@ -621,24 +702,64 @@ export default class ReportView extends Vue {
         width 100%
         height 100%
       .swiper-slide
-        text-align center
-        font-size 18px
-        background #fff
-        height 100px
-
         /* Center slide text vertically */
-        display -webkit-box
-        display -ms-flexbox
-        display -webkit-flex
-        display flex
-        -webkit-box-pack center
-        -ms-flex-pack center
-        -webkit-justify-content center
-        justify-content center
-        -webkit-box-align center
-        -ms-flex-align center
-        -webkit-align-items center
-        align-items center
+        // display -webkit-box
+        // display -ms-flexbox
+        // display -webkit-flex
+        // display flex
+        // -webkit-box-pack center
+        // -ms-flex-pack center
+        // -webkit-justify-content center
+        // justify-content center
+        // -webkit-box-align center
+        // -ms-flex-align center
+        // -webkit-align-items center
+        // align-items center
+
+        position relative
+        padding 11.2%
+        background $color-bg-white
+        &-box
+          position absolute
+          top 0
+          left 0
+          width 100%
+          height 100%
+          display -webkit-box
+          display -ms-flexbox
+          display -webkit-flex
+          display flex
+          -webkit-box-pack center
+          -ms-flex-pack center
+          -webkit-justify-content center
+          justify-content center
+          -webkit-box-align center
+          -ms-flex-align center
+          -webkit-align-items center
+          align-items center
+        &-image
+          width 100%
+          object-fit contain
+        &-delete
+          display none
+        &:hover
+          .swiper-slide-delete
+            position absolute
+            top 0
+            right 0
+            width 30%
+            height 30%
+            display flex
+            justify-content center
+            align-items center
+            border-radius 100px
+            background $color-bg-blue-white
+            color $color-text-red
+            cursor pointer
+        &-button
+          color $color-text-blue
+          font-size 16px
+          // background $color-bg-white
       .swiper-button-prev,
       .swiper-button-next
         color $color-text-gray
