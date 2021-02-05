@@ -60,7 +60,7 @@
         <div class="tip-text">交付失误率：10%</div>
       </div>
     </div>
-    <AddAccountModel></AddAccountModel>
+    <!-- <AddAccountModel></AddAccountModel> -->
   </div>
 </template>
 

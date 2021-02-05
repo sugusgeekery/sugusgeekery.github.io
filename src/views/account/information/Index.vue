@@ -1,6 +1,6 @@
 <template>
   <div class="context">
-    <div class="context-title">订单中心</div>
+    <div class="context-title">资料信息</div>
     <div class="context-body">
       <div class="list">
         <div class="nav">
@@ -13,11 +13,9 @@
               name="name"
               @updateindex="updateIndex"
             ></Selection>
-            <div class="nav-item nav-item-active">公司</div>
-            <div class="nav-item">个人</div>
           </div>
           <div class="nav-buttons">
-            <div class="nav-button nav-button">确定</div>
+            <div class="nav-button nav-button-blue">确定</div>
           </div>
         </div>
         <div class="form">
@@ -252,99 +250,4 @@ export default class InformationView extends Vue {
               width 100%
               border none
               outline none
-
-
-
-
-
-      &-header
-        width 100%
-        background $color-bg-white
-        padding 20px 20px 0px 20px
-        .filter-items
-          display flex
-          justify-content flex-start
-          align-items center
-          margin 20px auto
-        .filter-item
-          display flex
-          justify-content flex-start
-          align-items center
-          margin-right 40px
-          &-label
-            font-size 14px
-            color $color-text-gray
-            margin-right 12px
-          &-content
-            display flex
-            justify-content flex-start
-            align-items center
-          &-text
-            font-size 14px
-            color $color-text-gray
-            margin-right 8px
-          &-input
-            max-width 100px
-            min-height 40px
-            border solid 1px $color-bd
-            border-radius 4px
-            outline none
-            font-size 14px
-            color $color-text-gray
-            margin-right 8px
-            padding 10px
-      &-footer
-        width 100%
-        background $color-bg-white
-        margin auto
-        padding 5px
-        text-align center
-      &-body
-        width 100%
-        flex 1
-        position relative
-        .cells
-          position absolute
-          top 0
-          left 0
-          width 100%
-          overflow auto
-          display flex
-          flex-wrap wrap
-          justify-content flex-start
-          align-items flex-start
-          padding 0 20px
-        .cell
-          background $color-bg-white
-          width 100%
-          display flex
-          justify-content center
-          align-items center
-          padding 20px 0
-          border-bottom solid 1px $color-bd
-          &-gray
-            background $color-bg
-            border-bottom none
-          &-text
-            flex 1
-            text-align center
-            font-size 14px
-            color $color-text-black
-            &-blue
-              color $color-text-blue
-              cursor pointer
-          &-buttons
-            flex 1
-            text-align center
-          &-button
-            text-align center
-            padding 9px 16px
-            border-radius 4px
-            font-size 14px
-            color $color-text-blue
-            background rgba($color-bg-blue, .3)
-            &-blue
-              color $color-text-white
-              background rgba($color-bg-blue, 1)
-              cursor pointer
 </style>

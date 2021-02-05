@@ -13,7 +13,9 @@ import {
   GetMyBidAdvantage,
   GetOrderList,
 
-  GetOrderTime,
+  GetDfmRemainTime,
+  GetMachiningRemainTime,
+  GetInjectRemainTime
 } from "@/api/order";
 
 interface Store {
@@ -36,7 +38,7 @@ export enum ActionTypes {
   GetOrderDetail = "GetOrderDetail",
   UpdateNavigationIndex = "UpdateNavigationIndex",
 
-  GetOrderTime = "GetOrderTime",
+  GetRemainTime = "GetRemainTime",
 }
 
 export default {
@@ -117,7 +119,7 @@ export default {
       case Supplier.Dfm:
         dispatch("order/report/Init", {...list[index]}, { root: true });
         dispatch("order/design/Init", {...list[index]}, { root: true });
-        dispatch("order/information/Init", {...list[index]}, { root: true });
+        dispatch("order/mould/Init", {...list[index]}, { root: true });
         navigationList.push(...[
           {
             text: "DFM报告",
@@ -129,7 +131,7 @@ export default {
           },
           {
             text: "模具信息",
-            path: "/order/information",
+            path: "/order/mould",
           },
         ]);
         break;
@@ -139,7 +141,7 @@ export default {
         dispatch("order/process/Init", {...list[index]}, { root: true });
         dispatch("order/prototype/Init", {...list[index]}, { root: true });
         dispatch("order/question/Init", {...list[index]}, { root: true });
-        dispatch("order/information/Init", {...list[index]}, { root: true });
+        dispatch("order/mould/Init", {...list[index]}, { root: true });
         navigationList.push(...[
           {
             text: "DFM报告验收",
@@ -163,7 +165,7 @@ export default {
           },
           {
             text: "修模报价",
-            path: "/order/information",
+            path: "/order/mould",
           },
         ]);
         break;
@@ -200,16 +202,31 @@ export default {
   },
 
   // 获取竞价指标
-  async [ActionTypes.GetOrderTime](store: Store) {
+  async [ActionTypes.GetRemainTime](store: Store, callback: Function) {
     try {
       const { state, dispatch, commit } = store;
       const { order } = state;
       const { list = [], index = -1 } = order || {};
-      const { id } = list[index] || {};
-      const { success, msg, data }: any = await GetOrderTime({ orderId: id });
+      const { type, biddingId } = list[index] || {};
+      let fn = {};
+      switch(type) {
+        case Supplier.Dfm:
+          fn = await GetDfmRemainTime({ biddingId });
+          break;
+        case Supplier.Machining:
+          fn = await GetMachiningRemainTime({ biddingId });
+          break;
+        case Supplier.Injection:
+          fn = await GetInjectRemainTime({ biddingId });
+          break;
+      }
+      const { success, msg, data }: any = fn;
       if (success) {
-        // const { accuracy, anerror } = data || {};
-        // commit(MutationTypes.UpdateAdvantage, { accuracy, anerror });
+        const { remainSeconds, state } = data || {};
+        commit(MutationTypes.UpdateRemainTime, data || {});
+        if (callback && state === 0) {
+          callback(remainSeconds);
+        }
       } else {
         Message.error(msg);
       }

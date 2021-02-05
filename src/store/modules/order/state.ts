@@ -3,6 +3,7 @@ export interface State {
   order: Order;
   navigationIndex: number;
   navigationList: Array<NavigationList>;
+  remainTime: RemainTime;
 };
 
 export interface Advantage {
@@ -37,6 +38,7 @@ export interface OrderList {
   unit: string;
   unitDesc: string;
   workPeriod: string;
+  biddingId: string;
 }
 export interface ProjectList {
   text: string;
@@ -49,6 +51,12 @@ export interface StatusList {
 export interface NavigationList {
   text: string;
   path: string;
+};
+export interface RemainTime {
+  finishTime: string;
+  remainSeconds: number;
+  startTime: string;
+  state: number;
 };
 
 
@@ -145,7 +153,13 @@ const state: State = {
     //   text: "模具信息",
     //   path: "/order/information",
     // },
-  ]
+  ],
+  remainTime: {
+    finishTime: "2021-04-14 15:12:44",
+    remainSeconds: 6865,
+    startTime: "2021-04-05 11:23:12",
+    state: 1
+  }
 };
 
 export default state;

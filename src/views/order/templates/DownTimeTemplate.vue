@@ -1,22 +1,73 @@
 <template>
   <div class="downtime">
     <div class="downtime-title">交付倒计时</div>
-    <div class="downtime-content">
-      <span class="downtime-content-label downtime-content-red">已超时</span>
-      <span class="downtime-content-large downtime-content-red">15</span>
-      <span class="downtime-content-red">时</span>
-      <span class="downtime-content-large downtime-content-red">15</span>
-      <span class="downtime-content-red">分</span>
-      <span class="downtime-content-large downtime-content-red">15</span>
-      <span class="downtime-content-red">秒</span>
+    <div class="downtime-content" v-if="remainTime.state === 1">
+      <span class="downtime-content-label">已完成</span>
+    </div>
+    <div class="downtime-content" v-else>
+      <span
+        class="downtime-content-label downtime-content-red"
+        v-if="isTimeout"
+      >
+        已超时
+      </span>
+      <span
+        class="downtime-content-large"
+        :class="{
+          'downtime-content-red': isTimeout,
+          'downtime-content-yellow': !isTimeout
+        }"
+        >{{ hour }}</span
+      >
+      <span
+        :class="{
+          'downtime-content-red': isTimeout,
+          'downtime-content-yellow': !isTimeout
+        }"
+        >时</span
+      >
+      <span
+        class="downtime-content-large"
+        :class="{
+          'downtime-content-red': isTimeout,
+          'downtime-content-yellow': !isTimeout
+        }"
+        >{{ minute }}</span
+      >
+      <span
+        :class="{
+          'downtime-content-red': isTimeout,
+          'downtime-content-yellow': !isTimeout
+        }"
+        >分</span
+      >
+      <span
+        class="downtime-content-large"
+        :class="{
+          'downtime-content-red': isTimeout,
+          'downtime-content-yellow': !isTimeout
+        }"
+        >{{ second }}</span
+      >
+      <span
+        :class="{
+          'downtime-content-red': isTimeout,
+          'downtime-content-yellow': !isTimeout
+        }"
+        >秒</span
+      >
     </div>
     <div class="downtime-text">
       <span class="downtime-text-gray">启动时间</span>
-      <span class="downtime-text-black">2021-01-29 - 2021-02-15</span>
+      <span class="downtime-text-black">
+        {{ remainTime.startTime || "--" }}
+      </span>
     </div>
     <div class="downtime-text">
       <span class="downtime-text-gray">交付时间</span>
-      <span class="downtime-text-black">--</span>
+      <span class="downtime-text-black">
+        {{ remainTime.finishTime || "--" }}
+      </span>
     </div>
   </div>
 </template>
@@ -26,7 +77,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order");
 
-import { Advantage, Order } from "@/store/modules/order/state";
+import { RemainTime } from "@/store/modules/order/state";
 import { ActionTypes } from "@/store/modules/order/actions";
 
 @Component({
@@ -34,11 +85,36 @@ import { ActionTypes } from "@/store/modules/order/actions";
   components: {}
 })
 export default class DownTimeTemplate extends Vue {
-  @Action(ActionTypes.GetOrderTime)
-  public getOrderTime!: Function;
+  public isTimeout = false;
+  public hour = 0;
+  public minute = 0;
+  public second = 0;
+  public setTimeInterval = 0;
+
+  @State("remainTime")
+  public remainTime!: RemainTime;
+
+  @Action(ActionTypes.GetRemainTime)
+  public getRemainTime!: Function;
 
   public created() {
-    this.getOrderTime();
+    this.getRemainTime((remainSeconds: number) => {
+      const fn = (remainSeconds: number) => {
+        this.isTimeout = remainSeconds < 0;
+        const timeNumber = Math.abs(remainSeconds);
+        this.hour = Math.floor(timeNumber / (60 * 60));
+        this.minute = Math.floor((timeNumber % (60 * 60)) / 60);
+        this.second = timeNumber % 60;
+      };
+      fn(remainSeconds);
+      if (this.setTimeInterval) {
+        clearInterval(this.setTimeInterval);
+      }
+      this.setTimeInterval = setInterval(() => {
+        remainSeconds--;
+        fn(remainSeconds);
+      }, 1000);
+    });
   }
 }
 </script>

@@ -1,10 +1,11 @@
-import { State, Advantage, Order, NavigationList } from "./state";
+import { State, Advantage, Order, NavigationList, RemainTime } from "./state";
 
 export enum MutationTypes {
   UpdateAdvantage = "UpdateAdvantage",
   UpdateOrder = "UpdateOrder",
   UpdateNavigationList = "UpdateNavigationList",
-  UpdateNavigationIndex = "UpdateNavigationIndex"
+  UpdateNavigationIndex = "UpdateNavigationIndex",
+  UpdateRemainTime = "UpdateRemainTime",
 }
 
 export default {
@@ -38,5 +39,17 @@ export default {
   // 更新导航下标
   [MutationTypes.UpdateNavigationIndex](state: State, navigationIndex: number) {
     state.navigationIndex = navigationIndex;
+  },
+
+  // 更新交付倒计时
+  [MutationTypes.UpdateRemainTime](state: State, params: RemainTime) {
+    const { remainTime } = state;
+    const temp: RemainTime = remainTime;
+    (function<T>(state: State, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.remainTime = Object.assign(remainTime, temp);
+    })(state, params, temp);
   },
 }
