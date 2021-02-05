@@ -213,7 +213,7 @@
 
       <div
         class="item-cells"
-        v-if="a.state && initOption.type === Supplier.machining"
+        v-if="a.state && initOption.type === Supplier.Machining"
       >
         <div class="item-cell">
           <div class="item-cell-text item-cell-text-black">注塑方：</div>
@@ -306,8 +306,16 @@
               })
             "
           >
-            <div class="item-cell-li-label"></div>
-            <div class="item-cell-li-text">确认</div>
+            <div
+              class="item-cell-li-label"
+              :class="{
+                'item-cell-li-label-active':
+                  a.machiningApprovalInfo.opinion === 1
+              }"
+            ></div>
+            <div class="item-cell-li-text">
+              确认
+            </div>
           </div>
           <div
             class="item-cell-li"
@@ -320,7 +328,13 @@
               })
             "
           >
-            <div class="item-cell-li-label item-cell-li-label-active"></div>
+            <div
+              class="item-cell-li-label"
+              :class="{
+                'item-cell-li-label-active':
+                  a.machiningApprovalInfo.opinion === 0
+              }"
+            ></div>
             <div class="item-cell-li-text">驳回</div>
           </div>
           <div class="item-cell-li">
@@ -449,7 +463,13 @@
               })
             "
           >
-            <div class="item-cell-li-label"></div>
+            <div
+              class="item-cell-li-label"
+              :class="{
+                'item-cell-li-label-active':
+                  a.injectionApprovalInfo.opinion === 1
+              }"
+            ></div>
             <div class="item-cell-li-text">确认</div>
           </div>
           <div
@@ -463,7 +483,13 @@
               })
             "
           >
-            <div class="item-cell-li-label item-cell-li-label-active"></div>
+            <div
+              class="item-cell-li-label"
+              :class="{
+                'item-cell-li-label-active':
+                  a.injectionApprovalInfo.opinion === 0
+              }"
+            ></div>
             <div class="item-cell-li-text">驳回</div>
           </div>
           <div class="item-cell-li">
@@ -583,14 +609,14 @@ export default class ReportView extends Vue {
     }
   }
 
-  @Watch("timestamp")
-  public watchTimestamp() {
-    // console.log(1);
-    // this.initSwiper();
-    // this.swiper && this.swiper.updateSlides();
-    // this.swiper[index] && this.swiper[index].slideNext();
-    // console.log(2);
-  }
+  // @Watch("timestamp")
+  // public watchTimestamp() {
+  // console.log(1);
+  // this.initSwiper();
+  // this.swiper && this.swiper.updateSlides();
+  // this.swiper[index] && this.swiper[index].slideNext();
+  // console.log(2);
+  // }
 
   public swiper: any = null;
   public swiperOptions: any = {

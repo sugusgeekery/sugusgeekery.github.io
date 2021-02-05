@@ -1,5 +1,5 @@
 <template>
-  <div class="design">
+  <div class="design" v-if="design.stepList && design.stepList.length">
     <div
       class="design-item"
       v-for="(a, b) in design.stepList"

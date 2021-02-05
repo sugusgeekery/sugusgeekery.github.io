@@ -74,7 +74,7 @@ export default {
         const stepList = (ls => {
           for (const [a, b] of ls.entries()) {
             const { filePath } = b;
-            ls[a].fileList = [{ filePath }];
+            ls[a].fileList = filePath ? [{ filePath }] : [];
           }
           return ls;
         })(data || []);
@@ -161,6 +161,7 @@ export default {
         const { pics = [] } = data || {};
         const { filePath = "", id = "" } = pics[0];
         stepList[index].fileList = [...(fileList || []), { filePath, fileId: id }];
+        console.log(stepList[index].fileList)
         commit(MutationTypes.UpdateStepList, stepList);
       } else {
         Message.error(msg);

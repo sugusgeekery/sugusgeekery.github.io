@@ -122,7 +122,7 @@ export default {
       //@ts-ignore
       reportList[index][name] = value;
     }
-    commit(MutationTypes.UpdateReportList, reportList);
+    commit(MutationTypes.UpdateReportList, JSON.parse(JSON.stringify(reportList)));
   },
 
   // 提交DFM报告
@@ -160,21 +160,25 @@ export default {
       const { reportList = [], initOption } = state;
       const { type, biddingId } = initOption || {};
       const { index } = params || {};
-      const { reportTitleId, approvalContent, opinion } = reportList[index] || {};
-      if (opinion === 0 && !approvalContent) {
-        Message.error("请输入驳回原因");
-        return;
-      }
+      const { reportTitleId, machiningApprovalInfo, injectionApprovalInfo } = reportList[index] || {};
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
           // fn = await DfmApprovalDfmReport({ biddingId, approvalContent, reportTitleId, opinion });
           break;
         case Supplier.Machining:
-          fn = await MachiningApprovalDfmReport({ biddingId, approvalContent, reportTitleId, opinion });
+          if (machiningApprovalInfo.opinion === 0 && !machiningApprovalInfo.approvalContent) {
+            Message.error("请输入驳回原因");
+            return;
+          }
+          fn = await MachiningApprovalDfmReport({ biddingId, approvalContent: machiningApprovalInfo.approvalContent, reportTitleId, opinion: machiningApprovalInfo.opinion });
           break;
         case Supplier.Injection:
-          fn = await InjectApprovalDfmReport({ biddingId, approvalContent, reportTitleId, opinion });
+          if (injectionApprovalInfo.opinion === 0 && !injectionApprovalInfo.approvalContent) {
+            Message.error("请输入驳回原因");
+            return;
+          }
+          fn = await InjectApprovalDfmReport({ biddingId, approvalContent: injectionApprovalInfo.approvalContent, reportTitleId, opinion: injectionApprovalInfo.opinion });
           break;
       }
       const { success, msg, data }: any = fn;

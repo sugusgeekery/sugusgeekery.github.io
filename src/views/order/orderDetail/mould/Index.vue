@@ -1,6 +1,9 @@
 <template>
   <div class="information">
-    <div class="list">
+    <div
+      class="list"
+      v-if="mould.mouldProductList && mould.mouldProductList.length"
+    >
       <div class="li li-bg">
         <div class="li-row">
           <div class="li-text">

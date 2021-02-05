@@ -8,7 +8,7 @@
       id="fileElement"
       @change="uploadFile"
     />
-    <div class="items">
+    <div class="items" v-if="stepList && stepList.length">
       <div class="item" v-for="(a, b) in stepList" :key="b">
         <div class="item-label">
           <div

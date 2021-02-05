@@ -35,23 +35,23 @@ export default {
       const { state, dispatch, commit } = store;
       const { success, msg, data }: any = await GetStatistics();
       if (success) {
-        const { inCompleteOrderCount = 0, messageCount = 0, newBiddingCount = 0, pendingOrderCount = 0 } = data || {};
+        const { inCompleteOrderCount, messageCount, newBiddingCount, pendingOrderCount } = data || {};
         const orderMessageList = [];
         orderMessageList.push({
           text: "新竞价单",
-          count: newBiddingCount
+          count: newBiddingCount || 0
         });
         orderMessageList.push({
           text: "未完成订单",
-          count: inCompleteOrderCount
+          count: inCompleteOrderCount || 0
         });
         orderMessageList.push({
           text: "待处理订单",
-          count: pendingOrderCount
+          count: pendingOrderCount || 0
         });
         orderMessageList.push({
           text: "新消息",
-          count: messageCount
+          count: messageCount || 0
         });
         commit(MutationTypes.UpdateOrderMessageList, orderMessageList);
       } else {

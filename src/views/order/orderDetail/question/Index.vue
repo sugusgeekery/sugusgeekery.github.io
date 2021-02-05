@@ -1,6 +1,6 @@
 <template>
   <div class="question">
-    <div class="list">
+    <div class="list" v-if="questionList && questionList.length">
       <div class="li" v-for="(a, b) in questionList" :key="b">
         <div class="li-title">{{ a.title || "" }}</div>
         <div class="li-row">
