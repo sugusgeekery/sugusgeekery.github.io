@@ -108,11 +108,13 @@ export default class App extends Vue {
   flex-direction column
   justify-content flex-start
   align-items flex-start
+  overflow auto
   .container
     position relative
     width 100%
     flex 1
     min-width $width-min
+    overflow auto
     .wrapper
       position absolute
       top 0

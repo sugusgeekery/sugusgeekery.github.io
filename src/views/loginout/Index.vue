@@ -28,6 +28,7 @@ export default class LoginoutView extends Vue {}
 <style lang="stylus" scoped>
 @import "../../stylus/index.styl";
   .header
+    min-width $width-min
     width 100%
     display flex
     justify-content center

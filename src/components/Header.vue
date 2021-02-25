@@ -58,6 +58,7 @@ export default class Header extends Vue {
 <style lang="stylus" scoped>
 @import '../stylus/index.styl';
 .header
+  min-width $width-min
   &-container
     width 100%
     background $color-bg-white

@@ -136,7 +136,7 @@ export default class LoginView extends Vue {
   public init() {
     this.iframeSrc = getWxLoginCodeUrl({
       appid: WX_APPID,
-      redirectUri: encodeURIComponent(WX_REDIRECT_URL + "/#/user/login")
+      redirectUri: encodeURIComponent(WX_REDIRECT_URL + "/#/login")
     });
     this.updateVerificationCodeNumber(0);
     this.login();
@@ -194,7 +194,7 @@ export default class LoginView extends Vue {
     this.verificationCodelogin({ phone, code });
   }
   public toRegister() {
-    router.push("/user/register");
+    router.push("/register");
   }
 }
 </script>
