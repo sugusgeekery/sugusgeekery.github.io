@@ -5,17 +5,34 @@
       <div class="list">
         <div class="nav">
           <div class="nav-label">账号类型：</div>
-          <div class="nav-items">
+          <div class="nav-text" v-if="defInfo.type">
+            <span class="nav-text-gray">{{ defInfo.typeStr || "无" }}</span>
+            <span
+              class="nav-text-blue"
+              @click="
+                updateDefInfo({
+                  type: 0
+                })
+              "
+              >（修改）</span
+            >
+          </div>
+          <div class="nav-items" v-if="!defInfo.type">
             <Selection
               type="题型"
               label="选择题型"
-              :list="typeList"
-              name="name"
+              :list="defInfo.typeList"
+              name="text"
               @updateindex="updateIndex"
             ></Selection>
           </div>
-          <div class="nav-buttons">
-            <div class="nav-button nav-button-blue">确定</div>
+          <div class="nav-buttons" v-if="!defInfo.type">
+            <div
+              class="nav-button nav-button-blue"
+              @click="changeSupplierType()"
+            >
+              确定
+            </div>
           </div>
         </div>
         <div class="form">
@@ -23,9 +40,29 @@
             <div class="form-title">基本信息</div>
             <div class="form-items">
               <div class="form-item">
-                <div class="form-item-head">
-                  <img class="form-item-head-icon" src="" alt="" />
-                  <div class="form-item-head-text">上传头像</div>
+                <input
+                  type="file"
+                  name=""
+                  hidden="hidden"
+                  id="headiconFile"
+                  @change="uploadFile"
+                />
+                <div class="form-item-head" @click="selectFile()">
+                  <img
+                    class="form-item-head-icon"
+                    v-if="userInfo.headImgUrl"
+                    :src="userInfo.headImgUrl"
+                    alt=""
+                  />
+                  <img
+                    v-else
+                    class="form-item-head-icon"
+                    src="../../../assets/images/headicon.png"
+                    alt=""
+                  />
+                  <div class="form-item-head-text form-item-head-text-blue">
+                    上传头像
+                  </div>
                 </div>
               </div>
               <div class="form-item">
@@ -34,7 +71,80 @@
                   <span class="form-item-label-gray">真实姓名</span>
                 </div>
                 <div class="form-item-input">
-                  <input type="text" placeholder="请输入真实姓名" value="" />
+                  <input
+                    type="text"
+                    placeholder="请输入真实姓名"
+                    :value="userInfo.userName"
+                    @change="
+                      changeUserInfoInput($event.target.value, 'userName')
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-gray">性别</span>
+                </div>
+                <div class="form-item-radios">
+                  <div
+                    class="form-item-radio"
+                    v-for="(a, b) in userInfo.sexList"
+                    :key="b"
+                    v-show="b"
+                    @click="changeUserInfoInput(b, 'sex')"
+                  >
+                    <div
+                      class="form-item-radio-label"
+                      :class="{
+                        'form-item-radio-label-active': b === userInfo.sex
+                      }"
+                    ></div>
+                    <div class="form-item-radio-text">{{ a }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-red">*</span>
+                  <span class="form-item-label-gray">手机</span>
+                </div>
+                <div class="form-item-input">
+                  <input
+                    type="text"
+                    placeholder="请输入手机号码"
+                    :value="userInfo.phoneNo"
+                    @change="
+                      changeUserInfoInput($event.target.value, 'phoneNo')
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-gray">电话</span>
+                </div>
+                <div class="form-item-input">
+                  <input
+                    type="text"
+                    placeholder="请输入电话号码"
+                    :value="userInfo.telephoneNo"
+                    @change="
+                      changeUserInfoInput($event.target.value, 'telephoneNo')
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-gray">邮箱</span>
+                </div>
+                <div class="form-item-input">
+                  <input
+                    type="text"
+                    placeholder="请输入邮箱"
+                    :value="userInfo.email"
+                    @change="changeUserInfoInput($event.target.value, 'email')"
+                  />
                 </div>
               </div>
             </div>
@@ -45,14 +155,139 @@
               <div class="form-item">
                 <div class="form-item-label">
                   <span class="form-item-label-red">*</span>
-                  <span class="form-item-label-gray">真实姓名</span>
+                  <span class="form-item-label-gray">公司名称</span>
                 </div>
                 <div class="form-item-input">
-                  <input type="text" placeholder="请输入真实姓名" value="" />
+                  <input
+                    type="text"
+                    placeholder="请输入公司名称"
+                    :value="companyInfo.companyName"
+                    @change="
+                      changeCompanyInfoInput($event.target.value, 'companyName')
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-red">*</span>
+                  <span class="form-item-label-gray">公司人数</span>
+                </div>
+                <div class="form-item-input">
+                  <input
+                    type="text"
+                    placeholder="请输入公司人数"
+                    :value="companyInfo.staffSize"
+                    @change="
+                      changeCompanyInfoInput($event.target.value, 'staffSize')
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-red">*</span>
+                  <span class="form-item-label-gray">成立时间</span>
+                </div>
+                <div class="form-item-picker">
+                  <el-date-picker
+                    class="form-item-picker-date"
+                    prefix-icon=""
+                    :value="companyInfo.publishTime"
+                    type="date"
+                    placeholder="选择日期"
+                    @input="v => changeCompanyInfoInput(v, 'publishTime')"
+                  >
+                  </el-date-picker>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-red">*</span>
+                  <span class="form-item-label-gray">公司电话</span>
+                </div>
+                <div class="form-item-input">
+                  <input
+                    type="text"
+                    placeholder="请输入公司电话"
+                    :value="companyInfo.companyName"
+                    @change="
+                      changeCompanyInfoInput($event.target.value, 'companyName')
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-red">*</span>
+                  <span class="form-item-label-gray">公司地址</span>
+                </div>
+                <div class="form-item-input">
+                  <input
+                    type="text"
+                    placeholder="请输入公司人数"
+                    :value="companyInfo.companyName"
+                    @change="
+                      changeCompanyInfoInput($event.target.value, 'companyName')
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <!-- <span class="form-item-label-red">*</span>
+                  <span class="form-item-label-gray">详细地址</span> -->
+                </div>
+                <div class="form-item-input">
+                  <input
+                    type="text"
+                    placeholder="请输入详细地址"
+                    :value="companyInfo.address"
+                    @change="
+                      changeCompanyInfoInput($event.target.value, 'address')
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-gray">公司官网</span>
+                </div>
+                <div class="form-item-input">
+                  <input
+                    type="text"
+                    placeholder="请输入公司官网"
+                    :value="companyInfo.officialWebsite"
+                    @change="
+                      changeCompanyInfoInput(
+                        $event.target.value,
+                        'officialWebsite'
+                      )
+                    "
+                  />
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="form-item-label">
+                  <span class="form-item-label-red">*</span>
+                  <span class="form-item-label-gray">公司详情</span>
+                </div>
+                <div class="form-item-input">
+                  <textarea
+                    type="text"
+                    placeholder="请输入公司详情"
+                    :value="companyInfo.description"
+                    @change="
+                      changeCompanyInfoInput($event.target.value, 'description')
+                    "
+                  ></textarea>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div class="buttons">
+          <div class="button button-blue" @click="submitForm()">保存</div>
         </div>
       </div>
     </div>
@@ -61,11 +296,14 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-// import { namespace } from "vuex-class";
-// const { State, Getter, Action, Mutation } = namespace("account");
+import { namespace } from "vuex-class";
+const { State, Getter, Action, Mutation } = namespace("account");
 
-// import {} from "@/store/modules/account/state";
-// import { ActionTypes } from "@/store/modules/account/actions";
+import { DefInfo, UserInfo, CompanyInfo } from "@/store/modules/account/state";
+import { ActionTypes } from "@/store/modules/account/actions";
+import { MutationTypes } from "@/store/modules/account/mutations";
+
+import { BASE_IMAGE_URL } from "@/config";
 
 import Selection from "@/components/Selection.vue";
 
@@ -76,41 +314,71 @@ import Selection from "@/components/Selection.vue";
   }
 })
 export default class InformationView extends Vue {
-  public typeList = [
-    {
-      name: "公司",
-      isSelected: true
-    },
-    {
-      name: "个人",
-      isSelected: false
-    }
-  ];
+  public BASE_IMAGE_URL = BASE_IMAGE_URL;
+  public date = "";
+
+  @State("defInfo")
+  public defInfo!: any | DefInfo;
+  @State("userInfo")
+  public userInfo!: UserInfo;
+  @State("companyInfo")
+  public companyInfo!: CompanyInfo;
+
+  @Action(ActionTypes.GetDefInfo)
+  public getDefInfo!: Function;
+  @Action(ActionTypes.UploadForm)
+  public uploadForm!: Function;
+  @Action(ActionTypes.ChangeSupplierType)
+  public changeSupplierType!: Function;
+  @Action(ActionTypes.SaveUserInfo)
+  public saveUserInfo!: Function;
+  @Action(ActionTypes.SaveCompanyInfo)
+  public saveCompanyInfo!: Function;
+
+  @Mutation(MutationTypes.UpdateDefInfo)
+  public updateDefInfo!: Function;
+  @Mutation(MutationTypes.UpdateUserInfo)
+  public updateUserInfo!: Function;
+  @Mutation(MutationTypes.UpdateCompanyInfo)
+  public updateCompanyInfo!: Function;
+
   public updateIndex(index: number) {
-    console.log(index);
+    const { typeList = [] } = this.defInfo || {};
+    for (const [a, b] of typeList.entries()) {
+      typeList[a].isSelected = index === a;
+    }
+    this.updateDefInfo({ typeList });
   }
-  // @State("advantage")
-  // public advantage!: Advantage;
-  // @State("order")
-  // public order!: Order;
-  // @Action(ActionTypes.GetMyBidAdvantage)
-  // public getMyBidAdvantage!: Function;
-  // @Action(ActionTypes.UpdatePageNum)
-  // public updatePageNum!: Function;
-  // @Action(ActionTypes.UpdatePageSize)
-  // public updatePageSize!: Function;
-  // @Action(ActionTypes.UpdateProjectIndex)
-  // public updateProjectIndex!: Function;
-  // @Action(ActionTypes.UpdateStatusIndex)
-  // public updateStatusIndex!: Function;
-  // @Action(ActionTypes.UpdateOrderNo)
-  // public updateOrderNo!: Function;
-  // @Action(ActionTypes.GetOrderDetail)
-  // public getOrderDetail!: Function;
-  // public created() {
-  //   this.getMyBidAdvantage();
-  //   this.updatePageNum(1);
-  // }
+
+  public selectFile() {
+    const dom: any = document.querySelector("#headiconFile");
+    dom.click();
+  }
+  public uploadFile(e: any) {
+    const files = e.target.files;
+    let len = files.length;
+    while (len > 0) {
+      this.uploadForm({ file: files[files.length - len] });
+      len--;
+    }
+  }
+
+  public changeUserInfoInput(value: string, key: string) {
+    this.updateUserInfo({ [key]: value });
+  }
+
+  public changeCompanyInfoInput(value: string, key: string) {
+    this.updateCompanyInfo({ [key]: value });
+  }
+
+  public submitForm() {
+    this.saveUserInfo();
+    this.saveCompanyInfo();
+  }
+
+  public created() {
+    this.getDefInfo();
+  }
 }
 </script>
 
@@ -171,6 +439,13 @@ export default class InformationView extends Vue {
         justify-content flex-start
         align-items center
         border-bottom solid 1px $color-bd
+        &-text
+          font-size 16px
+          &-gray
+            color $color-text-gray
+          &-blue
+            cursor pointer
+            color $color-text-blue
         &-label
           color $color-text-gray
           font-size 16px
@@ -194,6 +469,24 @@ export default class InformationView extends Vue {
           &-blue
             color $color-text-white
             background $color-text-blue
+      .buttons
+        margin 20px auto
+        display flex
+        justify-content center
+        align-items center
+      .button
+        border-radius 4px
+        padding 10px 20px
+        font-size 14px
+        border solid 1px $color-bd-blue
+        color $color-text-blue
+        background $color-bg-white
+        cursor pointer
+        margin 0 20px
+        &-blue
+          border solid 1px $color-bd-blue
+          color $color-text-white
+          background $color-bg-blue
       .form
         width 100%
         margin 20px 0
@@ -215,7 +508,7 @@ export default class InformationView extends Vue {
           display flex
           justify-content flex-start
           align-items center
-          margin 10px 0
+          margin 20px 0
           &-head
             width 100%
             display flex
@@ -223,6 +516,7 @@ export default class InformationView extends Vue {
             justify-content center
             align-items center
             margin 20px
+            cursor pointer
             &-icon
               width 90px
               height 90px
@@ -231,6 +525,10 @@ export default class InformationView extends Vue {
               overflow hidden
             &-text
               margin-top 10px
+              font-size 14px
+              color $color-text-gray
+              &-blue
+                color $color-text-blue
           &-label
             flex 2
             text-align right
@@ -241,13 +539,54 @@ export default class InformationView extends Vue {
             &-gray
               color $color-text-gray
               font-size 16px
+          &-picker
+            flex 8
+            text-align left
+            // border solid 1px $color-bd
+            // padding 10px
+            &-date
+              width 100%
           &-input
             flex 8
             text-align left
-            border solid 1px $color-bd
-            padding 10px
+            border solid 1px $color-bd-grey
+            // padding 10px
             input
               width 100%
               border none
               outline none
+              padding 10px
+              border-radius 4px
+            textarea
+              width 100%
+              height 100px
+              border none
+              outline none
+              padding 10px
+              border-radius 4px
+          &-radios
+            flex 8
+            text-align left
+            // padding 10px
+            display flex
+            justify-content flex-start
+            align-items center
+          &-radio
+            display flex
+            justify-content flex-start
+            align-items center
+            cursor pointer
+            &-label
+              width 12px
+              height 12px
+              border-radius 100px
+              border solid 1px $color-bd-gray
+              background $color-bg-blue-white
+              margin-right 8px
+              &-active
+                background $color-bg-blue
+            &-text
+              color $color-text-gray
+              font-size 16px
+              margin-right 16px
 </style>
