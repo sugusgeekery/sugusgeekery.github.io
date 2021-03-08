@@ -149,7 +149,7 @@
               </div>
             </div>
           </div>
-          <div class="form-flex">
+          <div class="form-flex" v-if="defInfo.type === 1">
             <div class="form-title">公司信息</div>
             <div class="form-items">
               <div class="form-item">
@@ -173,15 +173,29 @@
                   <span class="form-item-label-red">*</span>
                   <span class="form-item-label-gray">公司人数</span>
                 </div>
-                <div class="form-item-input">
-                  <input
+                <div class="form-item-picker">
+                  <el-select
+                    class="form-item-picker-date"
+                    :value="companyInfo.staffSize"
+                    placeholder="请选择公司人数"
+                    @input="v => changeCompanyInfoInput(v, 'staffSize')"
+                  >
+                    <el-option
+                      v-for="item in companyInfo.staffsizeList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                  <!-- <input
                     type="text"
                     placeholder="请输入公司人数"
                     :value="companyInfo.staffSize"
                     @change="
                       changeCompanyInfoInput($event.target.value, 'staffSize')
                     "
-                  />
+                  /> -->
                 </div>
               </div>
               <div class="form-item">
@@ -196,7 +210,7 @@
                     :value="companyInfo.publishTime"
                     type="date"
                     placeholder="选择日期"
-                    @input="v => changeCompanyInfoInput(v, 'publishTime')"
+                    @input="updateDate"
                   >
                   </el-date-picker>
                 </div>
@@ -210,9 +224,12 @@
                   <input
                     type="text"
                     placeholder="请输入公司电话"
-                    :value="companyInfo.companyName"
+                    :value="companyInfo.companyPhoneNo"
                     @change="
-                      changeCompanyInfoInput($event.target.value, 'companyName')
+                      changeCompanyInfoInput(
+                        $event.target.value,
+                        'companyPhoneNo'
+                      )
                     "
                   />
                 </div>
@@ -222,15 +239,29 @@
                   <span class="form-item-label-red">*</span>
                   <span class="form-item-label-gray">公司地址</span>
                 </div>
-                <div class="form-item-input">
-                  <input
-                    type="text"
-                    placeholder="请输入公司人数"
-                    :value="companyInfo.companyName"
-                    @change="
-                      changeCompanyInfoInput($event.target.value, 'companyName')
-                    "
-                  />
+                <div class="form-item-picker">
+                  <el-cascader
+                    class="form-item-picker-date"
+                    :clearable="true"
+                    :filterable="true"
+                    placeholder="请选择省市区"
+                    :value="[
+                      companyInfo.provinceId || '',
+                      companyInfo.cityId || '',
+                      companyInfo.districtId || ''
+                    ]"
+                    :options="provinceCityDistrict"
+                    :props="{
+                      expandTrigger: 'click'
+                    }"
+                    @change="updateProvinceCityDistrict"
+                  ></el-cascader>
+                  <!-- <ProvinceCityCountry
+                    type="kmt-list-province"
+                    label="地区"
+                    :provinceCityCountry="questionProvinceCityCountry"
+                    @updateProvinceCityCountry="updateQuestionProvinceCityCountry"
+                  ></ProvinceCityCountry> -->
                 </div>
               </div>
               <div class="form-item">
@@ -285,6 +316,7 @@
               </div>
             </div>
           </div>
+          <div class="form-flex" v-else></div>
         </div>
         <div class="buttons">
           <div class="button button-blue" @click="submitForm()">保存</div>
@@ -299,11 +331,17 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("account");
 
-import { DefInfo, UserInfo, CompanyInfo } from "@/store/modules/account/state";
+import {
+  DefInfo,
+  ProvinceCityDistrict,
+  UserInfo,
+  CompanyInfo
+} from "@/store/modules/account/state";
 import { ActionTypes } from "@/store/modules/account/actions";
 import { MutationTypes } from "@/store/modules/account/mutations";
 
 import { BASE_IMAGE_URL } from "@/config";
+import { formatDateTime } from "@/utils/util";
 
 import Selection from "@/components/Selection.vue";
 
@@ -316,9 +354,34 @@ import Selection from "@/components/Selection.vue";
 export default class InformationView extends Vue {
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
   public date = "";
+  public options = [
+    {
+      value: "选项1",
+      label: "黄金糕"
+    },
+    {
+      value: "选项2",
+      label: "双皮奶"
+    },
+    {
+      value: "选项3",
+      label: "蚵仔煎"
+    },
+    {
+      value: "选项4",
+      label: "龙须面"
+    },
+    {
+      value: "选项5",
+      label: "北京烤鸭"
+    }
+  ];
+  public value = "";
 
   @State("defInfo")
   public defInfo!: any | DefInfo;
+  @State("provinceCityDistrict")
+  public provinceCityDistrict!: Array<ProvinceCityDistrict>;
   @State("userInfo")
   public userInfo!: UserInfo;
   @State("companyInfo")
@@ -371,9 +434,51 @@ export default class InformationView extends Vue {
     this.updateCompanyInfo({ [key]: value });
   }
 
+  public updateDate(e: any) {
+    this.changeCompanyInfoInput(
+      formatDateTime({ date: e, formatType: "yyyy-mm-dd" }),
+      "publishTime"
+    );
+    // v => changeCompanyInfoInput(v, 'publishTime')
+  }
+
+  public updateProvinceCityDistrict(value: any) {
+    const { provinceCityDistrict = [] } = this;
+    const label: any = ((ls, arr) => {
+      const array = [];
+      for (const [a, b] of ls.entries()) {
+        const { value, label, children = [] } = b;
+        if (children.length && value === arr[0]) {
+          array.push(label);
+          for (const [c, d] of children.entries()) {
+            const { value, label, children = [] } = d;
+            if (children.length && value === arr[1]) {
+              array.push(label);
+              for (const [e, f] of children.entries()) {
+                const { value, label } = f;
+                if (value === arr[2]) {
+                  array.push(label);
+                  return array;
+                }
+              }
+            }
+          }
+        }
+      }
+    })(provinceCityDistrict, value);
+    this.updateCompanyInfo({
+      provinceId: value[0],
+      cityId: value[1],
+      districtId: value[2],
+      provinceName: label[0],
+      cityName: label[1],
+      districtName: label[2]
+    });
+  }
+
   public submitForm() {
     this.saveUserInfo();
-    this.saveCompanyInfo();
+    // this.saveCompanyInfo();
   }
 
   public created() {

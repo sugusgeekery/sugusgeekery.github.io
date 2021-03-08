@@ -1,7 +1,8 @@
-import { State, DefInfo, UserInfo, CompanyInfo, UserQualify, CompanyQualify } from "./state";
+import { State, DefInfo, ProvinceCityDistrict, UserInfo, CompanyInfo, UserQualify, CompanyQualify } from "./state";
 
 export enum MutationTypes {
   UpdateDefInfo = "UpdateDefInfo",
+  UpdateProvinceCityDistrict = "UpdateProvinceCityDistrict",
   UpdateUserInfo = "UpdateUserInfo",
   UpdateCompanyInfo = "UpdateCompanyInfo",
   UpdateUserQualify = "UpdateUserQualify",
@@ -19,6 +20,10 @@ export default {
       }
       state.defInfo = Object.assign(defInfo, temp);
     })(state, params, temp);
+  },
+  // 更新省市区列表
+  [MutationTypes.UpdateProvinceCityDistrict](state: State, provinceCityDistrict: Array<ProvinceCityDistrict>) {
+    state.provinceCityDistrict = provinceCityDistrict;
   },
   // 更新用户信息
   [MutationTypes.UpdateUserInfo](state: State, params: any | UserInfo) {

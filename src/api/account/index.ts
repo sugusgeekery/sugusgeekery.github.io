@@ -1,6 +1,9 @@
 import fetch from "@/axios";
 
 
+// 获取省市区
+export const GetProvinceCityCountry = (params: any): object => fetch({ url: `/supplier/common/wechat`, method: "GET", params });
+
 // 更改供应商类型
 export const ChangeSupplierType = (data: object = {}): object => fetch({ url: "/supplier/userManage/changeSupplierType", data });
 

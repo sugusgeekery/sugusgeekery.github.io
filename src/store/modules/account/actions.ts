@@ -13,6 +13,7 @@ import {
   UploadForm
 } from "@/api";
 import {
+  GetProvinceCityCountry,
   ChangeSupplierType,
   GetUserInfo,
   SaveUserInfo,
@@ -34,6 +35,7 @@ interface Store {
 }
 
 export enum ActionTypes {
+  GetProvinceCityCountry = "GetProvinceCityCountry",
   UploadForm = "UploadForm",
   ChangeSupplierType = "ChangeSupplierType",
   GetDefInfo = "GetDefInfo",
@@ -48,8 +50,38 @@ export default {
   [ActionTypes.GetDefInfo](store: Store, params: any | DefInfo) {
     const { state, dispatch, commit } = store;
     commit(MutationTypes.UpdateDefInfo, params);
+    dispatch(ActionTypes.GetProvinceCityCountry);
     dispatch(ActionTypes.GetUserInfo);
     dispatch(ActionTypes.GetCompanyInfo);
+  },
+
+  // 获取省市区数据
+  async [ActionTypes.GetProvinceCityCountry](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { success, msg, data }: any = await GetProvinceCityCountry({});
+      if (success) {
+        const { provinceCityDistrict = [] } = data || {};
+        const fn: any = function(l: any) {
+          const a = [];
+          for (const v of l) {
+            const { code = 0, name = "", children = [] } = v;
+            if (children && children.length) {
+              a.push({ label: name, value: code, children: fn(children) });
+            } else {
+              a.push({ label: name, value: code });
+            }
+          }
+          return a;
+        }
+        const provinceCityDistrictList = fn(provinceCityDistrict);
+        commit(MutationTypes.UpdateProvinceCityDistrict, provinceCityDistrictList);
+      } else {
+        Message.error(msg);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
   },
 
   // 获取用户信息
@@ -122,9 +154,27 @@ export default {
   async [ActionTypes.SaveUserInfo](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { success, msg, data }: any = await SaveUserInfo({});
+      const { userInfo, defInfo, companyInfo } = state;
+      console.log(userInfo);
+      const { email, headImgUrl, phoneNo, userName, sex, telephoneNo } = userInfo || {};
+      if (!headImgUrl) {
+        Message.error("请上传头像！");
+        return;
+      }
+      if (!userName) {
+        Message.error("请输入真实姓名！");
+        return;
+      }
+      if (!phoneNo) {
+        Message.error("请输入手机号！");
+        return;
+      }
+      const { success, msg, data }: any = await SaveUserInfo({ email, headImgUrl, mobilePhoneNo: phoneNo, realName: userName, sex, telephoneNo });
       if (success) {
         // commit(MutationTypes.UpdateUserInfo, { ...(data || {})});
+        if (defInfo.type === 1) {
+          dispatch(ActionTypes.SaveCompanyInfo);
+        }
       } else {
         Message.error(msg);
       }
@@ -139,7 +189,7 @@ export default {
       const { state, dispatch, commit } = store;
       const { success, msg, data }: any = await GetCompanyInfo({});
       if (success) {
-        commit(MutationTypes.UpdateUserInfo, { ...(data || {})});
+        commit(MutationTypes.UpdateCompanyInfo, { ...(data || {})});
       } else {
         Message.error(msg);
       }
@@ -151,7 +201,38 @@ export default {
   async [ActionTypes.SaveCompanyInfo](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { success, msg, data }: any = await SaveCompanyInfo({});
+      const { userInfo, companyInfo } = state;
+      console.log(userInfo, companyInfo);
+      const { address, cityId, companyName, companyPhoneNo, description, districtId, officialWebsite = "", provinceId, publishTime, staffSize } = companyInfo || {};
+      if (!companyName) {
+        Message.error("请输入公司名称！");
+        return;
+      }
+      if (!staffSize) {
+        Message.error("请输入公司人数！");
+        return;
+      }
+      if (!publishTime) {
+        Message.error("请选择成立时间！");
+        return;
+      }
+      if (!publishTime) {
+        Message.error("请选择成立时间！");
+        return;
+      }
+      if (!companyPhoneNo) {
+        Message.error("请输入公司电话！");
+        return;
+      }
+      if (!provinceId || !cityId || !districtId || !address) {
+        Message.error("请选择公司地址！");
+        return;
+      }
+      if (!description) {
+        Message.error("请输入公司详情！");
+        return;
+      }
+      const { success, msg, data }: any = await SaveCompanyInfo({ address, cityId, companyName, companyPhoneNo, description, districtId, officialWebsite, provinceId, publishTime, staffSize });
       if (success) {
         // commit(MutationTypes.UpdateUserInfo, data || {});
       } else {
