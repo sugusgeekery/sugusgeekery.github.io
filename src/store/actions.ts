@@ -107,7 +107,7 @@ export default {
       const { dispatch, commit } = store;
       const { success, message, data }: any = await WechatLogin(parameter);
       if (success) {
-        const { accessToken = "", isExist = false, openId = "", token, user } = data || {};
+        const { accessToken = "", isExist = false, openId = "", token, supplierInfo } = data || {};
         commit(RootMutationTypes.UpdateLogInfo, { accessToken: accessToken || token, isExist, openId });
         if (!isExist) {
           if (openId) {
@@ -117,7 +117,7 @@ export default {
             Message.error("请扫码重试！");
           }
         } else {
-          commit(RootMutationTypes.UpdateUserInfo, { ...user });
+          commit(RootMutationTypes.UpdateUserInfo, { ...supplierInfo });
           router.push("/home");
         }
         // dispatch("getMyInfo");

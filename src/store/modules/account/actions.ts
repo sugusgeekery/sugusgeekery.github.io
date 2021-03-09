@@ -39,14 +39,19 @@ export enum ActionTypes {
   UploadForm = "UploadForm",
   ChangeSupplierType = "ChangeSupplierType",
   GetDefInfo = "GetDefInfo",
+  GetQualifyInfo = "GetQualifyInfo",
   GetUserInfo = "GetUserInfo",
   SaveUserInfo = "SaveUserInfo",
   GetCompanyInfo = "GetCompanyInfo",
   SaveCompanyInfo = "SaveCompanyInfo",
+  GetPersonQualifyInfo = "GetPersonQualifyInfo",
+  SavePersonQualifyInfo = "SavePersonQualifyInfo",
+  GetCompQualifyInfo = "GetCompQualifyInfo",
+  SaveCompanyQualifyInfo = "SaveCompanyQualifyInfo"
 }
 
 export default {
-  // 初始化模块默认值
+  // 初始化信息模块默认值
   [ActionTypes.GetDefInfo](store: Store, params: any | DefInfo) {
     const { state, dispatch, commit } = store;
     commit(MutationTypes.UpdateDefInfo, params);
@@ -55,11 +60,19 @@ export default {
     dispatch(ActionTypes.GetCompanyInfo);
   },
 
+  // 初始化资质模块默认值
+  [ActionTypes.GetQualifyInfo](store: Store, params: any | DefInfo) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateDefInfo, params);
+    dispatch(ActionTypes.GetPersonQualifyInfo);
+    dispatch(ActionTypes.GetCompQualifyInfo);
+  },
+
   // 获取省市区数据
   async [ActionTypes.GetProvinceCityCountry](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { success, msg, data }: any = await GetProvinceCityCountry({});
+      const { success, message, data }: any = await GetProvinceCityCountry({});
       if (success) {
         const { provinceCityDistrict = [] } = data || {};
         const fn: any = function(l: any) {
@@ -77,14 +90,14 @@ export default {
         const provinceCityDistrictList = fn(provinceCityDistrict);
         commit(MutationTypes.UpdateProvinceCityDistrict, provinceCityDistrictList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
     }
   },
 
-  // 获取用户信息
+  // 更新供应商类型
   async [ActionTypes.ChangeSupplierType](store: Store) {
     try {
       const { state, dispatch, commit } = store;
@@ -101,7 +114,7 @@ export default {
         Message.error("请选择供应商类型！");
         return;
       }
-      const { success, msg, data }: any = await ChangeSupplierType({ type });
+      const { success, message, data }: any = await ChangeSupplierType({ type });
       if (success) {
         commit(MutationTypes.UpdateDefInfo, { type, typeStr, typeList: (typeList => {
           for (const [a, b] of typeList.entries()) {
@@ -110,7 +123,7 @@ export default {
           return typeList;
         })(typeList)});
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -121,34 +134,38 @@ export default {
   async [ActionTypes.GetUserInfo](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { success, msg, data }: any = await GetUserInfo({});
+      const { success, message, data }: any = await GetUserInfo({});
       if (success) {
         commit(MutationTypes.UpdateUserInfo, { ...(data || {})});
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
     }
   },
-  // 上传文件
-  async [ActionTypes.UploadForm](store: Store, params: any) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { file } = params || {};
-      const formData = new FormData();
-      formData.append("files", file);
-      const { success, msg, data }: any = await UploadForm(formData);
-      if (success) {
-        const { pics = [] } = data || {};
-        const { fileThumPath = "" } = pics[0];
-        commit(MutationTypes.UpdateUserInfo, { headImgUrl: fileThumPath });
-      } else {
-        Message.error(msg);
+  // 上传头像
+  [ActionTypes.UploadForm](store: Store, params: any) {
+    return new Promise(async(resolve, reject) => {
+      try {
+        const { state, dispatch, commit } = store;
+        const { file } = params || {};
+        const formData = new FormData();
+        formData.append("files", file);
+        const { success, message, data }: any = await UploadForm(formData);
+        if (success) {
+          const { pics = [] } = data || {};
+          // const { fileThumPath = "" } = pics[0];
+          // commit(MutationTypes.UpdateUserInfo, { headImgUrl: fileThumPath });
+          resolve(pics[0]);
+        } else {
+          Message.error(message);
+          reject({});
+        }
+      } catch (e) {
+        throw new Error(e);
       }
-    } catch (e) {
-      throw new Error(e);
-    }
+    })
   },
   // 提交用户信息
   async [ActionTypes.SaveUserInfo](store: Store) {
@@ -169,14 +186,14 @@ export default {
         Message.error("请输入手机号！");
         return;
       }
-      const { success, msg, data }: any = await SaveUserInfo({ email, headImgUrl, mobilePhoneNo: phoneNo, realName: userName, sex, telephoneNo });
+      const { success, message, data }: any = await SaveUserInfo({ email, headImgUrl, mobilePhoneNo: phoneNo, realName: userName, sex, telephoneNo });
       if (success) {
         // commit(MutationTypes.UpdateUserInfo, { ...(data || {})});
         if (defInfo.type === 1) {
           dispatch(ActionTypes.SaveCompanyInfo);
         }
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -187,11 +204,11 @@ export default {
   async [ActionTypes.GetCompanyInfo](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { success, msg, data }: any = await GetCompanyInfo({});
+      const { success, message, data }: any = await GetCompanyInfo({});
       if (success) {
         commit(MutationTypes.UpdateCompanyInfo, { ...(data || {})});
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -232,11 +249,141 @@ export default {
         Message.error("请输入公司详情！");
         return;
       }
-      const { success, msg, data }: any = await SaveCompanyInfo({ address, cityId, companyName, companyPhoneNo, description, districtId, officialWebsite, provinceId, publishTime, staffSize });
+      const { success, message, data }: any = await SaveCompanyInfo({ address, cityId, companyName, companyPhoneNo, description, districtId, officialWebsite, provinceId, publishTime, staffSize });
       if (success) {
         // commit(MutationTypes.UpdateUserInfo, data || {});
       } else {
-        Message.error(msg);
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+
+
+  // 获取用户资质信息
+  async [ActionTypes.GetPersonQualifyInfo](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { success, message, data }: any = await GetPersonQualifyInfo({});
+      if (success) {
+        commit(MutationTypes.UpdateUserQualify, { ...(data || {})});
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 提交用户资质信息
+  async [ActionTypes.SavePersonQualifyInfo](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { userQualify } = state;
+      const { idcardBackImgId, idcardFrontImgId, labelList = [] } = userQualify || {};
+      const labelCodeList = (ls => {
+        const arr = [];
+        for (const v of ls) {
+          const { isSelected, code } = v;
+          if (isSelected) {
+            arr.push(code);
+          }
+        }
+        return arr;
+      })(labelList);
+      if (!idcardFrontImgId) {
+        Message.error("请上传身份证正面照！");
+        return;
+      }
+      if (!idcardBackImgId) {
+        Message.error("请上传身份证背面照！");
+        return;
+      }
+      if (!labelCodeList.length) {
+        Message.error("请选择你拥有的生产能力标签！");
+        return;
+      }
+      const { success, message, data }: any = await SavePersonQualifyInfo({ idcardBackImgId, idcardFrontImgId, labelCodeList });
+      if (success) {
+        console.log(1)
+        Message.success(message);
+      } else {
+        console.log(2)
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 获取公司资质信息
+  async [ActionTypes.GetCompQualifyInfo](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { success, message, data }: any = await GetCompQualifyInfo({});
+      if (success) {
+        commit(MutationTypes.UpdateCompanyQualify, { ...(data || {})});
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 提交公司资质信息
+  async [ActionTypes.SaveCompanyQualifyInfo](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { companyQualify } = state;
+      const { businessLicenseImgId, creditCode, labelList = [], operIdcardBackendId, operIdcardFrontId, operIdcardNo, operName, operPhoneNo } = companyQualify || {};
+      const labelCodeList = (ls => {
+        const arr = [];
+        for (const v of ls) {
+          const { isSelected, code } = v;
+          if (isSelected) {
+            arr.push(code);
+          }
+        }
+        return arr;
+      })(labelList);
+      if (!creditCode) {
+        Message.error("请输入统一社会信用代码！");
+        return;
+      }
+      if (!businessLicenseImgId) {
+        Message.error("请上传营业执照！");
+        return;
+      }
+      if (!operName) {
+        Message.error("请输入法人姓名！");
+        return;
+      }
+      if (!operIdcardNo) {
+        Message.error("请输入身份证号码！");
+        return;
+      }
+      if (!operPhoneNo) {
+        Message.error("请输入手机电话！");
+        return;
+      }
+      if (!operIdcardFrontId) {
+        Message.error("请上传身份证正面照！");
+        return;
+      }
+      if (!operIdcardBackendId) {
+        Message.error("请上传身份证背面照！");
+        return;
+      }
+      if (!labelCodeList.length) {
+        Message.error("请选择你拥有的生产能力标签！");
+        return;
+      }
+      const { success, message, data }: any = await SaveCompanyQualifyInfo({ businessLicenseImgId, creditCode, labelCodeList, operIdcardBackendId, operIdcardFrontId, operIdcardNo, operName, operPhoneNo });
+      if (success) {
+        Message.success(message);
+      } else {
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);

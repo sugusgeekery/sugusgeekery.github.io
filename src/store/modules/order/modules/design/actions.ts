@@ -59,12 +59,12 @@ export default {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldNo } = initOption;
-      const { success, msg, data }: any = await GetStep({ mouldNo });
+      const { success, message, data }: any = await GetStep({ mouldNo });
       if (success) {
         commit(MutationTypes.UpdateDesign, { step: data || 0 });
         dispatch(ActionTypes.GetStepDetail);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -76,7 +76,7 @@ export default {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldNo } = initOption;
-      const { success, msg, data }: any = await GetStepDetail({ mouldNo });
+      const { success, message, data }: any = await GetStepDetail({ mouldNo });
       if (success) {
         const stepList = (ls => {
           const arr = [];
@@ -114,7 +114,7 @@ export default {
         })(data || []);
         commit(MutationTypes.UpdateDesign, { stepList });
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -127,11 +127,11 @@ export default {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldNo } = initOption;
-      const { success, msg, data }: any = await GetBOMList({ mouldNo });
+      const { success, message, data }: any = await GetBOMList({ mouldNo });
       if (success) {
         commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true, showType });
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -145,12 +145,12 @@ export default {
       const { mouldNo } = initOption;
       const formData = new FormData();
       formData.append("file", file);
-      const { success, msg, data }: any = await ImportBom(formData, { mouldNo });
+      const { success, message, data }: any = await ImportBom(formData, { mouldNo });
       if (success) {
         // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
         dispatch(ActionTypes.GetBOMList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -163,7 +163,7 @@ export default {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldNo } = initOption;
-      const { success, msg, data }: any = await GetBOMImageInfo({ mouldNo });
+      const { success, message, data }: any = await GetBOMImageInfo({ mouldNo });
       if (success) {
         const list = (ls => {
           for (const [a, b] of ls.entries()) {
@@ -174,7 +174,7 @@ export default {
         commit(MutationTypes.UpdateBOMImageInfo, { list, isShow: true, showType });
         dispatch(ActionTypes.CacluateBOMImageInfo);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -223,12 +223,12 @@ export default {
       const { mouldNo } = initOption;
       const formData = new FormData();
       formData.append("file", file);
-      const { success, msg, data }: any = await ImportSpareImage(formData, { mouldNo });
+      const { success, message, data }: any = await ImportSpareImage(formData, { mouldNo });
       if (success) {
         // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
         dispatch(ActionTypes.GetBOMImageInfo);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -243,12 +243,12 @@ export default {
       // const { mouldNo } = initOption;
       const formData = new FormData();
       formData.append("file", file);
-      const { success, msg, data }: any = await UpdateSpareImage(formData, { infoId });
+      const { success, message, data }: any = await UpdateSpareImage(formData, { infoId });
       if (success) {
         // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
         dispatch(ActionTypes.GetBOMImageInfo);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -263,12 +263,12 @@ export default {
     const { mouldNo } = initOption;
     const fn = async(datas = {}) => {
       try {
-        const { success, msg, data }: any = await CheckProgramme(datas);
+        const { success, message, data }: any = await CheckProgramme(datas);
         if (success) {
           // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
           // dispatch(ActionTypes.GetBOMImageInfo);
         } else {
-          Message.error(msg);
+          Message.error(message);
         }
       } catch (e) {
         throw new Error(e);
@@ -326,12 +326,12 @@ export default {
     }
     const fn = async(datas = {}) => {
       try {
-        const { success, msg, data }: any = await CheckImage(datas);
+        const { success, message, data }: any = await CheckImage(datas);
         if (success) {
           // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
           // dispatch(ActionTypes.GetBOMImageInfo);
         } else {
-          Message.error(msg);
+          Message.error(message);
         }
       } catch (e) {
         throw new Error(e);

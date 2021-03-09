@@ -59,11 +59,11 @@ export default {
           // fn = await GetInjectStepList({ biddingId });
           break;
       }
-      const { success, msg, data }: any = fn;
+      const { success, message, data }: any = fn;
       if (success) {
         commit(MutationTypes.UpdatePrototype, data || {});
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -108,11 +108,11 @@ export default {
           // fn = await GetInjectStepList({ biddingId });
           break;
       }
-      const { success, msg, data }: any = fn;
+      const { success, message, data }: any = fn;
       if (success) {
         dispatch(ActionTypes.GetPrototype);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);

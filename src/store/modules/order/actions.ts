@@ -46,12 +46,12 @@ export default {
   async [ActionTypes.GetMyBidAdvantage](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { success, msg, data }: any = await GetMyBidAdvantage();
+      const { success, message, data }: any = await GetMyBidAdvantage();
       if (success) {
         const { accuracy, anerror } = data || {};
         commit(MutationTypes.UpdateAdvantage, { accuracy, anerror });
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -65,12 +65,12 @@ export default {
       const { pageNum = 1, pageSize = 10, orderNo = "", projectIndex = 0, projectList = [], statusIndex = 0, statusList = [] } = order;
       const { type = "" } = projectList[projectIndex] || {};
       const { status = "" } = statusList[statusIndex] || {};
-      const { success, msg, data }: any = await GetOrderList({ pageNum, pageSize, status, type, orderNo });
+      const { success, message, data }: any = await GetOrderList({ pageNum, pageSize, status, type, orderNo });
       if (success) {
         const { list = [], total } = data || {};
         commit(MutationTypes.UpdateOrder, { list, total: Number(total) });
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -220,7 +220,7 @@ export default {
           fn = await GetInjectRemainTime({ biddingId });
           break;
       }
-      const { success, msg, data }: any = fn;
+      const { success, message, data }: any = fn;
       if (success) {
         const { remainSeconds, state } = data || {};
         commit(MutationTypes.UpdateRemainTime, data || {});
@@ -228,7 +228,7 @@ export default {
           callback(remainSeconds);
         }
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);

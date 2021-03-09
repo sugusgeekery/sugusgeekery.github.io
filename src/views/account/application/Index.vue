@@ -1,57 +1,214 @@
 <template>
   <div class="context">
+    <input
+      type="file"
+      name="file"
+      hidden="hidden"
+      id="file"
+      @change="uploadFile"
+    />
     <div class="context-title">资质申请</div>
     <div class="context-body">
-      <div class="list">
-        <div class="nav">
-          <div class="nav-label">账号类型：</div>
-          <div class="nav-items">
-            <Selection
-              type="题型"
-              label="选择题型"
-              :list="typeList"
-              name="name"
-              @updateindex="updateIndex"
-            ></Selection>
-          </div>
-          <div class="nav-buttons">
-            <div class="nav-button nav-button-blue">确定</div>
+      <div class="list" v-if="defInfo.type === 1">
+        <div class="li">
+          <div class="li-title">营业执照</div>
+          <div class="li-row">
+            <div class="li-flex">
+              <div class="li-items">
+                <div class="li-item">
+                  <div class="li-item-label">
+                    <span class="li-item-label-gray">统一社会信用代码</span>
+                  </div>
+                  <div class="li-item-input">
+                    <input
+                      type="text"
+                      placeholder="请输入统一社会信用代码"
+                      :value="companyQualify.creditCode"
+                      @change="
+                        changeCompanyQualifyInput(
+                          $event.target.value,
+                          'creditCode'
+                        )
+                      "
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="li-text">
+                <span class="li-button" @click="selectFile(1)"
+                  >上传营业执照</span
+                >
+                <span class="li-text-gray">
+                  支持 jpg、png、jpeg格式，大小不超过5M
+                </span>
+              </div>
+              <div class="li-text">
+                <span class="li-text-gray">
+                  说明“上传之后，按钮显示为”重新上传”
+                </span>
+              </div>
+            </div>
+            <div class="li-img">
+              <img
+                class="li-img-icon"
+                v-if="companyQualify.businessLicenseImgUrl"
+                :src="BASE_IMAGE_URL + companyQualify.businessLicenseImgUrl"
+                alt=""
+              />
+              <img
+                v-else
+                class="li-img-icon"
+                src="../../../assets/images/headicon.png"
+                alt=""
+              />
+            </div>
           </div>
         </div>
-        <div class="form">
-          <div class="form-flex">
-            <div class="form-title">基本信息</div>
-            <div class="form-items">
-              <div class="form-item">
-                <div class="form-item-head">
-                  <img class="form-item-head-icon" src="" alt="" />
-                  <div class="form-item-head-text">上传头像</div>
-                </div>
+        <div class="li">
+          <div class="li-title">法人信息</div>
+          <div class="li-items">
+            <div class="li-item">
+              <div class="li-item-label">
+                <span class="li-item-label-gray">法人姓名</span>
               </div>
-              <div class="form-item">
-                <div class="form-item-label">
-                  <span class="form-item-label-red">*</span>
-                  <span class="form-item-label-gray">真实姓名</span>
-                </div>
-                <div class="form-item-input">
-                  <input type="text" placeholder="请输入真实姓名" value="" />
-                </div>
+              <div class="li-item-input">
+                <input
+                  type="text"
+                  placeholder="请输入法人姓名"
+                  :value="companyQualify.operName"
+                  @change="
+                    changeCompanyQualifyInput($event.target.value, 'operName')
+                  "
+                />
+              </div>
+            </div>
+            <div class="li-item">
+              <div class="li-item-label">
+                <span class="li-item-label-gray">身份证号码</span>
+              </div>
+              <div class="li-item-input">
+                <input
+                  type="text"
+                  placeholder="请输入身份证号码"
+                  :value="companyQualify.operIdcardNo"
+                  @change="
+                    changeCompanyQualifyInput(
+                      $event.target.value,
+                      'operIdcardNo'
+                    )
+                  "
+                />
+              </div>
+            </div>
+            <div class="li-item">
+              <div class="li-item-label">
+                <span class="li-item-label-gray">手机号码</span>
+              </div>
+              <div class="li-item-input">
+                <input
+                  type="text"
+                  placeholder="请输入手机号码"
+                  :value="companyQualify.operPhoneNo"
+                  @change="
+                    changeCompanyQualifyInput(
+                      $event.target.value,
+                      'operPhoneNo'
+                    )
+                  "
+                />
               </div>
             </div>
           </div>
-          <div class="form-flex">
-            <div class="form-title">公司信息</div>
-            <div class="form-items">
-              <div class="form-item">
-                <div class="form-item-label">
-                  <span class="form-item-label-red">*</span>
-                  <span class="form-item-label-gray">真实姓名</span>
-                </div>
-                <div class="form-item-input">
-                  <input type="text" placeholder="请输入真实姓名" value="" />
-                </div>
+          <div class="li-images">
+            <div class="li-image">
+              <div class="li-image-icon" @click="selectFile(2)">
+                <img
+                  class="li-image-icon-src"
+                  :src="BASE_IMAGE_URL + companyQualify.operIdcardFrontUrl"
+                  v-if="companyQualify.operIdcardFrontUrl"
+                  alt=""
+                />
+                <div class="li-image-icon-span" v-else>+</div>
               </div>
+              <div class="li-image-text">法人身份证正面</div>
             </div>
+            <div class="li-image">
+              <div class="li-image-icon" @click="selectFile(3)">
+                <img
+                  class="li-image-icon-src"
+                  :src="BASE_IMAGE_URL + companyQualify.operIdcardBackendUrl"
+                  v-if="companyQualify.operIdcardBackendUrl"
+                  alt=""
+                />
+                <div class="li-image-icon-span" v-else>+</div>
+              </div>
+              <div class="li-image-text">法人身份证背面</div>
+            </div>
+          </div>
+        </div>
+        <div class="li">
+          <div class="li-title">选择你拥有的生产能力标签</div>
+          <div class="li-content">
+            <Selection
+              type="生产能力标签"
+              label="选择生产能力标签"
+              :list="companyQualify.labelList"
+              name="name"
+              @updateindex="updateCompanyQualifyLabelIndex"
+            ></Selection>
+          </div>
+        </div>
+        <div class="buttons">
+          <div class="button button-blue" @click="saveCompanyQualifyInfo()">
+            提交
+          </div>
+        </div>
+      </div>
+      <div class="list" v-else-if="defInfo.type === 2">
+        <div class="li">
+          <div class="li-title">个人信息</div>
+          <div class="li-images">
+            <div class="li-image">
+              <div class="li-image-icon" @click="selectFile(4)">
+                <img
+                  class="li-image-icon-src"
+                  :src="BASE_IMAGE_URL + userQualify.idcardFrontImgUrl"
+                  v-if="userQualify.idcardFrontImgUrl"
+                  alt=""
+                />
+                <div class="li-image-icon-span" v-else>+</div>
+              </div>
+              <div class="li-image-text">法人身份证正面</div>
+            </div>
+            <div class="li-image">
+              <div class="li-image-icon" @click="selectFile(5)">
+                <img
+                  class="li-image-icon-src"
+                  :src="BASE_IMAGE_URL + userQualify.idcardBackImgUrl"
+                  v-if="userQualify.idcardBackImgUrl"
+                  alt=""
+                />
+                <div class="li-image-icon-span" v-else>+</div>
+              </div>
+              <div class="li-image-text">法人身份证背面</div>
+            </div>
+          </div>
+        </div>
+        <div class="li">
+          <div class="li-title">选择你拥有的生产能力标签</div>
+          <div class="li-content">
+            <Selection
+              type="生产能力标签"
+              label="选择生产能力标签"
+              :list="userQualify.labelList"
+              name="name"
+              @updateindex="updateUserQualifyLabelIndex"
+            ></Selection>
+          </div>
+        </div>
+        <div class="buttons">
+          <div class="button button-blue" @click="saveUserQualifyInfo()">
+            提交
           </div>
         </div>
       </div>
@@ -61,11 +218,19 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-// import { namespace } from "vuex-class";
-// const { State, Getter, Action, Mutation } = namespace("account");
+import { namespace } from "vuex-class";
+const { State, Getter, Action, Mutation } = namespace("account");
 
-// import {} from "@/store/modules/account/state";
-// import { ActionTypes } from "@/store/modules/account/actions";
+import {
+  DefInfo,
+  UserQualify,
+  CompanyQualify
+} from "@/store/modules/account/state";
+import { ActionTypes } from "@/store/modules/account/actions";
+import { MutationTypes } from "@/store/modules/account/mutations";
+
+import { BASE_IMAGE_URL } from "@/config";
+import { formatDateTime } from "@/utils/util";
 
 import Selection from "@/components/Selection.vue";
 
@@ -76,41 +241,103 @@ import Selection from "@/components/Selection.vue";
   }
 })
 export default class ApplicationView extends Vue {
-  public typeList = [
-    {
-      name: "公司",
-      isSelected: true
-    },
-    {
-      name: "个人",
-      isSelected: false
-    }
-  ];
-  public updateIndex(index: number) {
-    console.log(index);
+  public BASE_IMAGE_URL = BASE_IMAGE_URL;
+  public date = "";
+
+  @State("defInfo")
+  public defInfo!: any | DefInfo;
+  @State("userQualify")
+  public userQualify!: UserQualify;
+  @State("companyQualify")
+  public companyQualify!: CompanyQualify;
+
+  @Action(ActionTypes.GetQualifyInfo)
+  public getQualifyInfo!: Function;
+  @Action(ActionTypes.UploadForm)
+  public uploadForm!: Function;
+  @Action(ActionTypes.SavePersonQualifyInfo)
+  public saveUserQualifyInfo!: Function;
+  @Action(ActionTypes.SaveCompanyQualifyInfo)
+  public saveCompanyQualifyInfo!: Function;
+
+  @Mutation(MutationTypes.UpdateUserQualify)
+  public updateUserQualify!: Function;
+  @Mutation(MutationTypes.UpdateCompanyQualify)
+  public updateCompanyQualify!: Function;
+
+  public updateUserQualifyLabelIndex(index: number) {
+    const { labelList = [] } = this.userQualify || {};
+    const { isSelected } = labelList[index] || {};
+    labelList[index].isSelected = ~~!isSelected;
+    this.updateCompanyQualify({ labelList });
   }
-  // @State("advantage")
-  // public advantage!: Advantage;
-  // @State("order")
-  // public order!: Order;
-  // @Action(ActionTypes.GetMyBidAdvantage)
-  // public getMyBidAdvantage!: Function;
-  // @Action(ActionTypes.UpdatePageNum)
-  // public updatePageNum!: Function;
-  // @Action(ActionTypes.UpdatePageSize)
-  // public updatePageSize!: Function;
-  // @Action(ActionTypes.UpdateProjectIndex)
-  // public updateProjectIndex!: Function;
-  // @Action(ActionTypes.UpdateStatusIndex)
-  // public updateStatusIndex!: Function;
-  // @Action(ActionTypes.UpdateOrderNo)
-  // public updateOrderNo!: Function;
-  // @Action(ActionTypes.GetOrderDetail)
-  // public getOrderDetail!: Function;
-  // public created() {
-  //   this.getMyBidAdvantage();
-  //   this.updatePageNum(1);
-  // }
+  public updateCompanyQualifyLabelIndex(index: number) {
+    const { labelList = [] } = this.companyQualify || {};
+    const { isSelected } = labelList[index] || {};
+    labelList[index].isSelected = ~~!isSelected;
+    this.updateCompanyQualify({ labelList });
+  }
+
+  public fileType = 0;
+  public selectFile(fileType: number) {
+    this.fileType = fileType;
+    const dom: any = document.querySelector("#file");
+    dom.click();
+  }
+  public uploadFile(e: any) {
+    const files = e.target.files;
+    let len = files.length;
+    while (len > 0) {
+      this.uploadForm({ file: files[files.length - len] }).then((res: any) => {
+        const { filePath, id } = res || {};
+        switch (this.fileType) {
+          case 1:
+            this.updateCompanyQualify({
+              businessLicenseImgUrl: filePath,
+              businessLicenseImgId: id
+            });
+            break;
+          case 2:
+            this.updateCompanyQualify({
+              operIdcardFrontUrl: filePath,
+              operIdcardFrontId: id
+            });
+            break;
+          case 3:
+            this.updateCompanyQualify({
+              operIdcardBackendUrl: filePath,
+              operIdcardBackendId: id
+            });
+            break;
+          case 4:
+            this.updateUserQualify({
+              idcardFrontImgUrl: filePath,
+              idcardFrontImgId: id
+            });
+            break;
+          case 5:
+            this.updateUserQualify({
+              idcardBackImgUrl: filePath,
+              idcardBackImgId: id
+            });
+            break;
+        }
+      });
+      len--;
+    }
+  }
+
+  public changeUserQualifyInput(value: string, key: string) {
+    this.updateUserQualify({ [key]: value });
+  }
+
+  public changeCompanyQualifyInput(value: string, key: string) {
+    this.updateCompanyQualify({ [key]: value });
+  }
+
+  public created() {
+    this.getQualifyInfo({ type: 1 });
+  }
 }
 </script>
 
@@ -164,21 +391,72 @@ export default class ApplicationView extends Vue {
       border-radius 8px
       overflow auto
       padding 1px 30px
-      .nav
-        padding 20px 0
+      .li
         width 100%
-        display flex
-        justify-content flex-start
-        align-items center
-        border-bottom solid 1px $color-bd
-        &-label
-          color $color-text-gray
-          font-size 16px
-        &-items
+        &-title
+          padding 20px 0 14px 0
+          color $color-text-black
+          font-size 20px
+          font-weight bold
+          border-bottom solid 1px $color-bd
+        &-content
+          margin 20px 20px 20px 0
+        &-row
+          width 100%
+          display flex
+          justify-content space-between
+          align-items flex-start
+        &-flex
+          flex 2
+        &-img
+          flex 1
+          margin 20px 40px
+          text-align right
+          &-icon
+            width 124px
+            height 154px
+            background $color-bg-gray
+            object-fit contain
+        &-images
+          margin 20px 20px 20px 0
           display flex
           justify-content flex-start
-          align-items center
+          align-items flex-start
+        &-image
           margin-right 20px
+          &-icon
+            border solid 2px $color-bd-blue
+            position relative
+            width 124px
+            height 154px
+            background $color-bg-blue-white
+            &-src
+              width 100%
+              height 100%
+              object-fit contain
+              cursor pointer
+            &-span
+              width 100%
+              height 100%
+              display flex
+              justify-content center
+              align-items center
+              font-size 50px
+              color $color-text-blue
+              cursor pointer
+          &-text
+            text-align center
+            font-size 14px
+            margin 10px auto
+            color $color-text-gray
+        &-text
+          font-size 14px
+          margin 20px 20px 20px 0
+          &-gray
+            color $color-text-gray
+          &-blue
+            cursor pointer
+            color $color-text-blue
         &-buttons
           display flex
           justify-content flex-start
@@ -186,7 +464,9 @@ export default class ApplicationView extends Vue {
         &-button
           text-align center
           padding 9px 16px
+          margin-right 10px
           border-radius 4px
+          border solid 1px $color-text-blue
           font-size 14px
           color $color-text-blue
           background $color-bg-white
@@ -194,60 +474,84 @@ export default class ApplicationView extends Vue {
           &-blue
             color $color-text-white
             background $color-text-blue
-      .form
-        width 100%
-        margin 20px 0
-        display flex
-        justify-content flex-start
-        align-items flex-start
-        &-flex
-          flex 1
-          padding-right 30px
-        &-title
-          border-left solid 2px $color-text-blue
-          font-size 16px
-          color $color-text-black
-          padding 0 8px
-          margin 30px 0
         &-items
           width 100%
+          display flex
+          justify-content space-between
+          align-items flex-start
         &-item
+          flex 1
           display flex
           justify-content flex-start
           align-items center
-          margin 10px 0
-          &-head
-            width 100%
-            display flex
-            flex-direction column
-            justify-content center
-            align-items center
-            margin 20px
-            &-icon
-              width 90px
-              height 90px
-              border-radius 100px
-              background $color-bg-gray
-              overflow hidden
-            &-text
-              margin-top 10px
+          margin 20px 20px 20px 0
           &-label
-            flex 2
-            text-align right
             margin-right 20px
+            font-size 14px
             &-red
               color $color-text-red
-              font-size 16px
             &-gray
               color $color-text-gray
-              font-size 16px
+          &-picker
+            &-date
+              width 100%
           &-input
-            flex 8
-            text-align left
-            border solid 1px $color-bd
-            padding 10px
+            border solid 1px $color-bd-grey
+            font-size 14px
+            flex 1
             input
               width 100%
               border none
               outline none
+              padding 10px
+              border-radius 4px
+              font-size 14px
+            textarea
+              width 100%
+              height 100px
+              border none
+              outline none
+              padding 10px
+              border-radius 4px
+              font-size 14px
+          &-radios
+            display flex
+            justify-content flex-start
+            align-items center
+          &-radio
+            display flex
+            justify-content flex-start
+            align-items center
+            cursor pointer
+            &-label
+              width 12px
+              height 12px
+              border-radius 100px
+              border solid 1px $color-bd-gray
+              background $color-bg-blue-white
+              margin-right 8px
+              &-active
+                background $color-bg-blue
+            &-text
+              color $color-text-gray
+              font-size 16px
+              margin-right 16px
+      .buttons
+        margin 20px auto
+        display flex
+        justify-content center
+        align-items center
+      .button
+        border-radius 4px
+        padding 10px 20px
+        font-size 14px
+        border solid 1px $color-bd-blue
+        color $color-text-blue
+        background $color-bg-white
+        cursor pointer
+        margin 0 20px
+        &-blue
+          border solid 1px $color-bd-blue
+          color $color-text-white
+          background $color-bg-blue
 </style>

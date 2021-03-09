@@ -69,7 +69,7 @@ export default {
           fn = await GetInjectStepList({ biddingId });
           break;
       }
-      const { success, msg, data }: any = fn;
+      const { success, message, data }: any = fn;
       if (success) {
         const stepList = (ls => {
           for (const [a, b] of ls.entries()) {
@@ -80,7 +80,7 @@ export default {
         })(data || []);
         commit(MutationTypes.UpdateStepList, stepList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -107,11 +107,11 @@ export default {
           fn = await FinishedInjectStep({ biddingId, fileId, stepId });
           break;
       }
-      const { success, msg, data }: any = fn;
+      const { success, message, data }: any = fn;
       if (success) {
         dispatch(ActionTypes.GetStepList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -136,11 +136,11 @@ export default {
           fn = await ConfirmInjectFinished({ biddingId });
           break;
       }
-      const { success, msg, data }: any = fn;
+      const { success, message, data }: any = fn;
       if (success) {
         dispatch(ActionTypes.GetStepList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -156,7 +156,7 @@ export default {
       const { fileList } = stepList[index] || {};
       const formData = new FormData();
       formData.append("files", file);
-      const { success, msg, data }: any = await UploadForm(formData);
+      const { success, message, data }: any = await UploadForm(formData);
       if (success) {
         const { pics = [] } = data || {};
         const { filePath = "", id = "" } = pics[0];
@@ -164,7 +164,7 @@ export default {
         console.log(stepList[index].fileList)
         commit(MutationTypes.UpdateStepList, stepList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);

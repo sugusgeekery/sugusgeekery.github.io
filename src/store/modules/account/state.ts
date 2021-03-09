@@ -45,8 +45,35 @@ export interface StaffsizeList {
   value: number;
   label: string;
 }
-export interface UserQualify {}
-export interface CompanyQualify {}
+export interface UserQualify {
+  idcardBackImgId: number;
+  idcardBackImgUrl: string;
+  idcardFrontImgId: number;
+  idcardFrontImgUrl: string;
+  labelList: Array<LabelList>;
+  state: number;
+  stateDesc: string;
+}
+export interface CompanyQualify {
+  businessLicenseImgId: number;
+  businessLicenseImgUrl: string;
+  creditCode: string;
+  labelList: Array<LabelList>;
+  operIdcardBackendId: number;
+  operIdcardBackendUrl: string;
+  operIdcardFrontId: number;
+  operIdcardFrontUrl: string;
+  operIdcardNo: string;
+  operName: string;
+  operPhoneNo: string;
+  state: number;
+  stateDesc: string;
+}
+export interface LabelList {
+  code: string;
+  isSelected: number;
+  name: string;
+}
 
 const state: State = {
   defInfo: {
@@ -68,27 +95,27 @@ const state: State = {
   provinceCityDistrict: [],
   userInfo: {
     sexList: ["无","男", "女"],
-    email: "fww32@444.com",
-    headImgUrl: "ff3.jpg",
-    phoneNo: "13242558499",
-    sex: 1,
-    telephoneNo: "0755-669545",
-    userName: "詹三"
+    sex: 0,
+    email: "",
+    headImgUrl: "",
+    phoneNo: "",
+    telephoneNo: "",
+    userName: ""
   },
   companyInfo: {
-    address: "前海壹号B栋",
-    cityId: 6,
-    cityName: "深圳市",
-    companyName: "深圳怡宝科技公司",
-    companyPhoneNo: "1336555666",
-    description: "详细说明详细说明",
-    districtId: 11,
-    districtName: "南山区",
-    officialWebsite: "www.baidu.com",
-    provinceId: 4,
-    provinceName: "广东",
-    publishTime: "2021-01-10",
-    staffSize: 50,
+    address: "",
+    cityId: 0,
+    cityName: "",
+    companyName: "",
+    companyPhoneNo: "",
+    description: "",
+    districtId: 0,
+    districtName: "",
+    officialWebsite: "",
+    provinceId: 0,
+    provinceName: "",
+    publishTime: "",
+    staffSize: 0,
     staffsizeList: [
       {
         value: 1,
@@ -116,8 +143,30 @@ const state: State = {
       },
     ]
   },
-  userQualify: {},
-  companyQualify: {}
+  userQualify: {
+    idcardBackImgId: 0,
+    idcardBackImgUrl: "",
+    idcardFrontImgId: 0,
+    idcardFrontImgUrl: "",
+    labelList: [],
+    state: 0,
+    stateDesc: ""
+  },
+  companyQualify: {
+    businessLicenseImgId: 0,
+    businessLicenseImgUrl: "",
+    creditCode: "",
+    labelList: [],
+    operIdcardBackendId: 0,
+    operIdcardBackendUrl: "",
+    operIdcardFrontId: 0,
+    operIdcardFrontUrl: "",
+    operIdcardNo: "",
+    operName: "",
+    operPhoneNo: "",
+    state: 0,
+    stateDesc: ""
+  }
 };
 
 export default state;

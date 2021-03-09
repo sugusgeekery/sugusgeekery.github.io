@@ -127,13 +127,13 @@ const state: RootState = {
           path: "/account/application",
           query: {},
         },
-        {
-          id: "4_3",
-          text: "子账号管理",
-          icon: "",
-          path: "/account/management",
-          query: {},
-        },
+        // {
+        //   id: "4_3",
+        //   text: "子账号管理",
+        //   icon: "",
+        //   path: "/account/management",
+        //   query: {},
+        // },
       ]
     },
   ],

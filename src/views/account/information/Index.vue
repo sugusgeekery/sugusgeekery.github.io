@@ -421,7 +421,10 @@ export default class InformationView extends Vue {
     const files = e.target.files;
     let len = files.length;
     while (len > 0) {
-      this.uploadForm({ file: files[files.length - len] });
+      this.uploadForm({ file: files[files.length - len] }).then((res: any) => {
+        const { fileThumPath } = res || {};
+        this.updateUserInfo({ headImgUrl: fileThumPath });
+      });
       len--;
     }
   }
@@ -482,7 +485,7 @@ export default class InformationView extends Vue {
   }
 
   public created() {
-    this.getDefInfo();
+    this.getDefInfo({ type: 1 });
   }
 }
 </script>

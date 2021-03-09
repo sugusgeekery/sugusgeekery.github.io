@@ -33,7 +33,7 @@ export default {
   async [ActionTypes.GetStatistics](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { success, msg, data }: any = await GetStatistics();
+      const { success, message, data }: any = await GetStatistics();
       if (success) {
         const { inCompleteOrderCount, messageCount, newBiddingCount, pendingOrderCount } = data || {};
         const orderMessageList = [];
@@ -55,7 +55,7 @@ export default {
         });
         commit(MutationTypes.UpdateOrderMessageList, orderMessageList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -66,11 +66,11 @@ export default {
   async [ActionTypes.GetToBeDeal](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { success, msg, data }: any = await GetToBeDeal();
+      const { success, message, data }: any = await GetToBeDeal();
       if (success) {
         commit(MutationTypes.UpdateJobList, data || []);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);

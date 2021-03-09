@@ -76,14 +76,14 @@ export default {
       } else if (biddingIndex === 2 || biddingIndex === 3) {
         fn = await GetSelectMyBidding({ type, pageNum, pageSize });
       }
-      const { success, msg, data }: any = fn;
+      const { success, message, data }: any = fn;
       if (success) {
         const { list = [], total = 0 } = data || {};
         biddingList[biddingIndex].list = list;
         biddingList[biddingIndex].total = Number(total);
         commit(MutationTypes.UpdateBiddingList, biddingList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -147,11 +147,11 @@ export default {
       const { biddingIndex = 0, biddingList = [] } = state;
       const { list = [] } = biddingList[biddingIndex] || {}; 
       const { amount, id, workPeriod } = list[index] || {};
-      const { success, msg, data }: any = await JoinBidding({ amount, biddingHeadId: id, workPeriod });
+      const { success, message, data }: any = await JoinBidding({ amount, biddingHeadId: id, workPeriod });
       if (success) {
         dispatch(ActionTypes.GetBiddingList);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -173,12 +173,12 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { headId = "" } = biddingDetail || {};
-      const { success, msg, data }: any = await GetMouldBiddingDetail({ headId });
+      const { success, message, data }: any = await GetMouldBiddingDetail({ headId });
       if (success) {
         const { productInfos = [] } = data || {};
         commit(MutationTypes.UpdateBiddingDetail, { ...(data || {}), productInfoIndex: productInfos.length ? 0 : -1 });
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -208,11 +208,11 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { amount, headId, id, workPeriod } = biddingDetail || {}; 
-      const { success, msg, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id, workPeriod });
+      const { success, message, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id, workPeriod });
       if (success) {
         dispatch(ActionTypes.GetMouldBiddingDetail);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -233,11 +233,11 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { headId = "" } = biddingDetail || {};
-      const { success, msg, data }: any = await GetProductTechnology({ headId });
+      const { success, message, data }: any = await GetProductTechnology({ headId });
       if (success) {
         commit(MutationTypes.UpdateBiddingTechnology, data || {});
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -258,11 +258,11 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { headId = "" } = biddingDetail || {};
-      const { success, msg, data }: any = await GetMaterialAndColor({ headId });
+      const { success, message, data }: any = await GetMaterialAndColor({ headId });
       if (success) {
         commit(MutationTypes.UpdateBiddingMaterial, data || {});
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);

@@ -67,11 +67,11 @@ export default {
           // fn = await GetInjectStepList({ biddingId });
           break;
       }
-      const { success, msg, data }: any = fn;
+      const { success, message, data }: any = fn;
       if (success) {
         commit(MutationTypes.UpdateMould, data || []);
       } else {
-        Message.error(msg);
+        Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
@@ -87,7 +87,7 @@ export default {
   //     const { fileList } = reportList[index] || {};
   //     const formData = new FormData();
   //     formData.append("files", file);
-  //     const { success, msg, data }: any = await UploadForm(formData);
+  //     const { success, message, data }: any = await UploadForm(formData);
   //     if (success) {
   //       const { pics = [] } = data || {};
   //       const { filePath = "" } = pics[0];
@@ -95,7 +95,7 @@ export default {
   //       commit(MutationTypes.UpdateReportList, reportList);
   //       commit(MutationTypes.UpdateTimestamp, new Date().getTime());
   //     } else {
-  //       Message.error(msg);
+  //       Message.error(message);
   //     }
   //   } catch (e) {
   //     throw new Error(e);
@@ -141,12 +141,12 @@ export default {
   //       Message.error("请上传图片");
   //       return;
   //     }
-  //     const { success, msg, data }: any = await CommitReport({ biddingId, describe, reportTitleId, images: fileList });
+  //     const { success, message, data }: any = await CommitReport({ biddingId, describe, reportTitleId, images: fileList });
   //     if (success) {
   //       dispatch(ActionTypes.GetDfmReportList);
   //       // commit(MutationTypes.UpdateReportList, data || []);
   //     } else {
-  //       Message.error(msg);
+  //       Message.error(message);
   //     }
   //   } catch (e) {
   //     throw new Error(e);
@@ -177,12 +177,12 @@ export default {
   //         fn = await InjectApprovalDfmReport({ biddingId, approvalContent, reportTitleId, opinion });
   //         break;
   //     }
-  //     const { success, msg, data }: any = fn;
+  //     const { success, message, data }: any = fn;
   //     if (success) {
   //       dispatch(ActionTypes.GetDfmReportList);
   //       // commit(MutationTypes.UpdateReportList, data || []);
   //     } else {
-  //       Message.error(msg);
+  //       Message.error(message);
   //     }
   //   } catch (e) {
   //     throw new Error(e);
