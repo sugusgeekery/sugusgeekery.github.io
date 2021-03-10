@@ -23,4 +23,7 @@ export const PhoneLogin = (params: object = {}): object => fetch({ url: "/suppli
 // 注册
 export const Register = (data: object = {}): object => fetch({ url: "/supplier/oauth/register", data });
 
+// 获取用户信息 
+export const GetAccountInfo = (params: object = {}): object => fetch({ url: "/supplier/userManage/getLoginedUserInfo", method: "GET", params });
+
 

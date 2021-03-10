@@ -231,6 +231,12 @@ import { MutationTypes } from "@/store/modules/account/mutations";
 
 import { BASE_IMAGE_URL } from "@/config";
 import { formatDateTime } from "@/utils/util";
+import validate, {
+  ValidateTypes,
+  ValidateSuccessParams,
+  ValidateFailedParams
+} from "@/utils/validate";
+import { Message, MessageBox } from "element-ui";
 
 import Selection from "@/components/Selection.vue";
 
@@ -251,8 +257,8 @@ export default class ApplicationView extends Vue {
   @State("companyQualify")
   public companyQualify!: CompanyQualify;
 
-  @Action(ActionTypes.GetQualifyInfo)
-  public getQualifyInfo!: Function;
+  @Action(ActionTypes.GetQualifyDefInfo)
+  public getQualifyDefInfo!: Function;
   @Action(ActionTypes.UploadForm)
   public uploadForm!: Function;
   @Action(ActionTypes.SavePersonQualifyInfo)
@@ -327,16 +333,85 @@ export default class ApplicationView extends Vue {
     }
   }
 
-  public changeUserQualifyInput(value: string, key: string) {
-    this.updateUserQualify({ [key]: value });
-  }
+  // public changeUserQualifyInput(value: string, key: string) {
+  //   if (key === "phoneNo") {
+  //     validate[ValidateTypes.ValidatePhone]({
+  //       value,
+  //       success: ({ value }: ValidateSuccessParams) => {
+  //         this.updateUserQualify({ [key]: value });
+  //       },
+  //       failed: ({ value, message }: ValidateFailedParams) => {
+  //         if (value) {
+  //           Message.error(message);
+  //           this.updateUserQualify({ [key]: "" });
+  //         }
+  //       }
+  //     });
+  //   } else if (key === "telephoneNo") {
+  //     validate[ValidateTypes.ValidateTelephone]({
+  //       value,
+  //       success: ({ value }: ValidateSuccessParams) => {
+  //         this.updateUserQualify({ [key]: value });
+  //       },
+  //       failed: ({ value, message }: ValidateFailedParams) => {
+  //         if (value) {
+  //           Message.error(message);
+  //           this.updateUserQualify({ [key]: "" });
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     this.updateUserQualify({ [key]: value });
+  //   }
+  // }
 
   public changeCompanyQualifyInput(value: string, key: string) {
-    this.updateCompanyQualify({ [key]: value });
+    if (key === "creditCode") {
+      validate[ValidateTypes.ValidateCreditCode]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateCompanyQualify({ [key]: value });
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updateCompanyQualify({ [key]: "" });
+          }
+        }
+      });
+    } else if (key === "operIdcardNo") {
+      validate[ValidateTypes.ValidateIdentityCard]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateCompanyQualify({ [key]: value });
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updateCompanyQualify({ [key]: "" });
+          }
+        }
+      });
+    } else if (key === "operPhoneNo") {
+      validate[ValidateTypes.ValidatePhone]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateCompanyQualify({ [key]: value });
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updateCompanyQualify({ [key]: "" });
+          }
+        }
+      });
+    } else {
+      this.updateCompanyQualify({ [key]: value });
+    }
   }
 
   public created() {
-    this.getQualifyInfo({ type: 1 });
+    this.getQualifyDefInfo();
   }
 }
 </script>

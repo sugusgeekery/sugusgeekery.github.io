@@ -1,9 +1,9 @@
 import { setLocalStorage, setSessionStorage }  from "@/utils/storage";
-import { RootState, LogInfo, UserInfo, Navigation } from "./state";
+import { RootState, LoginInfo, AccountInfo, Navigation } from "./state";
 
 export enum RootMutationTypes {
-  UpdateLogInfo = "UpdateLogInfo",
-  UpdateUserInfo = "UpdateUserInfo",
+  UpdateLoginInfo = "UpdateLoginInfo",
+  UpdateAccountInfo = "UpdateAccountInfo",
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   UpdateLoginNavIndex = "UpdateLoginNavIndex",
   UpdateRegisterNavIndex = "UpdateRegisterNavIndex",
@@ -15,30 +15,30 @@ export enum RootMutationTypes {
 
 export default {
   // 更新登录信息
-  [RootMutationTypes.UpdateLogInfo](state: RootState, params: LogInfo) {
-    const { logInfo } = state;
-    const { accessToken } = logInfo || {};
-    if (accessToken) {
-      setSessionStorage("accessToken", accessToken);
-      setLocalStorage("accessToken", accessToken);
+  [RootMutationTypes.UpdateLoginInfo](state: RootState, params: LoginInfo) {
+    const { loginInfo } = state;
+    const { token } = loginInfo || {};
+    if (token) {
+      setSessionStorage("token", token);
+      setLocalStorage("token", token);
     }
-    const temp: LogInfo = logInfo;
+    const temp: LoginInfo = loginInfo;
     (function<T>(state: RootState, params: T, temp: T) {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.logInfo = Object.assign(logInfo, temp);
+      state.loginInfo = Object.assign(loginInfo, temp);
     })(state, params, temp);
   },
-  // 更新用户信息
-  [RootMutationTypes.UpdateUserInfo](state: RootState, params: UserInfo) {
-    const { userInfo } = state;
-    const temp: UserInfo = userInfo;
+  // 更新账号信息
+  [RootMutationTypes.UpdateAccountInfo](state: RootState, params: AccountInfo) {
+    const { accountInfo } = state;
+    const temp: AccountInfo = accountInfo;
     (function<T>(state: RootState, params: T, temp: T) {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.userInfo = Object.assign(userInfo, temp);
+      state.accountInfo = Object.assign(accountInfo, temp);
     })(state, params, temp);
   },
   // 更新验证码倒计时状态

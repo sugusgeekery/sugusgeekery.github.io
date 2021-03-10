@@ -164,7 +164,7 @@ export default class HomeTemplate extends Vue {
   public getToBeDeal!: Function;
 
   public created() {
-    this.getStatistics();
+    // this.getStatistics();
     this.getToBeDeal();
   }
 }

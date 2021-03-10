@@ -12,12 +12,14 @@ import { _url2xml2file } from "@/utils/util";
 import Vue from "@/main";
 
 import {
-  VerificationCodeLogin,
   GetVerificationCode,
+  VerificationCodeLogin,
   WechatLogin,
   PhoneLogin,
   Register,
+  GetAccountInfo
 } from "@/api";
+import { ActionTypes } from "./modules/account/actions";
 
 interface Store {
   state: RootState;
@@ -31,8 +33,9 @@ export enum RootActionTypes {
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   VerificationCodelogin = "VerificationCodelogin",
   WechatLogin = "WechatLogin",
-  Register = "Register",
   PhoneLogin = "PhoneLogin",
+  Register = "Register",
+  GetAccountInfo = "GetAccountInfo",
   UpdateNavigationIndex = "UpdateNavigationIndex",
 }
 
@@ -77,23 +80,9 @@ export default {
       const { dispatch, commit } = store;
       const { success, message, data }: any = await VerificationCodeLogin(parameter);
       if (success) {
-        // const { accessToken = "" } = data || {};
-        // commit(RootMutationTypes.UpdateLogInfo, { accessToken });
-        const { accessToken = "", isExist = false, openId = "", token, user } = data || {};
-        commit(RootMutationTypes.UpdateLogInfo, { accessToken: accessToken || token, isExist, openId });
-        // if (!isExist) {
-        //   if (openId) {
-        //     commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
-        //     router.push("/user/register");
-        //   } else {
-        //     Message.error("请扫码重试！");
-        //   }
-        // } else {
-          commit(RootMutationTypes.UpdateUserInfo, { ...user });
-          router.push("/home");
-        // }
-        // dispatch("getMyInfo");
-        // router.push("/home");
+        const { token } = data || {};
+        commit(RootMutationTypes.UpdateLoginInfo, { token });
+        dispatch(RootActionTypes.GetAccountInfo);
       } else {
         Message.error(message);
       }
@@ -101,56 +90,40 @@ export default {
       throw new Error(e);
     }
   },
-  // 微信扫码登陆
-  async [RootActionTypes.WechatLogin](store: Store, parameter: { jsCode: string; }) {
-    try {
-      const { dispatch, commit } = store;
-      const { success, message, data }: any = await WechatLogin(parameter);
-      if (success) {
-        const { accessToken = "", isExist = false, openId = "", token, supplierInfo } = data || {};
-        commit(RootMutationTypes.UpdateLogInfo, { accessToken: accessToken || token, isExist, openId });
-        if (!isExist) {
-          if (openId) {
-            commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
-            router.push("/user/register");
-          } else {
-            Message.error("请扫码重试！");
-          }
-        } else {
-          commit(RootMutationTypes.UpdateUserInfo, { ...supplierInfo });
-          router.push("/home");
-        }
-        // dispatch("getMyInfo");
-      } else {
-        Message.error(message);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
-  // 微信扫码登陆
+  // 手机号直接登陆（方便开发测试人员调试用的）
   async [RootActionTypes.PhoneLogin](store: Store, parameter: { phoneNo: string; }) {
     try {
       const { dispatch, commit } = store;
       const { success, message, data }: any = await PhoneLogin(parameter);
       if (success) {
-        // const { accessToken = "" } = data || {};
-        // commit(RootMutationTypes.UpdateLogInfo, { accessToken });
-        const { accessToken = "", isExist = false, openId = "", token, user } = data || {};
-        commit(RootMutationTypes.UpdateLogInfo, { accessToken: accessToken || token, isExist, openId });
-        // if (!isExist) {
-        //   if (openId) {
-        //     commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
-        //     router.push("/user/register");
-        //   } else {
-        //     Message.error("请扫码重试！");
-        //   }
-        // } else {
-          commit(RootMutationTypes.UpdateUserInfo, { ...user });
-          router.push("/home");
-        // }
-        // dispatch("getMyInfo");
-        // router.push("/home");
+        const { token } = data || {};
+        commit(RootMutationTypes.UpdateLoginInfo, { token });
+        dispatch(RootActionTypes.GetAccountInfo);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 微信扫码登陆或者去注册
+  async [RootActionTypes.WechatLogin](store: Store, parameter: { jsCode: string; }) {
+    try {
+      const { dispatch, commit } = store;
+      const { success, message, data }: any = await WechatLogin(parameter);
+      if (success) {
+        const { accessToken = "", exist = false, openId = "", supplierInfo, token } = data || {};
+        commit(RootMutationTypes.UpdateLoginInfo, { accessToken, exist, openId, supplierInfo, token });
+        if (!exist) {
+          if (openId) {
+            commit(RootMutationTypes.UpdateRegisterNavIndex, 1);
+            router.push("/register");
+          } else {
+            Message.error("请扫码重试！");
+          }
+        } else {
+          dispatch(RootActionTypes.GetAccountInfo);
+        }
       } else {
         Message.error(message);
       }
@@ -163,19 +136,34 @@ export default {
   async [RootActionTypes.Register](store: Store, parameter: { companyName: string; userName: string; phone: string; code: string; }) {
     try {
       const { state, dispatch, commit } = store;
-      const { logInfo } = state;
-      const { accessToken, openId } = logInfo || {};
+      const { loginInfo } = state;
+      const { accessToken, openId } = loginInfo || {};
       const { success, message, data }: any = await Register({ ...parameter, accessToken, openId });
       if (success) {
-        const { token, user } = data || {};
-        commit(RootMutationTypes.UpdateLogInfo, { accessToken: token });
+        const { exist, supplierInfo, token } = data || {};
+        commit(RootMutationTypes.UpdateLoginInfo, { exist, supplierInfo, token, isFirstExist: true });
         commit(RootMutationTypes.UpdateRegisterNavIndex, 2);
-        commit(RootMutationTypes.UpdateUserInfo, { ...user });
-        // setTimeout(() => {
-        //   router.push("/home");
-        // }, 3000);
-        // commit("updateAccessToken", accessToken);
-        // dispatch("getMyInfo");
+        dispatch(RootActionTypes.GetAccountInfo);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 获取账号信息
+  async [RootActionTypes.GetAccountInfo](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { loginInfo } = state;
+      const { isFirstExist } = loginInfo || {};
+      const { success, message, data }: any = await GetAccountInfo({});
+      if (success) {
+        commit(RootMutationTypes.UpdateAccountInfo, { ...(data || {}) });
+        if (!isFirstExist) {
+          router.push("/home");
+        }
       } else {
         Message.error(message);
       }

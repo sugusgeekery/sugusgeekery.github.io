@@ -112,7 +112,7 @@ export default {
     const { biddingIndex = 0, biddingList = [] } = state;
     biddingList[biddingIndex].minPrice = Number(minPrice);
     commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
+    // dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新竞价导航最多价格
   [ActionTypes.UpdateMaxPrice](store: Store, maxPrice: string | number) {
@@ -120,7 +120,7 @@ export default {
     const { biddingIndex = 0, biddingList = [] } = state;
     biddingList[biddingIndex].maxPrice = Number(maxPrice);
     commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
+    // dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新竞价导航交付日期
   [ActionTypes.UpdatePayDate](store: Store, payDate: string) {
@@ -129,7 +129,7 @@ export default {
     console.log(payDate)
     biddingList[biddingIndex].payDate = payDate;
     commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
+    // dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新竞价导航交付地区
   [ActionTypes.UpdateProvinceCityCountry](store: Store, provinceCityCountry: string[]) {
@@ -137,7 +137,7 @@ export default {
     const { biddingIndex = 0, biddingList = [] } = state;
     biddingList[biddingIndex].provinceCityCountry = provinceCityCountry;
     commit(MutationTypes.UpdateBiddingList, biddingList);
-    dispatch(ActionTypes.UpdatePageNum, 1);
+    // dispatch(ActionTypes.UpdatePageNum, 1);
   },
 
   // 竞价
@@ -163,8 +163,8 @@ export default {
     const { state, dispatch, commit } = store;
     const { biddingIndex = 0, biddingList = [] } = state;
     const { list = [] } = biddingList[biddingIndex] || {}; 
-    const { biddingHeadId } = list[index] || {};
-    commit(MutationTypes.UpdateBiddingDetail, { isShow: true, headId: biddingHeadId, biddingIndex });
+    const { id } = list[index] || {};
+    commit(MutationTypes.UpdateBiddingDetail, { headId: id, biddingIndex });
     dispatch(ActionTypes.GetMouldBiddingDetail);
   },
   // 获取竞价单详情
@@ -176,7 +176,7 @@ export default {
       const { success, message, data }: any = await GetMouldBiddingDetail({ headId });
       if (success) {
         const { productInfos = [] } = data || {};
-        commit(MutationTypes.UpdateBiddingDetail, { ...(data || {}), productInfoIndex: productInfos.length ? 0 : -1 });
+        commit(MutationTypes.UpdateBiddingDetail, { ...(data || {}), productInfoIndex: productInfos.length ? 0 : -1, isShow: true, });
       } else {
         Message.error(message);
       }
@@ -207,8 +207,9 @@ export default {
     try {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
-      const { amount, headId, id, workPeriod } = biddingDetail || {}; 
-      const { success, message, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id, workPeriod });
+      const { joinBiddingInfo, headId } = biddingDetail || {}; 
+      const { supplierBiddingId, amount, workPeriod } = joinBiddingInfo || {};
+      const { success, message, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id: supplierBiddingId, workPeriod });
       if (success) {
         dispatch(ActionTypes.GetMouldBiddingDetail);
       } else {

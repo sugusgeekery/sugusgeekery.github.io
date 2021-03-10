@@ -342,6 +342,12 @@ import { MutationTypes } from "@/store/modules/account/mutations";
 
 import { BASE_IMAGE_URL } from "@/config";
 import { formatDateTime } from "@/utils/util";
+import validate, {
+  ValidateTypes,
+  ValidateSuccessParams,
+  ValidateFailedParams
+} from "@/utils/validate";
+import { Message, MessageBox } from "element-ui";
 
 import Selection from "@/components/Selection.vue";
 
@@ -353,30 +359,6 @@ import Selection from "@/components/Selection.vue";
 })
 export default class InformationView extends Vue {
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
-  public date = "";
-  public options = [
-    {
-      value: "选项1",
-      label: "黄金糕"
-    },
-    {
-      value: "选项2",
-      label: "双皮奶"
-    },
-    {
-      value: "选项3",
-      label: "蚵仔煎"
-    },
-    {
-      value: "选项4",
-      label: "龙须面"
-    },
-    {
-      value: "选项5",
-      label: "北京烤鸭"
-    }
-  ];
-  public value = "";
 
   @State("defInfo")
   public defInfo!: any | DefInfo;
@@ -387,8 +369,10 @@ export default class InformationView extends Vue {
   @State("companyInfo")
   public companyInfo!: CompanyInfo;
 
-  @Action(ActionTypes.GetDefInfo)
-  public getDefInfo!: Function;
+  @Action(ActionTypes.GetInformationDefInfo)
+  public getInformationDefInfo!: Function;
+  @Action(ActionTypes.UpdateDefLoginInfo)
+  public updateDefLoginInfo!: Function;
   @Action(ActionTypes.UploadForm)
   public uploadForm!: Function;
   @Action(ActionTypes.ChangeSupplierType)
@@ -430,11 +414,80 @@ export default class InformationView extends Vue {
   }
 
   public changeUserInfoInput(value: string, key: string) {
-    this.updateUserInfo({ [key]: value });
+    if (key === "phoneNo") {
+      validate[ValidateTypes.ValidatePhone]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateUserInfo({ [key]: value });
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updateUserInfo({ [key]: "" });
+          }
+        }
+      });
+    } else if (key === "telephoneNo") {
+      validate[ValidateTypes.ValidateTelephone]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateUserInfo({ [key]: value });
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updateUserInfo({ [key]: "" });
+          }
+        }
+      });
+    } else if (key === "email") {
+      validate[ValidateTypes.ValidateEmail]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateUserInfo({ [key]: value });
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updateUserInfo({ [key]: "" });
+          }
+        }
+      });
+    } else {
+      this.updateUserInfo({ [key]: value });
+    }
   }
 
   public changeCompanyInfoInput(value: string, key: string) {
-    this.updateCompanyInfo({ [key]: value });
+    if (key === "companyPhoneNo") {
+      validate[ValidateTypes.ValidateTelephone]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateCompanyInfo({ [key]: value });
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updateCompanyInfo({ [key]: "" });
+          }
+        }
+      });
+    } else if (key === "officialWebsite") {
+      validate[ValidateTypes.ValidateWebsite]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateCompanyInfo({ [key]: value });
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updateCompanyInfo({ [key]: "" });
+          }
+        }
+      });
+    } else {
+      this.updateCompanyInfo({ [key]: value });
+    }
   }
 
   public updateDate(e: any) {
@@ -442,7 +495,6 @@ export default class InformationView extends Vue {
       formatDateTime({ date: e, formatType: "yyyy-mm-dd" }),
       "publishTime"
     );
-    // v => changeCompanyInfoInput(v, 'publishTime')
   }
 
   public updateProvinceCityDistrict(value: any) {
@@ -485,7 +537,33 @@ export default class InformationView extends Vue {
   }
 
   public created() {
-    this.getDefInfo({ type: 1 });
+    this.getInformationDefInfo();
+  }
+  public mounted() {
+    const { loginInfo } = this.defInfo || {};
+    const { isFirstExist } = loginInfo || {};
+    if (isFirstExist) {
+      MessageBox({
+        message:
+          "恭喜您，账号注册成功！请完善信息并提交资质认证。审核通过后就可以开始接单了。",
+        title: "提示",
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        showClose: false,
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
+        center: true,
+        roundButton: false,
+        showConfirmButton: true,
+        showCancelButton: false
+      })
+        .then(action => {
+          if (action === "confirm") {
+            this.updateDefLoginInfo();
+          }
+        })
+        .catch(() => {});
+    }
   }
 }
 </script>
@@ -641,12 +719,11 @@ export default class InformationView extends Vue {
             flex 2
             text-align right
             margin-right 20px
+            font-size 14px
             &-red
               color $color-text-red
-              font-size 16px
             &-gray
               color $color-text-gray
-              font-size 16px
           &-picker
             flex 8
             text-align left
@@ -665,6 +742,7 @@ export default class InformationView extends Vue {
               outline none
               padding 10px
               border-radius 4px
+              font-size 14px
             textarea
               width 100%
               height 100px
@@ -672,6 +750,7 @@ export default class InformationView extends Vue {
               outline none
               padding 10px
               border-radius 4px
+              font-size 14px
           &-radios
             flex 8
             text-align left
@@ -684,6 +763,7 @@ export default class InformationView extends Vue {
             justify-content flex-start
             align-items center
             cursor pointer
+            font-size 14px
             &-label
               width 12px
               height 12px

@@ -9,12 +9,20 @@
       <div class="header-icon">
         <img
           class="header-icon-image"
-          :src="userInfo.photo ? BASE_IMAGE_URL + userInfo.photo : headIcon"
+          :src="accountInfo.headImgUrl ? accountInfo.headImgUrl : headIcon"
           alt=""
         />
+        <div class="header-icon-message">{{ accountInfo.userName || "" }}</div>
+        <div
+          class="header-icon-button header-icon-button-active"
+          v-if="accountInfo.certificateState"
+        >
+          已认证
+        </div>
+        <div class="header-icon-button" v-else>未认证</div>
         <div class="header-icon-link">个人中心</div>
-        <div class="header-icon-message">消息</div>
-        <div class="header-icon-tip">5</div>
+        <!-- <div class="header-icon-message">消息</div>
+        <div class="header-icon-tip">5</div> -->
       </div>
     </div>
     <div class="header-right"></div>
@@ -25,7 +33,7 @@
 import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 import { State, Getter, Action, Mutation } from "vuex-class";
 
-import { UserInfo } from "@/store/state";
+import { AccountInfo } from "@/store/state";
 import { RootActionTypes } from "@/store/actions";
 
 import { BASE_IMAGE_URL } from "@/config";
@@ -44,7 +52,7 @@ export default class Header extends Vue {
   // @Prop(Array) private navList!: Array<Nav>;
   // @Prop(Boolean) private isCloseLogo!: boolean;
 
-  @State("userInfo") public userInfo!: UserInfo;
+  @State("accountInfo") public accountInfo!: AccountInfo;
 
   // @Emit("updateNavIndex")
   // public updateNavIndex(navIndex: number) {
@@ -98,6 +106,7 @@ export default class Header extends Vue {
       width 46px
       height 46px
       border-right 100px
+      border-radius 100px
       overflow hidden
       object-fit cover
     &-link
@@ -105,11 +114,20 @@ export default class Header extends Vue {
       color $color-text-blue
       font-size 16px
       cursor pointer
+    &-button
+      padding 2px 8px
+      line-height 24px
+      color $color-text-white
+      font-size 12px
+      border-radius 100px
+      background $color-bg-gray
+      &-active
+        color $color-text-white
+        background $color-bg-blue
     &-message
       padding 0 8px
       color $color-text-gray
-      font-size 16px
-      border-left solid 1px $color-bd-gray
+      font-size 14px
     &-tip
       color $color-text-white
       background $color-bg-red

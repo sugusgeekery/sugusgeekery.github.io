@@ -111,7 +111,7 @@
                   <div class="item-flex" v-if="biddingIndex === 0">
                     <span class="item-text item-text-small">已有</span>
                     <span class="item-text item-text-small item-text-red">
-                      {{ a.joinSupplierCount || "" }}
+                      {{ a.joinSupplierCount || 0 }}
                     </span>
                     <span class="item-text">公司参加</span>
                   </div>
@@ -404,7 +404,7 @@ export default class BiddingHomeTemplate extends Vue {
           background $color-bg
           padding 10px
           &-rows
-            padding 10px
+            padding 5px
             border-bottom solid 1px $color-bd
             &:nth-last-of-type(1)
               border-bottom none
@@ -420,11 +420,13 @@ export default class BiddingHomeTemplate extends Vue {
             display flex
             justify-content flex-start
             align-items center
+            margin 5px
           &-icon
             width 20px
             object-fit contain
             margin-right 8px
           &-text
+            line-height 20px
             font-size 14px
             color $color-text-black
             &-small

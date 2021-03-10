@@ -189,7 +189,7 @@ export default class RegisterView extends Vue {
           this.tipNumber--;
         } else {
           clearInterval(numberInterval);
-          router.push("/home");
+          router.push("/account/information");
         }
       }, 1000);
     }
@@ -202,7 +202,7 @@ export default class RegisterView extends Vue {
   public init() {
     this.iframeSrc = getWxLoginCodeUrl({
       appid: WX_APPID,
-      redirectUri: encodeURIComponent(WX_REDIRECT_URL + "/#/user/register")
+      redirectUri: encodeURIComponent(WX_REDIRECT_URL + "/#/register")
     });
     this.login();
   }
@@ -263,7 +263,7 @@ export default class RegisterView extends Vue {
     this.register({ companyName, userName, phone, code });
   }
   public toHome() {
-    router.push("/home");
+    router.push("/account/information");
   }
 }
 </script>

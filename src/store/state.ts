@@ -2,8 +2,8 @@ import { Dictionary } from 'vue-router/types/router';
 
 // 状态管理对象
 export interface RootState {
-  logInfo: LogInfo;
-  userInfo: UserInfo;
+  loginInfo: LoginInfo;
+  accountInfo: AccountInfo;
   verificationCodeNumber: number;
   loginNavIndex: number;
   loginNavList: Array<LoginNav>;
@@ -16,24 +16,29 @@ export interface RootState {
 };
 
 // 登录信息
-export interface LogInfo {
+export interface LoginInfo {
   accessToken: string;
-  isExist: boolean;
+  exist: boolean;
   openId: string;
+  supplierInfo: any | SupplierInfo;
+  token: string;
+  isFirstExist: boolean;
 }
+// 供应商类型
+export interface SupplierInfo {};
 
-// 用户信息
-export interface UserInfo {
-
-}
+// 账号信息
+export interface AccountInfo {
+  type: number;
+};
 // 登录列表类型
 export interface LoginNav {
   text: string;
-}
+};
 // 注册列表类型
 export interface RegisterNav {
   text: string;
-}
+};
 // 导航栏
 export interface Navigation {
   id: string;
@@ -46,12 +51,17 @@ export interface Navigation {
 };
 
 const state: RootState = {
-  logInfo: {
+  loginInfo: {
     accessToken: "",
-    isExist: false,
+    exist: false,
     openId: "",
+    supplierInfo: {},
+    token: "",
+    isFirstExist: false
   },
-  userInfo: {},
+  accountInfo: {
+    type: 0
+  },
   verificationCodeNumber: 0,
   loginNavIndex: 0,
   loginNavList: [

@@ -19,21 +19,18 @@ import { isEmptyObj } from "@/utils/util";
 export default class App extends Vue {
   public created() {
     // 在页面加载时读取sessionStorage里的状态信息
-    const accessToken = getSessionStorage("accessToken") || "";
-    if (accessToken) {
+    const token = getSessionStorage("token") || "";
+    if (token) {
       const store = getSessionStorage("store");
       if (store && !isEmptyObj(store)) {
         this.$store.replaceState(Object.assign({}, this.$store.state, store));
-        setSessionStorage("accessToken", "");
+        setSessionStorage("token", "");
       }
     }
 
     // 在页面刷新时将vuex里的信息保存到sessionStorage里
     window.addEventListener("beforeunload", () => {
-      setSessionStorage(
-        "accessToken",
-        this.$store.state.logInfo.accessToken || ""
-      );
+      setSessionStorage("token", this.$store.state.loginInfo.token || "");
       setSessionStorage("store", this.$store.state);
     });
 

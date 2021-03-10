@@ -40,7 +40,7 @@
             <div class="filter-item">
               <div class="filter-item-content">
                 <el-input
-                  :value="order.mouldNo"
+                  :value="order.orderNo"
                   @input="v => updateOrderNo(v)"
                   placeholder="请搜索你想要的订单"
                 ></el-input>

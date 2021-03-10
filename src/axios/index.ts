@@ -152,14 +152,14 @@ export default async ({
       {},
       {
         // accessToken:
-        //   store.state.logInfo.accessToken || getSessionStorage("accessToken") || getLocalStorage("accessToken") || "",
+        //   store.state.logInfo.accessToken || getSessionStorage("token") || getLocalStorage("token") || "",
         ...params
       }
     ),
     data,
     headers: {
       token:
-        store.state.logInfo.accessToken || getSessionStorage("accessToken") || getLocalStorage("accessToken") || "",
+        store.state.loginInfo.token || getSessionStorage("token") || getLocalStorage("token") || "",
       ...headers
     }
   };

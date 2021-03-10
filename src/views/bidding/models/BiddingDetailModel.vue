@@ -234,9 +234,15 @@
                     class="model-flex-input"
                     type="text"
                     placeholder="请输入竞标价格"
-                    :value="biddingDetail.joinBiddingInfo.amount"
+                    :value="biddingDetail.joinBiddingInfo.amount || 0"
                     @change="
-                      e => updateBiddingDetail({ amount: e.target.value })
+                      e =>
+                        updateBiddingDetail({
+                          joinBiddingInfo: {
+                            ...biddingDetail.joinBiddingInfo,
+                            amount: Number(e.target.value)
+                          }
+                        })
                     "
                     v-if="
                       biddingDetail.biddingIndex === 0 ||
@@ -252,9 +258,15 @@
                     class="model-flex-input"
                     type="text"
                     placeholder="请输入竞标交期"
-                    :value="biddingDetail.joinBiddingInfo.workPeriod"
+                    :value="biddingDetail.joinBiddingInfo.workPeriod || 0"
                     @change="
-                      e => updateBiddingDetail({ workPeriod: e.target.value })
+                      e =>
+                        updateBiddingDetail({
+                          joinBiddingInfo: {
+                            ...biddingDetail.joinBiddingInfo,
+                            workPeriod: Number(e.target.value)
+                          }
+                        })
                     "
                     v-if="
                       biddingDetail.biddingIndex === 0 ||

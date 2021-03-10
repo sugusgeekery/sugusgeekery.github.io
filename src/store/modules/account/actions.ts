@@ -38,8 +38,9 @@ export enum ActionTypes {
   GetProvinceCityCountry = "GetProvinceCityCountry",
   UploadForm = "UploadForm",
   ChangeSupplierType = "ChangeSupplierType",
-  GetDefInfo = "GetDefInfo",
-  GetQualifyInfo = "GetQualifyInfo",
+  GetInformationDefInfo = "GetInformationDefInfo",
+  GetQualifyDefInfo = "GetQualifyDefInfo",
+  UpdateDefLoginInfo = "UpdateDefLoginInfo",
   GetUserInfo = "GetUserInfo",
   SaveUserInfo = "SaveUserInfo",
   GetCompanyInfo = "GetCompanyInfo",
@@ -52,20 +53,36 @@ export enum ActionTypes {
 
 export default {
   // 初始化信息模块默认值
-  [ActionTypes.GetDefInfo](store: Store, params: any | DefInfo) {
-    const { state, dispatch, commit } = store;
-    commit(MutationTypes.UpdateDefInfo, params);
+  [ActionTypes.GetInformationDefInfo](store: Store, params: any | DefInfo) {
+    const { state, rootState, dispatch, commit } = store;
+    const { loginInfo, accountInfo } = rootState;
+    const { type = 0 } = accountInfo || {};
+    const typeStr = type === 1 ? "公司" : type === 2 ? "个人" : "";
+    commit(MutationTypes.UpdateDefInfo, { type, typeStr, loginInfo, accountInfo, ...params });
     dispatch(ActionTypes.GetProvinceCityCountry);
     dispatch(ActionTypes.GetUserInfo);
     dispatch(ActionTypes.GetCompanyInfo);
   },
 
   // 初始化资质模块默认值
-  [ActionTypes.GetQualifyInfo](store: Store, params: any | DefInfo) {
-    const { state, dispatch, commit } = store;
-    commit(MutationTypes.UpdateDefInfo, params);
+  [ActionTypes.GetQualifyDefInfo](store: Store, params: any | DefInfo) {
+    const { state, rootState, dispatch, commit } = store;
+    const { loginInfo, accountInfo } = rootState;
+    const { type = 0 } = accountInfo || {};
+    const typeStr = type === 1 ? "公司" : type === 2 ? "个人" : "";
+    commit(MutationTypes.UpdateDefInfo, { type, typeStr, loginInfo, accountInfo, ...params });
     dispatch(ActionTypes.GetPersonQualifyInfo);
     dispatch(ActionTypes.GetCompQualifyInfo);
+  },
+
+  // 更新是否首次注册 
+  [ActionTypes.UpdateDefLoginInfo](store: Store) {
+    const { state, dispatch, commit } = store;
+    const { defInfo } = state;
+    const { loginInfo } = defInfo;
+    loginInfo.isFirstExist = false;
+    commit(MutationTypes.UpdateDefInfo, { loginInfo });
+    commit("UpdateLoginInfo", { isFirstExist: false }, { root: true });
   },
 
   // 获取省市区数据
@@ -122,6 +139,7 @@ export default {
           }
           return typeList;
         })(typeList)});
+        commit("UpdateAccountInfo", { type }, { root: true });
       } else {
         Message.error(message);
       }

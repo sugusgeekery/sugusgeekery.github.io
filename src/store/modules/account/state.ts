@@ -77,6 +77,8 @@ export interface LabelList {
 
 const state: State = {
   defInfo: {
+    loginInfo: {},
+    accountInfo: {},
     type: 0,
     typeStr: "",
     typeList: [
