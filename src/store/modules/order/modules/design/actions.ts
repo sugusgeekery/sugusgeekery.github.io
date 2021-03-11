@@ -12,6 +12,7 @@ import { Message, MessageBox } from "element-ui";
 import {
   GetStep,
   GetStepDetail,
+  ImportProgramme,
   GetBOMList,
   ImportBom,
   GetBOMImageInfo,
@@ -34,6 +35,7 @@ export enum ActionTypes {
   Init = "Init",
   GetStep = "GetStep",
   GetStepDetail = "GetStepDetail",
+  ImportProgramme = "ImportProgramme",
   GetBOMList = "GetBOMList",
   ImportBom = "ImportBom",
   GetBOMImageInfo = "GetBOMImageInfo",
@@ -113,6 +115,25 @@ export default {
           return arr;
         })(data || []);
         commit(MutationTypes.UpdateDesign, { stepList });
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 上传3D图纸方案
+  async [ActionTypes.ImportProgramme](store: Store, file: any) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { initOption } = state;
+      const { mouldNo } = initOption;
+      const formData = new FormData();
+      formData.append("file", file);
+      const { success, message, data }: any = await ImportProgramme(formData, { mouldNo });
+      if (success) {
+        // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
+        dispatch(ActionTypes.GetStep);
       } else {
         Message.error(message);
       }

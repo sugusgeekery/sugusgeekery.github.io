@@ -10,6 +10,8 @@ import { Message, MessageBox } from "element-ui";
 // import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
+  GetMouldOrderType,
+  GetOrderStatus,
   GetMyBidAdvantage,
   GetOrderList,
 
@@ -28,6 +30,8 @@ interface Store {
 }
 
 export enum ActionTypes {
+  GetMouldOrderType = "GetMouldOrderType",
+  GetOrderStatus = "GetOrderStatus",
   GetMyBidAdvantage = "GetMyBidAdvantage",
   GetOrderList = "GetOrderList",
   UpdatePageNum = "UpdatePageNum",
@@ -42,6 +46,60 @@ export enum ActionTypes {
 }
 
 export default {
+  // 获取订单类型筛选项
+  async [ActionTypes.GetMouldOrderType](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { success, message, data }: any = await GetMouldOrderType();
+      if (success) {
+        const projectList = (list => {
+          const arr = [
+            {
+              text: "项目类型",
+              type: "",
+            },
+          ];
+          for (const [a, b] of list.entries()) {
+            const { index, label } = b;
+            arr.push({ text: label, type: index });
+          }
+          return arr;
+        })(data || {});
+        commit(MutationTypes.UpdateOrder, { projectList });
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 获取订单状态筛选项
+  async [ActionTypes.GetOrderStatus](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { success, message, data }: any = await GetOrderStatus();
+      if (success) {
+        const statusList = (list => {
+          const arr = [
+            {
+              text: "全部状态",
+              status: "",
+            },
+          ];
+          for (const [a, b] of list.entries()) {
+            const { index, label } = b;
+            arr.push({ text: label, status: index });
+          }
+          return arr;
+        })(data || {});
+        commit(MutationTypes.UpdateOrder, { statusList });
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
   // 获取竞价指标
   async [ActionTypes.GetMyBidAdvantage](store: Store) {
     try {
@@ -50,6 +108,8 @@ export default {
       if (success) {
         const { accuracy, anerror } = data || {};
         commit(MutationTypes.UpdateAdvantage, { accuracy, anerror });
+        dispatch(ActionTypes.GetMouldOrderType);
+        dispatch(ActionTypes.GetOrderStatus);
       } else {
         Message.error(message);
       }

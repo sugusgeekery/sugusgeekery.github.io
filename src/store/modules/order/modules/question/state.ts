@@ -10,13 +10,13 @@ export interface QuestionList {};
 const state: State = {
   initOption: {},
   questionList: [
-    {
-      "filePath": "abc.jpg",
-      "isFinished": 1,
-      "isNext": 1,
-      "stepId": 1,
-      "stepName": "EDM加工"
-    }
+    // {
+    //   "filePath": "abc.jpg",
+    //   "isFinished": 1,
+    //   "isNext": 1,
+    //   "stepId": 1,
+    //   "stepName": "EDM加工"
+    // }
   ]
 };
 

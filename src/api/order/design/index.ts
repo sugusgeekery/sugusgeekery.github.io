@@ -6,6 +6,9 @@ export const GetStep = (params: any = {}): object => fetch({ url: `/supplier/con
 // 获取步骤详情
 export const GetStepDetail = (params: any = {}): object => fetch({ url: `/supplier/conceptualDesign/listByMouldNo`, method: "GET", params });
 
+// 上传3D图纸方案
+export const ImportProgramme = (data: any = {}, params: any = {}): object => fetch({ url: `/supplier/conceptualDesign/importProgramme`, headers: { "Content-Type": "multipart/form-data;" }, data, params });
+
 // 获取BOM表
 export const GetBOMList = (params: any = {}): object => fetch({ url: `/supplier/conceptualDesign/listBom`, method: "GET", params });
 

@@ -3,7 +3,7 @@
     <div
       class="design-item"
       v-for="(a, b) in design.stepList"
-      :key="'_方案设计步骤_' + b"
+      :key="'_设计验收步骤_' + b"
     >
       <div class="design-item-label">
         <div

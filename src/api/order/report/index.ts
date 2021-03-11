@@ -2,20 +2,20 @@ import fetch from "@/axios";
 
 // 获取DFM供应商下的DFM报告订单列表
 export const GetDfmReportList = (params: any = {}): object => {
-  const { biddingId = "" } = params;
-  return fetch({ url: `/supplier/dfmReport/getReportsByOrder/${biddingId}`, method: "GET", params: {} });
+  const { id = "" } = params;
+  return fetch({ url: `/supplier/dfmReport/getReportsByOrder/${id}`, method: "GET", params: {} });
 };
 
 // 获取加工供应商下的DFM报告验收订单列表
 export const GetMachiningDfmReportList = (params: any = {}): object => {
-  const { biddingId = "" } = params;
-  return fetch({ url: `/supplier/machining/getDfmReportList/${biddingId}`, method: "GET", params: {} });
+  const { id = "" } = params;
+  return fetch({ url: `/supplier/machining/getDfmReportList/${id}`, method: "GET", params: {} });
 };
 
 // 获取注塑供应商下的DFM报告验收订单列表
 export const GetInjectDfmReportList = (params: any = {}): object => {
-  const { biddingId = "" } = params;
-  return fetch({ url: `/supplier/injectModel/getDfmReportList/${biddingId}`, method: "GET", params: {} });
+  const { id = "" } = params;
+  return fetch({ url: `/supplier/injectModel/getDfmReportList/${id}`, method: "GET", params: {} });
 };
 
 // 提交DFM报告

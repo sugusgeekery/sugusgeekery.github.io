@@ -97,7 +97,16 @@
           </span>
         </div>
         <div class="design-item-content-button" v-if="b === 0">
-          <span class="design-item-content-button-text">点击上传</span>
+          <input
+            type="file"
+            name="file"
+            id="file"
+            hidden="hidden"
+            @change="uploadFile"
+          />
+          <span class="design-item-content-button-text" @click="checkFile()">
+            点击上传
+          </span>
         </div>
       </div>
     </div>
@@ -135,8 +144,20 @@ export default class DesignView extends Vue {
   public getStep!: Function;
   @Action(ActionTypes.GetBOMList)
   public getBOMList!: Function;
+  @Action(ActionTypes.ImportProgramme)
+  public importProgramme!: Function;
   @Action(ActionTypes.GetBOMImageInfo)
   public getBOMImageInfo!: Function;
+
+  public checkFile() {
+    const dom: any = document.querySelector("#file");
+    dom.click();
+    dom.value = "";
+  }
+  public uploadFile(e: any) {
+    const file = e.target.files[0];
+    this.importProgramme(file);
+  }
 
   public created() {
     this.getStep();

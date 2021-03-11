@@ -83,41 +83,41 @@ const state: State = {
     orderNo: "",
     projectIndex: 0,
     projectList: [
-      {
-        text: "项目类型",
-        type: "",
-      },
-      {
-        text: "DFM",
-        type: "DFM",
-      },
-      {
-        text: "加工",
-        type: "加工",
-      },
-      {
-        text: "注塑",
-        type: "注塑",
-      },
+      // {
+      //   text: "项目类型",
+      //   type: "",
+      // },
+      // {
+      //   text: "DFM",
+      //   type: "DFM",
+      // },
+      // {
+      //   text: "加工",
+      //   type: "加工",
+      // },
+      // {
+      //   text: "注塑",
+      //   type: "注塑",
+      // },
     ],
     statusIndex: 0,
     statusList: [
-      {
-        text: "全部状态",
-        status: "",
-      },
-      {
-        text: "待开始",
-        status: "待开始",
-      },
-      {
-        text: "进行中",
-        status: "进行中",
-      },
-      {
-        text: "已完成",
-        status: "已完成",
-      },
+      // {
+      //   text: "全部状态",
+      //   status: "",
+      // },
+      // {
+      //   text: "待开始",
+      //   status: "待开始",
+      // },
+      // {
+      //   text: "进行中",
+      //   status: "进行中",
+      // },
+      // {
+      //   text: "已完成",
+      //   status: "已完成",
+      // },
     ],
     index: -1,
     list: [
