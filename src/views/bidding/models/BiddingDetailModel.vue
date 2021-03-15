@@ -1,5 +1,5 @@
 <template>
-  <div class="model-container" v-show="biddingDetail.isShow">
+  <div class="model-container" :data="biddingDetail.isShow" v-show="biddingDetail.isShow">
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
@@ -129,7 +129,7 @@
               <div class="model-flex-context">
                 <div class="model-flex-text">
                   <span>
-                    ￥{{ biddingDetail.biddingHeadInfo.amount || "" }}
+                    ￥{{ biddingDetail.biddingHeadInfo.amount || 0 }}
                   </span>
                 </div>
                 <div class="model-flex-text">

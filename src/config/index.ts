@@ -27,7 +27,7 @@ let WX_APPID = "";
 let WX_REDIRECT_URL = "";
 
 // 开发打包下对应的环境
-const NODE_ENV: string = "development" || process.env.NODE_ENV;
+const NODE_ENV: string = process.env.NODE_ENV;
 
 switch(NODE_ENV) {
   case "development":

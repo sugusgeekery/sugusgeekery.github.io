@@ -243,6 +243,7 @@ export default class OrderHomeView extends Vue {
         width 100%
         flex 1
         position relative
+        overflow auto
         .cells
           position absolute
           top 0

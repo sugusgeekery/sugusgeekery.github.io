@@ -62,10 +62,12 @@ export interface RemainTime {
 
 // 供应商对应的类型值
 export enum Supplier {
+  // DFM供应商
+  Dfm = "dfm",
+  // 方案设计
+  Design = "plan_design",
   // 加工供应商
   Machining = "machining",
-  // DFM供应商
-  Dfm = "DFM",
   // 注塑供应商
   Injection = "Injection"
 };

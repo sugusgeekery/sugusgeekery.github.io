@@ -126,7 +126,7 @@
                     <!-- <span class="item-text item-text-red">（已暂停）</span> -->
                   </div>
                   <div class="item-flex">
-                    <span class="item-button">DFM</span>
+                    <span class="item-button">{{ a.typeDesc }}</span>
                   </div>
                 </div>
                 <div class="item-row">
@@ -356,6 +356,7 @@ export default class BiddingHomeTemplate extends Vue {
         width 100%
         flex 1
         position relative
+        overflow auto
         .cells
           position absolute
           top 0

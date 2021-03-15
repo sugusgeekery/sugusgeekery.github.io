@@ -195,6 +195,25 @@ export default {
           },
         ]);
         break;
+      case Supplier.Design:
+        dispatch("order/report/Init", {...list[index]}, { root: true });
+        dispatch("order/design/Init", {...list[index]}, { root: true });
+        dispatch("order/mould/Init", {...list[index]}, { root: true });
+        navigationList.push(...[
+          {
+            text: "DFM报告",
+            path: "/order/report",
+          },
+          {
+            text: "方案设计",
+            path: "/order/design",
+          },
+          {
+            text: "模具信息",
+            path: "/order/mould",
+          },
+        ]);
+        break;
       case Supplier.Machining:
         dispatch("order/report/Init", {...list[index]}, { root: true });
         dispatch("order/design/Init", {...list[index]}, { root: true });
