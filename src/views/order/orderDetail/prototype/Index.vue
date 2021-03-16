@@ -55,7 +55,7 @@
               />
             </div>
           </div>
-          <div class="li-flex">
+          <div class="li-flex" v-if="prototype.fixedPostInfo">
             <div class="li-content">
               <div class="li-text">
                 {{ prototype.fixedPostInfo.userName || "" }}

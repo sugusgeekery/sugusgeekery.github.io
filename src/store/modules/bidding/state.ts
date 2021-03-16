@@ -24,7 +24,7 @@ export interface BiddingObject {
   biddingHeadId?: string;
   address: string;
   amount: number;
-  id: number;
+  id: string;
   isUserBid: number;
   joinSupplierCount: number;
   mouldNo: string;
@@ -41,7 +41,7 @@ export interface BiddingObjectMyself {
   biddingStatus: string;
   biddingStatusDesc: string;
   biddingTime: string;
-  id: number;
+  id: string;
   mouldNo: string;
   type: string;
   typeDesc: string;

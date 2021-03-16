@@ -1,6 +1,7 @@
 import { RootState } from "@/store/state";
 import rootGetters, { RootGetterTypes } from "@/store/getters";
 import { State, InitOption } from "./state";
+import { Supplier } from "../../state";
 import getters, { GetterTypes } from "./getters";
 import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
@@ -10,8 +11,14 @@ import { Message, MessageBox } from "element-ui";
 // import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
-  GetStep,
-  GetStepDetail,
+  UploadForm
+} from "@/api";
+import {
+  // GetStep,
+  // GetStepDetail,
+  GetDfmRealtime,
+  GetMachinRealtime,
+  GetInjectionRealtime,
   ImportProgramme,
   GetBOMList,
   ImportBom,
@@ -33,7 +40,7 @@ interface Store {
 
 export enum ActionTypes {
   Init = "Init",
-  GetStep = "GetStep",
+  // GetStep = "GetStep",
   GetStepDetail = "GetStepDetail",
   ImportProgramme = "ImportProgramme",
   GetBOMList = "GetBOMList",
@@ -56,54 +63,72 @@ export default {
   },
 
   // 获取方案设计进行到哪一步
-  async [ActionTypes.GetStep](store: Store) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { mouldNo } = initOption;
-      const { success, message, data }: any = await GetStep({ mouldNo });
-      if (success) {
-        commit(MutationTypes.UpdateDesign, { step: data || 0 });
-        dispatch(ActionTypes.GetStepDetail);
-      } else {
-        Message.error(message);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
+  // async [ActionTypes.GetStep](store: Store) {
+  //   try {
+  //     const { state, dispatch, commit } = store;
+  //     const { initOption } = state;
+  //     const { mouldNo } = initOption;
+  //     const { success, message, data }: any = await GetStep({ mouldNo });
+  //     if (success) {
+  //       commit(MutationTypes.UpdateDesign, { step: data || 0 });
+  //       dispatch(ActionTypes.GetStepDetail);
+  //     } else {
+  //       Message.error(message);
+  //     }
+  //   } catch (e) {
+  //     throw new Error(e);
+  //   }
+  // },
   // 获取当前进度详情
   async [ActionTypes.GetStepDetail](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
-      const { mouldNo } = initOption;
-      const { success, message, data }: any = await GetStepDetail({ mouldNo });
+      const { type, mouldProduceId } = initOption;
+      // const { success, message, data }: any = await GetStepDetail({ mouldNo });
+      let fn = {};
+      switch(type) {
+        case Supplier.Dfm:
+          fn = await GetDfmRealtime({ mouldProduceId })
+          break;
+        case Supplier.Machining:
+          fn = await GetMachinRealtime({ mouldProduceId });
+          break;
+        case Supplier.Injection:
+          fn = await GetInjectionRealtime({ mouldProduceId });
+          break;
+      }
+      const { success, message, data }: any = fn;
       if (success) {
-        const stepList = (ls => {
-          const arr = [];
+        const { stepInfoList = [] } = data || {};
+        const { list, step } = (ls => {
+          const list = [];
+          let step = 1;
           if (ls.length) {
             for (const [a, b] of ls.entries()) {
+              const { stepName = "", isFinished = false } = b;
               let text = "";
               let reviewText = "";
               let isLink = false;
               switch (a + 1) {
                 case 1:
-                  text = "上传3D图纸方案";
-                  reviewText = "验收3D图纸方案";
+                  text = "上传" + stepName;
+                  reviewText = "验收" + stepName;
+                  isLink = false;
                   break;
                 case 2:
-                  text = "导入BOM表";
-                  reviewText = "验收BOM表";
+                  text = "导入" + stepName;
+                  reviewText = "验收" + stepName;
                   isLink = true;
                   break;
                 case 3:
-                  text = "导入2D、3D图纸";
-                  reviewText = "验收2D、3D图纸";
+                  text = "导入" + stepName;
+                  reviewText = "验收" + stepName;
                   isLink = true;
                   break;
               }
-              arr.push({
+              step = isFinished ? a : step;
+              list.push({
                 ...b,
                 label: a + 1,
                 text,
@@ -112,9 +137,9 @@ export default {
               })
             }
           }
-          return arr;
-        })(data || []);
-        commit(MutationTypes.UpdateDesign, { stepList });
+          return { list, step };
+        })(stepInfoList);
+        commit(MutationTypes.UpdateDesign, { stepInfoList: list, step });
       } else {
         Message.error(message);
       }
@@ -122,18 +147,17 @@ export default {
       throw new Error(e);
     }
   },
+
   // 上传3D图纸方案
-  async [ActionTypes.ImportProgramme](store: Store, file: any) {
+  async [ActionTypes.ImportProgramme](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
-      const { mouldNo } = initOption;
-      const formData = new FormData();
-      formData.append("file", file);
-      const { success, message, data }: any = await ImportProgramme(formData, { mouldNo });
+      const { mouldProduceId } = initOption;
+      const { threeFacePlanFileId } = params || {};
+      const { success, message, data }: any = await ImportProgramme({ mouldProduceId, threeFacePlanFileId });
       if (success) {
-        // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
-        dispatch(ActionTypes.GetStep);
+        dispatch(ActionTypes.GetStepDetail);
       } else {
         Message.error(message);
       }

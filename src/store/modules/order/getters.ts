@@ -14,4 +14,5 @@ const getters: GetterTree<State, RootState> = {
     return orderObject;
   }
 };
+
 export default getters;

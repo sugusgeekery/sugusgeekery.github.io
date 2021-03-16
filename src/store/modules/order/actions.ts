@@ -14,10 +14,11 @@ import {
   GetOrderStatus,
   GetMyBidAdvantage,
   GetOrderList,
+  GetRemainTime
 
-  GetDfmRemainTime,
-  GetMachiningRemainTime,
-  GetInjectRemainTime
+  // GetDfmRemainTime,
+  // GetMachiningRemainTime,
+  // GetInjectRemainTime
 } from "@/api/order";
 
 interface Store {
@@ -177,24 +178,6 @@ export default {
     const navigationList = [];
     switch(type) {
       case Supplier.Dfm:
-        dispatch("order/report/Init", {...list[index]}, { root: true });
-        dispatch("order/design/Init", {...list[index]}, { root: true });
-        dispatch("order/mould/Init", {...list[index]}, { root: true });
-        navigationList.push(...[
-          {
-            text: "DFM报告",
-            path: "/order/report",
-          },
-          {
-            text: "方案设计",
-            path: "/order/design",
-          },
-          {
-            text: "模具信息",
-            path: "/order/mould",
-          },
-        ]);
-        break;
       case Supplier.Design:
         dispatch("order/report/Init", {...list[index]}, { root: true });
         dispatch("order/design/Init", {...list[index]}, { root: true });
@@ -286,20 +269,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { order } = state;
       const { list = [], index = -1 } = order || {};
-      const { type, biddingId } = list[index] || {};
-      let fn = {};
-      switch(type) {
-        case Supplier.Dfm:
-          fn = await GetDfmRemainTime({ biddingId });
-          break;
-        case Supplier.Machining:
-          fn = await GetMachiningRemainTime({ biddingId });
-          break;
-        case Supplier.Injection:
-          fn = await GetInjectRemainTime({ biddingId });
-          break;
-      }
-      const { success, message, data }: any = fn;
+      const { id } = list[index] || {};
+      const { success, message, data }: any = await GetRemainTime({ orderId: id });
       if (success) {
         const { remainSeconds, state } = data || {};
         commit(MutationTypes.UpdateRemainTime, data || {});

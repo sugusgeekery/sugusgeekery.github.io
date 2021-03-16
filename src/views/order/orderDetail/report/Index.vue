@@ -2,10 +2,9 @@
   <div class="report" v-if="reportList.length">
     <input
       type="file"
-      name=""
-      multiple="multiple"
+      name="file"
       hidden="hidden"
-      id="fileElement"
+      id="file"
       @change="uploadFile"
     />
     <div
@@ -18,7 +17,7 @@
         <div class="item-title-text">
           {{ a.reportTitle }}
         </div>
-        <img class="item-title-icon" src="" alt="" v-if="a.state === 2" />
+        <img class="item-title-icon" src="../../../../assets/images/select_green.png" alt="" v-if="a.state === 2" />
         <div
           class="item-title-button"
           v-else-if="a.state === 3"
@@ -60,7 +59,7 @@
               <div class="swiper-slide-box">
                 <img
                   class="swiper-slide-image"
-                  :src="BASE_IMAGE_URL + c"
+                  :src="BASE_IMAGE_URL + c.filePath"
                   alt=""
                 />
                 <div
@@ -115,7 +114,7 @@
       </div>
       <div
         class="item-cells"
-        v-if="a.state && initOption.type === Supplier.Dfm"
+        v-if="a.state && initOption.type === Supplier.Dfm || initOption.type === Supplier.Design"
       >
         <div class="item-cell">
           <div class="item-cell-text item-cell-text-black">加工方：</div>
@@ -597,7 +596,7 @@ export default class ReportView extends Vue {
   public index = -1;
   public selectFile(b: number) {
     this.index = b;
-    const dom: any = document.querySelector("#fileElement");
+    const dom: any = document.querySelector("#file");
     dom.click();
   }
   public uploadFile(e: any) {

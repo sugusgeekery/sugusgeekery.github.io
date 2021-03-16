@@ -1,8 +1,10 @@
-import { State, InitOption, StepList } from "./state";
+import { State, InitOption, MachinStepList, AssembleStepList, InjectionStepList } from "./state";
 
 export enum MutationTypes {
   UpdateInitOption = "UpdateInitOption",
-  UpdateStepList = "UpdateStepList",
+  UpdateMachinStepList = "UpdateMachinStepList",
+  UpdateAssembleStepList = "UpdateAssembleStepList",
+  UpdateInjectionStepList = "UpdateInjectionStepList"
 }
 
 export default {
@@ -18,8 +20,16 @@ export default {
     })(state, params, temp);
   },
 
-  // 更新报告列表
-  [MutationTypes.UpdateStepList](state: State, stepList: Array<StepList>) {
-    state.stepList = stepList;
+  // 更新加工步骤列表
+  [MutationTypes.UpdateMachinStepList](state: State, machinStepList: Array<MachinStepList>) {
+    state.machinStepList = machinStepList;
+  },
+  // 更新装配步骤列表
+  [MutationTypes.UpdateAssembleStepList](state: State, assembleStepList: Array<AssembleStepList>) {
+    state.assembleStepList = assembleStepList;
+  },
+  // 更新注塑步骤列表
+  [MutationTypes.UpdateInjectionStepList](state: State, injectionStepList: Array<InjectionStepList>) {
+    state.injectionStepList = injectionStepList;
   },
 }

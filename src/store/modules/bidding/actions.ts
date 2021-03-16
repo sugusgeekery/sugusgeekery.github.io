@@ -162,9 +162,16 @@ export default {
   [ActionTypes.GetBiddingDetail](store: Store, index: number) {
     const { state, dispatch, commit } = store;
     const { biddingIndex = 0, biddingList = [] } = state;
-    const { list = [] } = biddingList[biddingIndex] || {}; 
-    const { id } = list[index] || {};
-    commit(MutationTypes.UpdateBiddingDetail, { headId: id, biddingIndex });
+    const { list = [] } = biddingList[biddingIndex] || {};
+    let headId = "";
+    if (biddingIndex > 1) {
+      const { biddingHeadId = "" } = list[index] || {};
+      headId = biddingHeadId;
+    } else {
+      const { id } = list[index] || {};
+      headId = id;
+    }
+    commit(MutationTypes.UpdateBiddingDetail, { headId, biddingIndex });
     dispatch(ActionTypes.GetMouldBiddingDetail);
   },
   // 获取竞价单详情
@@ -202,15 +209,22 @@ export default {
       }
     }
   },
-  // 竞价
-  async [ActionTypes.UpdateMouldBidding](store: Store, index: number) {
+  // 更新竞价信息
+  async [ActionTypes.UpdateMouldBidding](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
-      const { joinBiddingInfo, headId } = biddingDetail || {}; 
+      const { joinBiddingInfo, biddingState, headId } = biddingDetail || {}; 
       const { supplierBiddingId, amount, workPeriod } = joinBiddingInfo || {};
-      const { success, message, data }: any = await UpdateMouldBidding({ amount, biddingHeadId: headId, id: supplierBiddingId, workPeriod });
+      let fn = null;
+      if (biddingState === 1) {
+        fn = await UpdateMouldBidding({ amount, id: supplierBiddingId, workPeriod });
+      } else {
+        fn = await JoinBidding({ amount, biddingHeadId: headId, workPeriod });
+      }
+      const { success, message, data }: any = fn;
       if (success) {
+        dispatch(ActionTypes.GetBiddingList);
         dispatch(ActionTypes.GetMouldBiddingDetail);
       } else {
         Message.error(message);

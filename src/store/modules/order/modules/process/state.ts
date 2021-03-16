@@ -1,23 +1,21 @@
 
 export interface State {
   initOption: any | InitOption;
-  stepList: any | Array<StepList>;
+  machinStepList: any | Array<MachinStepList>;
+  assembleStepList: any | Array<AssembleStepList>;
+  injectionStepList: any | Array<InjectionStepList>;
 };
 
 export interface InitOption {};
-export interface StepList {};
+export interface MachinStepList {};
+export interface AssembleStepList {};
+export interface InjectionStepList {};
 
 const state: State = {
   initOption: {},
-  stepList: [
-    // {
-    //   "filePath": "abc.jpg",
-    //   "isFinished": 1,
-    //   "isNext": 1,
-    //   "stepId": 1,
-    //   "stepName": "EDM加工"
-    // }
-  ]
+  machinStepList: [],
+  assembleStepList: [],
+  injectionStepList: [],
 };
 
 export default state;

@@ -110,7 +110,7 @@ export default class DesignAcceptanceView extends Vue {
   @State("design")
   public design!: Design;
 
-  @Action(ActionTypes.GetStep)
+  @Action(ActionTypes.GetStepDetail)
   public getStep!: Function;
   @Action(ActionTypes.GetBOMList)
   public getBOMList!: Function;

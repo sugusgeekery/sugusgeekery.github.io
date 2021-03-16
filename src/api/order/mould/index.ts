@@ -6,12 +6,9 @@ export const GetProducts = (params: any = {}): object => {
   return fetch({ url: `/supplier/dfmReport/selectProducts/${biddingId}`, method: "GET", params: {} });
 };
 
+// DFM供应商确认驳回图纸
+export const DfmApprovalDrawing = (data: any = {}): object => fetch({ url: `/supplier/dfmReport/approvalDrawing`, data });
 
-
-// 方案设计
-// 查看当前进行到哪一步
-export const GetStep = (params: any = {}): object => fetch({ url: `/supplier/conceptualDesign/getStep`, method: "GET", params });
-
-// 获取订单竞价指标
-// export const GetMyBidAdvantage = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getMyBidAdvantage`, method: "GET", params });
+// DFM供应商是否需要更新图纸
+export const NeedChangeDrawing = (data: any = {}): object => fetch({ url: `/supplier/dfmReport/needChangeDrawing`, data });
 

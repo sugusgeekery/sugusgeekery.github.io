@@ -2,14 +2,14 @@
   <div class="process">
     <input
       type="file"
-      name=""
-      multiple="multiple"
+      name="file"
       hidden="hidden"
-      id="fileElement"
+      id="file"
       @change="uploadFile"
     />
-    <div class="items" v-if="stepList && stepList.length">
-      <div class="item" v-for="(a, b) in stepList" :key="b">
+    <div class="items" v-if="initOption.type === Supplier.Machining && machinStepList && machinStepList.length">
+      <div class="items-text">加工</div>
+      <div class="item" v-for="(a, b) in machinStepList" :key="b">
         <div class="item-label">
           <div
             class="item-label-top"
@@ -24,7 +24,7 @@
           <div
             class="item-label-bottom"
             :class="{ 'item-label-bottom-blue': a.isFinished }"
-            v-if="b < stepList.length - 1"
+            v-if="b < machinStepList.length - 1"
           ></div>
         </div>
         <div class="item-content">
@@ -37,15 +37,15 @@
           <div class="item-content-title">{{ a.stepName }}</div>
         </div>
         <div class="item-buttons" v-if="a.isNext === 1">
-          <div class="item-button item-button-blue" @click="selectFile(b)">
+          <div class="item-button item-button-blue" @click="selectFile({ type: 1, index: b })">
             上传照片
           </div>
-          <div class="item-button" @click="finishStep(b)">完成</div>
+          <div class="item-button" @click="finishedStep({ type: 1, index: b })">完成</div>
         </div>
-        <div class="item-images" v-if="a.fileList && a.fileList.length">
+        <div class="item-images" v-if="a.fileInfos && a.fileInfos.length">
           <div
             class="item-image"
-            v-for="(c, d) in a.fileList"
+            v-for="(c, d) in a.fileInfos"
             :key="d"
             v-show="c.filePath"
           >
@@ -57,7 +57,7 @@
             <div
               class="item-image-delete"
               v-if="a.isNext === 1"
-              @click="deleteStepFile({ index: b, key: d })"
+              @click="deleteStepFile({ type: 1, index: b, key: d })"
             >
               X
             </div>
@@ -65,7 +65,124 @@
         </div>
       </div>
     </div>
-    <div class="text-black" v-if="initOption.type === Supplier.Machining">
+    <div class="items" v-if="initOption.type === Supplier.Machining && assembleStepList && assembleStepList.length">
+      <div class="items-text">装配</div>
+      <div class="item" v-for="(a, b) in assembleStepList" :key="b">
+        <div class="item-label">
+          <div
+            class="item-label-top"
+            :class="{ 'item-label-top-blue': a.isFinished || a.isNext === 1 }"
+          ></div>
+          <div
+            class="item-label-circle"
+            :class="{
+              'item-label-circle-blue': a.isFinished || a.isNext === 1
+            }"
+          ></div>
+          <div
+            class="item-label-bottom"
+            :class="{ 'item-label-bottom-blue': a.isFinished }"
+            v-if="b < assembleStepList.length - 1"
+          ></div>
+        </div>
+        <div class="item-content">
+          <div
+            class="item-content-text"
+            v-if="initOption.type === Supplier.Injection"
+          >
+            20201112
+          </div>
+          <div class="item-content-title">{{ a.stepName }}</div>
+        </div>
+        <div class="item-buttons" v-if="a.isNext === 1">
+          <div class="item-button item-button-blue" @click="selectFile({ type: 2, index: b })">
+            上传照片
+          </div>
+          <div class="item-button" @click="finishedStep({ type: 2, index: b })">完成</div>
+        </div>
+        <div class="item-images" v-if="a.fileInfos && a.fileInfos.length">
+          <div
+            class="item-image"
+            v-for="(c, d) in a.fileInfos"
+            :key="d"
+            v-show="c.filePath"
+          >
+            <img
+              class="item-image-icon"
+              :src="BASE_IMAGE_URL + c.filePath"
+              alt=""
+            />
+            <div
+              class="item-image-delete"
+              v-if="a.isNext === 1"
+              @click="deleteStepFile({ type: 2, index: b, key: d })"
+            >
+              X
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="items" v-if="initOption.type === Supplier.Injection && injectionStepList && injectionStepList.length">
+      <div class="items-text">注塑</div>
+      <div class="item" v-for="(a, b) in injectionStepList" :key="b">
+        <div class="item-label">
+          <div
+            class="item-label-top"
+            :class="{ 'item-label-top-blue': a.isFinished || a.isNext === 1 }"
+          ></div>
+          <div
+            class="item-label-circle"
+            :class="{
+              'item-label-circle-blue': a.isFinished || a.isNext === 1
+            }"
+          ></div>
+          <div
+            class="item-label-bottom"
+            :class="{ 'item-label-bottom-blue': a.isFinished }"
+            v-if="b < injectionStepList.length - 1"
+          ></div>
+        </div>
+        <div class="item-content">
+          <div
+            class="item-content-text"
+            v-if="initOption.type === Supplier.Injection"
+          >
+            20201112
+          </div>
+          <div class="item-content-title">{{ a.stepName }}</div>
+        </div>
+        <div class="item-buttons" v-if="a.isNext === 1">
+          <div class="item-button item-button-blue" @click="selectFile({ type: 3, index: b })">
+            上传照片
+          </div>
+          <div class="item-button" @click="finishedStep({ type: 3, index: b })">完成</div>
+        </div>
+        <div class="item-images" v-if="a.fileInfos && a.fileInfos.length">
+          <div
+            class="item-image"
+            v-for="(c, d) in a.fileInfos"
+            :key="d"
+            v-show="c.filePath"
+          >
+            <img
+              class="item-image-icon"
+              :src="BASE_IMAGE_URL + c.filePath"
+              alt=""
+            />
+            <div
+              class="item-image-delete"
+              v-if="a.isNext === 1"
+              @click="deleteStepFile({ type: 3, index: b, key: d })"
+            >
+              X
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div class="text-black" v-if="initOption.type === Supplier.Machining">
       完成所有加工环节后点击此按钮
     </div>
     <div class="text-black" v-else-if="initOption.type === Supplier.Injection">
@@ -92,7 +209,7 @@
     </div>
     <div class="text-gray" v-else-if="initOption.type === Supplier.Injection">
       提示：如果是试模，需要将样件给到加工方，寄回给平台
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -104,11 +221,17 @@ const { State, Getter, Action, Mutation } = namespace("order/process");
 import { Supplier } from "@/store/modules/order/state";
 import {
   InitOption,
-  StepList
+  MachinStepList,
+  AssembleStepList,
+  InjectionStepList,
 } from "@/store/modules/order/modules/process/state";
 import { ActionTypes } from "@/store/modules/order/modules/process/actions";
+import { MutationTypes } from "@/store/modules/order/modules/process/mutations";
 
 import { BASE_IMAGE_URL } from "@/config";
+import { Message, MessageBox } from "element-ui";
+
+import { UploadForm } from "@/api";
 
 @Component({
   name: "ProcessView",
@@ -123,37 +246,84 @@ export default class ProcessView extends Vue {
 
   @State("initOption")
   public initOption!: InitOption;
-  @State("stepList")
-  public stepList!: Array<StepList>;
+  @State("machinStepList")
+  public machinStepList!: any | Array<MachinStepList>;
+  @State("assembleStepList")
+  public assembleStepList!: any | Array<AssembleStepList>;
+  @State("injectionStepList")
+  public injectionStepList!: any | Array<InjectionStepList>;
 
-  @Action(ActionTypes.GetStepList)
-  public GetStepList!: Function;
-  @Action(ActionTypes.UploadForm)
-  public uploadForm!: Function;
-  @Action(ActionTypes.FinishStep)
-  public finishStep!: Function;
-  @Action(ActionTypes.CommitStep)
-  public commitStep!: Function;
+  @Action(ActionTypes.FinishedStep)
+  public finishedStep!: Function;
   @Action(ActionTypes.DeleteStepFile)
   public deleteStepFile!: Function;
 
+  @Mutation(MutationTypes.UpdateMachinStepList)
+  public updateMachinStepList!: Function;
+  @Mutation(MutationTypes.UpdateAssembleStepList)
+  public updateAssembleStepList!: Function;
+  @Mutation(MutationTypes.UpdateInjectionStepList)
+  public updateInjectionStepList!: Function;
+
+
+  // @Action(ActionTypes.GetStepList)
+  // public GetStepList!: Function;
+  // @Action(ActionTypes.UploadForm)
+  // public uploadForm!: Function;
+  
+  // @Action(ActionTypes.CommitStep)
+  // public commitStep!: Function;
+  
+
+
+
   public created() {
-    this.GetStepList();
+    // this.GetStepList();
   }
   public mounted() {}
 
+  public type = -1;
   public index = -1;
-  public selectFile(b: number) {
-    this.index = b;
-    const dom: any = document.querySelector("#fileElement");
+  public selectFile({ type = 0, index = 0 }: { type: number, index: number}) {
+    this.type = type;
+    this.index = index;
+    const dom: any = document.querySelector("#file");
     dom.click();
   }
-  public uploadFile(e: any) {
-    const files = e.target.files;
-    let len = files.length;
-    while (len > 0) {
-      this.uploadForm({ file: files[files.length - len], index: this.index });
-      len--;
+  // public uploadFile(e: any) {
+  //   const files = e.target.files;
+  //   let len = files.length;
+  //   while (len > 0) {
+  //     this.uploadForm({ file: files[files.length - len], index: this.index });
+  //     len--;
+  //   }
+  // }
+
+  public async uploadFile(e: any) {
+    try {
+      const { type, index, machinStepList, assembleStepList, injectionStepList } = this;
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("files", file);
+      const { success, message, data }: any = await UploadForm(formData);
+      if (success) {
+        const { pics = [] } = data || {};
+        const { filePath = "", fileName, id } = pics[0];
+        if (type === 1) {
+          machinStepList[index].fileInfos = [...(machinStepList[index].fileInfos || []), { filePath, fileName, fileId: id }];
+          this.updateMachinStepList(machinStepList);
+        } else if (type === 2) {
+          assembleStepList[index].fileInfos = [...(assembleStepList[index].fileInfos || []), { filePath, fileName, fileId: id }];
+          this.updateAssembleStepList(assembleStepList);
+        } else if (type === 3) {
+          injectionStepList[index].fileInfos = [...(injectionStepList[index].fileInfos || []), { filePath, fileName, fileId: id }];
+          this.updateInjectionStepList(injectionStepList);
+        }
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
     }
   }
 }
@@ -198,7 +368,10 @@ export default class ProcessView extends Vue {
       color $color-text-white
       background $color-bg-blue
   .items
-    padding 40px
+    padding 40px 60px
+    &-text
+      color $color-text-gray
+      margin 0 0 20px -30px
     .item
       display flex
       justify-content flex-start
@@ -267,13 +440,15 @@ export default class ProcessView extends Vue {
           color $color-text-white
           background $color-bg-blue
       &-images
+        flex 1
         display flex
+        flex-wrap wrap
         justify-content flex-start
         align-items center
       &-image
         width 50px
         height 50px
-        margin-right 10px
+        margin 0 10px 10px 0
         position relative
         background $color-bg-blue-white
         border-radius 4px

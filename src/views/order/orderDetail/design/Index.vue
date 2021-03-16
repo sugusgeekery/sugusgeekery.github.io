@@ -2,7 +2,7 @@
   <div class="design">
     <div
       class="design-item"
-      v-for="(a, b) in design.stepList"
+      v-for="(a, b) in design.stepInfoList"
       :key="'_方案设计步骤_' + b"
     >
       <div class="design-item-label">
@@ -18,7 +18,7 @@
         </div>
         <div
           class="design-item-label-line"
-          v-if="b < design.stepList.length - 1"
+          v-if="b < design.stepInfoList.length - 1"
           :class="{
             'design-item-label-line-blue': design.step >= a.label,
             'design-item-label-line-gray': design.step < a.label
@@ -124,7 +124,9 @@ import { Design } from "@/store/modules/order/modules/design/state";
 import { ActionTypes } from "@/store/modules/order/modules/design/actions";
 
 import downloadByUrl from "@/utils/downloadByUrl";
-import { MessageBox } from "element-ui";
+import { Message, MessageBox } from "element-ui";
+
+import { UploadForm } from "@/api";
 
 import BOMTableModel from "./models/BOMTableModel.vue";
 import BOMImageInfoModel from "./models/BOMImageInfoModel.vue";
@@ -140,8 +142,8 @@ export default class DesignView extends Vue {
   @State("design")
   public design!: Design;
 
-  @Action(ActionTypes.GetStep)
-  public getStep!: Function;
+  @Action(ActionTypes.GetStepDetail)
+  public getStepDetail!: Function;
   @Action(ActionTypes.GetBOMList)
   public getBOMList!: Function;
   @Action(ActionTypes.ImportProgramme)
@@ -154,13 +156,26 @@ export default class DesignView extends Vue {
     dom.click();
     dom.value = "";
   }
-  public uploadFile(e: any) {
-    const file = e.target.files[0];
-    this.importProgramme(file);
+  public async uploadFile(e: any) {
+    try {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("files", file);
+      const { success, message, data }: any = await UploadForm(formData);
+      if (success) {
+        const { pics = [] } = data || {};
+        const { filePath = "", fileName, id } = pics[0];
+        this.importProgramme({ threeFacePlanFileId: id });
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
   public created() {
-    this.getStep();
+    this.getStepDetail();
     // this.getBOMImageInfo();
   }
   public downloadFile(url: string, name: string) {

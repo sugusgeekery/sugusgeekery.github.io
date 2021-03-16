@@ -249,7 +249,6 @@ export default class OrderHomeView extends Vue {
           top 0
           left 0
           width 100%
-          overflow auto
           display flex
           flex-wrap wrap
           justify-content flex-start

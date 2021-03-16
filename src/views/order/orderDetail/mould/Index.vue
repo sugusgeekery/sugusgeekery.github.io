@@ -13,7 +13,9 @@
         </div>
         <div class="li-row">
           <div class="li-text">
-            <span class="li-text-gray">精度标准：</span>
+            <span class="li-text-gray">精度标准</span>
+            <img src="../../../../assets/images/tip_4.png" class="li-text-icon" alt="">
+            <span class="li-text-gray">：</span>
             <span class="li-text-gray">{{ mould.toleranceValue }}</span>
           </div>
         </div>
@@ -27,6 +29,7 @@
         <div class="li-text">
           <span class="li-text-black">产品：</span>
           <span class="li-text-black">{{ a.productNo }}</span>
+          <img src="../../../../assets/images/tip_3.png" class="li-text-icon" alt="">
         </div>
         <div class="li-content">
           <div class="li-row">
@@ -207,6 +210,9 @@ export default class MouldView extends Vue {
         margin-bottom 20px
         &:nth-last-of-type(1)
           margin-bottom 0px
+        &-icon
+          width 13px
+          object-fit contain
         &-gray
           color $color-text-gray
         &-black

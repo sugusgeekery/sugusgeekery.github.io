@@ -46,14 +46,14 @@ export default {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
-      const { type, biddingId } = initOption || {};
+      const { type, mouldProduceId } = initOption || {};
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
           // fn = await GetDfmReportList({ biddingId });
           break;
         case Supplier.Machining:
-          fn = await GetCheckAndAcceptInfo({ biddingId });
+          fn = await GetCheckAndAcceptInfo({ mouldProduceId });
           break;
         case Supplier.Injection:
           // fn = await GetInjectStepList({ biddingId });
@@ -85,7 +85,7 @@ export default {
     try {
       const { state, dispatch, commit } = store;
       const { initOption, prototype } = state;
-      const { type, biddingId } = initOption || {};
+      const { type, mouldProduceId } = initOption || {};
       const { productSamplePostInfo } = prototype || {};
       const { postCompany, postOrderNo } = productSamplePostInfo || {};
       if (!postCompany) {
@@ -99,13 +99,13 @@ export default {
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
-          // fn = await GetDfmReportList({ biddingId });
+          // fn = await GetDfmReportList({ mouldProduceId });
           break;
         case Supplier.Machining:
-          fn = await CommitMailInfo({ biddingId, postCompany, postOrderNo });
+          fn = await CommitMailInfo({ mouldProduceId, postCompany, postOrderNo });
           break;
         case Supplier.Injection:
-          // fn = await GetInjectStepList({ biddingId });
+          // fn = await GetInjectStepList({ mouldProduceId });
           break;
       }
       const { success, message, data }: any = fn;

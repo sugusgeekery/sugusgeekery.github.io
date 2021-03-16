@@ -69,7 +69,7 @@ export enum Supplier {
   // 加工供应商
   Machining = "machining",
   // 注塑供应商
-  Injection = "Injection"
+  Injection = "injection"
 };
 
 const state: State = {

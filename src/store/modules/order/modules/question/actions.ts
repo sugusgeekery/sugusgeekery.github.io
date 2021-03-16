@@ -43,14 +43,14 @@ export default {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
-      const { type, biddingId } = initOption || {};
+      const { type, mouldProduceId } = initOption || {};
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
           // fn = await GetDfmReportList({ biddingId });
           break;
         case Supplier.Machining:
-          fn = await GetQuestions({ biddingId });
+          fn = await GetQuestions({ mouldProduceId });
           break;
         case Supplier.Injection:
           // fn = await GetInjectStepList({ biddingId });
