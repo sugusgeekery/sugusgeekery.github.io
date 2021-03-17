@@ -3,8 +3,14 @@
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
-          <div class="model-title-text">
-            {{ BOMTable.showType > 0 ? "验收" : "导入" }}BOM表
+          <div class="model-title-text" v-if="Supplier.Design === initOption.type">
+            导入BOM表
+          </div>
+          <div class="model-title-text" v-else-if="Supplier.Dfm === initOption.type">
+            查看BOM表
+          </div>
+          <div class="model-title-text" v-else-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type">
+            验收BOM表
           </div>
         </div>
         <div
@@ -13,23 +19,18 @@
         ></div>
       </div>
       <div class="model-body">
-        <div class="model-row" v-if="BOMTable.showType > 0">
-          <div class="model-flex"></div>
-          <div class="model-flex">
-            <div class="model-text model-text-blue">下载BOM</div>
-          </div>
-        </div>
-        <div class="model-row" v-else>
-          <div class="model-flex">
+        <div class="model-row">
+          <div class="model-flex" v-if="Supplier.Design === initOption.type">
             <input
               type="file"
-              name="bomfile"
-              id="bomfile"
+              name="file"
+              id="file"
               hidden="hidden"
               @change="uploadFile"
             />
             <div class="model-button" @click="checkFile()">导入BOM表</div>
           </div>
+          <div class="model-flex" v-else></div>
           <div class="model-flex">
             <div class="model-text model-text-blue">BOM模板</div>
             <div class="model-text">下载</div>
@@ -52,36 +53,47 @@
               </tr>
               <tr v-for="(a, b) in BOMTable.list" :key="'_BOM表_' + b">
                 <td>{{ b + 1 }}</td>
-                <td>{{ a.name }}</td>
-                <td>{{ a.number }}</td>
+                <td>{{ a.partName }}</td>
+                <td>{{ a.partCode }}</td>
                 <td>{{ a.type }}</td>
-                <td>{{ a.referenceSpecifications }}</td>
-                <td>{{ a.handle }}</td>
-                <td>{{ a.texture }}</td>
+                <td>{{ a.referenceStandard }}</td>
+                <td>{{ a.heatTreatment }}</td>
+                <td>{{ a.material }}</td>
                 <td>{{ a.weight }}</td>
-                <td>{{ a.orderingSpecifications }}</td>
-                <td>{{ a.number }}</td>
+                <td>{{ a.orderingStandard }}</td>
+                <td>{{ a.num }}</td>
               </tr>
             </table>
           </div>
+          <div class="model-table-footer">
+            <el-pagination
+              @size-change="updatePageSize"
+              @current-change="updatePageNum"
+              :current-page="BOMTable.pageNo"
+              :page-sizes="BOMTable.pageSizes"
+              :page-size="BOMTable.pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="BOMTable.total"
+            >
+            </el-pagination>
+          </div>
         </div>
-        <div class="model-buttons" v-if="BOMTable.showType > 0">
+        <div class="model-buttons" v-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type">
           <div
             class="model-button model-button-blue"
-            @click="checkProgramme({ checkResult: 1, step: 2 })"
+            @click="approvalBom({ cause: '', opinion: 1, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })"
           >
             通过
           </div>
           <div
             class="model-button"
-            @click="checkProgramme({ checkResult: 0, step: 2 })"
+            @click="showMessageBox()"
           >
             驳回
           </div>
-          <div class="model-button model-button-blue">提交</div>
         </div>
         <div class="model-buttons" v-else>
-          <div class="model-button model-button-blue">确定</div>
+          <div class="model-button model-button-blue" @click="updateBOMTable({ isShow: false })">确定</div>
         </div>
       </div>
     </div>
@@ -93,24 +105,38 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/design");
 
-import {} from "@/store/modules/order/modules/design/state";
+import { Supplier } from "@/store/modules/order/state";
+import { InitOption } from "@/store/modules/order/modules/design/state";
 import { ActionTypes } from "@/store/modules/order/modules/design/actions";
 import { MutationTypes } from "@/store/modules/order/modules/design/mutations";
 
 import downloadByUrl from "@/utils/downloadByUrl";
+
+import { Message, MessageBox } from "element-ui";
+
+import { UploadForm } from "@/api";
 
 @Component({
   name: "BOMTableModel",
   components: {}
 })
 export default class BOMTableModel extends Vue {
+  // 供应商类型列表
+  public Supplier = Supplier;
+
+  @State("initOption")
+  public initOption!: any | InitOption;
   @State("BOMTable")
   public BOMTable!: any;
 
+  @Action(ActionTypes.UpdateBOMPageNum)
+  public updatePageNum!: Function;
+  @Action(ActionTypes.UpdateBOMPageSize)
+  public updatePageSize!: Function;
   @Action(ActionTypes.ImportBom)
   public importBom!: Function;
-  @Action(ActionTypes.CheckProgramme)
-  public checkProgramme!: Function;
+  @Action(ActionTypes.ApprovalBom)
+  public approvalBom!: Function;
 
   @Mutation(MutationTypes.UpdateBOMTable)
   public updateBOMTable!: Function;
@@ -122,13 +148,50 @@ export default class BOMTableModel extends Vue {
   }
 
   public checkFile() {
-    const dom: any = document.querySelector("#bomfile");
+    const dom: any = document.querySelector("#file");
     dom.click();
     dom.value = "";
   }
-  public uploadFile(e: any) {
-    const file = e.target.files[0];
-    this.importBom(file);
+  public async uploadFile(e: any) {
+    try {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("files", file);
+      const { success, message, data }: any = await UploadForm(formData);
+      if (success) {
+        const { pics = [] } = data || {};
+        const { filePath = "", fileName, id } = pics[0];
+        this.importBom(id);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  public showMessageBox() {
+    const { Supplier, initOption } = this;
+    MessageBox({
+      message: "",
+      title: "温馨提示",
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      showClose: true,
+      showInput: true,
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
+      center: true,
+      roundButton: false,
+      showConfirmButton: true,
+      showCancelButton: true
+    })
+      .then(({ action, value }: any) => {
+        if (action === "confirm") {
+          this.approvalBom({ cause: value, opinion: 0, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })
+        }
+      })
+      .catch(() => {});
   }
 }
 </script>
@@ -243,14 +306,20 @@ export default class BOMTableModel extends Vue {
   &-table
     width 100%
     flex 1
-    position relative
+    // position relative
+    display flex
+    flex-direction column
+    justify-content flex-start
+    align-items flex-start
     &-box
-      position absolute
-      top 0
-      left 0
+      flex 1
+      // position absolute
+      // top 0
+      // left 0
       width 100%
-      height 100%
+      // height 100%
       overflow auto
+      
       table
         width 100%
         border solid 1px $color-bd-gray
@@ -267,4 +336,10 @@ export default class BOMTableModel extends Vue {
           padding 10px
           border-right solid 1px $color-bd-gray
           text-align center
+    &-footer
+      width 100%
+      background $color-bg-white
+      margin auto
+      padding 5px
+      text-align center
 </style>

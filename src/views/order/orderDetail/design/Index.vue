@@ -1,5 +1,5 @@
 <template>
-  <div class="design">
+  <div class="design" v-if="design.stepInfoList && design.stepInfoList.length">
     <div
       class="design-item"
       v-for="(a, b) in design.stepInfoList"
@@ -9,94 +9,86 @@
         <div
           class="design-item-label-number"
           :class="{
-            'design-item-label-number-gray': design.step < a.label,
-            'design-item-label-number-blue': design.step === a.label,
-            'design-item-label-number-white': design.step > a.label
+            'design-item-label-number-gray': a.isFinished === null,
+            'design-item-label-number-blue': a.isFinished === 0,
+            'design-item-label-number-white': a.isFinished === 1
           }"
         >
-          {{ a.label }}
+          {{ b + 1 }}
         </div>
         <div
           class="design-item-label-line"
           v-if="b < design.stepInfoList.length - 1"
           :class="{
-            'design-item-label-line-blue': design.step >= a.label,
-            'design-item-label-line-gray': design.step < a.label
+            'design-item-label-line-blue': a.isFinished === 0 || a.isFinished === 1,
+            'design-item-label-line-gray': a.isFinished === null
           }"
         ></div>
       </div>
-      <div class="design-item-content" v-if="design.step > a.label">
+      <div class="design-item-content">
         <div class="design-item-content-text">
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
-            v-if="a.isLink"
-            @click="alertModel(a.label)"
+            v-if="b > 0"
+            @click="a.isFinished === 0 ? alertModel(b + 1) : null"
           >
-            {{ a.text }}
+            {{ Supplier.Design === initOption.type ? "导入" : Supplier.Dfm === initOption.type ? "查看" : "验收" }}{{ a.stepName }}
           </span>
           <span class="design-item-content-text-black" v-else>
-            {{ a.text }}
+            {{ Supplier.Design === initOption.type ? "上传" : Supplier.Dfm === initOption.type ? "查看" : "验收" }}{{ a.stepName }}
           </span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
+            v-if="a.fileName"
           >
             {{ a.fileName || "" }}
           </span>
           <span
             class="design-item-content-text-gray design-item-content-text-pointer"
+            v-if="a.filePath"
             @click="downloadFile(a.filePath, a.fileName)"
           >
             下载
           </span>
-          <span class="design-item-content-text-gray">
+          <span class="design-item-content-text-gray" v-if="a.fileTime">
             {{ a.fileTime || "" }}
           </span>
         </div>
+
+
         <div
           class="design-item-content-text"
-          v-for="(c, d) in a.map"
+          v-for="(c, d) in a.approvalInfoList"
           :key="'_方案设计步骤详情对应处理方_' + d"
+          v-show="Supplier.Design === initOption.type || Supplier.Dfm === initOption.type"
         >
-          <span class="design-item-content-text-black" v-if="c.role === 0">
+          <span class="design-item-content-text-black" v-if="c.type == 1">
             加工方：
           </span>
-          <span class="design-item-content-text-black" v-else-if="c.role === 1">
+          <span class="design-item-content-text-black" v-else-if="c.type == 2">
             注塑方：
           </span>
-          <span class="design-item-content-text-red" v-if="c.status === 0">
+          <span class="design-item-content-text-red" v-if="c.opinion === 0">
             驳回
           </span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
-            v-if="c.status === 0"
-            @click="alertMessage(a.describe)"
+            v-if="c.opinion === 0"
+            @click="alertMessage(a.cause)"
           >
             查看详情
           </span>
           <span
             class="design-item-content-text-green"
-            v-else-if="c.status === 1"
+            v-else-if="c.opinion === 1"
           >
             验收通过
           </span>
           <span class="design-item-content-text-gray">{{
-            c.datetime || ""
+            c.approvalTime || ""
           }}</span>
         </div>
-      </div>
-      <div class="design-item-content" v-else>
-        <div class="design-item-content-text">
-          <span
-            class="design-item-content-text-blue design-item-content-text-pointer"
-            v-if="a.isLink"
-          >
-            {{ a.text }}
-          </span>
-          <span class="design-item-content-text-black" v-else>
-            {{ a.text }}
-          </span>
-        </div>
-        <div class="design-item-content-button" v-if="b === 0">
+        <div class="design-item-content-button" v-if="Supplier.Design === initOption.type && (a.approveStatus === 0 || a.approveStatus === 2) && b === 0">
           <input
             type="file"
             name="file"
@@ -107,6 +99,20 @@
           <span class="design-item-content-button-text" @click="checkFile()">
             点击上传
           </span>
+        </div>
+
+
+        <div class="design-item-content-button" v-if="(Supplier.Machining === initOption.type || Supplier.Injection === initOption.type) && a.isFinished === 0 && b === 0">
+          <span
+            class="design-item-content-button-text design-item-content-button-text-blue"
+            @click="approvalDesign({ opinion: 1, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })"
+            >通过</span
+          >
+          <span
+            class="design-item-content-button-text"
+            @click="approvalDesign({ opinion: 0, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })"
+            >驳回</span
+          >
         </div>
       </div>
     </div>
@@ -120,7 +126,8 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/design");
 
-import { Design } from "@/store/modules/order/modules/design/state";
+import { Supplier } from "@/store/modules/order/state";
+import { InitOption, Design } from "@/store/modules/order/modules/design/state";
 import { ActionTypes } from "@/store/modules/order/modules/design/actions";
 
 import downloadByUrl from "@/utils/downloadByUrl";
@@ -139,6 +146,11 @@ import BOMImageInfoModel from "./models/BOMImageInfoModel.vue";
   }
 })
 export default class DesignView extends Vue {
+  // 供应商类型列表
+  public Supplier = Supplier;
+
+  @State("initOption")
+  public initOption!: InitOption;
   @State("design")
   public design!: Design;
 
@@ -146,10 +158,12 @@ export default class DesignView extends Vue {
   public getStepDetail!: Function;
   @Action(ActionTypes.GetBOMList)
   public getBOMList!: Function;
-  @Action(ActionTypes.ImportProgramme)
-  public importProgramme!: Function;
+  @Action(ActionTypes.ImportDesign)
+  public importDesign!: Function;
   @Action(ActionTypes.GetBOMImageInfo)
   public getBOMImageInfo!: Function;
+  @Action(ActionTypes.ApprovalDesign)
+  public approvalDesign!: Function;
 
   public checkFile() {
     const dom: any = document.querySelector("#file");
@@ -165,7 +179,7 @@ export default class DesignView extends Vue {
       if (success) {
         const { pics = [] } = data || {};
         const { filePath = "", fileName, id } = pics[0];
-        this.importProgramme({ threeFacePlanFileId: id });
+        this.importDesign({ threeFacePlanFileId: id });
       } else {
         Message.error(message);
       }
@@ -176,7 +190,6 @@ export default class DesignView extends Vue {
 
   public created() {
     this.getStepDetail();
-    // this.getBOMImageInfo();
   }
   public downloadFile(url: string, name: string) {
     if (url) {
@@ -185,7 +198,7 @@ export default class DesignView extends Vue {
   }
   public alertMessage(content: string) {
     MessageBox.alert(
-      content || "的时间里发酵按时发链接爱上了发生的激发了圣诞节福利",
+      content || "",
       "驳回原因"
     );
   }
@@ -261,7 +274,6 @@ export default class DesignView extends Vue {
         &-black
           color $color-text-black
           margin-right 20px
-          font-size 16px
         &-blue
           color $color-text-blue
           margin-right 20px
@@ -282,4 +294,9 @@ export default class DesignView extends Vue {
           font-size 14px
           color $color-text-blue
           cursor pointer
+          margin-right 14px
+          &-blue
+            border solid 1px $color-bd-blue
+            color $color-text-white
+            background $color-bg-blue
 </style>

@@ -3,10 +3,14 @@
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
-          <div class="model-title-text">
-            {{
-              BOMImageInfo.showType > 0 ? "验收" : "导入"
-            }}BOM表对应零件的2D、3D图纸
+          <div class="model-title-text" v-if="Supplier.Dfm === initOption.type">
+            查看BOM表对应零件的2D、3D图纸
+          </div>
+          <div class="model-title-text" v-else-if="Supplier.Design === initOption.type">
+            导入BOM表对应零件的2D、3D图纸
+          </div>
+          <div class="model-title-text" v-else-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type">
+            验收BOM表对应零件的2D、3D图纸
           </div>
         </div>
         <div
@@ -15,7 +19,7 @@
         ></div>
       </div>
       <div class="model-body">
-        <div class="model-row" v-if="BOMImageInfo.showType === 0">
+        <div class="model-row" v-if="Supplier.Design === initOption.type">
           <div class="model-flex">
             <input
               type="file"
@@ -30,7 +34,6 @@
               name="bomimagelifile"
               id="bomimagelifile"
               hidden="hidden"
-              multiple="multiple"
               @change="uploadLiFile"
             />
             <div class="model-button" @click="checkFile()">
@@ -46,7 +49,7 @@
             <table>
               <tr>
                 <th
-                  v-if="BOMImageInfo.showType > 0"
+                  v-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type"
                   @click="checkBOMImageAll()"
                 >
                   <img
@@ -74,7 +77,7 @@
                 v-for="(a, b) in BOMImageInfo.list"
                 :key="'_BOM表零件图纸_' + b"
               >
-                <td v-if="BOMImageInfo.showType > 0" @click="checkBOMImage(b)">
+                <td v-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type" @click="checkBOMImage(b)">
                   <img
                     class="model-icon"
                     v-if="a.isSelected"
@@ -88,70 +91,82 @@
                     alt=""
                   />
                 </td>
-                <td>{{ b + 1 }}</td>
-                <td>{{ a.name }}</td>
-                <td>{{ a.number }}</td>
+                <td>{{ a.serialNo }}</td>
+                <td>{{ a.partName }}</td>
+                <td>{{ a.partCode }}</td>
                 <td>
-                  <span class="model-text model-text-blue">{{ a.name2d }}</span>
+                  <span class="model-text model-text-blue">{{ a.twoFaceFileName }}</span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
-                    @click="checkLiFile(a.id)"
+                    @click="checkLiFile(a.twoFaceFileId)"
                     >更新</span
                   >
                   <span
                     class="model-text model-text-gray"
-                    @click="downloadFile(a.thumPath2d, a.name2d)"
+                    @click="downloadFile(a.twoFaceFileUrl, a.twoFaceFileName)"
                     >下载</span
                   >
                 </td>
                 <td>
-                  <span class="model-text model-text-blue">{{ a.name3d }}</span>
+                  <span class="model-text model-text-blue">{{ a.threeFaceFileName }}</span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
-                    @click="checkLiFile(a.id)"
+                    @click="checkLiFile(a.threeFaceFileId)"
                     >更新</span
                   >
                   <span
                     class="model-text model-text-gray"
-                    @click="downloadFile(a.thumPath3d, a.name3d)"
+                    @click="downloadFile(a.threeFaceFileUrl, a.threeFaceFileName)"
                     >下载</span
                   >
                 </td>
                 <td>
                   <span
                     class="model-text model-text-blue"
-                    v-if="a.checkResult === 1"
+                    v-if="a.state === 2"
                     >通过</span
                   >
                   <span
                     class="model-text model-text-red"
-                    v-if="a.checkResult === 2"
+                    v-if="a.state === 3"
                     >驳回</span
                   >
                   <span
                     class="model-text model-text-blue"
-                    v-if="a.checkResult === 2"
-                    @click="alertMessage(a.checkDescribe)"
+                    v-if="a.state === 3"
+                    @click="alertMessage(a.cause)"
                     >查看详情</span
                   >
                 </td>
               </tr>
             </table>
           </div>
+          <div class="model-table-footer">
+            <el-pagination
+              @size-change="updatePageSize"
+              @current-change="updatePageNum"
+              :current-page="BOMImageInfo.pageNo"
+              :page-sizes="BOMImageInfo.pageSizes"
+              :page-size="BOMImageInfo.pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="BOMImageInfo.total"
+            >
+            </el-pagination>
+          </div>
         </div>
-        <div class="model-buttons" v-if="BOMImageInfo.showType > 0">
+        <div class="model-buttons" v-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type">
           <div
             class="model-button model-button-blue"
-            @click="checkImage({ checkResult: 1 })"
+            @click="this.approvalBomImage({ cause: '', opinion: 1, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })"
           >
             通过
           </div>
-          <div class="model-button" @click="checkImage({ checkResult: 0 })">
+          <div class="model-button" @click="showMessageBox()">
             驳回
           </div>
         </div>
         <div class="model-buttons" v-else>
-          <div class="model-button model-button-blue">确定</div>
+          <div class="model-button model-button-blue" @click="updateBOMImageInfo({ isShow: false })">确定</div>
         </div>
       </div>
     </div>
@@ -163,31 +178,41 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/design");
 
-import {} from "@/store/modules/order/modules/design/state";
+import { Supplier } from "@/store/modules/order/state";
+import { InitOption } from "@/store/modules/order/modules/design/state";
 import { ActionTypes } from "@/store/modules/order/modules/design/actions";
 import { MutationTypes } from "@/store/modules/order/modules/design/mutations";
 
 import downloadByUrl from "@/utils/downloadByUrl";
-import { MessageBox } from "element-ui";
+import { Message, MessageBox } from "element-ui";
+
+import { UploadForm } from "@/api";
 
 @Component({
   name: "BOMImageInfoModel",
   components: {}
 })
 export default class BOMImageInfoModel extends Vue {
+  // 供应商类型列表
+  public Supplier = Supplier;
+
+  @State("initOption")
+  public initOption!: any | InitOption;
   @State("BOMImageInfo")
   public BOMImageInfo!: any;
 
-  @Action(ActionTypes.ImportSpareImage)
-  public importSpareImage!: Function;
-  @Action(ActionTypes.UpdateSpareImage)
-  public updateSpareImage!: Function;
+  @Action(ActionTypes.UpdateBOMImagePageNum)
+  public updatePageNum!: Function;
+  @Action(ActionTypes.UpdateBOMImagePageSize)
+  public updatePageSize!: Function;
   @Action(ActionTypes.CheckBOMImage)
   public checkBOMImage!: Function;
   @Action(ActionTypes.CheckBOMImageAll)
   public checkBOMImageAll!: Function;
-  @Action(ActionTypes.CheckImage)
-  public checkImage!: Function;
+  @Action(ActionTypes.ImportBomImage)
+  public importBomImage!: Function;
+  @Action(ActionTypes.ApprovalBomImage)
+  public approvalBomImage!: Function;
 
   @Mutation(MutationTypes.UpdateBOMImageInfo)
   public updateBOMImageInfo!: Function;
@@ -203,9 +228,40 @@ export default class BOMImageInfoModel extends Vue {
     dom.click();
     dom.value = "";
   }
+  public fileLen = 0;
+  public files = [];
+  public fileNum = 0;
+  public fileList: Array<{ fileName: string; fileId: string; }> = [];
   public uploadFile(e: any) {
-    const file = e.target.files[0];
-    this.importSpareImage(file);
+    if (e.target.files.length) {
+      this.fileLen = e.target.files.length;
+      this.files = e.target.files;
+      this.fileNum = 0;
+      this.fileList = [];
+      this.uploadFileFn();
+    }
+  }
+  public async uploadFileFn() {
+    try {
+      const formData = new FormData();
+      formData.append("files", this.files[this.fileNum]);
+      const { success, message, data }: any = await UploadForm(formData);
+      if (success) {
+        const { pics = [] } = data || {};
+        const { filePath = "", fileName = "", id = "" } = pics[0];
+        this.fileList.push({ fileName, fileId: id });
+        if (this.fileNum === this.fileLen - 1) {
+          this.importBomImage({ bomDesignFiles: this.fileList })
+        } else {
+          this.fileNum++;
+          this.uploadFileFn();
+        }
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
   public infoId = "";
@@ -218,13 +274,39 @@ export default class BOMImageInfoModel extends Vue {
   public uploadLiFile(e: any) {
     const { infoId } = this;
     const file = e.target.files[0];
-    this.updateSpareImage({ file, infoId });
+    // this.updateSpareImage({ file, infoId });
     this.infoId = "";
+  }
+
+  
+
+  public showMessageBox() {
+    const { Supplier, initOption } = this;
+    MessageBox({
+      message: "",
+      title: "温馨提示",
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      showClose: true,
+      showInput: true,
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
+      center: true,
+      roundButton: false,
+      showConfirmButton: true,
+      showCancelButton: true
+    })
+      .then(({ action, value }: any) => {
+        if (action === "confirm") {
+          this.approvalBomImage({ cause: value, opinion: 0, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 });
+        }
+      })
+      .catch(() => {});
   }
 
   public alertMessage(content: string) {
     MessageBox.alert(
-      content || "的时间里发酵按时发链接爱上了发生的激发了圣诞节福利",
+      content || "",
       "驳回原因"
     );
   }
@@ -350,17 +432,50 @@ export default class BOMImageInfoModel extends Vue {
   &-icon
     width 14px
     margin-right 10px
+  // &-table
+  //   width 100%
+  //   flex 1
+  //   position relative
+  //   &-box
+  //     position absolute
+  //     top 0
+  //     left 0
+  //     width 100%
+  //     height 100%
+  //     overflow auto
+  //     table
+  //       width 100%
+  //       border solid 1px $color-bd-gray
+  //       th
+  //         font-size 14px
+  //         font-weight 400
+  //         color $color-text-gray
+  //         padding 10px
+  //         background $color-bg-gray-white
+  //         text-align center
+  //       td
+  //         font-size 14px
+  //         color $color-text-black
+  //         padding 10px
+  //         border-right solid 1px $color-bd-gray
+  //         text-align center
   &-table
     width 100%
     flex 1
-    position relative
+    // position relative
+    display flex
+    flex-direction column
+    justify-content flex-start
+    align-items flex-start
     &-box
-      position absolute
-      top 0
-      left 0
+      flex 1
+      // position absolute
+      // top 0
+      // left 0
       width 100%
-      height 100%
+      // height 100%
       overflow auto
+      
       table
         width 100%
         border solid 1px $color-bd-gray
@@ -377,4 +492,10 @@ export default class BOMImageInfoModel extends Vue {
           padding 10px
           border-right solid 1px $color-bd-gray
           text-align center
+    &-footer
+      width 100%
+      background $color-bg-white
+      margin auto
+      padding 5px
+      text-align center
 </style>

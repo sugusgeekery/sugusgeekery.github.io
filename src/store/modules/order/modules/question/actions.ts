@@ -15,6 +15,7 @@ import {
 } from "@/api";
 import {
   GetQuestions,
+  AnswerQuestion
 } from "@/api/order/question";
 
 interface Store {
@@ -29,6 +30,7 @@ interface Store {
 export enum ActionTypes {
   Init = "Init",
   GetQuestionList = "GetQuestionList",
+  AnswerQuestion = "AnswerQuestion"
 }
 
 export default {
@@ -38,7 +40,7 @@ export default {
     commit(MutationTypes.UpdateInitOption, params);
   },
 
-  // 获取流程步骤
+  // 获取问题列表
   async [ActionTypes.GetQuestionList](store: Store) {
     try {
       const { state, dispatch, commit } = store;
@@ -58,7 +60,62 @@ export default {
       }
       const { success, message, data }: any = fn;
       if (success) {
-        commit(MutationTypes.UpdateQuestionList, data || []);
+        const questionList = (ls => {
+          for (const [a, b] of ls.entries()) {
+            const { problemApprovalLogs = [] } = b;
+            ls[a].reason = (list => {
+              let reason = "";
+              for (const [c, d] of list.entries()) {
+                const { approvalType, description } = d;
+                if (approvalType === 2) {
+                  reason = description;
+                }
+              }
+              return reason;
+            })(problemApprovalLogs || [])
+          }
+          return ls;
+        })(data || []);
+        commit(MutationTypes.UpdateQuestionList, questionList);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 回答问题
+  async [ActionTypes.AnswerQuestion](store: Store, params: any) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { initOption, questionList } = state;
+      const { opinion = -1, index, replyContent = "" } = params || {};
+      const { type, mouldProduceId } = initOption || {};
+      const { id, isRepair = -1, supplierAnswer} = questionList[index] || {};
+      let fn = null;
+      if (isRepair === null || isRepair === -1) {
+        Message.error("请选择是否需要修模");
+        return;
+      }
+      if (opinion > -1) {
+        if (opinion === 0 && !replyContent) {
+          Message.error("请输入不接受的理由");
+          return;
+        }
+        fn = await AnswerQuestion({ needAdjust: isRepair, opinion, problemId: id, replyContent });
+      } else {
+        if (!supplierAnswer) {
+          Message.error("请输入分析内容和改善建议");
+          return;
+        }
+        fn = await AnswerQuestion({ needAdjust: isRepair, problemId: id, replyContent: supplierAnswer });
+      }
+      
+      const { success, message, data }: any = fn;
+      if (success) {
+        // commit(MutationTypes.UpdateQuestionList, data || []);
+        dispatch(ActionTypes.GetQuestionList);
       } else {
         Message.error(message);
       }

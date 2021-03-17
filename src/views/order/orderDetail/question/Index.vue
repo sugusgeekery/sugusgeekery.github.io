@@ -2,49 +2,58 @@
   <div class="question">
     <div class="list" v-if="questionList && questionList.length">
       <div class="li" v-for="(a, b) in questionList" :key="b">
-        <div class="li-title">{{ a.title || "" }}</div>
+        <div class="li-title">{{ a.problemTitleId || "" }}{{ a.problemTitle || "" }}</div>
         <div class="li-row">
           <div class="li-flex">
             <div class="li-image">
-              <img class="li-image-icon" src="" alt="" />
+              <img class="li-image-icon" v-for="(c, d) in a.fileList" :key="c.fileId + d" v-show="c.filePath" :src="BASE_IMAGE_URL + c.filePath" alt="" />
             </div>
           </div>
           <div class="li-flex">
-            <div class="li-text">{{ a.description || "" }}</div>
-            <div class="li-context">{{ a.description || "" }}</div>
-            <div class="li-textarea">
+            <div class="li-text">{{ a.problemDescription || "" }}</div>
+            <div class="li-textarea" v-if="a.state === 0">
               <textarea
                 name=""
                 id=""
                 cols="30"
                 rows="10"
-                :value="a.description"
+                placeholder="请输入问题分析与改善措施"
+                :value="a.supplierAnswer"
+                @change="updateQuestion({ value: $event.target.value, name: 'supplierAnswer', index: b })"
               ></textarea>
             </div>
+            <div class="li-context" v-else>{{ a.supplierAnswer || "" }}</div>
             <div class="li-items">
-              <div class="li-item">
+              <div class="li-item" v-if="a.state === 0">
                 <div class="li-item-text">是否需要修模：</div>
-                <div class="li-item-select">
+                <div class="li-item-select" @click="updateQuestion({ value: 0, name: 'isRepair', index: b })">
                   <div
                     class="li-item-select-label"
                     :class="{
-                      'li-item-select-label-active': a.needAdjust === 0
+                      'li-item-select-label-active': a.isRepair === 0
                     }"
                   ></div>
                   <div class="li-item-select-text">否</div>
                 </div>
-                <div class="li-item-select">
+                <div class="li-item-select" @click="updateQuestion({ value: 1, name: 'isRepair', index: b })">
                   <div
                     class="li-item-select-label"
                     :class="{
-                      'li-item-select-label-active': a.needAdjust === 1
+                      'li-item-select-label-active': a.isRepair === 1
                     }"
                   ></div>
                   <div class="li-item-select-text">是</div>
                 </div>
               </div>
+              <div class="li-item" v-else>
+                <div class="li-item-text">是否需要修模：</div>
+                <div class="li-item-select">
+                  <div class="li-item-select-text" v-if="a.isRepair">是</div>
+                  <div class="li-item-select-text" v-else>否</div>
+                </div>
+              </div>
               <div class="li-item" v-if="a.state === 0">
-                <div class="li-item-text">待确认</div>
+                <div class="li-item-select-button li-item-select-button-blue" @click="answerQuestion({ index: b })">确认</div>
               </div>
               <div class="li-item" v-else-if="a.state === 1">
                 <div class="li-item-image">
@@ -66,13 +75,16 @@
                 </div>
                 <div class="li-item-text li-item-text-p">已驳回</div>
                 <div class="li-item-text li-item-text-p">
-                  {{ a.replyContent || "" }}
+                  {{ a.reason || "" }}
                 </div>
               </div>
+              <div class="li-item" v-else-if="a.state === 3">
+                <div class="li-item-text">待确认</div>
+              </div>
             </div>
-            <div class="li-buttons">
-              <div class="li-button li-button-blue">接受并修改</div>
-              <div class="li-button">不接受</div>
+            <div class="li-buttons" v-if="a.state === 2">
+              <div class="li-button li-button-blue" @click="updateQuestion({ index: b, value: 0, name: 'state' })">接受并修改</div>
+              <div class="li-button" @click="showMessageBox(b)">不接受</div>
             </div>
           </div>
         </div>
@@ -92,8 +104,10 @@ import {
   QuestionList
 } from "@/store/modules/order/modules/question/state";
 import { ActionTypes } from "@/store/modules/order/modules/question/actions";
+import { MutationTypes } from "@/store/modules/order/modules/question/mutations";
 
 import { BASE_IMAGE_URL } from "@/config";
+import { Message, MessageBox  } from "element-ui";
 
 @Component({
   name: "QuestionView",
@@ -109,10 +123,15 @@ export default class QuestionView extends Vue {
   @State("initOption")
   public initOption!: InitOption;
   @State("questionList")
-  public questionList!: Array<QuestionList>;
+  public questionList!: any | Array<QuestionList>;
 
   @Action(ActionTypes.GetQuestionList)
   public getQuestionList!: Function;
+  @Action(ActionTypes.AnswerQuestion)
+  public answerQuestion!: Function;
+
+  @Mutation(MutationTypes.UpdateQuestionList)
+  public updateQuestionList!: Function;
   // @Action(ActionTypes.UploadForm)
   // public uploadForm!: Function;
   // @Action(ActionTypes.UpdateReportData)
@@ -126,6 +145,36 @@ export default class QuestionView extends Vue {
 
   public created() {
     this.getQuestionList();
+  }
+
+  public updateQuestion(params: any) {
+    const { questionList } = this;
+    const { value, name, index } = params || {};
+    questionList[index][name] = value;
+    this.updateQuestionList(questionList);
+  }
+
+  public showMessageBox(b: number) {
+    MessageBox({
+      message: "",
+      title: "温馨提示",
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      showClose: true,
+      showInput: true,
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
+      center: true,
+      roundButton: false,
+      showConfirmButton: true,
+      showCancelButton: true
+    })
+      .then(({ action, value }: any) => {
+        if (action === "confirm") {
+          this.answerQuestion({ index: b, opinion: 0, replyContent: value })
+        }
+      })
+      .catch(() => {});
   }
   // public mounted() {}
 
@@ -178,9 +227,16 @@ export default class QuestionView extends Vue {
         background $color-bg-white
         min-height 190px
         margin-right 20px
+        display flex
+        flex-wrap wrap
+        justify-content flex-start
+        align-items flex-start
         &-icon
-          width 100%
+          width 60px
+          height 60px
+          background $color-bg
           object-fit contain
+          margin 10px
       &-text
         color $color-text-gray
         font-size 14px

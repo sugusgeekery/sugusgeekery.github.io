@@ -169,7 +169,7 @@ export default {
       const { reportList = [], initOption } = state;
       const { type, id } = initOption || {};
       const { index } = params || {};
-      const { biddingTitleId, machiningApprovalInfo, injectionApprovalInfo } = reportList[index] || {};
+      const { reportId, machiningApprovalInfo, injectionApprovalInfo } = reportList[index] || {};
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
@@ -179,14 +179,14 @@ export default {
             Message.error("请输入驳回原因");
             return;
           }
-          fn = await MachiningApprovalDfmReport({ supplierOrderId: id, approvalContent: machiningApprovalInfo.approvalContent, biddingTitleId, opinion: machiningApprovalInfo.opinion });
+          fn = await MachiningApprovalDfmReport({ approvalContent: machiningApprovalInfo.approvalContent, dfmReportId: reportId, opinion: machiningApprovalInfo.opinion });
           break;
         case Supplier.Injection:
           if (injectionApprovalInfo.opinion === 0 && !injectionApprovalInfo.approvalContent) {
             Message.error("请输入驳回原因");
             return;
           }
-          fn = await InjectApprovalDfmReport({ supplierOrderId: id, approvalContent: injectionApprovalInfo.approvalContent, biddingTitleId, opinion: injectionApprovalInfo.opinion });
+          fn = await InjectApprovalDfmReport({ approvalContent: injectionApprovalInfo.approvalContent, dfmReportId: reportId, opinion: injectionApprovalInfo.opinion });
           break;
       }
       const { success, message, data }: any = fn;

@@ -78,11 +78,6 @@ export default [
             component: () => import(/* webpackChunkName: "DesignView" */ "@/views/order/orderDetail/design/Index.vue")
           },
           {
-            path: "/order/designAcceptance",
-            name: "DesignAcceptanceView",
-            component: () => import(/* webpackChunkName: "DesignAcceptanceView" */ "@/views/order/orderDetail/design/DesignAcceptance.vue")
-          },
-          {
             path: "/order/process",
             name: "ProcessView",
             component: () => import(/* webpackChunkName: "ProcessView" */ "@/views/order/orderDetail/process/Index.vue")

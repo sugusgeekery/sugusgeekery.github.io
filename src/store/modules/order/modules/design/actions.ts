@@ -14,19 +14,17 @@ import {
   UploadForm
 } from "@/api";
 import {
-  // GetStep,
-  // GetStepDetail,
   GetDfmRealtime,
   GetMachinRealtime,
   GetInjectionRealtime,
-  ImportProgramme,
+  ImportDesign,
+  ApprovalDesign,
   GetBOMList,
-  ImportBom,
   GetBOMImageInfo,
-  ImportSpareImage,
-  UpdateSpareImage,
-  CheckProgramme,
-  CheckImage,
+  ImportBom,
+  ApprovalBom,
+  ImportBomImage,
+  ApprovalBomImage,
 } from "@/api/order/design";
 
 interface Store {
@@ -40,19 +38,24 @@ interface Store {
 
 export enum ActionTypes {
   Init = "Init",
-  // GetStep = "GetStep",
   GetStepDetail = "GetStepDetail",
-  ImportProgramme = "ImportProgramme",
+  ImportDesign = "ImportDesign",
+  ApprovalDesign = "ApprovalDesign",
+
   GetBOMList = "GetBOMList",
+  UpdateBOMPageSize = "UpdateBOMPageSize",
+  UpdateBOMPageNum = "UpdateBOMPageNum",
   ImportBom = "ImportBom",
+  ApprovalBom = "ApprovalBom",
+
   GetBOMImageInfo = "GetBOMImageInfo",
   CacluateBOMImageInfo = "CacluateBOMImageInfo",
+  UpdateBOMImagePageSize = "UpdateBOMImagePageSize",
+  UpdateBOMImagePageNum = "UpdateBOMImagePageNum",
   CheckBOMImage = "CheckBOMImage",
-  ImportSpareImage = "ImportSpareImage",
-  UpdateSpareImage = "UpdateSpareImage",
-  CheckProgramme = "CheckProgramme",
   CheckBOMImageAll = "CheckBOMImageAll",
-  CheckImage = "CheckImage",
+  ImportBomImage = "ImportBomImage",
+  ApprovalBomImage = "ApprovalBomImage"
 }
 
 export default {
@@ -62,33 +65,16 @@ export default {
     commit(MutationTypes.UpdateInitOption, params);
   },
 
-  // 获取方案设计进行到哪一步
-  // async [ActionTypes.GetStep](store: Store) {
-  //   try {
-  //     const { state, dispatch, commit } = store;
-  //     const { initOption } = state;
-  //     const { mouldNo } = initOption;
-  //     const { success, message, data }: any = await GetStep({ mouldNo });
-  //     if (success) {
-  //       commit(MutationTypes.UpdateDesign, { step: data || 0 });
-  //       dispatch(ActionTypes.GetStepDetail);
-  //     } else {
-  //       Message.error(message);
-  //     }
-  //   } catch (e) {
-  //     throw new Error(e);
-  //   }
-  // },
   // 获取当前进度详情
   async [ActionTypes.GetStepDetail](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { type, mouldProduceId } = initOption;
-      // const { success, message, data }: any = await GetStepDetail({ mouldNo });
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
+        case Supplier.Design:
           fn = await GetDfmRealtime({ mouldProduceId })
           break;
         case Supplier.Machining:
@@ -101,45 +87,7 @@ export default {
       const { success, message, data }: any = fn;
       if (success) {
         const { stepInfoList = [] } = data || {};
-        const { list, step } = (ls => {
-          const list = [];
-          let step = 1;
-          if (ls.length) {
-            for (const [a, b] of ls.entries()) {
-              const { stepName = "", isFinished = false } = b;
-              let text = "";
-              let reviewText = "";
-              let isLink = false;
-              switch (a + 1) {
-                case 1:
-                  text = "上传" + stepName;
-                  reviewText = "验收" + stepName;
-                  isLink = false;
-                  break;
-                case 2:
-                  text = "导入" + stepName;
-                  reviewText = "验收" + stepName;
-                  isLink = true;
-                  break;
-                case 3:
-                  text = "导入" + stepName;
-                  reviewText = "验收" + stepName;
-                  isLink = true;
-                  break;
-              }
-              step = isFinished ? a : step;
-              list.push({
-                ...b,
-                label: a + 1,
-                text,
-                reviewText,
-                isLink
-              })
-            }
-          }
-          return { list, step };
-        })(stepInfoList);
-        commit(MutationTypes.UpdateDesign, { stepInfoList: list, step });
+        commit(MutationTypes.UpdateDesign, { stepInfoList });
       } else {
         Message.error(message);
       }
@@ -149,13 +97,13 @@ export default {
   },
 
   // 上传3D图纸方案
-  async [ActionTypes.ImportProgramme](store: Store, params: any) {
+  async [ActionTypes.ImportDesign](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
       const { mouldProduceId } = initOption;
       const { threeFacePlanFileId } = params || {};
-      const { success, message, data }: any = await ImportProgramme({ mouldProduceId, threeFacePlanFileId });
+      const { success, message, data }: any = await ImportDesign({ mouldProduceId, threeFacePlanFileId });
       if (success) {
         dispatch(ActionTypes.GetStepDetail);
       } else {
@@ -165,16 +113,63 @@ export default {
       throw new Error(e);
     }
   },
+  // 通过或者驳回3D图纸
+  async [ActionTypes.ApprovalDesign](store: Store, params: any) {
+    const { state, dispatch, commit } = store;
+    const { opinion, role } = params || {};
+    const { initOption } = state;
+    const { mouldProduceId } = initOption;
+    const fn = async(datas = {}) => {
+      try {
+        const { success, message, data }: any = await ApprovalDesign(datas);
+        if (success) {
+          // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
+          dispatch(ActionTypes.GetStepDetail);
+        } else {
+          Message.error(message);
+        }
+      } catch (e) {
+        throw new Error(e);
+      }
+    };
+    if (opinion === 0) {
+      MessageBox({
+        message: "驳回原因描述",
+        title: "温馨提示",
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        showClose: false,
+        showInput: true,
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
+        center: true,
+        roundButton: false,
+        showConfirmButton: true,
+        showCancelButton: true
+      })
+        .then(({ action, value }: any = {}) => {
+          if (action === "confirm") {
+            const cause = value;
+            fn({ opinion, role, mouldProduceId, cause });
+          }
+        })
+        .catch(() => {});
+    } else {
+      fn({ opinion, role, mouldProduceId, cause: "" });
+    }
+  },
 
   // 获取BOM表
-  async [ActionTypes.GetBOMList](store: Store, showType: number = 0) {
+  async [ActionTypes.GetBOMList](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { mouldNo } = initOption;
-      const { success, message, data }: any = await GetBOMList({ mouldNo });
+      const { initOption, BOMTable } = state;
+      const { mouldProduceId } = initOption;
+      const { pageNum, pageSize } = BOMTable;
+      const { success, message, data }: any = await GetBOMList({ mouldProduceId, pageNum, pageSize });
       if (success) {
-        commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true, showType });
+        const { list = [], pages, total } = data || {};
+        commit(MutationTypes.UpdateBOMTable, { list, pages: Number(pages), total: Number(total), isShow: true });
       } else {
         Message.error(message);
       }
@@ -182,17 +177,43 @@ export default {
       throw new Error(e);
     }
   },
+  // 更新BOM表每页条数
+  [ActionTypes.UpdateBOMPageSize](store: Store, pageSize: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateBOMTable, { pageSize });
+    dispatch(ActionTypes.UpdateBOMPageNum, 1);
+  },
+  // 更新BOM表页码
+  [ActionTypes.UpdateBOMPageNum](store: Store, pageNum: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateBOMTable, { pageNum });
+    dispatch(ActionTypes.GetBOMList);
+  },
   // 上传BOM图表
-  async [ActionTypes.ImportBom](store: Store, file: any) {
+  async [ActionTypes.ImportBom](store: Store, bomFileId: string) {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
-      const { mouldNo } = initOption;
-      const formData = new FormData();
-      formData.append("file", file);
-      const { success, message, data }: any = await ImportBom(formData, { mouldNo });
+      const { mouldProduceId } = initOption;
+      const { success, message, data }: any = await ImportBom({ mouldProduceId, bomFileId });
       if (success) {
-        // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
+        dispatch(ActionTypes.GetBOMList);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 验收BOM图表
+  async [ActionTypes.ApprovalBom](store: Store, params: any) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { initOption } = state;
+      const { mouldProduceId } = initOption;
+      const { cause, opinion, role } = params || {};
+      const { success, message, data }: any = await ApprovalBom({ mouldProduceId, cause, opinion, role });
+      if (success) {
         dispatch(ActionTypes.GetBOMList);
       } else {
         Message.error(message);
@@ -202,21 +223,23 @@ export default {
     }
   },
 
-  // 获取BOM表零件图纸
-  async [ActionTypes.GetBOMImageInfo](store: Store, showType: number = 0) {
+  // 获取BOM表零件图纸2D3D
+  async [ActionTypes.GetBOMImageInfo](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { mouldNo } = initOption;
-      const { success, message, data }: any = await GetBOMImageInfo({ mouldNo });
+      const { initOption, BOMImageInfo } = state;
+      const { mouldProduceId } = initOption;
+      const { pageNum, pageSize } = BOMImageInfo;
+      const { success, message, data }: any = await GetBOMImageInfo({ mouldProduceId, pageNum, pageSize });
       if (success) {
-        const list = (ls => {
+        const { list = [], pages, total = 0 } = data || {};
+        const listTemp = (ls => {
           for (const [a, b] of ls.entries()) {
             ls[a]["isSelected"] = false;
           }
           return ls;
-        })(data || [])
-        commit(MutationTypes.UpdateBOMImageInfo, { list, isShow: true, showType });
+        })(list)
+        commit(MutationTypes.UpdateBOMImageInfo, { list: listTemp, pages: Number(pages), total: Number(total), isShow: true });
         dispatch(ActionTypes.CacluateBOMImageInfo);
       } else {
         Message.error(message);
@@ -238,6 +261,18 @@ export default {
       }
     }
     commit(MutationTypes.UpdateBOMImageInfo, { isAllSelected: total === list.length });
+  },
+  // 更新BOM零件图纸表每页条数
+  [ActionTypes.UpdateBOMImagePageSize](store: Store, pageSize: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateBOMImageInfo, { pageSize });
+    dispatch(ActionTypes.UpdateBOMImagePageNum, 1);
+  },
+  // 更新BOM零件图纸表页码
+  [ActionTypes.UpdateBOMImagePageNum](store: Store, pageNum: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateBOMImageInfo, { pageNum });
+    dispatch(ActionTypes.GetBOMImageInfo);
   },
   // 选择BOM零件图纸
   [ActionTypes.CheckBOMImage](store: Store, index: number) {
@@ -261,16 +296,14 @@ export default {
     dispatch(ActionTypes.CacluateBOMImageInfo);
   },
   // 上传BOM图表零件图纸
-  async [ActionTypes.ImportSpareImage](store: Store, file: any) {
+  async [ActionTypes.ImportBomImage](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
-      const { mouldNo } = initOption;
-      const formData = new FormData();
-      formData.append("file", file);
-      const { success, message, data }: any = await ImportSpareImage(formData, { mouldNo });
+      const { mouldProduceId } = initOption;
+      const { bomDesignFiles } = params;
+      const { success, message, data }: any = await ImportBomImage({ mouldProduceId, bomDesignFiles });
       if (success) {
-        // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
         dispatch(ActionTypes.GetBOMImageInfo);
       } else {
         Message.error(message);
@@ -279,133 +312,32 @@ export default {
       throw new Error(e);
     }
   },
-  // 上传BOM图表零件图纸
-  async [ActionTypes.UpdateSpareImage](store: Store, params: any) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { file, infoId } = params || {};
-      // const { initOption } = state;
-      // const { mouldNo } = initOption;
-      const formData = new FormData();
-      formData.append("file", file);
-      const { success, message, data }: any = await UpdateSpareImage(formData, { infoId });
-      if (success) {
-        // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
-        dispatch(ActionTypes.GetBOMImageInfo);
-      } else {
-        Message.error(message);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
-  
-  // 通过或者驳回
-  async [ActionTypes.CheckProgramme](store: Store, params: any) {
+  // 验收BOM图表零件图纸
+  async [ActionTypes.ApprovalBomImage](store: Store, params: any) {
     const { state, dispatch, commit } = store;
-    const { checkResult, step } = params || {};
-    const { initOption } = state;
-    const { mouldNo } = initOption;
-    const fn = async(datas = {}) => {
-      try {
-        const { success, message, data }: any = await CheckProgramme(datas);
-        if (success) {
-          // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
-          // dispatch(ActionTypes.GetBOMImageInfo);
-        } else {
-          Message.error(message);
-        }
-      } catch (e) {
-        throw new Error(e);
-      }
-    };
-    if (checkResult === 0) {
-      MessageBox({
-        message: "驳回原因描述",
-        title: "温馨提示",
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        showClose: false,
-        showInput: true,
-        closeOnClickModal: false,
-        closeOnPressEscape: false,
-        center: true,
-        roundButton: false,
-        showConfirmButton: true,
-        showCancelButton: true
-      })
-        .then(({ action, value }: any = {}) => {
-          if (action === "confirm") {
-            const describe = value;
-            fn({ checkResult, step, mouldNo, describe });
-          }
-        })
-        .catch(() => {});
-    } else {
-      fn({ checkResult, step, mouldNo, describe: "" });
-    }
-  },
-
-  // 通过或者驳回
-  async [ActionTypes.CheckImage](store: Store, params: any) {
-    const { state, dispatch, commit } = store;
-    const { checkResult } = params || {};
     const { initOption, BOMImageInfo } = state;
-    const { list = [] } = BOMImageInfo;
-    const { mouldNo } = initOption;
-    const infoIdList = (ls => {
+    const { list } = BOMImageInfo;
+    const { mouldProduceId } = initOption;
+    const { cause, opinion, role } = params || {};
+    const mouldBomListIds = (ls => {
       const arr = [];
-      if (ls.length) {
-        for (const [a, b] of ls.entries()) {
-          const { isSelected, id } = b;
-          if (isSelected) {
-            arr.push(id);
-          }
+      for (const v of ls) {
+        const { isSelected, id } = v;
+        if (isSelected) {
+          arr.push(id);
         }
       }
       return arr;
     })(list);
-    if (!infoIdList.length) {
-      Message.error("请至少选择一个图纸");
-      return;
-    }
-    const fn = async(datas = {}) => {
-      try {
-        const { success, message, data }: any = await CheckImage(datas);
-        if (success) {
-          // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
-          // dispatch(ActionTypes.GetBOMImageInfo);
-        } else {
-          Message.error(message);
-        }
-      } catch (e) {
-        throw new Error(e);
+    try {
+      const { success, message, data }: any = await ApprovalBomImage({ mouldProduceId, cause, mouldBomListIds, opinion });
+      if (success) {
+        dispatch(ActionTypes.GetBOMImageInfo);
+      } else {
+        Message.error(message);
       }
-    };
-    if (checkResult === 0) {
-      MessageBox({
-        message: "驳回原因描述",
-        title: "温馨提示",
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        showClose: false,
-        showInput: true,
-        closeOnClickModal: false,
-        closeOnPressEscape: false,
-        center: true,
-        roundButton: false,
-        showConfirmButton: true,
-        showCancelButton: true
-      })
-        .then(({ action, value }: any = {}) => {
-          if (action === "confirm") {
-            const describe = value;
-            fn({ checkResult, infoIdList, mouldNo, describe });
-          }
-        })
-        .catch(() => {});
-    } else {
-      fn({ checkResult, infoIdList, mouldNo, describe: "" });
+    } catch (e) {
+      throw new Error(e);
     }
   },
   

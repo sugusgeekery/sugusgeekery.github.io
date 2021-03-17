@@ -116,7 +116,7 @@
         class="item-cells"
         v-if="a.state && initOption.type === Supplier.Dfm || initOption.type === Supplier.Design"
       >
-        <div class="item-cell">
+        <div class="item-cell" v-if="a.machiningApprovalInfo">
           <div class="item-cell-text item-cell-text-black">加工方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -143,7 +143,7 @@
             待确认
           </div>
         </div>
-        <div class="item-cell">
+        <div class="item-cell" v-if="a.injectionApprovalInfo">
           <div class="item-cell-text item-cell-text-black">注塑方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -170,7 +170,7 @@
             待确认
           </div>
         </div>
-        <div class="item-cell">
+        <div class="item-cell" v-if="a.customerApprovalInfo">
           <div class="item-cell-text item-cell-text-black">客户方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -214,7 +214,7 @@
         class="item-cells"
         v-if="a.state && initOption.type === Supplier.Machining"
       >
-        <div class="item-cell">
+        <div class="item-cell" v-if="a.injectionApprovalInfo">
           <div class="item-cell-text item-cell-text-black">注塑方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -241,7 +241,7 @@
             待确认
           </div>
         </div>
-        <div class="item-cell">
+        <div class="item-cell" v-if="a.customerApprovalInfo">
           <div class="item-cell-text item-cell-text-black">客户方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -269,7 +269,7 @@
           </div>
         </div>
 
-        <div class="item-cell item-cell-line">
+        <div class="item-cell item-cell-line" v-if="a.machiningApprovalInfo">
           <div class="item-cell-text item-cell-text-black">加工方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -292,7 +292,7 @@
         </div>
         <div
           class="item-cell item-cell-line"
-          v-if="a.machiningApprovalInfo.approvalStatus === 2"
+          v-if="a.machiningApprovalInfo && a.machiningApprovalInfo.approvalStatus === 2"
         >
           <div
             class="item-cell-li"
@@ -347,7 +347,7 @@
         </div>
         <div
           class="item-cell-textarea"
-          v-if="a.machiningApprovalInfo.approvalStatus === 2"
+          v-if="a.machiningApprovalInfo && a.machiningApprovalInfo.approvalStatus === 2"
         >
           <textarea
             name=""
@@ -372,7 +372,7 @@
         class="item-cells"
         v-if="a.state && initOption.type === Supplier.Injection"
       >
-        <div class="item-cell">
+        <div class="item-cell" v-if="a.machiningApprovalInfo">
           <div class="item-cell-text item-cell-text-black">加工方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -399,7 +399,7 @@
             待确认
           </div>
         </div>
-        <div class="item-cell">
+        <div class="item-cell" v-if="a.customerApprovalInfo">
           <div class="item-cell-text item-cell-text-black">客户方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -426,7 +426,7 @@
             待确认
           </div>
         </div>
-        <div class="item-cell item-cell-line">
+        <div class="item-cell item-cell-line" v-if="a.injectionApprovalInfo">
           <div class="item-cell-text item-cell-text-black">注塑方：</div>
           <div
             class="item-cell-text item-cell-text-red"
@@ -449,7 +449,7 @@
         </div>
         <div
           class="item-cell item-cell-line"
-          v-if="a.injectionApprovalInfo.approvalStatus === 2"
+          v-if="a.injectionApprovalInfo && a.injectionApprovalInfo.approvalStatus === 2"
         >
           <div
             class="item-cell-li"
@@ -502,7 +502,7 @@
         </div>
         <div
           class="item-cell-textarea"
-          v-if="a.injectionApprovalInfo.approvalStatus === 2"
+          v-if="a.injectionApprovalInfo && a.injectionApprovalInfo.approvalStatus === 2"
         >
           <textarea
             name=""
