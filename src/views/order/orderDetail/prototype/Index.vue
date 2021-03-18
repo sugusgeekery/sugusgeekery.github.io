@@ -84,7 +84,7 @@
           </div>
         </div>
         <div class="li-title">邮寄后请填写快递信息</div>
-        <div class="li-row">
+        <div class="li-row" v-if="prototype.productSamplePostInfo">
           <div class="li-input">
             <input
               type="text"

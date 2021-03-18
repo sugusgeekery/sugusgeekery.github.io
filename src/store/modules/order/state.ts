@@ -157,10 +157,10 @@ const state: State = {
     // },
   ],
   remainTime: {
-    finishTime: "2021-04-14 15:12:44",
-    remainSeconds: 6865,
-    startTime: "2021-04-05 11:23:12",
-    state: 1
+    finishTime: "--",
+    remainSeconds: 0,
+    startTime: "--",
+    state: 0
   }
 };
 

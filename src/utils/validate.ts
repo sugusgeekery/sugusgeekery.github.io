@@ -25,6 +25,7 @@ export interface ValidateFailedParams {
 
 // 验证方法名
 export enum ValidateTypes {
+  ValidateNumber = "ValidateNumber",
   ValidatePhone = "ValidatePhone",
   ValidateTelephone = "ValidateTelephone",
   ValidateCode = "ValidateCode",
@@ -36,6 +37,24 @@ export enum ValidateTypes {
 }
 
 export default {
+  /**
+   * 数字类型验证
+   */
+   [ValidateTypes.ValidateNumber]: (params: ValidateParams) => {
+    const { value, success = function() {}, failed = function() {} } = params;
+    if (!value) {
+      failed({ value, message: "内容不能为空" });
+    } else {
+      const reg = /^[\d\.]+$/;
+      console.log(reg.test(value), value, reg)
+      if (reg.test(value)) {
+        success({ value,  message: "内容验证通过" });
+      } else {
+        failed({ value, message: "只能输入数字哦" });
+      }
+    }
+  },
+
   /**
    * 手机号码验证
    */

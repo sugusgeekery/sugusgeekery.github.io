@@ -14,7 +14,13 @@ import {
   UploadForm
 } from "@/api";
 import {
-  GetProducts
+  GetProducts,
+  NeedChangeDrawing,
+  DfmApprovalDrawing,
+  GetMouldDetail,
+  GetAllRepair,
+  CommitRepairMould,
+  
   // GetMachiningStepList,
   // GetInjectStepList,
   // FinishedMachiningStep,
@@ -35,11 +41,11 @@ interface Store {
 export enum ActionTypes {
   Init = "Init",
   GetMould = "GetMould",
-  // UploadForm = "UploadForm",
-  // DeleteReportFile = "DeleteReportFile",
-  // UpdateReportData = "UpdateReportData",
-  // CommitReport = "CommitReport",
-  // ApprovalDfmReport = "ApprovalDfmReport"
+  NeedChangeDrawing = "NeedChangeDrawing",
+  DfmApprovalDrawing = "DfmApprovalDrawing",
+  GetAllRepair = "GetAllRepair",
+  UpdateRepairMould = "UpdateRepairMould",
+  CommitRepairMould = "CommitRepairMould",
 }
 
 export default {
@@ -49,19 +55,19 @@ export default {
     commit(MutationTypes.UpdateInitOption, params);
   },
 
-  // // 获取流程步骤
+  // 获取模具信息
   async [ActionTypes.GetMould](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { initOption } = state;
-      const { type, biddingId } = initOption || {};
+      const { type, id, mouldProduceId } = initOption || {};
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
-          fn = await GetProducts({ biddingId });
+          fn = await GetProducts({ orderId: id });
           break;
         case Supplier.Machining:
-          // fn = await GetMachiningStepList({ biddingId });
+          fn = await GetMouldDetail({ mouldProduceId });
           break;
         case Supplier.Injection:
           // fn = await GetInjectStepList({ biddingId });
@@ -69,7 +75,118 @@ export default {
       }
       const { success, message, data }: any = fn;
       if (success) {
-        commit(MutationTypes.UpdateMould, data || []);
+        commit(MutationTypes.UpdateMould, data || {});
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 获取修模列表
+  async [ActionTypes.GetAllRepair](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { initOption } = state;
+      const { mouldProduceId } = initOption || {};
+      const { success, message, data }: any = await GetAllRepair({ mouldProduceId });
+      if (success) {
+        const repairMouldList = data || [];
+        commit(MutationTypes.UpdateRepairMouldList, repairMouldList);
+        commit(MutationTypes.UpdateRepairMouldIndex, repairMouldList.length - 1);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 更新修模数据
+  [ActionTypes.UpdateRepairMould](store: Store, params: { key: string; value: number | string; }) {
+    const { state, dispatch, commit } = store;
+    const { repairMouldIndex, repairMouldList } = state;
+    const { key, value } = params || {};
+    repairMouldList[repairMouldIndex][key] = value;
+    commit(MutationTypes.UpdateRepairMouldList, repairMouldList);
+  },
+  // 提交修模信息
+  async [ActionTypes.CommitRepairMould](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { mould, repairMouldIndex, repairMouldList } = state;
+      const { mouldId } = mould || {};
+      const { repairAmount, repairDeliveryDays, planDesignTime, machinTime, injectionTime } = repairMouldList[repairMouldIndex] || {};
+      if (!repairAmount) {
+        Message.error("请输入修模报价");
+        return;
+      }
+      if (!repairDeliveryDays) {
+        Message.error("请输入修模交期");
+        return;
+      }
+      if (!planDesignTime) {
+        Message.error("请输入设计交期");
+        return;
+      }
+      if (!machinTime) {
+        Message.error("请输入加工交期");
+        return;
+      }
+      if (!injectionTime) {
+        Message.error("请输入注塑交期");
+        return;
+      }
+      const { success, message, data }: any = await CommitRepairMould({ 
+        mouldId, 
+        amount: repairAmount, 
+        repairDeliveryDays, 
+        planDesignDays: planDesignTime, 
+        machinDays: machinTime, 
+        injectionDays: injectionTime
+      });
+      if (success) {
+        dispatch(ActionTypes.GetAllRepair);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 更新图纸
+  async [ActionTypes.NeedChangeDrawing](store: Store, params: { opinion: number; index: number }) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { initOption, mould } = state;
+      const { type, id } = initOption || {};
+      const { index = -1 } = params || {};
+      const { mouldProductList = [] } = mould || {};
+      const { productId = "" } = mouldProductList[index] || {};
+      const { success, message, data }: any = await NeedChangeDrawing({ productId });
+      if (success) {
+        dispatch(ActionTypes.GetMould);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 确认驳回图纸
+  async [ActionTypes.DfmApprovalDrawing](store: Store, params: { opinion: number; index: number }) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { initOption, mould } = state;
+      const { type, id } = initOption || {};
+      const { opinion = -1, index = -1 } = params || {};
+      const { mouldProductList = [] } = mould || {};
+      const { productId = "" } = mouldProductList[index] || {};
+      const { success, message, data }: any = await DfmApprovalDrawing({ productId, opinion });
+      if (success) {
+        dispatch(ActionTypes.GetMould);
       } else {
         Message.error(message);
       }

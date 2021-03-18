@@ -68,7 +68,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { success, message, data }: any = await GetToBeDeal();
       if (success) {
-        commit(MutationTypes.UpdateJobList, data || []);
+        const { list = [] } = data || {};
+        commit(MutationTypes.UpdateJobList, list);
       } else {
         Message.error(message);
       }

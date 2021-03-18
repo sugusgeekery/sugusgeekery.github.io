@@ -164,7 +164,7 @@ export default class HomeTemplate extends Vue {
   public getToBeDeal!: Function;
 
   public created() {
-    // this.getStatistics();
+    this.getStatistics();
     this.getToBeDeal();
   }
 }
@@ -391,9 +391,9 @@ export default class HomeTemplate extends Vue {
           min-width 180px
           min-height 180px
           &-icon
-            width 130px
-            height 130px
+            height 100px
             object-fit contain
+            margin 10px auto 5px auto
           &-text
             font-size 14px
             color $color-text-black
