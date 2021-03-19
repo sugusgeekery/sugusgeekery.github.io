@@ -53,6 +53,8 @@
             v-if="a.fileName"
           >
             {{ a.fileName || "" }}
+            <!-- <el-image src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJUXwG4RBCSRnOIqibcJbv9JdwRM0yG1lkJ66SnlnKoEnpx7PT0kIyBculMTQ5RiaXWNThIxVVI52jg/132" :preview-src-list="['https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJUXwG4RBCSRnOIqibcJbv9JdwRM0yG1lkJ66SnlnKoEnpx7PT0kIyBculMTQ5RiaXWNThIxVVI52jg/132']"></el-image>
+            <el-image :preview-src-list="[BASE_IMAGE_URL + a.filePath]"></el-image> -->
           </span>
           <span
             class="design-item-content-text-gray design-item-content-text-pointer"
@@ -145,6 +147,7 @@ import downloadByUrl from "@/utils/downloadByUrl";
 import { Message, MessageBox } from "element-ui";
 
 import { UploadForm } from "@/api";
+import { BASE_IMAGE_URL } from "@/config";
 
 import BOMTableModel from "./models/BOMTableModel.vue";
 import BOMImageInfoModel from "./models/BOMImageInfoModel.vue";
@@ -157,6 +160,8 @@ import BOMImageInfoModel from "./models/BOMImageInfoModel.vue";
   }
 })
 export default class DesignView extends Vue {
+   // 图片域名
+  public BASE_IMAGE_URL = BASE_IMAGE_URL;
   // 供应商类型列表
   public Supplier = Supplier;
 
