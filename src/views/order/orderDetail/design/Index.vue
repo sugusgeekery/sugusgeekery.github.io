@@ -9,9 +9,9 @@
         <div
           class="design-item-label-number"
           :class="{
-            'design-item-label-number-gray': a.isFinished === null,
-            'design-item-label-number-blue': a.isFinished === 0,
-            'design-item-label-number-white': a.isFinished === 1
+            'design-item-label-number-gray': a.approveStatus === 0,
+            'design-item-label-number-blue': a.approveStatus === 1,
+            'design-item-label-number-white': a.approveStatus > 1
           }"
         >
           {{ b + 1 }}
@@ -20,8 +20,8 @@
           class="design-item-label-line"
           v-if="b < design.stepInfoList.length - 1"
           :class="{
-            'design-item-label-line-blue': a.isFinished === 0 || a.isFinished === 1,
-            'design-item-label-line-gray': a.isFinished === null
+            'design-item-label-line-blue': a.approveStatus > 0,
+            'design-item-label-line-gray': a.approveStatus === 0
           }"
         ></div>
       </div>
@@ -30,23 +30,23 @@
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="Supplier.Dfm === initInfo.type"
-            @click="a.isFinished === 0 || a.isFinished === 1 ? alertModel({ label: b + 1, isEdit: false }) : null"
+            @click="b > 0 ? alertModel({ label: b + 1, isEdit: false }) : null"
           >
-            {{ a.isFinished === 0 ? "查看" : a.isFinished === 1 ? "查看" : "" }}{{ a.stepName }}
+            {{ a.approveStatus === 2 || a.approveStatus === 3 ? "查看" : "" }}{{ a.stepName }}
           </span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="Supplier.Design === initInfo.type"
-            @click="a.isFinished === 0 || a.isFinished === 1 ? alertModel({ label: b + 1, isEdit: a.isFinished === 0 }) : null"
+            @click="b > 0 ? alertModel({ label: b + 1, isEdit: a.approveStatus === 0 }) : null"
           >
-            {{ a.isFinished === 0 ? (b > 0 ? "导入" : "上传") : a.isFinished === 1 ? "查看" : ""}}{{ a.stepName }}
+            {{ a.approveStatus === 0 ? (b > 0 ? "导入" : "上传") : a.approveStatus > 0 ? "查看" : ""}}{{ a.stepName }}
           </span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type"
-            @click="a.isFinished === 0 || a.isFinished === 1 ? alertModel({ label: b + 1, isEdit: a.isFinished === 0 }) : null"
+            @click="b > 0 ? alertModel({ label: b + 1, isEdit: a.approveStatus === 1 }) : null"
           >
-            {{ a.isFinished === 0 ? "验收" : a.isFinished === 1 ? "查看" : "" }}{{ a.stepName }}
+            {{ a.approveStatus === 1 ? "验收" : a.approveStatus > 1 ? "查看" : "" }}{{ a.stepName }}
           </span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
@@ -71,7 +71,6 @@
           class="design-item-content-text"
           v-for="(c, d) in a.approvalInfoList"
           :key="'_方案设计步骤详情对应处理方_' + d"
-          v-show="Supplier.Design === initInfo.type || Supplier.Dfm === initInfo.type"
         >
           <span class="design-item-content-text-black" v-if="c.type == 1">
             加工方：
@@ -114,7 +113,7 @@
         </div>
 
 
-        <div class="design-item-content-button" v-if="(Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type) && a.isFinished === 0 && b === 0">
+        <div class="design-item-content-button" v-if="(Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type) && a.approveStatus === 1 && b === 0 && a.isEdit">
           <span
             class="design-item-content-button-text design-item-content-button-text-blue"
             @click="approvalDesign({ opinion: 1, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"

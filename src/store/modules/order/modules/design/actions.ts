@@ -87,7 +87,33 @@ export default {
       const { success, message, data }: any = fn;
       if (success) {
         const { stepInfoList = [] } = data || {};
-        commit(MutationTypes.UpdateDesign, { stepInfoList });
+        const stepInfoListTemp = (stepInfoList => {
+          for (const [a, b] of stepInfoList.entries()) {
+            const { approvalInfoList = [] } = b;
+            stepInfoList[a].isEdit = true;
+            if (approvalInfoList.length) {
+              for (const [c, d] of approvalInfoList.entries()) {
+                switch(type) {
+                  case Supplier.Dfm:
+                  case Supplier.Design:
+                    break;
+                  case Supplier.Machining:
+                    if (d.type == 1) {
+                      stepInfoList[a].isEdit = false;
+                    }
+                    break;
+                  case Supplier.Injection:
+                    if (d.type == 2) {
+                      stepInfoList[a].isEdit = false;
+                    }
+                    break;
+                }
+              }
+            }
+          }
+          return stepInfoList;
+        })(stepInfoList);
+        commit(MutationTypes.UpdateDesign, { stepInfoList: stepInfoListTemp });
       } else {
         Message.error(message);
       }
