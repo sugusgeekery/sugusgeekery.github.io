@@ -42,12 +42,14 @@ export enum ActionTypes {
   ImportDesign = "ImportDesign",
   ApprovalDesign = "ApprovalDesign",
 
+  GetBOMListCtl = "GetBOMListCtl",
   GetBOMList = "GetBOMList",
   UpdateBOMPageSize = "UpdateBOMPageSize",
   UpdateBOMPageNum = "UpdateBOMPageNum",
   ImportBom = "ImportBom",
   ApprovalBom = "ApprovalBom",
 
+  GetBOMImageInfoCtl = "GetBOMImageInfoCtl",
   GetBOMImageInfo = "GetBOMImageInfo",
   CacluateBOMImageInfo = "CacluateBOMImageInfo",
   UpdateBOMImagePageSize = "UpdateBOMImagePageSize",
@@ -186,7 +188,13 @@ export default {
   },
 
   // 获取BOM表
-  async [ActionTypes.GetBOMList](store: Store, isEdit: boolean = false) {
+  [ActionTypes.GetBOMListCtl](store: Store, isEdit: boolean = false) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateBOMTable, { isEdit });
+    dispatch(ActionTypes.UpdateBOMPageNum, 1);
+  },
+  // 获取BOM表
+  async [ActionTypes.GetBOMList](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { initInfo, BOMTable } = state;
@@ -195,7 +203,7 @@ export default {
       const { success, message, data }: any = await GetBOMList({ mouldProduceId, pageNum, pageSize });
       if (success) {
         const { list = [], pages, total } = data || {};
-        commit(MutationTypes.UpdateBOMTable, { list, pages: Number(pages), total: Number(total), isShow: true, isEdit });
+        commit(MutationTypes.UpdateBOMTable, { list, pages: Number(pages), total: Number(total), isShow: true });
       } else {
         Message.error(message);
       }
@@ -250,7 +258,13 @@ export default {
   },
 
   // 获取BOM表零件图纸2D3D
-  async [ActionTypes.GetBOMImageInfo](store: Store, isEdit: boolean = false) {
+  [ActionTypes.GetBOMImageInfoCtl](store: Store, isEdit: boolean = false) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateBOMImageInfo, { isEdit });
+    dispatch(ActionTypes.UpdateBOMImagePageNum, 1);
+  },
+  // 获取BOM表零件图纸2D3D
+  async [ActionTypes.GetBOMImageInfo](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { initInfo, BOMImageInfo } = state;
@@ -265,7 +279,7 @@ export default {
           }
           return ls;
         })(list);
-        commit(MutationTypes.UpdateBOMImageInfo, { list: listTemp, pages: Number(pages), total: Number(total), isShow: true, isEdit });
+        commit(MutationTypes.UpdateBOMImageInfo, { list: listTemp, pages: Number(pages), total: Number(total), isShow: true });
         dispatch(ActionTypes.CacluateBOMImageInfo);
       } else {
         Message.error(message);

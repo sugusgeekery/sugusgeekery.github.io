@@ -30,7 +30,7 @@
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="Supplier.Dfm === initInfo.type"
-            @click="b > 0 ? alertModel({ label: b + 1, isEdit: false }) : null"
+            @click="b > 0 && a.approveStatus > 1 ? alertModel({ label: b + 1, isEdit: false }) : null"
           >
             {{ a.approveStatus === 2 || a.approveStatus === 3 ? "查看" : "" }}{{ a.stepName }}
           </span>
@@ -44,7 +44,7 @@
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type"
-            @click="b > 0 ? alertModel({ label: b + 1, isEdit: a.approveStatus === 1 }) : null"
+            @click="b > 0 && a.approveStatus > 0 ? alertModel({ label: b + 1, isEdit: a.approveStatus === 1 }) : null"
           >
             {{ a.approveStatus === 1 ? "验收" : a.approveStatus > 1 ? "查看" : "" }}{{ a.stepName }}
           </span>
@@ -172,11 +172,11 @@ export default class DesignView extends Vue {
 
   @Action(ActionTypes.GetStepDetail)
   public getStepDetail!: Function;
-  @Action(ActionTypes.GetBOMList)
+  @Action(ActionTypes.GetBOMListCtl)
   public getBOMList!: Function;
   @Action(ActionTypes.ImportDesign)
   public importDesign!: Function;
-  @Action(ActionTypes.GetBOMImageInfo)
+  @Action(ActionTypes.GetBOMImageInfoCtl)
   public getBOMImageInfo!: Function;
   @Action(ActionTypes.ApprovalDesign)
   public approvalDesign!: Function;
