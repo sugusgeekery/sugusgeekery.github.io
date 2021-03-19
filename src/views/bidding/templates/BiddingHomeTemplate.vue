@@ -172,6 +172,13 @@
                       竞价
                     </span>
                   </div>
+                  <div class="item-flex" v-else>
+                    <span
+                      class="item-text"
+                    >
+                      竞价中
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -190,7 +190,6 @@ export default {
     try {
       const { state, dispatch, commit } = store;
       const { userInfo, initInfo, companyInfo } = state;
-      console.log(userInfo);
       const { email, headImgUrl, phoneNo, userName, sex, telephoneNo } = userInfo || {};
       if (!headImgUrl) {
         Message.error("请上传头像！");
@@ -207,7 +206,7 @@ export default {
       const { success, message, data }: any = await SaveUserInfo({ email, headImgUrl, mobilePhoneNo: phoneNo, realName: userName, sex, telephoneNo });
       if (success) {
         // commit(MutationTypes.UpdateUserInfo, { ...(data || {})});
-        Message.error(message);
+        Message.success(message);
         if (initInfo.type === 1) {
           dispatch(ActionTypes.SaveCompanyInfo);
         }
@@ -270,7 +269,7 @@ export default {
       const { success, message, data }: any = await SaveCompanyInfo({ address, cityId, companyName, companyPhoneNo, description, districtId, officialWebsite, provinceId, publishTime, staffSize });
       if (success) {
         // commit(MutationTypes.UpdateUserInfo, data || {});
-        Message.error(message);
+        Message.success(message);
       } else {
         Message.error(message);
       }
@@ -325,10 +324,8 @@ export default {
       }
       const { success, message, data }: any = await SavePersonQualifyInfo({ idcardBackImgId, idcardFrontImgId, labelCodeList });
       if (success) {
-        console.log(1)
         Message.success(message);
       } else {
-        console.log(2)
         Message.error(message);
       }
     } catch (e) {
