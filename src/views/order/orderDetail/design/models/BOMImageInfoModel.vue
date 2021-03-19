@@ -19,7 +19,7 @@
         ></div>
       </div>
       <div class="model-body">
-        <div class="model-row" v-if="Supplier.Design === initInfo.type">
+        <div class="model-row" v-if="(Supplier.Design === initInfo.type) && BOMImageInfo.isEdit">
           <div class="model-flex">
             <input
               type="file"
@@ -101,7 +101,7 @@
                   <span
                     class="model-text model-text-gray model-text-arrow"
                     @click="checkLiFile(a.twoFaceFileId, a.twoFaceFileName)"
-                    v-if="a.state === 3"
+                    v-if="a.state === 3 && BOMImageInfo.isEdit"
                   >
                     更新
                     <span class="model-text-tip"></span>
@@ -122,7 +122,7 @@
                   <span class="model-text model-text-blue">{{ a.threeFaceFileName }}</span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
-                    v-if="a.state === 3"
+                    v-if="a.state === 3 && BOMImageInfo.isEdit"
                     @click="checkLiFile(a.threeFaceFileId, a.threeFaceFileName)"
                   >
                     更新
@@ -174,7 +174,7 @@
             </el-pagination>
           </div>
         </div>
-        <div class="model-buttons" v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type">
+        <div class="model-buttons" v-if="(Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type) && BOMImageInfo.isEdit">
           <div
             class="model-button model-button-blue"
             @click="this.approvalBomImage({ cause: '', opinion: 1, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"

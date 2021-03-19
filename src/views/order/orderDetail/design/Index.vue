@@ -29,13 +29,24 @@
         <div class="design-item-content-text">
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
-            v-if="b > 0"
-            @click="a.isFinished === 0 ? alertModel(b + 1) : null"
+            v-if="Supplier.Dfm === initInfo.type"
+            @click="a.isFinished === 0 || a.isFinished === 1 ? alertModel({ label: b + 1, isEdit: false }) : null"
           >
-            {{ Supplier.Design === initInfo.type ? "导入" : Supplier.Dfm === initInfo.type ? "查看" : "验收" }}{{ a.stepName }}
+            {{ a.isFinished === 0 ? "查看" : a.isFinished === 1 ? "查看" : "" }}{{ a.stepName }}
           </span>
-          <span class="design-item-content-text-black" v-else>
-            {{ Supplier.Design === initInfo.type ? "上传" : Supplier.Dfm === initInfo.type ? "查看" : "验收" }}{{ a.stepName }}
+          <span
+            class="design-item-content-text-blue design-item-content-text-pointer"
+            v-if="Supplier.Design === initInfo.type"
+            @click="a.isFinished === 0 || a.isFinished === 1 ? alertModel({ label: b + 1, isEdit: a.isFinished === 0 }) : null"
+          >
+            {{ a.isFinished === 0 ? (b > 0 ? "导入" : "上传") : a.isFinished === 1 ? "查看" : ""}}{{ a.stepName }}
+          </span>
+          <span
+            class="design-item-content-text-blue design-item-content-text-pointer"
+            v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type"
+            @click="a.isFinished === 0 || a.isFinished === 1 ? alertModel({ label: b + 1, isEdit: a.isFinished === 0 }) : null"
+          >
+            {{ a.isFinished === 0 ? "验收" : a.isFinished === 1 ? "查看" : "" }}{{ a.stepName }}
           </span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
@@ -203,11 +214,12 @@ export default class DesignView extends Vue {
       "驳回原因"
     );
   }
-  public alertModel(label: number) {
+  public alertModel(params: { label: number; isEdit: boolean;}) {
+    const { label = 0, isEdit = false } = params;
     if (label === 2) {
-      this.getBOMList();
+      this.getBOMList(isEdit);
     } else if (label === 3) {
-      this.getBOMImageInfo();
+      this.getBOMImageInfo(isEdit);
     }
   }
 }

@@ -160,7 +160,7 @@ export default {
   },
 
   // 获取BOM表
-  async [ActionTypes.GetBOMList](store: Store) {
+  async [ActionTypes.GetBOMList](store: Store, isEdit: boolean = false) {
     try {
       const { state, dispatch, commit } = store;
       const { initInfo, BOMTable } = state;
@@ -169,7 +169,7 @@ export default {
       const { success, message, data }: any = await GetBOMList({ mouldProduceId, pageNum, pageSize });
       if (success) {
         const { list = [], pages, total } = data || {};
-        commit(MutationTypes.UpdateBOMTable, { list, pages: Number(pages), total: Number(total), isShow: true });
+        commit(MutationTypes.UpdateBOMTable, { list, pages: Number(pages), total: Number(total), isShow: true, isEdit });
       } else {
         Message.error(message);
       }
@@ -224,7 +224,7 @@ export default {
   },
 
   // 获取BOM表零件图纸2D3D
-  async [ActionTypes.GetBOMImageInfo](store: Store) {
+  async [ActionTypes.GetBOMImageInfo](store: Store, isEdit: boolean = false) {
     try {
       const { state, dispatch, commit } = store;
       const { initInfo, BOMImageInfo } = state;
@@ -239,7 +239,7 @@ export default {
           }
           return ls;
         })(list);
-        commit(MutationTypes.UpdateBOMImageInfo, { list: listTemp, pages: Number(pages), total: Number(total), isShow: true });
+        commit(MutationTypes.UpdateBOMImageInfo, { list: listTemp, pages: Number(pages), total: Number(total), isShow: true, isEdit });
         dispatch(ActionTypes.CacluateBOMImageInfo);
       } else {
         Message.error(message);

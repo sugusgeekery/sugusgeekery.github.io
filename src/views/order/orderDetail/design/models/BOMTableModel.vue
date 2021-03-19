@@ -20,7 +20,7 @@
       </div>
       <div class="model-body">
         <div class="model-row">
-          <div class="model-flex" v-if="Supplier.Design === initInfo.type">
+          <div class="model-flex" v-if="(Supplier.Design === initInfo.type) && BOMTable.isEdit">
             <input
               type="file"
               name="file"
@@ -79,7 +79,7 @@
             </el-pagination>
           </div>
         </div>
-        <div class="model-buttons" v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type">
+        <div class="model-buttons" v-if="(Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type) && BOMTable.isEdit">
           <div
             class="model-button model-button-blue"
             @click="approvalBom({ cause: '', opinion: 1, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"

@@ -21,7 +21,8 @@ const state: State = {
     pageSizes: [10, 20, 50, 100, 200],
     total: 0,
     pages: 0,
-    list: []
+    list: [],
+    isEdit: false,
   },
   BOMImageInfo: {
     isShow: false,
@@ -31,7 +32,8 @@ const state: State = {
     total: 0,
     pages: 0,
     bomDesignFiles: [],
-    list: []
+    list: [],
+    isEdit: false,
   },
 };
 
