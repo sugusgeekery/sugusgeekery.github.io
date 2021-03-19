@@ -174,7 +174,7 @@
                   </div>
                   <div class="item-flex" v-else>
                     <span
-                      class="item-text"
+                      class="item-button"
                     >
                       竞价中
                     </span>

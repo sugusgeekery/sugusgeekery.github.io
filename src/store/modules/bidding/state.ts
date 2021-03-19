@@ -118,7 +118,7 @@ const state: State = {
     },
     {
       text: "我的中标",
-      type: 0,
+      type: 1,
       pageNum: 1,
       pageSize: 10,
       pageSizes: [10, 20, 50, 100],
@@ -144,7 +144,7 @@ const state: State = {
     },
     {
       text: "竞价历史",
-      type: 1,
+      type: 0,
       pageNum: 1,
       pageSize: 10,
       pageSizes: [10, 20, 50, 100],
