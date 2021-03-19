@@ -1,14 +1,14 @@
 
 export interface State {
-  initOption: any | InitOption;
+  initInfo: any | InitInfo;
   questionList: any | Array<QuestionList>;
 };
 
-export interface InitOption {};
+export interface InitInfo {};
 export interface QuestionList {};
 
 const state: State = {
-  initOption: {},
+  initInfo: {},
   questionList: [
     // {
     //   "filePath": "abc.jpg",

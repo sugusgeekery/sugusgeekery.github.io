@@ -1,5 +1,5 @@
-// 项目名称 hotpick-supplier-web （好品供应商端）
-const APPLICATION_NAME = "hotpick-supplier-web";
+// 项目名称 supplier （好品供应商端）
+const APPLICATION_NAME = "supplier";
 
 // 项目版本号
 const APPLICATION_VERSION = "0.1.0";

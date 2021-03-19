@@ -1,18 +1,18 @@
 
 export interface State {
-  initOption: any | InitOption;
+  initInfo: any | InitInfo;
   design: any | Design;
   BOMTable: any | BOMTable;
   BOMImageInfo: any | BOMImageInfo;
 };
 
-export interface InitOption {};
+export interface InitInfo {};
 export interface Design {};
 export interface BOMTable {};
 export interface BOMImageInfo {};
 
 const state: State = {
-  initOption: {},
+  initInfo: {},
   design: {},
   BOMTable: {
     isShow: false,

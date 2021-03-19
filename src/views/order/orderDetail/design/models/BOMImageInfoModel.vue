@@ -3,13 +3,13 @@
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
-          <div class="model-title-text" v-if="Supplier.Dfm === initOption.type">
+          <div class="model-title-text" v-if="Supplier.Dfm === initInfo.type">
             查看BOM表对应零件的2D、3D图纸
           </div>
-          <div class="model-title-text" v-else-if="Supplier.Design === initOption.type">
+          <div class="model-title-text" v-else-if="Supplier.Design === initInfo.type">
             导入BOM表对应零件的2D、3D图纸
           </div>
-          <div class="model-title-text" v-else-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type">
+          <div class="model-title-text" v-else-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type">
             验收BOM表对应零件的2D、3D图纸
           </div>
         </div>
@@ -19,7 +19,7 @@
         ></div>
       </div>
       <div class="model-body">
-        <div class="model-row" v-if="Supplier.Design === initOption.type">
+        <div class="model-row" v-if="Supplier.Design === initInfo.type">
           <div class="model-flex">
             <input
               type="file"
@@ -49,7 +49,7 @@
             <table>
               <tr>
                 <th
-                  v-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type"
+                  v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type"
                   @click="checkBOMImageAll()"
                 >
                   <img
@@ -77,7 +77,7 @@
                 v-for="(a, b) in BOMImageInfo.list"
                 :key="'_BOM表零件图纸_' + b"
               >
-                <td v-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type" @click="checkBOMImage(b)">
+                <td v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type" @click="checkBOMImage(b)">
                   <img
                     class="model-icon"
                     v-if="a.isSelected"
@@ -154,10 +154,10 @@
             </el-pagination>
           </div>
         </div>
-        <div class="model-buttons" v-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type">
+        <div class="model-buttons" v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type">
           <div
             class="model-button model-button-blue"
-            @click="this.approvalBomImage({ cause: '', opinion: 1, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })"
+            @click="this.approvalBomImage({ cause: '', opinion: 1, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"
           >
             通过
           </div>
@@ -179,7 +179,7 @@ import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/design");
 
 import { Supplier } from "@/store/modules/order/state";
-import { InitOption } from "@/store/modules/order/modules/design/state";
+import { InitInfo } from "@/store/modules/order/modules/design/state";
 import { ActionTypes } from "@/store/modules/order/modules/design/actions";
 import { MutationTypes } from "@/store/modules/order/modules/design/mutations";
 
@@ -196,8 +196,8 @@ export default class BOMImageInfoModel extends Vue {
   // 供应商类型列表
   public Supplier = Supplier;
 
-  @State("initOption")
-  public initOption!: any | InitOption;
+  @State("initInfo")
+  public initInfo!: any | InitInfo;
   @State("BOMImageInfo")
   public BOMImageInfo!: any;
 
@@ -281,7 +281,7 @@ export default class BOMImageInfoModel extends Vue {
   
 
   public showMessageBox() {
-    const { Supplier, initOption } = this;
+    const { Supplier, initInfo } = this;
     MessageBox({
       message: "",
       title: "温馨提示",
@@ -298,7 +298,7 @@ export default class BOMImageInfoModel extends Vue {
     })
       .then(({ action, value }: any) => {
         if (action === "confirm") {
-          this.approvalBomImage({ cause: value, opinion: 0, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 });
+          this.approvalBomImage({ cause: value, opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 });
         }
       })
       .catch(() => {});

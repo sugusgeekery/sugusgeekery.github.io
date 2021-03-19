@@ -1,7 +1,7 @@
 import { RootState } from "@/store/state";
 import rootGetters, { RootGetterTypes } from "@/store/getters";
 import { Supplier } from "../../state";
-import { State, InitOption } from "./state";
+import { State, InitInfo } from "./state";
 import getters, { GetterTypes } from "./getters";
 import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
@@ -43,17 +43,17 @@ export enum ActionTypes {
 
 export default {
   // 初始化
-  [ActionTypes.Init](store: Store, params: InitOption) {
+  [ActionTypes.Init](store: Store, params: InitInfo) {
     const { state, dispatch, commit } = store;
-    commit(MutationTypes.UpdateInitOption, params);
+    commit(MutationTypes.UpdateInitInfo, params);
   },
 
   // 获取DFM报告或验收列表
   async [ActionTypes.GetDfmReportList](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { type, id } = initOption || {};
+      const { initInfo } = state;
+      const { type, id } = initInfo || {};
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
@@ -70,6 +70,7 @@ export default {
       const { success, message, data }: any = fn;
       if (success) {
         commit(MutationTypes.UpdateReportList, data || []);
+        return;
       } else {
         Message.error(message);
       }
@@ -129,8 +130,8 @@ export default {
   async [ActionTypes.CommitReport](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
-      const { reportList = [], initOption } = state;
-      const { id } = initOption || {};
+      const { reportList = [], initInfo } = state;
+      const { id } = initInfo || {};
       const { index } = params || {};
       const { describe, reportTitleId, fileList } = reportList[index] || {};
       const images = (fileList => {
@@ -166,8 +167,8 @@ export default {
   async [ActionTypes.ApprovalDfmReport](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
-      const { reportList = [], initOption } = state;
-      const { type, id } = initOption || {};
+      const { reportList = [], initInfo } = state;
+      const { type, id } = initInfo || {};
       const { index } = params || {};
       const { reportId, machiningApprovalInfo, injectionApprovalInfo } = reportList[index] || {};
       let fn = {};

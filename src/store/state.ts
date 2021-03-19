@@ -2,6 +2,7 @@ import { Dictionary } from 'vue-router/types/router';
 
 // 状态管理对象
 export interface RootState {
+  initInfo: any | InitInfo;
   loginInfo: LoginInfo;
   accountInfo: AccountInfo;
   verificationCodeNumber: number;
@@ -15,6 +16,8 @@ export interface RootState {
   navigationList: Navigation[];
 };
 
+// 初始化参数
+export interface InitInfo {};
 // 登录信息
 export interface LoginInfo {
   accessToken: string;
@@ -51,6 +54,7 @@ export interface Navigation {
 };
 
 const state: RootState = {
+  initInfo: {},
   loginInfo: {
     accessToken: "",
     exist: false,

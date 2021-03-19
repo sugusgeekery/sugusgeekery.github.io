@@ -7,7 +7,7 @@ import { Dispatch, Commit, GetterTree } from "vuex";
 
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
-// import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
   GetStatistics,
@@ -24,11 +24,18 @@ interface Store {
 }
 
 export enum ActionTypes {
+  Init = "Init",
   GetStatistics = "GetStatistics",
   GetToBeDeal = "GetToBeDeal",
 }
 
 export default {
+  // 初始化模块默认值
+  [ActionTypes.Init](store: Store, params: any) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateInitInfo, { ...(params || {}) });
+  },
+
   // 获取个人统计信息
   async [ActionTypes.GetStatistics](store: Store) {
     try {

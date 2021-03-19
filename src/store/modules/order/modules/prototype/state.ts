@@ -1,14 +1,14 @@
 
 export interface State {
-  initOption: any | InitOption;
+  initInfo: any | InitInfo;
   prototype: any | Prototype;
 };
 
-export interface InitOption {};
+export interface InitInfo {};
 export interface Prototype {};
 
 const state: State = {
-  initOption: {},
+  initInfo: {},
   prototype: {}
 };
 

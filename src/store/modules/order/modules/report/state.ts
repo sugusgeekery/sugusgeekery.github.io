@@ -1,15 +1,15 @@
 
 export interface State {
-  initOption: any | InitOption;
+  initInfo: any | InitInfo;
   timestamp: number;
   reportList: any | Array<ReportList>;
 };
 
-export interface InitOption {};
+export interface InitInfo {};
 export interface ReportList {};
 
 const state: State = {
-  initOption: {},
+  initInfo: {},
   timestamp: 0,
   reportList: [
     // {

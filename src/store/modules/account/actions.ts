@@ -1,13 +1,13 @@
 import { RootState } from "@/store/state";
 import rootGetters, { RootGetterTypes } from "@/store/getters";
-import { DefInfo, State } from "./state";
+import { InitInfo, State } from "./state";
 import getters, { GetterTypes } from "./getters";
 import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
 
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
-// import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
   UploadForm
@@ -53,24 +53,24 @@ export enum ActionTypes {
 
 export default {
   // 初始化信息模块默认值
-  [ActionTypes.GetInformationDefInfo](store: Store, params: any | DefInfo) {
+  [ActionTypes.GetInformationDefInfo](store: Store, params: any | InitInfo) {
     const { state, rootState, dispatch, commit } = store;
     const { loginInfo, accountInfo } = rootState;
     const { type = 0 } = accountInfo || {};
     const typeStr = type === 1 ? "公司" : type === 2 ? "个人" : "";
-    commit(MutationTypes.UpdateDefInfo, { type, typeStr, loginInfo, accountInfo, ...params });
+    commit(MutationTypes.UpdateInitInfo, { type, typeStr, loginInfo, accountInfo, ...params });
     dispatch(ActionTypes.GetProvinceCityCountry);
     dispatch(ActionTypes.GetUserInfo);
     dispatch(ActionTypes.GetCompanyInfo);
   },
 
   // 初始化资质模块默认值
-  [ActionTypes.GetQualifyDefInfo](store: Store, params: any | DefInfo) {
+  [ActionTypes.GetQualifyDefInfo](store: Store, params: any | InitInfo) {
     const { state, rootState, dispatch, commit } = store;
     const { loginInfo, accountInfo } = rootState;
     const { type = 0 } = accountInfo || {};
     const typeStr = type === 1 ? "公司" : type === 2 ? "个人" : "";
-    commit(MutationTypes.UpdateDefInfo, { type, typeStr, loginInfo, accountInfo, ...params });
+    commit(MutationTypes.UpdateInitInfo, { type, typeStr, loginInfo, accountInfo, ...params });
     dispatch(ActionTypes.GetPersonQualifyInfo);
     dispatch(ActionTypes.GetCompQualifyInfo);
   },
@@ -78,10 +78,10 @@ export default {
   // 更新是否首次注册 
   [ActionTypes.UpdateDefLoginInfo](store: Store) {
     const { state, dispatch, commit } = store;
-    const { defInfo } = state;
-    const { loginInfo } = defInfo;
+    const { initInfo } = state;
+    const { loginInfo } = initInfo;
     loginInfo.isFirstExist = false;
-    commit(MutationTypes.UpdateDefInfo, { loginInfo });
+    commit(MutationTypes.UpdateInitInfo, { loginInfo });
     commit("UpdateLoginInfo", { isFirstExist: false }, { root: true });
   },
 
@@ -118,8 +118,8 @@ export default {
   async [ActionTypes.ChangeSupplierType](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { defInfo } = state;
-      const { typeList } = defInfo;
+      const { initInfo } = state;
+      const { typeList } = initInfo;
       const { type, typeStr } = (typeList => {
         for (const [a, b] of typeList.entries()) {
           const { type, text, isSelected } = b;
@@ -133,7 +133,7 @@ export default {
       }
       const { success, message, data }: any = await ChangeSupplierType({ type });
       if (success) {
-        commit(MutationTypes.UpdateDefInfo, { type, typeStr, typeList: (typeList => {
+        commit(MutationTypes.UpdateInitInfo, { type, typeStr, typeList: (typeList => {
           for (const [a, b] of typeList.entries()) {
             typeList[a]["isSelected"] = false;
           }
@@ -189,7 +189,7 @@ export default {
   async [ActionTypes.SaveUserInfo](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { userInfo, defInfo, companyInfo } = state;
+      const { userInfo, initInfo, companyInfo } = state;
       console.log(userInfo);
       const { email, headImgUrl, phoneNo, userName, sex, telephoneNo } = userInfo || {};
       if (!headImgUrl) {
@@ -207,7 +207,8 @@ export default {
       const { success, message, data }: any = await SaveUserInfo({ email, headImgUrl, mobilePhoneNo: phoneNo, realName: userName, sex, telephoneNo });
       if (success) {
         // commit(MutationTypes.UpdateUserInfo, { ...(data || {})});
-        if (defInfo.type === 1) {
+        Message.error(message);
+        if (initInfo.type === 1) {
           dispatch(ActionTypes.SaveCompanyInfo);
         }
       } else {
@@ -237,7 +238,6 @@ export default {
     try {
       const { state, dispatch, commit } = store;
       const { userInfo, companyInfo } = state;
-      console.log(userInfo, companyInfo);
       const { address, cityId, companyName, companyPhoneNo, description, districtId, officialWebsite = "", provinceId, publishTime, staffSize } = companyInfo || {};
       if (!companyName) {
         Message.error("请输入公司名称！");
@@ -270,6 +270,7 @@ export default {
       const { success, message, data }: any = await SaveCompanyInfo({ address, cityId, companyName, companyPhoneNo, description, districtId, officialWebsite, provinceId, publishTime, staffSize });
       if (success) {
         // commit(MutationTypes.UpdateUserInfo, data || {});
+        Message.error(message);
       } else {
         Message.error(message);
       }

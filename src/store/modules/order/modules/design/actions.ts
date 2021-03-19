@@ -1,6 +1,6 @@
 import { RootState } from "@/store/state";
 import rootGetters, { RootGetterTypes } from "@/store/getters";
-import { State, InitOption } from "./state";
+import { State, InitInfo } from "./state";
 import { Supplier } from "../../state";
 import getters, { GetterTypes } from "./getters";
 import { MutationTypes } from "./mutations";
@@ -8,7 +8,7 @@ import { Dispatch, Commit, GetterTree } from "vuex";
 
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
-// import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
   UploadForm
@@ -60,17 +60,17 @@ export enum ActionTypes {
 
 export default {
   // 初始化
-  [ActionTypes.Init](store: Store, params: InitOption) {
+  [ActionTypes.Init](store: Store, params: InitInfo) {
     const { state, dispatch, commit } = store;
-    commit(MutationTypes.UpdateInitOption, params);
+    commit(MutationTypes.UpdateInitInfo, params);
   },
 
   // 获取当前进度详情
   async [ActionTypes.GetStepDetail](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { type, mouldProduceId } = initOption;
+      const { initInfo } = state;
+      const { type, mouldProduceId } = initInfo;
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
@@ -100,8 +100,8 @@ export default {
   async [ActionTypes.ImportDesign](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { mouldProduceId } = initOption;
+      const { initInfo } = state;
+      const { mouldProduceId } = initInfo;
       const { threeFacePlanFileId } = params || {};
       const { success, message, data }: any = await ImportDesign({ mouldProduceId, threeFacePlanFileId });
       if (success) {
@@ -117,8 +117,8 @@ export default {
   async [ActionTypes.ApprovalDesign](store: Store, params: any) {
     const { state, dispatch, commit } = store;
     const { opinion, role } = params || {};
-    const { initOption } = state;
-    const { mouldProduceId } = initOption;
+    const { initInfo } = state;
+    const { mouldProduceId } = initInfo;
     const fn = async(datas = {}) => {
       try {
         const { success, message, data }: any = await ApprovalDesign(datas);
@@ -163,8 +163,8 @@ export default {
   async [ActionTypes.GetBOMList](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption, BOMTable } = state;
-      const { mouldProduceId } = initOption;
+      const { initInfo, BOMTable } = state;
+      const { mouldProduceId } = initInfo;
       const { pageNum, pageSize } = BOMTable;
       const { success, message, data }: any = await GetBOMList({ mouldProduceId, pageNum, pageSize });
       if (success) {
@@ -193,8 +193,8 @@ export default {
   async [ActionTypes.ImportBom](store: Store, bomFileId: string) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { mouldProduceId } = initOption;
+      const { initInfo } = state;
+      const { mouldProduceId } = initInfo;
       const { success, message, data }: any = await ImportBom({ mouldProduceId, bomFileId });
       if (success) {
         dispatch(ActionTypes.GetBOMList);
@@ -209,8 +209,8 @@ export default {
   async [ActionTypes.ApprovalBom](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { mouldProduceId } = initOption;
+      const { initInfo } = state;
+      const { mouldProduceId } = initInfo;
       const { cause, opinion, role } = params || {};
       const { success, message, data }: any = await ApprovalBom({ mouldProduceId, cause, opinion, role });
       if (success) {
@@ -227,8 +227,8 @@ export default {
   async [ActionTypes.GetBOMImageInfo](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption, BOMImageInfo } = state;
-      const { mouldProduceId } = initOption;
+      const { initInfo, BOMImageInfo } = state;
+      const { mouldProduceId } = initInfo;
       const { pageNum, pageSize } = BOMImageInfo;
       const { success, message, data }: any = await GetBOMImageInfo({ mouldProduceId, pageNum, pageSize });
       if (success) {
@@ -299,8 +299,8 @@ export default {
   async [ActionTypes.ImportBomImage](store: Store, params: any) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { mouldProduceId } = initOption;
+      const { initInfo } = state;
+      const { mouldProduceId } = initInfo;
       const { bomDesignFiles } = params;
       const { success, message, data }: any = await ImportBomImage({ mouldProduceId, bomDesignFiles });
       if (success) {
@@ -315,9 +315,9 @@ export default {
   // 验收BOM图表零件图纸
   async [ActionTypes.ApprovalBomImage](store: Store, params: any) {
     const { state, dispatch, commit } = store;
-    const { initOption, BOMImageInfo } = state;
+    const { initInfo, BOMImageInfo } = state;
     const { list } = BOMImageInfo;
-    const { mouldProduceId } = initOption;
+    const { mouldProduceId } = initInfo;
     const { cause, opinion, role } = params || {};
     const mouldBomListIds = (ls => {
       const arr = [];

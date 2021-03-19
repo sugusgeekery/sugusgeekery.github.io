@@ -1,7 +1,8 @@
 import { setLocalStorage, setSessionStorage }  from "@/utils/storage";
-import { RootState, LoginInfo, AccountInfo, Navigation } from "./state";
+import { RootState, InitInfo, LoginInfo, AccountInfo, Navigation } from "./state";
 
 export enum RootMutationTypes {
+  UpdateInitInfo = "UpdateInitInfo",
   UpdateLoginInfo = "UpdateLoginInfo",
   UpdateAccountInfo = "UpdateAccountInfo",
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
@@ -14,6 +15,18 @@ export enum RootMutationTypes {
 }
 
 export default {
+  // 更新初始化通用参数
+  [RootMutationTypes.UpdateInitInfo](state: RootState, params: InitInfo) {
+    const { initInfo } = state;
+    const temp: InitInfo = initInfo;
+    (function<T>(state: RootState, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.initInfo = Object.assign(initInfo, temp);
+    })(state, params, temp);
+  },
+
   // 更新登录信息
   [RootMutationTypes.UpdateLoginInfo](state: RootState, params: LoginInfo) {
     const { loginInfo } = state;

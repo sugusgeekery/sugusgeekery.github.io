@@ -1,18 +1,18 @@
 
 export interface State {
-  initOption: any | InitOption;
+  initInfo: any | InitInfo;
   machinStepList: any | Array<MachinStepList>;
   assembleStepList: any | Array<AssembleStepList>;
   injectionStepList: any | Array<InjectionStepList>;
 };
 
-export interface InitOption {};
+export interface InitInfo {};
 export interface MachinStepList {};
 export interface AssembleStepList {};
 export interface InjectionStepList {};
 
 const state: State = {
-  initOption: {},
+  initInfo: {},
   machinStepList: [],
   assembleStepList: [],
   injectionStepList: [],

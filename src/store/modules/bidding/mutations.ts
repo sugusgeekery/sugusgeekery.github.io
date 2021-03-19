@@ -1,6 +1,7 @@
-import { State, BiddingList, BiddingDetail, BiddingTechnology, BiddingMaterial } from "./state";
+import { State, InitInfo, BiddingList, BiddingDetail, BiddingTechnology, BiddingMaterial } from "./state";
 
 export enum MutationTypes {
+  UpdateInitInfo = "UpdateInitInfo",
   UpdateBiddingIndex = "UpdateBiddingIndex",
   UpdateBiddingList = "UpdateBiddingList",
   UpdateBiddingDetail = "UpdateBiddingDetail",
@@ -9,6 +10,17 @@ export enum MutationTypes {
 }
 
 export default {
+  // 更新初始化通用参数
+  [MutationTypes.UpdateInitInfo](state: State, params: InitInfo) {
+    const { initInfo } = state;
+    const temp: InitInfo = initInfo;
+    (function<T>(state: State, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.initInfo = Object.assign(initInfo, temp);
+    })(state, params, temp);
+  },
   // 更新竞价导航下标
   [MutationTypes.UpdateBiddingIndex](state: State, biddingIndex: number) {
     state.biddingIndex = biddingIndex;

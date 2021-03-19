@@ -1,4 +1,5 @@
 export interface State {
+  initInfo: any | InitInfo;
   biddingIndex: number;
   biddingList: Array<BiddingList>;
   biddingDetail: any | BiddingDetail;
@@ -6,6 +7,8 @@ export interface State {
   biddingMaterial: any | BiddingMaterial;
 };
 
+// 初始化参数
+export interface InitInfo {};
 // 竞价导航
 export interface BiddingList {
   text: string;
@@ -54,6 +57,7 @@ export interface BiddingTechnology {}
 export interface BiddingMaterial {}
 
 const state: State = {
+  initInfo: {},
   biddingIndex: 0,
   biddingList: [
     {

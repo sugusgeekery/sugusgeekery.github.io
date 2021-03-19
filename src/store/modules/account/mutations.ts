@@ -1,7 +1,7 @@
-import { State, DefInfo, ProvinceCityDistrict, UserInfo, CompanyInfo, UserQualify, CompanyQualify } from "./state";
+import { State, InitInfo, ProvinceCityDistrict, UserInfo, CompanyInfo, UserQualify, CompanyQualify } from "./state";
 
 export enum MutationTypes {
-  UpdateDefInfo = "UpdateDefInfo",
+  UpdateInitInfo = "UpdateInitInfo",
   UpdateProvinceCityDistrict = "UpdateProvinceCityDistrict",
   UpdateUserInfo = "UpdateUserInfo",
   UpdateCompanyInfo = "UpdateCompanyInfo",
@@ -11,14 +11,14 @@ export enum MutationTypes {
 
 export default {
   // 更新初始化数据
-  [MutationTypes.UpdateDefInfo](state: State, params: any | DefInfo) {
-    const { defInfo } = state;
-    const temp: any | DefInfo = defInfo;
+  [MutationTypes.UpdateInitInfo](state: State, params: any | InitInfo) {
+    const { initInfo } = state;
+    const temp: any | InitInfo = initInfo;
     (function<T>(state: State, params: T, temp: T) {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.defInfo = Object.assign(defInfo, temp);
+      state.initInfo = Object.assign(initInfo, temp);
     })(state, params, temp);
   },
   // 更新省市区列表

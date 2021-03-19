@@ -64,7 +64,7 @@
                 />
                 <div
                   class="swiper-slide-delete"
-                  v-if="!a.state && initOption.type === Supplier.Dfm"
+                  v-if="!a.state && initInfo.type === Supplier.Dfm"
                   @click="deleteReportFile({ index: b, key: d })"
                 >
                   X
@@ -73,7 +73,7 @@
             </div>
             <div
               class="swiper-slide"
-              v-if="!a.state && initOption.type === Supplier.Dfm"
+              v-if="!a.state && initInfo.type === Supplier.Dfm"
               @click="selectFile(b)"
             >
               <div class="swiper-slide-box">
@@ -92,7 +92,7 @@
       <div class="item-content">
         <div
           class="item-content-textarea"
-          v-if="!a.state && initOption.type === Supplier.Dfm"
+          v-if="!a.state && initInfo.type === Supplier.Dfm"
         >
           <textarea
             name=""
@@ -114,7 +114,7 @@
       </div>
       <div
         class="item-cells"
-        v-if="a.state && initOption.type === Supplier.Dfm || initOption.type === Supplier.Design"
+        v-if="a.state && initInfo.type === Supplier.Dfm || initInfo.type === Supplier.Design"
       >
         <div class="item-cell" v-if="a.machiningApprovalInfo">
           <div class="item-cell-text item-cell-text-black">加工方：</div>
@@ -200,7 +200,7 @@
       </div>
       <div
         class="item-buttons"
-        v-if="!a.state && initOption.type === Supplier.Dfm"
+        v-if="!a.state && initInfo.type === Supplier.Dfm"
       >
         <div
           class="item-button item-button-blue"
@@ -212,7 +212,7 @@
 
       <div
         class="item-cells"
-        v-if="a.state && initOption.type === Supplier.Machining"
+        v-if="a.state && initInfo.type === Supplier.Machining"
       >
         <div class="item-cell" v-if="a.injectionApprovalInfo">
           <div class="item-cell-text item-cell-text-black">注塑方：</div>
@@ -370,7 +370,7 @@
 
       <div
         class="item-cells"
-        v-if="a.state && initOption.type === Supplier.Injection"
+        v-if="a.state && initInfo.type === Supplier.Injection"
       >
         <div class="item-cell" v-if="a.machiningApprovalInfo">
           <div class="item-cell-text item-cell-text-black">加工方：</div>
@@ -533,7 +533,7 @@ const { State, Getter, Action, Mutation } = namespace("order/report");
 
 import { Supplier } from "@/store/modules/order/state";
 import {
-  InitOption,
+  InitInfo,
   ReportList
 } from "@/store/modules/order/modules/report/state";
 import { ActionTypes } from "@/store/modules/order/modules/report/actions";
@@ -566,8 +566,8 @@ export default class ReportView extends Vue {
   // 图片域名
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
 
-  @State("initOption")
-  public initOption!: InitOption;
+  @State("initInfo")
+  public initInfo!: InitInfo;
   @State("reportList")
   public reportList!: Array<ReportList>;
   @State("timestamp")
@@ -586,10 +586,8 @@ export default class ReportView extends Vue {
   @Action(ActionTypes.DeleteReportFile)
   public deleteReportFile!: Function;
 
-  public created() {
-    this.getDfmReportList();
-  }
-  public mounted() {
+  public async created() {
+    await this.getDfmReportList();
     this.initSwiper();
   }
 
@@ -607,15 +605,6 @@ export default class ReportView extends Vue {
       len--;
     }
   }
-
-  // @Watch("timestamp")
-  // public watchTimestamp() {
-  // console.log(1);
-  // this.initSwiper();
-  // this.swiper && this.swiper.updateSlides();
-  // this.swiper[index] && this.swiper[index].slideNext();
-  // console.log(2);
-  // }
 
   public swiper: any = null;
   public swiperOptions: any = {
@@ -638,7 +627,6 @@ export default class ReportView extends Vue {
   };
   public initSwiper() {
     this.swiper = new Swiper(".swiper-container", this.swiperOptions);
-    console.log(this.swiper);
   }
 
   public swiperPrev(index: number) {

@@ -9,7 +9,6 @@ import { Message, MessageBox } from "element-ui";
 
 import { INTERFACE_ERROR_TEXT, VERIFICATION_CODE_NUMBER } from "@/config";
 import { _url2xml2file } from "@/utils/util";
-import Vue from "@/main";
 
 import {
   GetVerificationCode,
@@ -19,7 +18,6 @@ import {
   Register,
   GetAccountInfo
 } from "@/api";
-import { ActionTypes } from "./modules/account/actions";
 
 interface Store {
   state: RootState;

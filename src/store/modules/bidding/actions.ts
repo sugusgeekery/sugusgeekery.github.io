@@ -7,7 +7,7 @@ import { Dispatch, Commit, GetterTree } from "vuex";
 
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
-// import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
   GetSelectByUser,
@@ -29,7 +29,7 @@ interface Store {
 }
 
 export enum ActionTypes {
-  // InitWeeklyReport = "InitWeeklyReport",
+  Init = "Init",
   UpdateBiddingIndex = "UpdateBiddingIndex",
   GetBiddingList = "GetBiddingList",
   UpdatePageNum = "UpdatePageNum",
@@ -51,12 +51,10 @@ export enum ActionTypes {
 
 export default {
   // 初始化模块默认值
-  // [ActionTypes.InitWeeklyReport](store: Store, params: any) {
-  //   const { state, dispatch, commit } = store;
-  //   const { platform = "", accessToken = "", vipId = "", subject = "", beginTime = "", endTime = "" } = params || {};
-  //   commit(MutationTypes.UpdateWeeklyReport, { platform, accessToken, vipId, subject, beginTime, endTime });
-  //   dispatch(ActionTypes.GetWeeklyReport);
-  // },
+  [ActionTypes.Init](store: Store, params: any) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateInitInfo, { ...(params || {}) });
+  },
 
   // 更新竞价导航下标
   [ActionTypes.UpdateBiddingIndex](store: Store, biddingIndex: number) {

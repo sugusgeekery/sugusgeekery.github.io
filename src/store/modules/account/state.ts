@@ -1,6 +1,6 @@
 
 export interface State {
-  defInfo: any | DefInfo;
+  initInfo: any | InitInfo;
   provinceCityDistrict: Array<ProvinceCityDistrict>;
   userInfo: UserInfo;
   companyInfo: CompanyInfo;
@@ -15,7 +15,7 @@ export interface ProvinceCityDistrict {
   children?: Array<ProvinceCityDistrict>;
 }
 
-export interface DefInfo {}
+export interface InitInfo {}
 export interface UserInfo {
   email: string;
 	headImgUrl: string;
@@ -76,7 +76,7 @@ export interface LabelList {
 }
 
 const state: State = {
-  defInfo: {
+  initInfo: {
     loginInfo: {},
     accountInfo: {},
     type: 0,

@@ -2,7 +2,7 @@
   <div class="information">
     <div
       class="list"
-      v-if="Supplier.Dfm === initOption.type || Supplier.Design === initOption.type"
+      v-if="Supplier.Dfm === initInfo.type || Supplier.Design === initInfo.type"
     >
       <div class="li li-bg">
         <div class="li-row">
@@ -86,7 +86,7 @@
             </div>
           </div>
         </div>
-        <div class="li-buttons" v-if="Supplier.Dfm === initOption.type">
+        <div class="li-buttons" v-if="Supplier.Dfm === initInfo.type">
           <div class="li-button li-button-blue" v-if="a.isUpdateImage === 1" @click="needChangeDrawing({ index: b })">需要更新图纸</div>
           <div class="li-button li-button-blue" v-if="a.isUpdateImage === 2" @click="dfmApprovalDrawing({ opinion: 1, index: b })">确认图纸</div>
           <div class="li-button li-button-red" v-if="a.isUpdateImage === 2" @click="dfmApprovalDrawing({ opinion: 1, index: b })">驳回图纸</div>
@@ -96,7 +96,7 @@
 
     <div
       class="list"
-      v-if="Supplier.Machining === initOption.type"
+      v-if="Supplier.Machining === initInfo.type"
     >
       <div class="li li-bg">
         <div class="li-row">
@@ -180,7 +180,7 @@
         </div>
       </div>
     </div>
-    <div v-if="Supplier.Machining === initOption.type">
+    <div v-if="Supplier.Machining === initInfo.type">
       <div class="filter-items">
         <div class="filter-item">
           <div class="filter-item-content">
@@ -279,7 +279,7 @@ import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/mould");
 
 import { Supplier } from "@/store/modules/order/state";
-import { InitOption, Mould, RepairMould } from "@/store/modules/order/modules/mould/state";
+import { InitInfo, Mould, RepairMould } from "@/store/modules/order/modules/mould/state";
 import { GetterTypes } from "@/store/modules/order/modules/mould/getters";
 import { ActionTypes } from "@/store/modules/order/modules/mould/actions";
 import { MutationTypes } from "@/store/modules/order/modules/mould/mutations";
@@ -302,8 +302,8 @@ export default class MouldView extends Vue {
   // 供应商类型列表
   public Supplier = Supplier;
 
-  @State("initOption")
-  public initOption!: any | InitOption;
+  @State("initInfo")
+  public initInfo!: any | InitInfo;
 
   @State("mould")
   public mould!: Mould;

@@ -100,7 +100,7 @@ const { State, Getter, Action, Mutation } = namespace("order/question");
 
 import { Supplier } from "@/store/modules/order/state";
 import {
-  InitOption,
+  InitInfo,
   QuestionList
 } from "@/store/modules/order/modules/question/state";
 import { ActionTypes } from "@/store/modules/order/modules/question/actions";
@@ -120,8 +120,8 @@ export default class QuestionView extends Vue {
   // 图片域名
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
 
-  @State("initOption")
-  public initOption!: InitOption;
+  @State("initInfo")
+  public initInfo!: InitInfo;
   @State("questionList")
   public questionList!: any | Array<QuestionList>;
 

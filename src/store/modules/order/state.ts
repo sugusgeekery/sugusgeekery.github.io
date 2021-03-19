@@ -1,4 +1,5 @@
 export interface State {
+  initInfo: any | InitInfo;
   advantage: Advantage;
   order: Order;
   navigationIndex: number;
@@ -6,6 +7,8 @@ export interface State {
   remainTime: RemainTime;
 };
 
+// 初始化参数
+export interface InitInfo {};
 export interface Advantage {
   accuracy: number;
   anerror: number;
@@ -73,6 +76,7 @@ export enum Supplier {
 };
 
 const state: State = {
+  initInfo: {},
   advantage: {
     accuracy: 0,
     anerror: 0

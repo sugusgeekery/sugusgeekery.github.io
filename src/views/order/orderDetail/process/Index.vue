@@ -7,7 +7,7 @@
       id="file"
       @change="uploadFile"
     />
-    <div class="items" v-if="initOption.type === Supplier.Machining && machinStepList && machinStepList.length">
+    <div class="items" v-if="initInfo.type === Supplier.Machining && machinStepList && machinStepList.length">
       <div class="items-text">加工</div>
       <div class="item" v-for="(a, b) in machinStepList" :key="b">
         <div class="item-label">
@@ -30,7 +30,7 @@
         <div class="item-content">
           <div
             class="item-content-text"
-            v-if="initOption.type === Supplier.Injection"
+            v-if="initInfo.type === Supplier.Injection"
           >
             20201112
           </div>
@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <div class="items" v-if="initOption.type === Supplier.Machining && assembleStepList && assembleStepList.length">
+    <div class="items" v-if="initInfo.type === Supplier.Machining && assembleStepList && assembleStepList.length">
       <div class="items-text">装配</div>
       <div class="item" v-for="(a, b) in assembleStepList" :key="b">
         <div class="item-label">
@@ -88,7 +88,7 @@
         <div class="item-content">
           <div
             class="item-content-text"
-            v-if="initOption.type === Supplier.Injection"
+            v-if="initInfo.type === Supplier.Injection"
           >
             20201112
           </div>
@@ -123,7 +123,7 @@
         </div>
       </div>
     </div>
-    <div class="items" v-if="initOption.type === Supplier.Injection && injectionStepList && injectionStepList.length">
+    <div class="items" v-if="initInfo.type === Supplier.Injection && injectionStepList && injectionStepList.length">
       <div class="items-text">注塑</div>
       <div class="item" v-for="(a, b) in injectionStepList" :key="b">
         <div class="item-label">
@@ -146,7 +146,7 @@
         <div class="item-content">
           <div
             class="item-content-text"
-            v-if="initOption.type === Supplier.Injection"
+            v-if="initInfo.type === Supplier.Injection"
           >
             20201112
           </div>
@@ -182,32 +182,32 @@
       </div>
     </div>
     
-    <!-- <div class="text-black" v-if="initOption.type === Supplier.Machining">
+    <!-- <div class="text-black" v-if="initInfo.type === Supplier.Machining">
       完成所有加工环节后点击此按钮
     </div>
-    <div class="text-black" v-else-if="initOption.type === Supplier.Injection">
+    <div class="text-black" v-else-if="initInfo.type === Supplier.Injection">
       完成所有注塑环节工作后点击此按钮
     </div>
     <div class="buttons">
       <div
         class="button"
-        v-if="initOption.type === Supplier.Machining"
+        v-if="initInfo.type === Supplier.Machining"
         @click="commitStep()"
       >
         完成加工阶段
       </div>
       <div
         class="button"
-        v-else-if="initOption.type === Supplier.Injection"
+        v-else-if="initInfo.type === Supplier.Injection"
         @click="commitStep()"
       >
         完成注塑阶段
       </div>
     </div>
-    <div class="text-gray" v-if="initOption.type === Supplier.Machining">
+    <div class="text-gray" v-if="initInfo.type === Supplier.Machining">
       提示：需要协助注塑方完成样件注塑，并将样件回给平台
     </div>
-    <div class="text-gray" v-else-if="initOption.type === Supplier.Injection">
+    <div class="text-gray" v-else-if="initInfo.type === Supplier.Injection">
       提示：如果是试模，需要将样件给到加工方，寄回给平台
     </div> -->
   </div>
@@ -220,7 +220,7 @@ const { State, Getter, Action, Mutation } = namespace("order/process");
 
 import { Supplier } from "@/store/modules/order/state";
 import {
-  InitOption,
+  InitInfo,
   MachinStepList,
   AssembleStepList,
   InjectionStepList,
@@ -244,8 +244,8 @@ export default class ProcessView extends Vue {
   // 图片域名
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
 
-  @State("initOption")
-  public initOption!: InitOption;
+  @State("initInfo")
+  public initInfo!: InitInfo;
   @State("machinStepList")
   public machinStepList!: any | Array<MachinStepList>;
   @State("assembleStepList")

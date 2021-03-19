@@ -8,7 +8,7 @@
             <div class="filter-item">
               <div class="filter-item-content">
                 <el-select
-                  :value="order.projectList[order.projectIndex].text"
+                  :value="order.projectList[order.projectIndex] ? order.projectList[order.projectIndex].text : ''"
                   @change="v => updateProjectIndex(Number(v))"
                   placeholder="请选择项目类型"
                 >
@@ -24,7 +24,7 @@
             <div class="filter-item">
               <div class="filter-item-content">
                 <el-select
-                  :value="order.statusList[order.statusIndex].text"
+                  :value="order.statusList[order.statusIndex] ? order.statusList[order.statusIndex].text : ''"
                   @change="v => updateStatusIndex(Number(v))"
                   placeholder="请选择状态"
                 >

@@ -1,14 +1,14 @@
 import { RootState } from "@/store/state";
 import rootGetters, { RootGetterTypes } from "@/store/getters";
 import { Supplier } from "../../state";
-import { State, InitOption } from "./state";
+import { State, InitInfo } from "./state";
 import getters, { GetterTypes } from "./getters";
 import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
 
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
-// import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
   UploadForm
@@ -20,13 +20,6 @@ import {
   GetMouldDetail,
   GetAllRepair,
   CommitRepairMould,
-  
-  // GetMachiningStepList,
-  // GetInjectStepList,
-  // FinishedMachiningStep,
-  // FinishedInjectStep,
-  // ConfirmMachiningFinished,
-  // ConfirmInjectFinished,
 } from "@/api/order/mould";
 
 interface Store {
@@ -50,17 +43,17 @@ export enum ActionTypes {
 
 export default {
   // 初始化
-  [ActionTypes.Init](store: Store, params: InitOption) {
+  [ActionTypes.Init](store: Store, params: InitInfo) {
     const { state, dispatch, commit } = store;
-    commit(MutationTypes.UpdateInitOption, params);
+    commit(MutationTypes.UpdateInitInfo, params);
   },
 
   // 获取模具信息
   async [ActionTypes.GetMould](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { type, id, mouldProduceId } = initOption || {};
+      const { initInfo } = state;
+      const { type, id, mouldProduceId } = initInfo || {};
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
@@ -88,8 +81,8 @@ export default {
   async [ActionTypes.GetAllRepair](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption } = state;
-      const { mouldProduceId } = initOption || {};
+      const { initInfo } = state;
+      const { mouldProduceId } = initInfo || {};
       const { success, message, data }: any = await GetAllRepair({ mouldProduceId });
       if (success) {
         const repairMouldList = data || [];
@@ -159,8 +152,8 @@ export default {
   async [ActionTypes.NeedChangeDrawing](store: Store, params: { opinion: number; index: number }) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption, mould } = state;
-      const { type, id } = initOption || {};
+      const { initInfo, mould } = state;
+      const { type, id } = initInfo || {};
       const { index = -1 } = params || {};
       const { mouldProductList = [] } = mould || {};
       const { productId = "" } = mouldProductList[index] || {};
@@ -179,8 +172,8 @@ export default {
   async [ActionTypes.DfmApprovalDrawing](store: Store, params: { opinion: number; index: number }) {
     try {
       const { state, dispatch, commit } = store;
-      const { initOption, mould } = state;
-      const { type, id } = initOption || {};
+      const { initInfo, mould } = state;
+      const { type, id } = initInfo || {};
       const { opinion = -1, index = -1 } = params || {};
       const { mouldProductList = [] } = mould || {};
       const { productId = "" } = mouldProductList[index] || {};
@@ -194,116 +187,4 @@ export default {
       throw new Error(e);
     }
   },
-  
-  // // 上传文件
-  // async [ActionTypes.UploadForm](store: Store, params: any) {
-  //   try {
-  //     const { state, dispatch, commit } = store;
-  //     const { reportList = [] } = state;
-  //     const { file, index } = params || {};
-  //     const { fileList } = reportList[index] || {};
-  //     const formData = new FormData();
-  //     formData.append("files", file);
-  //     const { success, message, data }: any = await UploadForm(formData);
-  //     if (success) {
-  //       const { pics = [] } = data || {};
-  //       const { filePath = "" } = pics[0];
-  //       reportList[index].fileList = [...(fileList || []), filePath];
-  //       commit(MutationTypes.UpdateReportList, reportList);
-  //       commit(MutationTypes.UpdateTimestamp, new Date().getTime());
-  //     } else {
-  //       Message.error(message);
-  //     }
-  //   } catch (e) {
-  //     throw new Error(e);
-  //   }
-  // },
-  // // 删除图片
-  // [ActionTypes.DeleteReportFile](store: Store, params: any) {
-  //     const { state, dispatch, commit } = store;
-  //     const { reportList = [] } = state;
-  //     const { index, key } = params || {};
-  //     reportList[index].fileList.splice(key, 1);
-  //     commit(MutationTypes.UpdateReportList, reportList);
-  // },
-
-  // // 更新报告信息
-  // [ActionTypes.UpdateReportData](store: Store, params: any) {
-  //   const { state, dispatch, commit } = store;
-  //   const { reportList = [] } = state;
-  //   const { index, text, name, value } = params || {};
-  //   if (text) {
-  //     //@ts-ignore
-  //     reportList[index][text][name] = value;
-  //   } else {
-  //     //@ts-ignore
-  //     reportList[index][name] = value;
-  //   }
-  //   commit(MutationTypes.UpdateReportList, reportList);
-  // },
-
-  // // 提交DFM报告
-  // async [ActionTypes.CommitReport](store: Store, params: any) {
-  //   try {
-  //     const { state, dispatch, commit } = store;
-  //     const { reportList = [], initOption } = state;
-  //     const { biddingId } = initOption || {};
-  //     const { index } = params || {};
-  //     const { describe, reportTitleId, fileList } = reportList[index] || {};
-  //     if (!describe) {
-  //       Message.error("请输入报告描述");
-  //       return;
-  //     }
-  //     if (!fileList || !fileList.length) {
-  //       Message.error("请上传图片");
-  //       return;
-  //     }
-  //     const { success, message, data }: any = await CommitReport({ biddingId, describe, reportTitleId, images: fileList });
-  //     if (success) {
-  //       dispatch(ActionTypes.GetDfmReportList);
-  //       // commit(MutationTypes.UpdateReportList, data || []);
-  //     } else {
-  //       Message.error(message);
-  //     }
-  //   } catch (e) {
-  //     throw new Error(e);
-  //   }
-  // },
-
-  // // 确认驳回DFM报告
-  // async [ActionTypes.ApprovalDfmReport](store: Store, params: any) {
-  //   try {
-  //     const { state, dispatch, commit } = store;
-  //     const { reportList = [], initOption } = state;
-  //     const { type, biddingId } = initOption || {};
-  //     const { index } = params || {};
-  //     const { reportTitleId, approvalContent, opinion } = reportList[index] || {};
-  //     if (opinion === 0 && !approvalContent) {
-  //       Message.error("请输入驳回原因");
-  //       return;
-  //     }
-  //     let fn = {};
-  //     switch(type) {
-  //       case Supplier.Dfm:
-  //         // fn = await DfmApprovalDfmReport({ biddingId, approvalContent, reportTitleId, opinion });
-  //         break;
-  //       case Supplier.Machining:
-  //         fn = await MachiningApprovalDfmReport({ biddingId, approvalContent, reportTitleId, opinion });
-  //         break;
-  //       case Supplier.Injection:
-  //         fn = await InjectApprovalDfmReport({ biddingId, approvalContent, reportTitleId, opinion });
-  //         break;
-  //     }
-  //     const { success, message, data }: any = fn;
-  //     if (success) {
-  //       dispatch(ActionTypes.GetDfmReportList);
-  //       // commit(MutationTypes.UpdateReportList, data || []);
-  //     } else {
-  //       Message.error(message);
-  //     }
-  //   } catch (e) {
-  //     throw new Error(e);
-  //   }
-  // },
-  
 }

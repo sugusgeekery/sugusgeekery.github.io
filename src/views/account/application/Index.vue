@@ -9,7 +9,7 @@
     />
     <div class="context-title">资质申请</div>
     <div class="context-body">
-      <div class="list" v-if="defInfo.type === 1">
+      <div class="list" v-if="initInfo.type === 1">
         <div class="li">
           <div class="li-title">营业执照</div>
           <div class="li-row">
@@ -164,7 +164,7 @@
           </div>
         </div>
       </div>
-      <div class="list" v-else-if="defInfo.type === 2">
+      <div class="list" v-else-if="initInfo.type === 2">
         <div class="li">
           <div class="li-title">个人信息</div>
           <div class="li-images">
@@ -222,7 +222,7 @@ import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("account");
 
 import {
-  DefInfo,
+  InitInfo,
   UserQualify,
   CompanyQualify
 } from "@/store/modules/account/state";
@@ -250,8 +250,8 @@ export default class ApplicationView extends Vue {
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
   public date = "";
 
-  @State("defInfo")
-  public defInfo!: any | DefInfo;
+  @State("initInfo")
+  public initInfo!: any | InitInfo;
   @State("userQualify")
   public userQualify!: UserQualify;
   @State("companyQualify")

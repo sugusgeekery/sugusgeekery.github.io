@@ -1,9 +1,12 @@
 export interface State {
+  initInfo: any | InitInfo;
   orderMessageList: Array<OrderMessage>;
   jobList: Array<Job>;
   userMessageList: Array<UserMessage>;
 };
 
+// 初始化参数
+export interface InitInfo {};
 // 订单消息
 export interface OrderMessage {
   text: string;
@@ -24,6 +27,7 @@ export interface UserMessage {
 }
 
 const state: State = {
+  initInfo: {},
   orderMessageList: [
     {
       text: "新竞价单",

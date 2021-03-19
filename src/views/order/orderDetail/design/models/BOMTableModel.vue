@@ -3,13 +3,13 @@
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
-          <div class="model-title-text" v-if="Supplier.Design === initOption.type">
+          <div class="model-title-text" v-if="Supplier.Design === initInfo.type">
             导入BOM表
           </div>
-          <div class="model-title-text" v-else-if="Supplier.Dfm === initOption.type">
+          <div class="model-title-text" v-else-if="Supplier.Dfm === initInfo.type">
             查看BOM表
           </div>
-          <div class="model-title-text" v-else-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type">
+          <div class="model-title-text" v-else-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type">
             验收BOM表
           </div>
         </div>
@@ -20,7 +20,7 @@
       </div>
       <div class="model-body">
         <div class="model-row">
-          <div class="model-flex" v-if="Supplier.Design === initOption.type">
+          <div class="model-flex" v-if="Supplier.Design === initInfo.type">
             <input
               type="file"
               name="file"
@@ -78,10 +78,10 @@
             </el-pagination>
           </div>
         </div>
-        <div class="model-buttons" v-if="Supplier.Machining === initOption.type || Supplier.Injection === initOption.type">
+        <div class="model-buttons" v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type">
           <div
             class="model-button model-button-blue"
-            @click="approvalBom({ cause: '', opinion: 1, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })"
+            @click="approvalBom({ cause: '', opinion: 1, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"
           >
             通过
           </div>
@@ -106,7 +106,7 @@ import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/design");
 
 import { Supplier } from "@/store/modules/order/state";
-import { InitOption } from "@/store/modules/order/modules/design/state";
+import { InitInfo } from "@/store/modules/order/modules/design/state";
 import { ActionTypes } from "@/store/modules/order/modules/design/actions";
 import { MutationTypes } from "@/store/modules/order/modules/design/mutations";
 
@@ -124,8 +124,8 @@ export default class BOMTableModel extends Vue {
   // 供应商类型列表
   public Supplier = Supplier;
 
-  @State("initOption")
-  public initOption!: any | InitOption;
+  @State("initInfo")
+  public initInfo!: any | InitInfo;
   @State("BOMTable")
   public BOMTable!: any;
 
@@ -171,7 +171,7 @@ export default class BOMTableModel extends Vue {
   }
 
   public showMessageBox() {
-    const { Supplier, initOption } = this;
+    const { Supplier, initInfo } = this;
     MessageBox({
       message: "",
       title: "温馨提示",
@@ -188,7 +188,7 @@ export default class BOMTableModel extends Vue {
     })
       .then(({ action, value }: any) => {
         if (action === "confirm") {
-          this.approvalBom({ cause: value, opinion: 0, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })
+          this.approvalBom({ cause: value, opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })
         }
       })
       .catch(() => {});

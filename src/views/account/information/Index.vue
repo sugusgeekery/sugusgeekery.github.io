@@ -5,28 +5,28 @@
       <div class="list">
         <div class="nav">
           <div class="nav-label">账号类型：</div>
-          <div class="nav-text" v-if="defInfo.type">
-            <span class="nav-text-gray">{{ defInfo.typeStr || "无" }}</span>
+          <div class="nav-text" v-if="initInfo.type">
+            <span class="nav-text-gray">{{ initInfo.typeStr || "无" }}</span>
             <span
               class="nav-text-blue"
               @click="
-                updateDefInfo({
+                updateInitInfo({
                   type: 0
                 })
               "
               >（修改）</span
             >
           </div>
-          <div class="nav-items" v-if="!defInfo.type">
+          <div class="nav-items" v-if="!initInfo.type">
             <Selection
               type="题型"
               label="选择题型"
-              :list="defInfo.typeList"
+              :list="initInfo.typeList"
               name="text"
               @updateindex="updateIndex"
             ></Selection>
           </div>
-          <div class="nav-buttons" v-if="!defInfo.type">
+          <div class="nav-buttons" v-if="!initInfo.type">
             <div
               class="nav-button nav-button-blue"
               @click="changeSupplierType()"
@@ -149,7 +149,7 @@
               </div>
             </div>
           </div>
-          <div class="form-flex" v-if="defInfo.type === 1">
+          <div class="form-flex" v-if="initInfo.type === 1">
             <div class="form-title">公司信息</div>
             <div class="form-items">
               <div class="form-item">
@@ -332,7 +332,7 @@ import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("account");
 
 import {
-  DefInfo,
+  InitInfo,
   ProvinceCityDistrict,
   UserInfo,
   CompanyInfo
@@ -360,8 +360,8 @@ import Selection from "@/components/Selection.vue";
 export default class InformationView extends Vue {
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
 
-  @State("defInfo")
-  public defInfo!: any | DefInfo;
+  @State("initInfo")
+  public initInfo!: any | InitInfo;
   @State("provinceCityDistrict")
   public provinceCityDistrict!: Array<ProvinceCityDistrict>;
   @State("userInfo")
@@ -382,19 +382,19 @@ export default class InformationView extends Vue {
   @Action(ActionTypes.SaveCompanyInfo)
   public saveCompanyInfo!: Function;
 
-  @Mutation(MutationTypes.UpdateDefInfo)
-  public updateDefInfo!: Function;
+  @Mutation(MutationTypes.UpdateInitInfo)
+  public updateInitInfo!: Function;
   @Mutation(MutationTypes.UpdateUserInfo)
   public updateUserInfo!: Function;
   @Mutation(MutationTypes.UpdateCompanyInfo)
   public updateCompanyInfo!: Function;
 
   public updateIndex(index: number) {
-    const { typeList = [] } = this.defInfo || {};
+    const { typeList = [] } = this.initInfo || {};
     for (const [a, b] of typeList.entries()) {
       typeList[a].isSelected = index === a;
     }
-    this.updateDefInfo({ typeList });
+    this.updateInitInfo({ typeList });
   }
 
   public selectFile() {
@@ -540,7 +540,7 @@ export default class InformationView extends Vue {
     this.getInformationDefInfo();
   }
   public mounted() {
-    const { loginInfo } = this.defInfo || {};
+    const { loginInfo } = this.initInfo || {};
     const { isFirstExist } = loginInfo || {};
     if (isFirstExist) {
       MessageBox({

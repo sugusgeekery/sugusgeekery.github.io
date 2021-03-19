@@ -32,10 +32,10 @@
             v-if="b > 0"
             @click="a.isFinished === 0 ? alertModel(b + 1) : null"
           >
-            {{ Supplier.Design === initOption.type ? "导入" : Supplier.Dfm === initOption.type ? "查看" : "验收" }}{{ a.stepName }}
+            {{ Supplier.Design === initInfo.type ? "导入" : Supplier.Dfm === initInfo.type ? "查看" : "验收" }}{{ a.stepName }}
           </span>
           <span class="design-item-content-text-black" v-else>
-            {{ Supplier.Design === initOption.type ? "上传" : Supplier.Dfm === initOption.type ? "查看" : "验收" }}{{ a.stepName }}
+            {{ Supplier.Design === initInfo.type ? "上传" : Supplier.Dfm === initInfo.type ? "查看" : "验收" }}{{ a.stepName }}
           </span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
@@ -60,7 +60,7 @@
           class="design-item-content-text"
           v-for="(c, d) in a.approvalInfoList"
           :key="'_方案设计步骤详情对应处理方_' + d"
-          v-show="Supplier.Design === initOption.type || Supplier.Dfm === initOption.type"
+          v-show="Supplier.Design === initInfo.type || Supplier.Dfm === initInfo.type"
         >
           <span class="design-item-content-text-black" v-if="c.type == 1">
             加工方：
@@ -88,7 +88,7 @@
             c.approvalTime || ""
           }}</span>
         </div>
-        <div class="design-item-content-button" v-if="Supplier.Design === initOption.type && (a.approveStatus === 0 || a.approveStatus === 2) && b === 0">
+        <div class="design-item-content-button" v-if="Supplier.Design === initInfo.type && (a.approveStatus === 0 || a.approveStatus === 2) && b === 0">
           <input
             type="file"
             name="file"
@@ -102,15 +102,15 @@
         </div>
 
 
-        <div class="design-item-content-button" v-if="(Supplier.Machining === initOption.type || Supplier.Injection === initOption.type) && a.isFinished === 0 && b === 0">
+        <div class="design-item-content-button" v-if="(Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type) && a.isFinished === 0 && b === 0">
           <span
             class="design-item-content-button-text design-item-content-button-text-blue"
-            @click="approvalDesign({ opinion: 1, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })"
+            @click="approvalDesign({ opinion: 1, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"
             >通过</span
           >
           <span
             class="design-item-content-button-text"
-            @click="approvalDesign({ opinion: 0, role: Supplier.Machining === initOption.type ? 1 : Supplier.Injection === initOption.type ? 2 : 0 })"
+            @click="approvalDesign({ opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"
             >驳回</span
           >
         </div>
@@ -127,7 +127,7 @@ import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/design");
 
 import { Supplier } from "@/store/modules/order/state";
-import { InitOption, Design } from "@/store/modules/order/modules/design/state";
+import { InitInfo, Design } from "@/store/modules/order/modules/design/state";
 import { ActionTypes } from "@/store/modules/order/modules/design/actions";
 
 import downloadByUrl from "@/utils/downloadByUrl";
@@ -149,8 +149,8 @@ export default class DesignView extends Vue {
   // 供应商类型列表
   public Supplier = Supplier;
 
-  @State("initOption")
-  public initOption!: InitOption;
+  @State("initInfo")
+  public initInfo!: InitInfo;
   @State("design")
   public design!: Design;
 
