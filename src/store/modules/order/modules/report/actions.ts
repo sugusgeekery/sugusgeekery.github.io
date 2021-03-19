@@ -92,7 +92,7 @@ export default {
       if (success) {
         const { pics = [] } = data || {};
         const { filePath = "", fileName, id } = pics[0];
-        reportList[index].fileList = [...(fileList || []), { filePath, fileName, id }];
+        reportList[index].fileList = [...(fileList || []), { filePath, fileName, fileId: id }];
         commit(MutationTypes.UpdateReportList, reportList);
         commit(MutationTypes.UpdateTimestamp, new Date().getTime());
       } else {
@@ -137,9 +137,9 @@ export default {
       const images = (fileList => {
         const images = [];
         for (const v of fileList) {
-          const { id } = v;
-          if (id) {
-            images.push(id);
+          const { fileId } = v;
+          if (fileId) {
+            images.push(fileId);
           }
         }
         return images;

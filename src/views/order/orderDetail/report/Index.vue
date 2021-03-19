@@ -9,7 +9,7 @@
     />
     <div
       class="item"
-      :class="{ 'item-green': a.state === 2, 'item-white': a.state === 3 }"
+      :class="{ 'item-green': a.state === 2 }"
       v-for="(a, b) in reportList"
       :key="b"
     >
@@ -673,6 +673,8 @@ export default class ReportView extends Vue {
       background $color-bg-blue-white
     &-white
       background $color-bg-white
+    &-yellow
+      background $color-bg-yellow
     &-title
       margin 16px 18px
       display flex
