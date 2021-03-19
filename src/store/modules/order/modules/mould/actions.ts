@@ -57,6 +57,7 @@ export default {
       let fn = {};
       switch(type) {
         case Supplier.Dfm:
+        case Supplier.Design:
           fn = await GetProducts({ orderId: id });
           break;
         case Supplier.Machining:

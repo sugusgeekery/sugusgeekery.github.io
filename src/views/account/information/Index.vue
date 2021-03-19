@@ -45,6 +45,7 @@
                   name=""
                   hidden="hidden"
                   id="headiconFile"
+                  accept="image/*"
                   @change="uploadFile"
                 />
                 <div class="form-item-head" @click="selectFile()">

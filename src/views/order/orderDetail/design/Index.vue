@@ -30,8 +30,10 @@
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="b > 0"
-            @click="a.isFinished === 0 ? alertModel(b + 1) : null"
+            @click="alertModel(b + 1)"
+            
           >
+          <!-- @click="a.isFinished === 0 ? alertModel(b + 1) : null" -->
             {{ Supplier.Design === initInfo.type ? "导入" : Supplier.Dfm === initInfo.type ? "查看" : "验收" }}{{ a.stepName }}
           </span>
           <span class="design-item-content-text-black" v-else>
@@ -94,6 +96,7 @@
             name="file"
             id="file"
             hidden="hidden"
+            accept=".step, .stp, .stl"
             @change="uploadFile"
           />
           <span class="design-item-content-button-text" @click="checkFile()">
@@ -190,6 +193,7 @@ export default class DesignView extends Vue {
 
   public created() {
     this.getStepDetail();
+    this.getBOMImageInfo();
   }
   public downloadFile(url: string, name: string) {
     if (url) {

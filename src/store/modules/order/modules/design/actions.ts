@@ -238,7 +238,7 @@ export default {
             ls[a]["isSelected"] = false;
           }
           return ls;
-        })(list)
+        })(list);
         commit(MutationTypes.UpdateBOMImageInfo, { list: listTemp, pages: Number(pages), total: Number(total), isShow: true });
         dispatch(ActionTypes.CacluateBOMImageInfo);
       } else {

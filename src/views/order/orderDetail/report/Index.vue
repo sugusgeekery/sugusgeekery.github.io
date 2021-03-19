@@ -5,6 +5,7 @@
       name="file"
       hidden="hidden"
       id="file"
+      accept="image/*"
       @change="uploadFile"
     />
     <div

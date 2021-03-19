@@ -26,6 +26,7 @@
               name="file"
               id="file"
               hidden="hidden"
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
               @change="uploadFile"
             />
             <div class="model-button" @click="checkFile()">导入BOM表</div>

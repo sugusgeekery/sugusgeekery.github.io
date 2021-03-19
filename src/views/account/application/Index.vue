@@ -5,6 +5,7 @@
       name="file"
       hidden="hidden"
       id="file"
+      accept="image/*"
       @change="uploadFile"
     />
     <div class="context-title">资质申请</div>

@@ -27,6 +27,7 @@
               id="bomimagefile"
               hidden="hidden"
               multiple="multiple"
+              accept=".pdf, .step, .stp, .stl"
               @change="uploadFile"
             />
             <input
@@ -34,7 +35,8 @@
               name="bomimagelifile"
               id="bomimagelifile"
               hidden="hidden"
-              @change="uploadLiFile"
+              accept=".pdf,.step,.stp, .stl"
+              @change="uploadFile"
             />
             <div class="model-button" @click="checkFile()">
               批量导入零件图纸
@@ -98,9 +100,18 @@
                   <span class="model-text model-text-blue">{{ a.twoFaceFileName }}</span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
-                    @click="checkLiFile(a.twoFaceFileId)"
-                    >更新</span
+                    @click="checkLiFile(a.twoFaceFileId, a.twoFaceFileName)"
+                    v-if="a.state === 3"
                   >
+                    更新
+                    <span class="model-text-tip"></span>
+                  </span>
+                  <span
+                    class="model-text model-text-gray model-text-arrow"
+                    v-else
+                  >
+                    更新
+                  </span>
                   <span
                     class="model-text model-text-gray"
                     @click="downloadFile(a.twoFaceFileUrl, a.twoFaceFileName)"
@@ -111,9 +122,18 @@
                   <span class="model-text model-text-blue">{{ a.threeFaceFileName }}</span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
-                    @click="checkLiFile(a.threeFaceFileId)"
-                    >更新</span
+                    v-if="a.state === 3"
+                    @click="checkLiFile(a.threeFaceFileId, a.threeFaceFileName)"
                   >
+                    更新
+                    <span class="model-text-tip"></span>
+                  </span>
+                  <span
+                    class="model-text model-text-gray model-text-arrow"
+                    v-else
+                  >
+                    更新
+                  </span>
                   <span
                     class="model-text model-text-gray"
                     @click="downloadFile(a.threeFaceFileUrl, a.threeFaceFileName)"
@@ -271,12 +291,12 @@ export default class BOMImageInfoModel extends Vue {
     dom.click();
     dom.value = "";
   }
-  public uploadLiFile(e: any) {
-    const { infoId } = this;
-    const file = e.target.files[0];
-    // this.updateSpareImage({ file, infoId });
-    this.infoId = "";
-  }
+  // public uploadLiFile(e: any) {
+  //   const { infoId } = this;
+  //   const file = e.target.files[0];
+  //   // this.updateSpareImage({ file, infoId });
+  //   this.infoId = "";
+  // }
 
   
 
@@ -397,6 +417,7 @@ export default class BOMImageInfoModel extends Vue {
     margin-left 14px
     font-size 14px
     color $color-text-gray
+    position relative
     &-black
       color $color-text-black
     &-blue
@@ -410,6 +431,14 @@ export default class BOMImageInfoModel extends Vue {
     &-arrow
       padding-right 14px
       border-right solid 1px $color-bd
+    &-tip
+      position absolute
+      top 0
+      right 14px
+      width 6px
+      height 6px
+      border-radius 10px
+      background $color-bg-red
   &-buttons
     width 100%
     display flex

@@ -5,6 +5,7 @@
       name="file"
       hidden="hidden"
       id="file"
+      accept="image/*"
       @change="uploadFile"
     />
     <div class="items" v-if="initInfo.type === Supplier.Machining && machinStepList && machinStepList.length">
