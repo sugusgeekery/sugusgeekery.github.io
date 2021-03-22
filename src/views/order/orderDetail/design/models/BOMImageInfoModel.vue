@@ -79,7 +79,7 @@
                 v-for="(a, b) in BOMImageInfo.list"
                 :key="'_BOM表零件图纸_' + b"
               >
-                <td v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type" @click="a.twoFaceFileId && a.threeFaceFileId ? checkBOMImage(b) : null">
+                <td v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type" @click="checkBOMImage(b)">
                   <img
                     class="model-icon"
                     v-if="a.isSelected"

@@ -55,7 +55,7 @@
                 </el-date-picker>
               </div>
             </div>
-            <div class="filter-item">
+            <!-- <div class="filter-item">
               <div class="filter-item-label">交付地区</div>
               <div class="filter-item-content">
                 <el-cascader
@@ -70,7 +70,7 @@
                   @change="updateProvinceCityCountry"
                 ></el-cascader>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="list-body">

@@ -37,9 +37,9 @@
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="Supplier.Design === initInfo.type"
-            @click="b > 0 ? alertModel({ label: b + 1, isEdit: a.approveStatus === 0 }) : null"
+            @click="b > 0 ? alertModel({ label: b + 1, isEdit: a.approveStatus < 3 }) : null"
           >
-            {{ a.approveStatus === 0 ? (b > 0 ? "导入" : "上传") : a.approveStatus > 0 ? "查看" : ""}}{{ a.stepName }}
+            {{ a.approveStatus !== 3 ? (b > 0 ? "导入" : "上传") : a.approveStatus === 3 ? "查看" : ""}}{{ a.stepName }}
           </span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"

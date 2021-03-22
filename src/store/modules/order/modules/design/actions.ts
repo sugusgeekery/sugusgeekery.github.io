@@ -319,10 +319,14 @@ export default {
     const { state, dispatch, commit } = store;
     const { BOMImageInfo } = state;
     const { list } = BOMImageInfo;
-    const { isSelected = false } = list[index] || {};
-    list[index]["isSelected"] = !isSelected;
-    commit(MutationTypes.UpdateBOMImageInfo, { list });
-    dispatch(ActionTypes.CacluateBOMImageInfo);
+    const { isSelected = false, twoFaceFileId, threeFaceFileId } = list[index] || {};
+    if (twoFaceFileId && threeFaceFileId && (list[index] || {}).state === 1) {
+      list[index]["isSelected"] = !isSelected;
+      commit(MutationTypes.UpdateBOMImageInfo, { list });
+      dispatch(ActionTypes.CacluateBOMImageInfo);
+    } else {
+      Message.error("不符合选中条件");
+    }
   },
   // 全部选择BOM零件图纸
   [ActionTypes.CheckBOMImageAll](store: Store) {
@@ -330,7 +334,10 @@ export default {
     const { BOMImageInfo } = state;
     const { list, isAllSelected = false } = BOMImageInfo;
     for (const [a, b] of list.entries()) {
-      list[a]["isSelected"] = !isAllSelected;
+      const { twoFaceFileId, threeFaceFileId, state } = b;
+      if (twoFaceFileId && threeFaceFileId && state) {
+        list[a]["isSelected"] = !isAllSelected;
+      }
     }
     commit(MutationTypes.UpdateBOMImageInfo, { list });
     dispatch(ActionTypes.CacluateBOMImageInfo);
