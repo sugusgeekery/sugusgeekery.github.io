@@ -300,7 +300,7 @@ export default {
         total++;
       }
     }
-    commit(MutationTypes.UpdateBOMImageInfo, { isAllSelected: total === list.length });
+    commit(MutationTypes.UpdateBOMImageInfo, { isAllSelected: list.length > 0 && total === list.length });
   },
   // 更新BOM零件图纸表每页条数
   [ActionTypes.UpdateBOMImagePageSize](store: Store, pageSize: number) {

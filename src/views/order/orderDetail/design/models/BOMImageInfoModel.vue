@@ -79,7 +79,7 @@
                 v-for="(a, b) in BOMImageInfo.list"
                 :key="'_BOM表零件图纸_' + b"
               >
-                <td v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type" @click="checkBOMImage(b)">
+                <td v-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type" @click="a.twoFaceFileId && a.threeFaceFileId ? checkBOMImage(b) : null">
                   <img
                     class="model-icon"
                     v-if="a.isSelected"
@@ -97,32 +97,34 @@
                 <td>{{ a.partName }}</td>
                 <td>{{ a.partCode }}</td>
                 <td>
-                  <span class="model-text model-text-blue">{{ a.twoFaceFileName }}</span>
+                  <span class="model-text model-text-blue" v-if="a.twoFaceFileName">{{ a.twoFaceFileName }}</span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
                     @click="checkLiFile(a.twoFaceFileId, a.twoFaceFileName)"
-                    v-if="a.state === 3 && BOMImageInfo.isEdit"
+                    v-if="Supplier.Design === initInfo.type && a.state === 3 && BOMImageInfo.isEdit"
                   >
                     更新
                     <span class="model-text-tip"></span>
                   </span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
-                    v-else
+                    @click="a.state !== 2 ? checkLiFile(a.twoFaceFileId, a.twoFaceFileName) : null"
+                    v-else-if="Supplier.Design === initInfo.type"
                   >
                     更新
                   </span>
                   <span
                     class="model-text model-text-gray"
+                    v-if="a.twoFaceFileUrl"
                     @click="downloadFile(a.twoFaceFileUrl, a.twoFaceFileName)"
                     >下载</span
                   >
                 </td>
                 <td>
-                  <span class="model-text model-text-blue">{{ a.threeFaceFileName }}</span>
+                  <span class="model-text model-text-blue" v-if="a.threeFaceFileName">{{ a.threeFaceFileName }}</span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
-                    v-if="a.state === 3 && BOMImageInfo.isEdit"
+                    v-if="Supplier.Design === initInfo.type && a.state === 3 && BOMImageInfo.isEdit"
                     @click="checkLiFile(a.threeFaceFileId, a.threeFaceFileName)"
                   >
                     更新
@@ -130,12 +132,14 @@
                   </span>
                   <span
                     class="model-text model-text-gray model-text-arrow"
-                    v-else
+                    @click="a.state !== 2 ? checkLiFile(a.threeFaceFileId, a.threeFaceFileName) : null"
+                    v-else-if="Supplier.Design === initInfo.type"
                   >
                     更新
                   </span>
                   <span
                     class="model-text model-text-gray"
+                    v-if="a.threeFaceFileUrl"
                     @click="downloadFile(a.threeFaceFileUrl, a.threeFaceFileName)"
                     >下载</span
                   >
