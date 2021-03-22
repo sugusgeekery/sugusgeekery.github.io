@@ -273,7 +273,7 @@ export default class BOMImageInfoModel extends Vue {
       if (success) {
         const { pics = [] } = data || {};
         const { filePath = "", fileName = "", id = "" } = pics[0];
-        this.fileList.push({ fileName, fileId: id });
+        this.fileList.push(id);
         if (this.fileNum === this.fileLen - 1) {
           this.importBomImage({ bomDesignFiles: this.fileList })
         } else {
