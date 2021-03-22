@@ -369,6 +369,10 @@ export default {
       }
       return arr;
     })(list);
+    if (!mouldBomListIds.length) {
+      Message.error("请选择后再提交");
+      return;
+    }
     try {
       const { success, message, data }: any = await ApprovalBomImage({ mouldProduceId, cause, mouldBomListIds, opinion });
       if (success) {
