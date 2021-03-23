@@ -86,7 +86,7 @@
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="c.opinion === 0"
-            @click="alertMessage(a.cause)"
+            @click="alertMessage(c.cause)"
           >
             查看详情
           </span>
@@ -213,6 +213,7 @@ export default class DesignView extends Vue {
     }
   }
   public alertMessage(content: string) {
+    console.log(content)
     MessageBox.alert(
       content || "",
       "驳回原因"
