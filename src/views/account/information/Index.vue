@@ -401,6 +401,7 @@ export default class InformationView extends Vue {
   public selectFile() {
     const dom: any = document.querySelector("#headiconFile");
     dom.click();
+    dom.value = "";
   }
   public uploadFile(e: any) {
     const files = e.target.files;

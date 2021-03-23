@@ -290,6 +290,7 @@ export default class ProcessView extends Vue {
     this.index = index;
     const dom: any = document.querySelector("#file");
     dom.click();
+    dom.value = "";
   }
   // public uploadFile(e: any) {
   //   const files = e.target.files;

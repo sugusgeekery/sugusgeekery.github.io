@@ -597,6 +597,7 @@ export default class ReportView extends Vue {
     this.index = b;
     const dom: any = document.querySelector("#file");
     dom.click();
+    dom.value = "";
   }
   public uploadFile(e: any) {
     const files = e.target.files;
