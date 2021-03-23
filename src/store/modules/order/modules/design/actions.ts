@@ -252,7 +252,8 @@ export default {
       const { success, message, data }: any = await ApprovalBom({ mouldProduceId, cause, opinion, role });
       if (success) {
         Message.success(message);
-        dispatch(ActionTypes.GetBOMList);
+        // dispatch(ActionTypes.GetBOMList);
+        commit(MutationTypes.UpdateBOMTable, { isShow: false });
       } else {
         Message.error(message);
       }
@@ -389,7 +390,8 @@ export default {
       const { success, message, data }: any = await ApprovalBomImage({ mouldProduceId, cause, mouldBomListIds, opinion });
       if (success) {
         Message.success(message);
-        dispatch(ActionTypes.GetBOMImageInfo);
+        // dispatch(ActionTypes.GetBOMImageInfo);
+        commit(MutationTypes.UpdateBOMImageInfo, { isShow: false });
       } else {
         Message.error(message);
       }
