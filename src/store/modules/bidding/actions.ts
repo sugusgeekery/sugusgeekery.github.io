@@ -147,6 +147,7 @@ export default {
       const { amount, id, workPeriod } = list[index] || {};
       const { success, message, data }: any = await JoinBidding({ amount, biddingHeadId: id, workPeriod });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetBiddingList);
       } else {
         Message.error(message);
@@ -222,6 +223,7 @@ export default {
       }
       const { success, message, data }: any = fn;
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetBiddingList);
         dispatch(ActionTypes.GetMouldBiddingDetail);
       } else {

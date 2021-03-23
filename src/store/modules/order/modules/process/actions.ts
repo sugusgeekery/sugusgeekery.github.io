@@ -179,6 +179,7 @@ export default {
       }
       const { success, message, data }: any = fn;
       if (success) {
+        Message.success(message);
         if (type === 1) {
           dispatch(ActionTypes.GetMachinSteps);
           dispatch(ActionTypes.GetAssembleSteps);

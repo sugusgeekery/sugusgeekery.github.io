@@ -110,6 +110,7 @@ export default {
       }
       const { success, message, data }: any = fn;
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetPrototype);
       } else {
         Message.error(message);

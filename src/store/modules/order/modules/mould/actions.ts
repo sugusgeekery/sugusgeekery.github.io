@@ -140,6 +140,7 @@ export default {
         injectionDays: injectionTime
       });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetAllRepair);
       } else {
         Message.error(message);
@@ -160,6 +161,7 @@ export default {
       const { productId = "" } = mouldProductList[index] || {};
       const { success, message, data }: any = await NeedChangeDrawing({ productId });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetMould);
       } else {
         Message.error(message);
@@ -180,6 +182,7 @@ export default {
       const { productId = "" } = mouldProductList[index] || {};
       const { success, message, data }: any = await DfmApprovalDrawing({ productId, opinion });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetMould);
       } else {
         Message.error(message);

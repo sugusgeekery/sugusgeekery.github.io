@@ -133,6 +133,7 @@ export default {
       const { threeFacePlanFileId } = params || {};
       const { success, message, data }: any = await ImportDesign({ mouldProduceId, threeFacePlanFileId });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetStepDetail);
       } else {
         Message.error(message);
@@ -152,6 +153,7 @@ export default {
         const { success, message, data }: any = await ApprovalDesign(datas);
         if (success) {
           // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
+          Message.success(message);
           dispatch(ActionTypes.GetStepDetail);
         } else {
           Message.error(message);
@@ -231,6 +233,7 @@ export default {
       const { mouldProduceId } = initInfo;
       const { success, message, data }: any = await ImportBom({ mouldProduceId, bomFileId });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetBOMList);
       } else {
         Message.error(message);
@@ -248,6 +251,7 @@ export default {
       const { cause, opinion, role } = params || {};
       const { success, message, data }: any = await ApprovalBom({ mouldProduceId, cause, opinion, role });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetBOMList);
       } else {
         Message.error(message);
@@ -351,6 +355,7 @@ export default {
       const { bomDesignFiles } = params;
       const { success, message, data }: any = await ImportBomImage({ mouldProduceId, bomDesignFiles });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetBOMImageInfo);
       } else {
         Message.error(message);
@@ -383,6 +388,7 @@ export default {
     try {
       const { success, message, data }: any = await ApprovalBomImage({ mouldProduceId, cause, mouldBomListIds, opinion });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetBOMImageInfo);
       } else {
         Message.error(message);

@@ -154,6 +154,7 @@ export default {
       }
       const { success, message, data }: any = await CommitReport({ supplierOrderId: id, describe, reportTitleId, images });
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetDfmReportList);
       } else {
         Message.error(message);
@@ -192,6 +193,7 @@ export default {
       }
       const { success, message, data }: any = fn;
       if (success) {
+        Message.success(message);
         dispatch(ActionTypes.GetDfmReportList);
       } else {
         Message.error(message);

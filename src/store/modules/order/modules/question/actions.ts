@@ -114,6 +114,7 @@ export default {
       
       const { success, message, data }: any = fn;
       if (success) {
+        Message.success(message);
         // commit(MutationTypes.UpdateQuestionList, data || []);
         dispatch(ActionTypes.GetQuestionList);
       } else {
