@@ -183,9 +183,7 @@ export default {
   async [RootActionTypes.Logout](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { loginInfo } = state;
-      const { token } = loginInfo || {};
-      const { success, message, data }: any = await Logout({ token });
+      const { success, message, data }: any = await Logout();
       if (success) {
         commit(RootMutationTypes.UpdateLoginInfo, { accessToken: "", exist: "", openId: "", supplierInfo: {}, token: "", isFirstExist: false });
         commit(RootMutationTypes.UpdateAccountInfo, {});

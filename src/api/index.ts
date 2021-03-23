@@ -27,7 +27,7 @@ export const Register = (data: object = {}): object => fetch({ url: "/supplier/o
 export const GetAccountInfo = (params: object = {}): object => fetch({ url: "/supplier/userManage/getLoginedUserInfo", method: "GET", params });
 
 // 退出登录 
-export const Logout = (data: object = {}): object => fetch({ url: "/supplier/oauth/logout", data });
+export const Logout = (params: object = {}): object => fetch({ url: "/supplier/oauth/logout", method: "GET", params });
 
 
 
