@@ -1,5 +1,8 @@
 <template>
   <div class="information">
+    <div class="show-image" v-if="isShowImage">
+      <img src="../../../../assets/images/GB-T14486-2008.png" class="li-text-icon" alt="" @click="showImage(false)">
+    </div>
     <div
       class="list"
       v-if="Supplier.Dfm === initInfo.type || Supplier.Design === initInfo.type"
@@ -8,13 +11,18 @@
         <div class="li-row">
           <div class="li-text">
             <span class="li-text-gray">模具寿命：</span>
-            <span class="li-text-gray">{{ mould.lifetime }}</span>
+            <span class="li-text-gray">{{ mould.lifetime }}（万次）</span>
           </div>
         </div>
         <div class="li-row">
           <div class="li-text">
             <span class="li-text-gray">精度标准</span>
-            <img src="../../../../assets/images/tip_4.png" class="li-text-icon" alt="">
+            <img src="../../../../assets/images/tip_4.png" class="li-text-icon" alt="" @click="showImage(true)">
+            <!-- <el-image 
+              class="li-text-icon"
+              :src="require('../../../../assets/images/tip_4.png')" 
+              :preview-src-list="[require('../../../../assets/images/GB-T14486-2008.png')]">
+            </el-image> -->
             <span class="li-text-gray">：</span>
             <span class="li-text-gray">{{ mould.toleranceValue }}</span>
           </div>
@@ -28,7 +36,7 @@
       >
         <div class="li-text">
           <span class="li-text-black">产品：</span>
-          <span class="li-text-black">{{ a.productNo }}</span>
+          <span class="li-text-black">{{ a.realProductNo }}</span>
           <span class="li-text-tips" v-if="a.isUpdateImage === 1">
             <img src="../../../../assets/images/tip_3.png" class="li-text-icon" alt="">
             <span class="li-text-tip">需要更新图纸</span>
@@ -62,7 +70,7 @@
             <div class="li-text">
               <span class="li-text-black">材料及颜色：</span>
               <span class="li-text-blue"
-                >{{ a.productMaterial.materialValue
+                >{{ a.productMaterial.materialSpecParentName
                 }}{{ a.productMaterial.materialColorValue }}</span
               >
             </div>
@@ -87,7 +95,7 @@
           </div>
         </div>
         <div class="li-buttons" v-if="Supplier.Dfm === initInfo.type">
-          <div class="li-button li-button-blue" v-if="a.isUpdateImage === 1" @click="needChangeDrawing({ index: b })">需要更新图纸</div>
+          <div class="li-button li-button-blue" v-if="a.isUpdateImage === 0" @click="needChangeDrawing({ index: b })">需要更新图纸</div>
           <div class="li-button li-button-blue" v-if="a.isUpdateImage === 2" @click="dfmApprovalDrawing({ opinion: 1, index: b })">确认图纸</div>
           <div class="li-button li-button-red" v-if="a.isUpdateImage === 2" @click="dfmApprovalDrawing({ opinion: 1, index: b })">驳回图纸</div>
         </div>
@@ -136,7 +144,7 @@
       >
         <div class="li-text">
           <span class="li-text-black">产品：</span>
-          <span class="li-text-black">{{ a.productNo }}</span>
+          <span class="li-text-black">{{ a.realProductNo }}</span>
         </div>
         <div class="li-content">
           <div class="li-row">
@@ -166,7 +174,7 @@
             <div class="li-text">
               <span class="li-text-black">材料及颜色：</span>
               <span class="li-text-blue"
-                >{{ a.productMaterial.materialValue
+                >{{ a.productMaterial.materialSpecParentName
                 }}{{ a.productMaterial.materialColorValue }}</span
               >
             </div>
@@ -298,6 +306,8 @@ import validate, {
   components: {}
 })
 export default class MouldView extends Vue {
+  // 是否显示图片
+  public isShowImage = false;
   // 图片域名
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
   // 供应商类型列表
@@ -356,6 +366,10 @@ export default class MouldView extends Vue {
       this.updateRepairMould({ key, value });
     }
   }
+
+  public showImage(isShowImage: boolean) {
+    this.isShowImage = isShowImage;
+  }
 }
 </script>
 
@@ -369,6 +383,20 @@ export default class MouldView extends Vue {
   width 100%
   height 100%
   overflow auto
+  .show-image
+    position fixed 
+    top 0
+    left 0
+    width 100%
+    height 100%
+    overflow auto
+    display flex
+    justify-content center 
+    align-items center
+    z-index 999
+    background rgba($color-bg-black, .3)
+    img
+      object-fit contain
   .list
     margin 36px
     border solid 1px $color-bd

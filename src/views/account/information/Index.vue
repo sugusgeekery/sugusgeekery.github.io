@@ -7,7 +7,7 @@
           <div class="nav-label">账号类型：</div>
           <div class="nav-text" v-if="initInfo.type">
             <span class="nav-text-gray">{{ initInfo.typeStr || "无" }}</span>
-            <span
+            <!-- <span
               class="nav-text-blue"
               @click="
                 updateInitInfo({
@@ -15,7 +15,7 @@
                 })
               "
               >（修改）</span
-            >
+            > -->
           </div>
           <div class="nav-items" v-if="!initInfo.type">
             <Selection
