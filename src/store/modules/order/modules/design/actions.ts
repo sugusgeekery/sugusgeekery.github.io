@@ -255,6 +255,7 @@ export default {
           Message.success(message);
           // dispatch(ActionTypes.GetBOMList);
           commit(MutationTypes.UpdateBOMTable, { isShow: false });
+          dispatch(ActionTypes.GetStepDetail);
         } else {
           Message.error(message);
         }
@@ -419,6 +420,7 @@ export default {
           Message.success(message);
           // dispatch(ActionTypes.GetBOMImageInfo);
           commit(MutationTypes.UpdateBOMImageInfo, { isShow: false });
+          dispatch(ActionTypes.GetStepDetail);
         } else {
           Message.error(message);
         }
