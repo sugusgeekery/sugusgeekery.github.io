@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <div class="header">
+    <div class="header" @click="$router.push('/')">
       <img class="header-image" src="../../assets/images/logo.png" alt="" />
       <div class="header-text">好品数字 合作伙伴</div>
     </div>

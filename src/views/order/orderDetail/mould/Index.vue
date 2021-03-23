@@ -204,6 +204,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
+              :readonly="true"
               :value="repairMould.repairAmount"
               @change="v => changeInput({ key: 'repairAmount', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"

@@ -189,6 +189,7 @@ export default class RegisterView extends Vue {
           this.tipNumber--;
         } else {
           clearInterval(numberInterval);
+          this.updateRegisterNavIndex(0);
           router.push("/account/information");
         }
       }, 1000);
@@ -263,6 +264,7 @@ export default class RegisterView extends Vue {
     this.register({ companyName, userName, phone, code });
   }
   public toHome() {
+    this.updateRegisterNavIndex(0);
     router.push("/account/information");
   }
 }

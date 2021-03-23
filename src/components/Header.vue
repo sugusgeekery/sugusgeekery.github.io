@@ -20,7 +20,8 @@
           已认证
         </div>
         <div class="header-icon-button" v-else>未认证</div>
-        <div class="header-icon-link">个人中心</div>
+        <div class="header-icon-link" @click="logout()">退出</div>
+        <!-- <div class="header-icon-link">个人中心</div> -->
         <!-- <div class="header-icon-message">消息</div>
         <div class="header-icon-tip">5</div> -->
       </div>
@@ -59,7 +60,7 @@ export default class Header extends Vue {
   //   return navIndex;
   // }
 
-  // @Action(RootActionTypes.Logout) public logout!: Function;
+  @Action(RootActionTypes.Logout) public logout!: Function;
 }
 </script>
 

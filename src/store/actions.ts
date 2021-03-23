@@ -16,7 +16,8 @@ import {
   WechatLogin,
   PhoneLogin,
   Register,
-  GetAccountInfo
+  GetAccountInfo,
+  Logout
 } from "@/api";
 
 interface Store {
@@ -27,6 +28,7 @@ interface Store {
 }
 
 export enum RootActionTypes {
+  Init = "Init",
   GetVerificationCode = "GetVerificationCode",
   UpdateVerificationCodeNumber = "UpdateVerificationCodeNumber",
   VerificationCodelogin = "VerificationCodelogin",
@@ -35,9 +37,16 @@ export enum RootActionTypes {
   Register = "Register",
   GetAccountInfo = "GetAccountInfo",
   UpdateNavigationIndex = "UpdateNavigationIndex",
+  Logout = "Logout"
 }
 
 export default {
+  // 初始化模块默认值
+  [RootActionTypes.Init](store: Store, params: any) {
+    const { state, dispatch, commit } = store;
+    commit(RootMutationTypes.UpdateInitInfo, { ...(params || {}) });
+  },
+
   // 获取验证码
   async [RootActionTypes.GetVerificationCode](store: Store, parameter: any = {}) {
     try {
@@ -162,6 +171,25 @@ export default {
         if (!isFirstExist) {
           router.push("/home");
         }
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 退出登录
+  async [RootActionTypes.Logout](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { loginInfo } = state;
+      const { token } = loginInfo || {};
+      const { success, message, data }: any = await Logout({ token });
+      if (success) {
+        commit(RootMutationTypes.UpdateLoginInfo, { accessToken: "", exist: "", openId: "", supplierInfo: {}, token: "", isFirstExist: false });
+        commit(RootMutationTypes.UpdateAccountInfo, {});
+        router.push("/login");
       } else {
         Message.error(message);
       }
