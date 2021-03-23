@@ -243,22 +243,48 @@ export default {
     }
   },
   // 验收BOM图表
-  async [ActionTypes.ApprovalBom](store: Store, params: any) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { initInfo } = state;
-      const { mouldProduceId } = initInfo;
-      const { cause, opinion, role } = params || {};
-      const { success, message, data }: any = await ApprovalBom({ mouldProduceId, cause, opinion, role });
-      if (success) {
-        Message.success(message);
-        // dispatch(ActionTypes.GetBOMList);
-        commit(MutationTypes.UpdateBOMTable, { isShow: false });
-      } else {
-        Message.error(message);
+  [ActionTypes.ApprovalBom](store: Store, params: any) {
+    const { state, dispatch, commit } = store;
+    const { initInfo } = state;
+    const { mouldProduceId } = initInfo;
+    const { cause, opinion, role } = params || {};
+    const fn = async(params: any) => {
+      try {
+        const { success, message, data }: any = await ApprovalBom(params);
+        if (success) {
+          Message.success(message);
+          // dispatch(ActionTypes.GetBOMList);
+          commit(MutationTypes.UpdateBOMTable, { isShow: false });
+        } else {
+          Message.error(message);
+        }
+      } catch (e) {
+        throw new Error(e);
       }
-    } catch (e) {
-      throw new Error(e);
+    }
+    if (opinion === 0) {
+      MessageBox({
+        message: "",
+        title: "温馨提示",
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        showClose: true,
+        showInput: true,
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
+        center: true,
+        roundButton: false,
+        showConfirmButton: true,
+        showCancelButton: true
+      })
+        .then(({ action, value }: any) => {
+          if (action === "confirm") {
+            fn({ mouldProduceId, cause: value, opinion, role });
+          }
+        })
+        .catch(() => {});
+    } else {
+      fn({ mouldProduceId, cause, opinion, role });
     }
   },
 
@@ -366,7 +392,7 @@ export default {
     }
   },
   // 验收BOM图表零件图纸
-  async [ActionTypes.ApprovalBomImage](store: Store, params: any) {
+  [ActionTypes.ApprovalBomImage](store: Store, params: any) {
     const { state, dispatch, commit } = store;
     const { initInfo, BOMImageInfo } = state;
     const { list } = BOMImageInfo;
@@ -386,18 +412,46 @@ export default {
       Message.error("请选择后再提交");
       return;
     }
-    try {
-      const { success, message, data }: any = await ApprovalBomImage({ mouldProduceId, cause, mouldBomListIds, opinion });
-      if (success) {
-        Message.success(message);
-        // dispatch(ActionTypes.GetBOMImageInfo);
-        commit(MutationTypes.UpdateBOMImageInfo, { isShow: false });
-      } else {
-        Message.error(message);
+    const fn = async(params: any) => {
+      try {
+        const { success, message, data }: any = await ApprovalBomImage(params);
+        if (success) {
+          Message.success(message);
+          // dispatch(ActionTypes.GetBOMImageInfo);
+          commit(MutationTypes.UpdateBOMImageInfo, { isShow: false });
+        } else {
+          Message.error(message);
+        }
+      } catch (e) {
+        throw new Error(e);
       }
-    } catch (e) {
-      throw new Error(e);
     }
+    
+    if (opinion === 0) {
+      MessageBox({
+        message: "",
+        title: "温馨提示",
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        showClose: true,
+        showInput: true,
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
+        center: true,
+        roundButton: false,
+        showConfirmButton: true,
+        showCancelButton: true
+      })
+        .then(({ action, value }: any) => {
+          if (action === "confirm") {
+            fn({ mouldProduceId, cause: value, mouldBomListIds, opinion });
+          }
+        })
+        .catch(() => {});
+    } else {
+      fn({ mouldProduceId, cause, mouldBomListIds, opinion });
+    }
+    
   },
   
 }

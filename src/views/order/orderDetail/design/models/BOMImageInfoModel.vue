@@ -185,7 +185,7 @@
           >
             通过
           </div>
-          <div class="model-button" @click="showMessageBox()">
+          <div class="model-button" @click="approvalBomImage({ cause: '', opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })">
             驳回
           </div>
         </div>
@@ -304,29 +304,29 @@ export default class BOMImageInfoModel extends Vue {
 
   
 
-  public showMessageBox() {
-    const { Supplier, initInfo } = this;
-    MessageBox({
-      message: "",
-      title: "温馨提示",
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      showClose: true,
-      showInput: true,
-      closeOnClickModal: false,
-      closeOnPressEscape: false,
-      center: true,
-      roundButton: false,
-      showConfirmButton: true,
-      showCancelButton: true
-    })
-      .then(({ action, value }: any) => {
-        if (action === "confirm") {
-          this.approvalBomImage({ cause: value, opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 });
-        }
-      })
-      .catch(() => {});
-  }
+  // public showMessageBox() {
+  //   const { Supplier, initInfo } = this;
+  //   MessageBox({
+  //     message: "",
+  //     title: "温馨提示",
+  //     confirmButtonText: "确定",
+  //     cancelButtonText: "取消",
+  //     showClose: true,
+  //     showInput: true,
+  //     closeOnClickModal: false,
+  //     closeOnPressEscape: false,
+  //     center: true,
+  //     roundButton: false,
+  //     showConfirmButton: true,
+  //     showCancelButton: true
+  //   })
+  //     .then(({ action, value }: any) => {
+  //       if (action === "confirm") {
+  //         this.approvalBomImage({ cause: value, opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 });
+  //       }
+  //     })
+  //     .catch(() => {});
+  // }
 
   public alertMessage(content: string) {
     MessageBox.alert(
