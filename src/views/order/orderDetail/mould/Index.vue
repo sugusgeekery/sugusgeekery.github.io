@@ -188,7 +188,7 @@
         </div>
       </div>
     </div>
-    <div v-if="Supplier.Machining === initInfo.type">
+    <div v-if="Supplier.Machining === initInfo.type && repairMouldList.length">
       <div class="filter-items">
         <div class="filter-item">
           <div class="filter-item-content">
