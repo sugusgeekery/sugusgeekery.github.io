@@ -212,7 +212,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
-              :readonly="true"
+              :readonly="repairMould.approvalState > 0"
               :value="repairMould.repairAmount"
               @change="v => changeInput({ key: 'repairAmount', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
@@ -224,6 +224,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
+              :readonly="repairMould.approvalState > 0"
               :value="repairMould.repairDeliveryDays"
               @input="v => changeInput({ key: 'repairDeliveryDays', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
@@ -241,6 +242,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
+              :readonly="repairMould.approvalState > 0"
               :value="repairMould.planDesignTime"
               @input="v => changeInput({ key: 'planDesignTime', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
@@ -253,6 +255,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
+              :readonly="repairMould.approvalState > 0"
               :value="repairMould.machinTime"
               @input="v => changeInput({ key: 'machinTime', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
@@ -265,6 +268,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
+              :readonly="repairMould.approvalState > 0"
               :value="repairMould.injectionTime"
               @input="v => changeInput({ key: 'injectionTime', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
