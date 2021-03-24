@@ -32,9 +32,9 @@
             <div class="model-button" @click="checkFile()">导入BOM表</div>
           </div>
           <div class="model-flex" v-else></div>
-          <div class="model-flex">
-            <div class="model-text model-text-blue">BOM模板</div>
-            <div class="model-text">下载</div>
+          <div class="model-flex" v-if="design.stepInfoList[1].filePath">
+            <div class="model-text model-text-blue" v-if="design.stepInfoList[1].fileName">{{ design.stepInfoList[1].fileName }}</div>
+            <div class="model-text model-text-hover" @click="downloadFile(design.stepInfoList[1].filePath, design.stepInfoList[1].fileName)">下载</div>
           </div>
         </div>
         <div class="model-table">
@@ -107,7 +107,7 @@ import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("order/design");
 
 import { Supplier } from "@/store/modules/order/state";
-import { InitInfo } from "@/store/modules/order/modules/design/state";
+import { InitInfo, Design } from "@/store/modules/order/modules/design/state";
 import { ActionTypes } from "@/store/modules/order/modules/design/actions";
 import { MutationTypes } from "@/store/modules/order/modules/design/mutations";
 
@@ -127,6 +127,8 @@ export default class BOMTableModel extends Vue {
 
   @State("initInfo")
   public initInfo!: any | InitInfo;
+  @State("design")
+  public design!: Design;
   @State("BOMTable")
   public BOMTable!: any;
 
@@ -285,6 +287,8 @@ export default class BOMTableModel extends Vue {
       color $color-text-black
     &-blue
       color $color-text-blue
+    &-hover
+      cursor pointer
   &-buttons
     width 100%
     display flex
