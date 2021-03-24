@@ -21,7 +21,7 @@
         <img class="item-title-icon" src="../../../../assets/images/select_green.png" alt="" v-if="a.state === 2" />
         <div
           class="item-title-button"
-          v-else-if="a.state === 3 && initInfo.type === Supplier.Dfm"
+          v-else-if="a.state === 3 && initInfo.type === Supplier.Dfm && a.canCommit"
           @click="
             updateReportData({
               index: b,
