@@ -71,8 +71,11 @@ export default {
     const { type = 0 } = accountInfo || {};
     const typeStr = type === 1 ? "公司" : type === 2 ? "个人" : "";
     commit(MutationTypes.UpdateInitInfo, { type, typeStr, loginInfo, accountInfo, ...params });
-    dispatch(ActionTypes.GetPersonQualifyInfo);
-    dispatch(ActionTypes.GetCompQualifyInfo);
+    if (type === 1) {
+      dispatch(ActionTypes.GetPersonQualifyInfo);
+    } else if (type === 2) {
+      dispatch(ActionTypes.GetCompQualifyInfo);
+    }
   },
 
   // 更新是否首次注册 
