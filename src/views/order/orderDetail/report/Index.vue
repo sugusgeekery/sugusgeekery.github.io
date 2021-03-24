@@ -65,7 +65,7 @@
                 />
                 <div
                   class="swiper-slide-delete"
-                  v-if="!a.state && initInfo.type === Supplier.Dfm"
+                  v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit"
                   @click="deleteReportFile({ index: b, key: d })"
                 >
                   X
@@ -74,7 +74,7 @@
             </div>
             <div
               class="swiper-slide"
-              v-if="!a.state && initInfo.type === Supplier.Dfm"
+              v-if="!a.state && initInfo.type === Supplier.Dfm  && a.canCommit"
               @click="selectFile(b)"
             >
               <div class="swiper-slide-box">
@@ -93,7 +93,7 @@
       <div class="item-content">
         <div
           class="item-content-textarea"
-          v-if="!a.state && initInfo.type === Supplier.Dfm"
+          v-if="!a.state && initInfo.type === Supplier.Dfm  && a.canCommit"
         >
           <textarea
             name=""
@@ -115,7 +115,7 @@
       </div>
       <div
         class="item-cells"
-        v-if="a.state && initInfo.type === Supplier.Dfm || initInfo.type === Supplier.Design"
+        v-if="a.state && (initInfo.type === Supplier.Dfm || initInfo.type === Supplier.Design)"
       >
         <div class="item-cell" v-if="a.machiningApprovalInfo">
           <div class="item-cell-text item-cell-text-black">加工方：</div>
@@ -201,7 +201,7 @@
       </div>
       <div
         class="item-buttons"
-        v-if="!a.state && initInfo.type === Supplier.Dfm"
+        v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit"
       >
         <div
           class="item-button item-button-blue"
