@@ -246,7 +246,7 @@ export default class ProcessView extends Vue {
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
 
   @State("initInfo")
-  public initInfo!: InitInfo;
+  public initInfo!: any | InitInfo;
   @State("machinStepList")
   public machinStepList!: any | Array<MachinStepList>;
   @State("assembleStepList")
@@ -267,8 +267,12 @@ export default class ProcessView extends Vue {
   public updateInjectionStepList!: Function;
 
 
-  // @Action(ActionTypes.GetStepList)
-  // public GetStepList!: Function;
+  @Action(ActionTypes.GetMachinSteps)
+  public getMachinSteps!: Function;
+  @Action(ActionTypes.GetAssembleSteps)
+  public getAssembleSteps!: Function;
+  @Action(ActionTypes.GetInjectionSteps)
+  public getInjectionSteps!: Function;
   // @Action(ActionTypes.UploadForm)
   // public uploadForm!: Function;
   
@@ -280,6 +284,20 @@ export default class ProcessView extends Vue {
 
   public created() {
     // this.GetStepList();
+    const { type = "" } = this.initInfo || {};
+    switch(type) {
+      case Supplier.Dfm:
+        break;
+      case Supplier.Design:
+        break;
+      case Supplier.Machining:
+        this.getMachinSteps();
+        this.getAssembleSteps();
+        break;
+      case Supplier.Injection:
+        this.getInjectionSteps();
+        break;
+    }
   }
   public mounted() {}
 

@@ -43,20 +43,20 @@ export default {
   [ActionTypes.Init](store: Store, params: any | InitInfo) {
     const { state, dispatch, commit } = store;
     commit(MutationTypes.UpdateInitInfo, params);
-    const { type = "" } = params || {};
-    switch(type) {
-      case Supplier.Dfm:
-        break;
-      case Supplier.Design:
-        break;
-      case Supplier.Machining:
-        dispatch(ActionTypes.GetMachinSteps);
-        dispatch(ActionTypes.GetAssembleSteps);
-        break;
-      case Supplier.Injection:
-        dispatch(ActionTypes.GetInjectionSteps);
-        break;
-    }
+    // const { type = "" } = params || {};
+    // switch(type) {
+    //   case Supplier.Dfm:
+    //     break;
+    //   case Supplier.Design:
+    //     break;
+    //   case Supplier.Machining:
+    //     dispatch(ActionTypes.GetMachinSteps);
+    //     dispatch(ActionTypes.GetAssembleSteps);
+    //     break;
+    //   case Supplier.Injection:
+    //     dispatch(ActionTypes.GetInjectionSteps);
+    //     break;
+    // }
   },
 
   // 获取加工步骤
