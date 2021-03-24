@@ -50,7 +50,7 @@ switch(NODE_ENV) {
     WX_APPID = "wxbd935b8482dffb36";
     WX_REDIRECT_URL = "http://supplier.hotpick.com";
     console.log(`
-        项目环境：主正式环境（${NODE_ENV}）；
+        项目环境：正式环境（${NODE_ENV}）；
         项目版本：${APPLICATION_VERSION}；
         项目更新内容：${APPLICATION_UPDATE_INFORMATION}；
 
