@@ -10,7 +10,7 @@ const APPLICATION_UPDATE_INFORMATION = `
 `
 
 // 超时时间，单位ms
-const TIME_OUT = 32000;
+const TIME_OUT = 180000;
 
 // 接口错误统一提示语
 const INTERFACE_ERROR_TEXT = "出了点小问题";
