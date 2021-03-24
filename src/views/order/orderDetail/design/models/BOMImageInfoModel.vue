@@ -250,7 +250,6 @@ export default class BOMImageInfoModel extends Vue {
   public checkFile() {
     const dom: any = document.querySelector("#bomimagefile");
     dom.click();
-    dom.value = "";
   }
   public fileLen = 0;
   public files = [];
@@ -262,10 +261,12 @@ export default class BOMImageInfoModel extends Vue {
       this.files = e.target.files;
       this.fileNum = 0;
       this.fileList = [];
-      this.uploadFileFn();
+      this.uploadFileFn(() => {
+        e.target.value = null;
+      });
     }
   }
-  public async uploadFileFn() {
+  public async uploadFileFn(fn: Function) {
     try {
       const formData = new FormData();
       formData.append("files", this.files[this.fileNum]);
@@ -275,10 +276,13 @@ export default class BOMImageInfoModel extends Vue {
         const { filePath = "", fileName = "", id = "" } = pics[0];
         this.fileList.push(id);
         if (this.fileNum === this.fileLen - 1) {
-          this.importBomImage({ bomDesignFiles: this.fileList })
+          this.importBomImage({ bomDesignFiles: this.fileList });
+          if (fn) {
+            fn();
+          }
         } else {
           this.fileNum++;
-          this.uploadFileFn();
+          this.uploadFileFn(fn);
         }
       } else {
         Message.error(message);
@@ -293,7 +297,6 @@ export default class BOMImageInfoModel extends Vue {
     this.infoId = infoId;
     const dom: any = document.querySelector("#bomimagelifile");
     dom.click();
-    dom.value = "";
   }
   // public uploadLiFile(e: any) {
   //   const { infoId } = this;

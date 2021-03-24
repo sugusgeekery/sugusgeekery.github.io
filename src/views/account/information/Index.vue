@@ -401,7 +401,6 @@ export default class InformationView extends Vue {
   public selectFile() {
     const dom: any = document.querySelector("#headiconFile");
     dom.click();
-    dom.value = "";
   }
   public uploadFile(e: any) {
     const files = e.target.files;
@@ -410,6 +409,7 @@ export default class InformationView extends Vue {
       this.uploadForm({ file: files[files.length - len] }).then((res: any) => {
         const { fileThumPath } = res || {};
         this.updateUserInfo({ headImgUrl: fileThumPath });
+        e.target.value = null;
       });
       len--;
     }

@@ -11,7 +11,7 @@
         <div class="li-row">
           <div class="li-text">
             <span class="li-text-gray">模具寿命：</span>
-            <span class="li-text-gray">{{ mould.lifetime }}（万次）</span>
+            <span class="li-text-gray">{{ mould.lifetime }}（万啤）</span>
           </div>
         </div>
         <div class="li-row">
@@ -110,7 +110,7 @@
         <div class="li-row">
           <div class="li-text">
             <span class="li-text-gray">模具寿命：</span>
-            <span class="li-text-gray">{{ mould.lifetime || 0 }}（万次）</span>
+            <span class="li-text-gray">{{ mould.lifetime || 0 }}（万啤）</span>
           </div>
           <div class="li-text">
             <span class="li-text-gray">预估日产量：</span>

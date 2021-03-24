@@ -290,7 +290,6 @@ export default class ProcessView extends Vue {
     this.index = index;
     const dom: any = document.querySelector("#file");
     dom.click();
-    dom.value = "";
   }
   // public uploadFile(e: any) {
   //   const files = e.target.files;
@@ -324,6 +323,7 @@ export default class ProcessView extends Vue {
       } else {
         Message.error(message);
       }
+      e.target.value = null;
     } catch (e) {
       throw new Error(e);
     }

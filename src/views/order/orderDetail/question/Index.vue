@@ -191,6 +191,7 @@ export default class QuestionView extends Vue {
   //     this.uploadForm({ file: files[files.length - len], index: this.index });
   //     len--;
   //   }
+  //   e.target.value = null;
   // }
 }
 </script>

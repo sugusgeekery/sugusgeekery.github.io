@@ -37,7 +37,7 @@
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="Supplier.Design === initInfo.type"
-            @click="b > 0 ? alertModel({ label: b + 1, isEdit: a.approveStatus < 3 }) : null"
+            @click="b > 0 && a.canUse ? alertModel({ label: b + 1, isEdit: a.approveStatus < 3 }) : null"
           >
             {{ a.approveStatus !== 3 ? (b > 0 ? "导入" : "上传") : a.approveStatus === 3 ? "查看" : ""}}{{ a.stepName }}
           </span>
@@ -100,7 +100,7 @@
             c.approvalTime || ""
           }}</span>
         </div>
-        <div class="design-item-content-button" v-if="Supplier.Design === initInfo.type && (a.approveStatus === 0 || a.approveStatus === 2) && b === 0">
+        <div class="design-item-content-button" v-if="Supplier.Design === initInfo.type && a.canUse && (a.approveStatus === 0 || a.approveStatus === 2) && b === 0">
           <input
             type="file"
             name="file"
@@ -113,7 +113,6 @@
             点击上传
           </span>
         </div>
-
 
         <div class="design-item-content-button" v-if="(Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type) && a.approveStatus === 1 && b === 0 && a.isEdit">
           <span
@@ -184,7 +183,6 @@ export default class DesignView extends Vue {
   public checkFile() {
     const dom: any = document.querySelector("#file");
     dom.click();
-    dom.value = "";
   }
   public async uploadFile(e: any) {
     try {
@@ -199,6 +197,7 @@ export default class DesignView extends Vue {
       } else {
         Message.error(message);
       }
+      e.target.value = null;
     } catch (e) {
       throw new Error(e);
     }

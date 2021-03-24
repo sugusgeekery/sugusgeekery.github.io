@@ -279,7 +279,7 @@ export default class BiddingHomeTemplate extends Vue {
     padding 20px
     .list
       width 100%
-      max-width 1200px
+      max-width 1250px
       flex 1
       display flex
       flex-direction column
@@ -406,7 +406,7 @@ export default class BiddingHomeTemplate extends Vue {
           padding 0 12px
         .item
           margin 1%
-          min-width 23%
+          width 23%
           border-radius 4px
           border solid 1px $color-bd
           background $color-bg

@@ -3,8 +3,8 @@
     <input
       type="file"
       name="file"
-      hidden="hidden"
       id="file"
+      hidden="hidden"
       accept="image/*"
       @change="uploadFile"
     />
@@ -597,7 +597,6 @@ export default class ReportView extends Vue {
     this.index = b;
     const dom: any = document.querySelector("#file");
     dom.click();
-    dom.value = "";
   }
   public uploadFile(e: any) {
     const files = e.target.files;
@@ -606,6 +605,7 @@ export default class ReportView extends Vue {
       this.uploadForm({ file: files[files.length - len], index: this.index });
       len--;
     }
+    e.target.value = null;
   }
 
   public swiper: any = null;

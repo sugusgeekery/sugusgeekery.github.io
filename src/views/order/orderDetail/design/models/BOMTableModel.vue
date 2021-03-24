@@ -153,7 +153,6 @@ export default class BOMTableModel extends Vue {
   public checkFile() {
     const dom: any = document.querySelector("#file");
     dom.click();
-    dom.value = "";
   }
   public async uploadFile(e: any) {
     try {
@@ -168,6 +167,7 @@ export default class BOMTableModel extends Vue {
       } else {
         Message.error(message);
       }
+      e.target.value = null;
     } catch (e) {
       throw new Error(e);
     }
