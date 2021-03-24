@@ -212,7 +212,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
-              :readonly="repairMould.approvalState > 0"
+              :readonly="repairMould.approvalState === 1 || repairMould.approvalState === 2"
               :value="repairMould.repairAmount"
               @change="v => changeInput({ key: 'repairAmount', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
@@ -224,7 +224,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
-              :readonly="repairMould.approvalState > 0"
+              :readonly="repairMould.approvalState === 1 || repairMould.approvalState === 2"
               :value="repairMould.repairDeliveryDays"
               @input="v => changeInput({ key: 'repairDeliveryDays', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
@@ -242,7 +242,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
-              :readonly="repairMould.approvalState > 0"
+              :readonly="repairMould.approvalState === 1 || repairMould.approvalState === 2"
               :value="repairMould.planDesignTime"
               @input="v => changeInput({ key: 'planDesignTime', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
@@ -255,7 +255,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
-              :readonly="repairMould.approvalState > 0"
+              :readonly="repairMould.approvalState === 1 || repairMould.approvalState === 2"
               :value="repairMould.machinTime"
               @input="v => changeInput({ key: 'machinTime', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"
@@ -268,7 +268,7 @@
           <div class="filter-item-content">
             <input
               class="filter-item-input"
-              :readonly="repairMould.approvalState > 0"
+              :readonly="repairMould.approvalState === 1 || repairMould.approvalState === 2"
               :value="repairMould.injectionTime"
               @input="v => changeInput({ key: 'injectionTime', value: v.target.value, validateType: 'validateNumber' })"
               placeholder="请输入数字"

@@ -3,7 +3,7 @@
     <div class="context-title">首页</div>
     <div class="context-body">
       <div class="list">
-        <div class="list-title">书江同学，您好！</div>
+        <div class="list-title" v-if="initInfo.accountInfo && initInfo.accountInfo.userName">{{ initInfo.accountInfo.userName }}，您好！</div>
         <div class="list-items">
           <div
             class="list-item"
@@ -143,7 +143,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("home");
 
-import { OrderMessage, Job, UserMessage } from "@/store/modules/home/state";
+import { InitInfo, OrderMessage, Job, UserMessage } from "@/store/modules/home/state";
 import { ActionTypes } from "@/store/modules/home/actions";
 
 @Component({
@@ -151,6 +151,8 @@ import { ActionTypes } from "@/store/modules/home/actions";
   components: {}
 })
 export default class HomeTemplate extends Vue {
+  @State("initInfo")
+  public initInfo!: any | InitInfo;
   @State("orderMessageList")
   public orderMessageList!: Array<OrderMessage>;
   @State("jobList")
@@ -158,14 +160,11 @@ export default class HomeTemplate extends Vue {
   @State("userMessageList")
   public userMessageList!: Array<UserMessage>;
 
-  @Action(ActionTypes.GetStatistics)
-  public getStatistics!: Function;
-  @Action(ActionTypes.GetToBeDeal)
-  public getToBeDeal!: Function;
+  @Action(ActionTypes.Init)
+  public init!: Function;
 
   public created() {
-    this.getStatistics();
-    this.getToBeDeal();
+    this.init();
   }
 }
 </script>

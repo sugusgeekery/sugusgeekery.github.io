@@ -32,8 +32,11 @@ export enum ActionTypes {
 export default {
   // 初始化模块默认值
   [ActionTypes.Init](store: Store, params: any) {
-    const { state, dispatch, commit } = store;
-    commit(MutationTypes.UpdateInitInfo, { ...(params || {}) });
+    const { state, rootState, dispatch, commit } = store;
+    const { accountInfo } = rootState;
+    commit(MutationTypes.UpdateInitInfo, { ...(params || {}), accountInfo });
+    dispatch(ActionTypes.GetStatistics);
+    dispatch(ActionTypes.GetToBeDeal);
   },
 
   // 获取个人统计信息
