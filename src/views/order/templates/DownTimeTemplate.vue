@@ -10,6 +10,7 @@
         v-if="isTimeout"
       >
         已超时
+        <span v-if="remainTime.state === 2">（已暂停）</span>
       </span>
       <span
         class="downtime-content-large"
@@ -98,7 +99,7 @@ export default class DownTimeTemplate extends Vue {
   public getRemainTime!: Function;
 
   public created() {
-    this.getRemainTime((remainSeconds: number) => {
+    this.getRemainTime((remainSeconds: number, state: number) => {
       const fn = (remainSeconds: number) => {
         this.isTimeout = remainSeconds < 0;
         const timeNumber = Math.abs(remainSeconds);
@@ -110,11 +111,19 @@ export default class DownTimeTemplate extends Vue {
       if (this.setTimeInterval) {
         clearInterval(this.setTimeInterval);
       }
-      this.setTimeInterval = setInterval(() => {
-        remainSeconds--;
-        fn(remainSeconds);
-      }, 1000);
+      if (state === 0) {
+        this.setTimeInterval = setInterval(() => {
+          remainSeconds--;
+          fn(remainSeconds);
+        }, 1000);
+      }
     });
+  }
+
+  public beforeDestroy() {
+    if (this.setTimeInterval) {
+      clearInterval(this.setTimeInterval);
+    }
   }
 }
 </script>

@@ -270,7 +270,7 @@ export default {
     router.push({ path });
   },
 
-  // 获取竞价指标
+  // 获取倒计时
   async [ActionTypes.GetRemainTime](store: Store, callback: Function) {
     try {
       const { state, dispatch, commit } = store;
@@ -281,8 +281,8 @@ export default {
       if (success) {
         const { remainSeconds, state } = data || {};
         commit(MutationTypes.UpdateRemainTime, data || {});
-        if (callback && state === 0) {
-          callback(remainSeconds);
+        if (callback) {
+          callback(remainSeconds, state);
         }
       } else {
         Message.error(message);
