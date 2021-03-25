@@ -55,7 +55,7 @@
               <div class="li-item" v-if="a.state === 0">
                 <div class="li-item-select-button li-item-select-button-blue" @click="answerQuestion({ index: b })">确认</div>
               </div>
-              <div class="li-item" v-else-if="a.state === 1">
+              <div class="li-item" v-else-if="a.state === 2">
                 <div class="li-item-image">
                   <img
                     class="li-item-image-icon"
@@ -65,7 +65,7 @@
                 </div>
                 <div class="li-item-text li-item-text-p">已确认</div>
               </div>
-              <div class="li-item" v-else-if="a.state === 2">
+              <div class="li-item" v-else-if="a.state === 3">
                 <div class="li-item-image">
                   <img
                     class="li-item-image-icon"
@@ -78,11 +78,11 @@
                   {{ a.reason || "" }}
                 </div>
               </div>
-              <div class="li-item" v-else-if="a.state === 3">
+              <div class="li-item" v-else-if="a.state === 1">
                 <div class="li-item-text">待确认</div>
               </div>
             </div>
-            <div class="li-buttons" v-if="a.state === 2">
+            <div class="li-buttons" v-if="a.state === 3">
               <div class="li-button li-button-blue" @click="updateQuestion({ index: b, value: 0, name: 'state' })">接受并修改</div>
               <div class="li-button" @click="showMessageBox(b)">不接受</div>
             </div>
