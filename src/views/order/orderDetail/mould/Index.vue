@@ -278,7 +278,7 @@
         </div>
       </div>
       <div class="filter-items">
-        <div class="filter-item" v-if="repairMould.approvalState === 2">
+        <div class="filter-item" v-if="repairMould.approvalState === 3">
           <div class="filter-item-text filter-item-text-red">提示：修模报价已被平台方驳回，请联系平台人员后重新填写修模报价。</div>
         </div>
       </div>
