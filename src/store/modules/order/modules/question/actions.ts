@@ -109,7 +109,7 @@ export default {
           Message.error("请输入分析内容和改善建议");
           return;
         }
-        fn = await AnswerQuestion({ needAdjust: isRepair, problemId: id, replyContent: supplierAnswer });
+        fn = await AnswerQuestion({ needAdjust: isRepair, opinion: 1, problemId: id, replyContent: supplierAnswer });
       }
       
       const { success, message, data }: any = fn;
