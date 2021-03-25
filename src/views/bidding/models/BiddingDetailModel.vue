@@ -40,7 +40,7 @@
                   <span>{{ a.productNo || "" }}</span>
                 </div>
                 <div class="model-flex-image">
-                  <img src="" alt="" />
+                  <img v-if="a.productImage" :src="BASE_IMAGE_URL + a.productImage" alt="" />
                 </div>
               </div>
               <div class="model-flex-context">
@@ -298,6 +298,8 @@ import { BiddingDetail } from "@/store/modules/bidding/state";
 import { ActionTypes } from "@/store/modules/bidding/actions";
 import { MutationTypes } from "@/store/modules/bidding/mutations";
 
+import { BASE_IMAGE_URL } from "@/config";
+
 import BiddingMaterialModel from "./BiddingMaterialModel.vue";
 import BiddingTechnologyModel from "./BiddingTechnologyModel.vue";
 
@@ -309,6 +311,9 @@ import BiddingTechnologyModel from "./BiddingTechnologyModel.vue";
   }
 })
 export default class BiddingDetailModel extends Vue {
+  // 图片域名
+  public BASE_IMAGE_URL = BASE_IMAGE_URL;
+
   @State("biddingDetail")
   public biddingDetail!: any | BiddingDetail;
 

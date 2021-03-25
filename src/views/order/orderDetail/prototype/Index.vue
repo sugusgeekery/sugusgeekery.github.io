@@ -1,7 +1,7 @@
 <template>
   <div class="prototype">
     <div class="list">
-      <div class="li" v-if="prototype.status === 1">
+      <div class="li" v-if="prototype.status === 1 && prototype.productSamplePostInfo">
         <div class="li-title">
           模具：{{ prototype.productSamplePostInfo.mouldNo || "" }}
         </div>
