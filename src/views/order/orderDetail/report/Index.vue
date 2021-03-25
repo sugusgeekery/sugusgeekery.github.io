@@ -49,7 +49,7 @@
           <swiper-slide>Slide 3</swiper-slide>
           ...
         </swiper> -->
-        <div class="swiper-container">
+        <div class="swiper-container" v-show="isShowSwiper">
           <div class="swiper-wrapper">
             <div
               class="swiper-slide"
@@ -608,6 +608,7 @@ export default class ReportView extends Vue {
     e.target.value = null;
   }
 
+  public isShowSwiper: boolean = false;
   public swiper: any = null;
   public swiperOptions: any = {
     slidesPerView: 4,
@@ -629,6 +630,7 @@ export default class ReportView extends Vue {
   };
   public initSwiper() {
     this.swiper = new Swiper(".swiper-container", this.swiperOptions);
+    this.isShowSwiper = true;
   }
 
   public swiperPrev(index: number) {
