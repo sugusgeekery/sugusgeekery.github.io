@@ -7,9 +7,9 @@
     <div class="downtime-content" v-else>
       <span
         class="downtime-content-label downtime-content-red"
-        v-if="isTimeout"
+        v-if="isTimeout || remainTime.state === 2"
       >
-        已超时
+        <span v-if="isTimeout">已超时</span>
         <span v-if="remainTime.state === 2">（已暂停）</span>
       </span>
       <span
