@@ -291,9 +291,7 @@ export default {
         };
         fn(tempRemainTime);
         if (tempRemainTime.setTimeInterval) {
-          console.log(898)
           clearInterval(tempRemainTime.setTimeInterval);
-          console.log(tempRemainTime.setTimeInterval, 989)
         }
         if (tempRemainTime.state === 0) {
           tempRemainTime.setTimeInterval = setInterval(() => {
