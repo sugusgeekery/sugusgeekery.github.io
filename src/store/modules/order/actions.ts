@@ -1,6 +1,6 @@
 import { RootState } from "@/store/state";
 import rootGetters, { RootGetterTypes } from "@/store/getters";
-import { State, Supplier } from "./state";
+import { RemainTime, State, Supplier } from "./state";
 import getters, { GetterTypes } from "./getters";
 import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
@@ -271,22 +271,41 @@ export default {
   },
 
   // 获取倒计时
-  async [ActionTypes.GetRemainTime](store: Store, callback: Function) {
+  async [ActionTypes.GetRemainTime](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { order } = state;
+      const { order, remainTime } = state;
       const { list = [], index = -1 } = order || {};
       const { id } = list[index] || {};
       const { success, message, data }: any = await GetRemainTime({ orderId: id });
       if (success) {
-        const { remainSeconds, state } = data || {};
-        commit(MutationTypes.UpdateRemainTime, data || {});
-        if (callback) {
-          callback(remainSeconds, state);
+        const tempRemainTime = { ...remainTime, ...(data || {})};
+        const fn = (remainTime: RemainTime) => {
+          const { remainSeconds } = remainTime;
+          const timeNumber = Math.abs(remainSeconds);
+          remainTime.isTimeout = remainSeconds < 0;
+          remainTime.hour = Math.floor(timeNumber / (60 * 60));
+          remainTime.minute = Math.floor((timeNumber % (60 * 60)) / 60);
+          remainTime.second = timeNumber % 60;
+          commit(MutationTypes.UpdateRemainTime, { ...remainTime });
+        };
+        fn(tempRemainTime);
+        if (tempRemainTime.setTimeInterval) {
+          console.log(898)
+          clearInterval(tempRemainTime.setTimeInterval);
+          console.log(tempRemainTime.setTimeInterval, 989)
+        }
+        if (tempRemainTime.state === 0) {
+          tempRemainTime.setTimeInterval = setInterval(() => {
+            tempRemainTime.remainSeconds--;
+            fn(tempRemainTime);
+          }, 1000);
+          commit(MutationTypes.UpdateRemainTime, { ...tempRemainTime });
         }
       } else {
         Message.error(message);
       }
+      console.log(123)
     } catch (e) {
       throw new Error(e);
     }

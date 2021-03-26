@@ -41,7 +41,7 @@ export default {
     commit(MutationTypes.UpdateInitInfo, params);
   },
 
-  // 获取流程步骤
+  // 获取样件
   async [ActionTypes.GetPrototype](store: Store) {
     try {
       const { state, dispatch, commit } = store;
@@ -112,6 +112,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetPrototype);
+        dispatch("order/GetRemainTime", null, { root: true });
       } else {
         Message.error(message);
       }

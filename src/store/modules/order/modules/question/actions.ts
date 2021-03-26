@@ -117,6 +117,7 @@ export default {
         Message.success(message);
         // commit(MutationTypes.UpdateQuestionList, data || []);
         dispatch(ActionTypes.GetQuestionList);
+        dispatch("order/GetRemainTime", null, { root: true });
       } else {
         Message.error(message);
       }

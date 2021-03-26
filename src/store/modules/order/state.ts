@@ -60,6 +60,12 @@ export interface RemainTime {
   remainSeconds: number;
   startTime: string;
   state: number;
+
+  isTimeout: boolean;
+  hour: number;
+  minute: number;
+  second: number;
+  setTimeInterval: number;
 };
 
 
@@ -164,7 +170,13 @@ const state: State = {
     finishTime: "--",
     remainSeconds: 0,
     startTime: "--",
-    state: 0
+    state: 0,
+
+    isTimeout: false,
+    hour: 0,
+    minute: 0,
+    second: 0,
+    setTimeInterval: 0,
   }
 };
 

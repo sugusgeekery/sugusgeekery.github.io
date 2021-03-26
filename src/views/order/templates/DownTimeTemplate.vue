@@ -7,53 +7,53 @@
     <div class="downtime-content" v-else>
       <span
         class="downtime-content-label downtime-content-red"
-        v-if="isTimeout || remainTime.state === 2"
+        v-if="remainTime.isTimeout || remainTime.state === 2"
       >
-        <span v-if="isTimeout">已超时</span>
+        <span v-if="remainTime.isTimeout">已超时</span>
         <span v-if="remainTime.state === 2">（已暂停）</span>
       </span>
       <span
         class="downtime-content-large"
         :class="{
-          'downtime-content-red': isTimeout,
-          'downtime-content-yellow': !isTimeout
+          'downtime-content-red': remainTime.isTimeout,
+          'downtime-content-yellow': !remainTime.isTimeout
         }"
-        >{{ hour }}</span
+        >{{ remainTime.hour }}</span
       >
       <span
         :class="{
-          'downtime-content-red': isTimeout,
-          'downtime-content-yellow': !isTimeout
+          'downtime-content-red': remainTime.isTimeout,
+          'downtime-content-yellow': !remainTime.isTimeout
         }"
         >时</span
       >
       <span
         class="downtime-content-large"
         :class="{
-          'downtime-content-red': isTimeout,
-          'downtime-content-yellow': !isTimeout
+          'downtime-content-red': remainTime.isTimeout,
+          'downtime-content-yellow': !remainTime.isTimeout
         }"
-        >{{ minute }}</span
+        >{{ remainTime.minute }}</span
       >
       <span
         :class="{
-          'downtime-content-red': isTimeout,
-          'downtime-content-yellow': !isTimeout
+          'downtime-content-red': remainTime.isTimeout,
+          'downtime-content-yellow': !remainTime.isTimeout
         }"
         >分</span
       >
       <span
         class="downtime-content-large"
         :class="{
-          'downtime-content-red': isTimeout,
-          'downtime-content-yellow': !isTimeout
+          'downtime-content-red': remainTime.isTimeout,
+          'downtime-content-yellow': !remainTime.isTimeout
         }"
-        >{{ second }}</span
+        >{{ remainTime.second }}</span
       >
       <span
         :class="{
-          'downtime-content-red': isTimeout,
-          'downtime-content-yellow': !isTimeout
+          'downtime-content-red': remainTime.isTimeout,
+          'downtime-content-yellow': !remainTime.isTimeout
         }"
         >秒</span
       >
@@ -86,11 +86,11 @@ import { ActionTypes } from "@/store/modules/order/actions";
   components: {}
 })
 export default class DownTimeTemplate extends Vue {
-  public isTimeout = false;
-  public hour = 0;
-  public minute = 0;
-  public second = 0;
-  public setTimeInterval = 0;
+  // public isTimeout = false;
+  // public hour = 0;
+  // public minute = 0;
+  // public second = 0;
+  // public setTimeInterval = 0;
 
   @State("remainTime")
   public remainTime!: RemainTime;
@@ -99,32 +99,34 @@ export default class DownTimeTemplate extends Vue {
   public getRemainTime!: Function;
 
   public created() {
-    this.getRemainTime((remainSeconds: number, state: number) => {
-      const fn = (remainSeconds: number) => {
-        this.isTimeout = remainSeconds < 0;
-        const timeNumber = Math.abs(remainSeconds);
-        this.hour = Math.floor(timeNumber / (60 * 60));
-        this.minute = Math.floor((timeNumber % (60 * 60)) / 60);
-        this.second = timeNumber % 60;
-      };
-      fn(remainSeconds);
-      if (this.setTimeInterval) {
-        clearInterval(this.setTimeInterval);
-      }
-      if (state === 0) {
-        this.setTimeInterval = setInterval(() => {
-          remainSeconds--;
-          fn(remainSeconds);
-        }, 1000);
-      }
-    });
+    this.getRemainTime();
+    // const { remainSeconds, state } = await this.getRemainTime();
+    // ((remainSeconds: number, state: number) => {
+    //   const fn = (remainSeconds: number) => {
+    //     this.isTimeout = remainSeconds < 0;
+    //     const timeNumber = Math.abs(remainSeconds);
+    //     this.hour = Math.floor(timeNumber / (60 * 60));
+    //     this.minute = Math.floor((timeNumber % (60 * 60)) / 60);
+    //     this.second = timeNumber % 60;
+    //   };
+    //   fn(remainSeconds);
+    //   if (this.setTimeInterval) {
+    //     clearInterval(this.setTimeInterval);
+    //   }
+    //   if (state === 0) {
+    //     this.setTimeInterval = setInterval(() => {
+    //       remainSeconds--;
+    //       fn(remainSeconds);
+    //     }, 1000);
+    //   }
+    // })(remainSeconds, state);
   }
 
-  public beforeDestroy() {
-    if (this.setTimeInterval) {
-      clearInterval(this.setTimeInterval);
-    }
-  }
+  // public beforeDestroy() {
+  //   if (this.setTimeInterval) {
+  //     clearInterval(this.setTimeInterval);
+  //   }
+  // }
 }
 </script>
 

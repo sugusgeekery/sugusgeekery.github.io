@@ -156,6 +156,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetDfmReportList);
+        dispatch("order/GetRemainTime", null, { root: true });
       } else {
         Message.error(message);
       }
@@ -195,6 +196,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetDfmReportList);
+        dispatch("order/GetRemainTime", null, { root: true });
       } else {
         Message.error(message);
       }

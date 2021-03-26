@@ -142,6 +142,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetAllRepair);
+        dispatch("order/GetRemainTime", null, { root: true });
       } else {
         Message.error(message);
       }
@@ -163,6 +164,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetMould);
+        dispatch("order/GetRemainTime", null, { root: true });
       } else {
         Message.error(message);
       }
@@ -184,6 +186,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetMould);
+        dispatch("order/GetRemainTime", null, { root: true });
       } else {
         Message.error(message);
       }
