@@ -2,7 +2,7 @@
 const APPLICATION_NAME = "supplier";
 
 // 项目版本号
-const APPLICATION_VERSION = "0.1.0";
+const APPLICATION_VERSION = "0.1.1";
 
 // 项目更新信息
 const APPLICATION_UPDATE_INFORMATION = `
