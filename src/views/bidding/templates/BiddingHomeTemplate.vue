@@ -106,6 +106,7 @@
               <div class="item-rows" @click="getBiddingDetail(b)">
                 <div class="item-row">
                   <div class="item-flex">
+                    <span class="item-text">单号：</span>
                     <span class="item-text">{{ a.mouldNo || "" }}</span>
                   </div>
                   <div class="item-flex" v-if="biddingIndex === 0">
@@ -123,7 +124,7 @@
                 </div>
                 <div class="item-row">
                   <div class="item-flex">
-                    <!-- <span class="item-text item-text-red">（已暂停）</span> -->
+                    <span class="item-text item-text-red" v-if="a.isbidding === 0">（已暂停）</span>
                   </div>
                   <div class="item-flex">
                     <span class="item-button">{{ a.typeDesc }}</span>
@@ -131,17 +132,19 @@
                 </div>
                 <div class="item-row">
                   <div class="item-flex">
+                    <span class="item-text">竞价价格：</span>
                     <span class="item-text">￥{{ a.amount || 0 }}</span>
                   </div>
                 </div>
                 <div class="item-row">
                   <div class="item-flex">
+                    <span class="item-text">竞价交期：</span>
                     <span class="item-text">{{ a.workPeriod || 0 }}天</span>
                   </div>
                 </div>
               </div>
               <div class="item-rows" v-if="biddingIndex === 0">
-                <div class="item-row">
+                <!-- <div class="item-row">
                   <div class="item-flex">
                     <img
                       class="item-icon"
@@ -152,7 +155,7 @@
                       {{ a.address || "" }}
                     </span>
                   </div>
-                </div>
+                </div> -->
                 <div class="item-row">
                   <div class="item-flex">
                     <img
@@ -279,7 +282,7 @@ export default class BiddingHomeTemplate extends Vue {
     padding 20px
     .list
       width 100%
-      max-width 1250px
+      max-width 1400px
       flex 1
       display flex
       flex-direction column
