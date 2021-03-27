@@ -87,45 +87,45 @@ service.interceptors.response.use(
     switch (status) {
       case 401:
         // Message.error("登录已失效，请重新登录");
-        // if (!hasMessageBox) {
-        //   hasMessageBox = true;
-        //   const message =
-        //     type == 1
-        //       ? "你已经被超级管理员强制下线"
-        //       : type == 2
-        //       ? "该账号已在其他地方登录"
-        //       : type == 3
-        //       ? "资料正在审核中，请重新登录"
-        //       : "登录已失效，请重新登录";
-        //   MessageBox({
-        //     message,
-        //     title: "温馨提示",
-        //     confirmButtonText: "确定",
-        //     cancelButtonText: "取消",
-        //     showClose: false,
-        //     closeOnClickModal: false,
-        //     closeOnPressEscape: false,
-        //     center: true,
-        //     roundButton: false,
-        //     showConfirmButton: true,
-        //     showCancelButton: false
-        //   })
-        //     .then(action => {
-        //       hasMessageBox = false;
-        //       if (action === "confirm") {
-        //         router.push("/");
-        //       }
-        //     })
-        //     .catch(() => {
-        //       hasMessageBox = false;
-        //       Message.info("已取消登录");
-        //     });
-        // }
-        store.dispatch("notifyTokenExpired");
-        return Promise.reject({
-          message: message || statusText || INTERFACE_ERROR_TEXT,
-          code: "401"
-        });
+        if (!hasMessageBox) {
+          hasMessageBox = true;
+          const message =
+            type == 1
+              ? "你已经被超级管理员强制下线"
+              : type == 2
+              ? "该账号已在其他地方登录"
+              : type == 3
+              ? "资料正在审核中，请重新登录"
+              : "登录已失效，请重新登录";
+          MessageBox({
+            message,
+            title: "温馨提示",
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            showClose: false,
+            closeOnClickModal: false,
+            closeOnPressEscape: false,
+            center: true,
+            roundButton: false,
+            showConfirmButton: true,
+            showCancelButton: false
+          })
+            .then(action => {
+              hasMessageBox = false;
+              if (action === "confirm") {
+                router.push("/");
+              }
+            })
+            .catch(() => {
+              hasMessageBox = false;
+              Message.info("已取消登录");
+            });
+        }
+        // store.dispatch("notifyTokenExpired");
+        // return Promise.reject({
+        //   message: message || statusText || INTERFACE_ERROR_TEXT,
+        //   code: "401"
+        // });
       default:
         if (isTimeOut && isTimeOut.length > 0) {
           message = "网络响应超时！请稍后重试！";
