@@ -79,6 +79,7 @@
                     @change="
                       changeUserInfoInput($event.target.value, 'userName')
                     "
+                    @keyup.enter="submitForm()"
                   />
                 </div>
               </div>
@@ -117,6 +118,7 @@
                     @change="
                       changeUserInfoInput($event.target.value, 'phoneNo')
                     "
+                    @keyup.enter="submitForm()"
                   />
                 </div>
               </div>
@@ -132,6 +134,7 @@
                     @change="
                       changeUserInfoInput($event.target.value, 'telephoneNo')
                     "
+                    @keyup.enter="submitForm()"
                   />
                 </div>
               </div>
@@ -145,6 +148,7 @@
                     placeholder="请输入邮箱"
                     :value="userInfo.email"
                     @change="changeUserInfoInput($event.target.value, 'email')"
+                    @keyup.enter="submitForm()"
                   />
                 </div>
               </div>
@@ -166,6 +170,7 @@
                     @change="
                       changeCompanyInfoInput($event.target.value, 'companyName')
                     "
+                    @keyup.enter="submitForm()"
                   />
                 </div>
               </div>
@@ -180,6 +185,7 @@
                     :value="companyInfo.staffSize"
                     placeholder="请选择公司人数"
                     @input="v => changeCompanyInfoInput(v, 'staffSize')"
+                    @keyup.enter="submitForm()"
                   >
                     <el-option
                       v-for="item in companyInfo.staffsizeList"
@@ -212,6 +218,7 @@
                     type="date"
                     placeholder="选择日期"
                     @input="updateDate"
+                    @keyup.enter="submitForm()"
                   >
                   </el-date-picker>
                 </div>
@@ -232,6 +239,7 @@
                         'companyPhoneNo'
                       )
                     "
+                    @keyup.enter="submitForm()"
                   />
                 </div>
               </div>
@@ -278,6 +286,7 @@
                     @change="
                       changeCompanyInfoInput($event.target.value, 'address')
                     "
+                    @keyup.enter="submitForm()"
                   />
                 </div>
               </div>
@@ -296,6 +305,7 @@
                         'officialWebsite'
                       )
                     "
+                    @keyup.enter="submitForm()"
                   />
                 </div>
               </div>
@@ -312,6 +322,7 @@
                     @change="
                       changeCompanyInfoInput($event.target.value, 'description')
                     "
+                    @keyup.enter="submitForm()"
                   ></textarea>
                 </div>
               </div>

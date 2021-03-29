@@ -31,6 +31,7 @@
                           'creditCode'
                         )
                       "
+                      @keyup.enter="saveCompanyQualifyInfo()"
                     />
                   </div>
                 </div>
@@ -80,6 +81,7 @@
                   @change="
                     changeCompanyQualifyInput($event.target.value, 'operName')
                   "
+                  @keyup.enter="saveCompanyQualifyInfo()"
                 />
               </div>
             </div>
@@ -98,6 +100,7 @@
                       'operIdcardNo'
                     )
                   "
+                  @keyup.enter="saveCompanyQualifyInfo()"
                 />
               </div>
             </div>
@@ -116,6 +119,7 @@
                       'operPhoneNo'
                     )
                   "
+                  @keyup.enter="saveCompanyQualifyInfo()"
                 />
               </div>
             </div>

@@ -39,6 +39,7 @@
                 placeholder="请输入手机号"
                 v-model="phone"
                 @change="validateCtl('phone')"
+                @keyup.enter="verificationLoginCtl"
               />
             </div>
             <div class="model-form-item">
@@ -53,6 +54,7 @@
                 placeholder="手机验证码"
                 v-model="code"
                 @change="validateCtl('code')"
+                @keyup.enter="verificationLoginCtl"
               />
               <div
                 class="model-form-text-button model-form-text-button-active"
@@ -70,7 +72,7 @@
               </div>
             </div>
             <div class="model-form-buttons">
-              <div class="model-form-button" @click="verificationLoginCtl">
+              <div class="model-form-button" @click="verificationLoginCtl" @keyup.enter="verificationLoginCtl">
                 登录
               </div>
             </div>
