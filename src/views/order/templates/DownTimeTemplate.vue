@@ -122,11 +122,9 @@ export default class DownTimeTemplate extends Vue {
     // })(remainSeconds, state);
   }
 
-  // public beforeDestroy() {
-  //   if (this.setTimeInterval) {
-  //     clearInterval(this.setTimeInterval);
-  //   }
-  // }
+  public beforeDestroy() {
+    this.getRemainTime(false);
+  }
 }
 </script>
 

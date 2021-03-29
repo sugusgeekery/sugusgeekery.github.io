@@ -124,7 +124,7 @@
                 </div>
                 <div class="item-row">
                   <div class="item-flex">
-                    <span class="item-text item-text-red" v-if="a.isbidding === 0">（已暂停）</span>
+                    <span class="item-text item-text-red" v-if="a.isBidding === 0">（已暂停）</span>
                   </div>
                   <div class="item-flex">
                     <span class="item-button">{{ a.typeDesc }}</span>

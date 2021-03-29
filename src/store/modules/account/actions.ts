@@ -72,9 +72,9 @@ export default {
     const typeStr = type === 1 ? "公司" : type === 2 ? "个人" : "";
     commit(MutationTypes.UpdateInitInfo, { type, typeStr, loginInfo, accountInfo, ...params });
     if (type === 1) {
-      dispatch(ActionTypes.GetPersonQualifyInfo);
-    } else if (type === 2) {
       dispatch(ActionTypes.GetCompQualifyInfo);
+    } else if (type === 2) {
+      dispatch(ActionTypes.GetPersonQualifyInfo);
     }
   },
 

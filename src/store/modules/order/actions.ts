@@ -271,7 +271,7 @@ export default {
   },
 
   // 获取倒计时
-  async [ActionTypes.GetRemainTime](store: Store) {
+  async [ActionTypes.GetRemainTime](store: Store, isDownTime: boolean = true) {
     try {
       const { state, dispatch, commit } = store;
       const { order, remainTime } = state;
@@ -293,7 +293,7 @@ export default {
         if (tempRemainTime.setTimeInterval) {
           clearInterval(tempRemainTime.setTimeInterval);
         }
-        if (tempRemainTime.state === 0) {
+        if (isDownTime && tempRemainTime.state === 0) {
           tempRemainTime.setTimeInterval = setInterval(() => {
             tempRemainTime.remainSeconds--;
             fn(tempRemainTime);
