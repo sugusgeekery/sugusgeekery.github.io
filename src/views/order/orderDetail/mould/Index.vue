@@ -134,6 +134,9 @@
         </div>
         <div class="li-row">
           <div class="li-text">
+            <span class="li-text-button" @click="getClampingPlan()">合模方案</span>
+          </div>
+          <div class="li-text">
             <span class="li-text-gray">开机费</span>
             <img src="../../../../assets/images/tip_4.png" class="li-text-icon" alt="">
             <span class="li-text-gray">：</span>
