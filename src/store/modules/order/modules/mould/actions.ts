@@ -211,9 +211,8 @@ export default {
         const { matchedPlan } = temp || {};
         const { mouldLabeImage } = matchedPlan || {};
         let mouldLabeImages = mouldLabeImage ? mouldLabeImage.split(",") : [];
-        
         if (mouldLabeImages.length) {
-          mouldLabeImages = mouldLabeImages.map(v => BASE_IMAGE_URL + v);
+          mouldLabeImages = mouldLabeImages.map((v: string) => BASE_IMAGE_URL + v);
         }
         commit(MutationTypes.UpdateClampingPlan, { ...temp, mouldLabeImages, isShow: true });
       } else {

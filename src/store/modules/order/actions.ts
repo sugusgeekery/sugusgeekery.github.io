@@ -303,7 +303,6 @@ export default {
       } else {
         Message.error(message);
       }
-      console.log(123)
     } catch (e) {
       throw new Error(e);
     }

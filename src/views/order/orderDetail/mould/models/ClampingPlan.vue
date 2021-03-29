@@ -13,8 +13,8 @@
       <div class="model-body" v-if="clampingPlan.matchedPlan">
         <div class="model-label">合模方案</div>
         <div class="model-text">合模产品拼图：</div>
-        <div class="model-images" v-if="clampingPlan.mouldLabeImages.length">
-          <el-image class="model-image" v-show="a"  :src="a" v-for="(a, b) in clampingPlan.mouldLabeImages" :key="b" :preview-src-list="clampingPlan.mouldLabeImages"></el-image>
+        <div class="model-images" v-if="clampingPlan.mouldLabeImages && clampingPlan.mouldLabeImages.length">
+          <el-image class="model-image" v-show="a" :src="a" v-for="(a, b) in clampingPlan.mouldLabeImages" :key="b" :preview-src-list="clampingPlan.mouldLabeImages"></el-image>
         </div>
         <div class="model-row">
           <div class="model-flex">
@@ -42,7 +42,7 @@
           <div class="model-flex">
             <div class="model-flex-label">转水口{{ a.gateSort || "" }}：</div>
             <div class="model-flex-input">{{ a.productIds || "" }}</div>
-            <div class="model-flex-label">{{ a.productIds || "" }}</div>
+            <!-- <div class="model-flex-label">{{ a.productIds || "" }}</div> -->
           </div>
         </div>
         <div class="model-line"></div>

@@ -18,7 +18,8 @@ const state: State = {
   repairMouldIndex: -1,
   repairMouldList: [],
   clampingPlan: {
-    isShow: true,
+    isShow: false,
+    mouldLabeImages: [],
 
     "isMatchedMould": 0,
     "matchedPlan": {
