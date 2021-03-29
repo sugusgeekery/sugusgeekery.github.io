@@ -44,6 +44,7 @@
                 placeholder="请输入公司名称"
                 v-model="companyName"
                 @change="validateCtl('companyName')"
+                @keyup.enter="registerCtl()"
               />
             </div>
             <div class="model-form-item">
@@ -58,6 +59,7 @@
                 placeholder="请输入名字"
                 v-model="userName"
                 @change="validateCtl('userName')"
+                @keyup.enter="registerCtl()"
               />
             </div>
             <div class="model-form-item">
@@ -72,6 +74,7 @@
                 placeholder="请输入手机号"
                 v-model="phone"
                 @change="validateCtl('phone')"
+                @keyup.enter="registerCtl()"
               />
             </div>
             <div class="model-form-item">
@@ -86,6 +89,7 @@
                 placeholder="手机验证码"
                 v-model="code"
                 @change="validateCtl('code')"
+                @keyup.enter="registerCtl()"
               />
               <div
                 class="model-form-text-button model-form-text-button-active"
