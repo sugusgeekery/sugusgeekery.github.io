@@ -21,3 +21,8 @@ export const GetAllRepair = (params: any = {}): object => fetch({ url: `/supplie
 export const CommitRepairMould = (data: any = {}): object => fetch({ url: `/supplier/machining/commitRepairMould`, data });
 
 
+
+// 获取合模方案
+export const GetClampingPlan = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getPolyteneMatchedMould`, method: "GET", params });
+
+

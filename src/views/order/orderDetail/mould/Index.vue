@@ -27,6 +27,11 @@
             <span class="li-text-gray">{{ mould.toleranceValue }}</span>
           </div>
         </div>
+        <div class="li-row">
+          <div class="li-text">
+            <span class="li-text-button" @click="getClampingPlan()">合模方案</span>
+          </div>
+        </div>
       </div>
       <div
         class="li"
@@ -283,6 +288,7 @@
         </div>
       </div>
     </div>
+    <ClampingPlan></ClampingPlan>
   </div>
 </template>
 
@@ -305,9 +311,13 @@ import validate, {
   ValidateFailedParams
 } from "@/utils/validate";
 
+import ClampingPlan from "./models/ClampingPlan.vue";
+
 @Component({
   name: "MouldView",
-  components: {}
+  components: {
+    ClampingPlan
+  }
 })
 export default class MouldView extends Vue {
   // 是否显示图片
@@ -342,6 +352,8 @@ export default class MouldView extends Vue {
   public needChangeDrawing!: Function;
   @Action(ActionTypes.DfmApprovalDrawing)
   public dfmApprovalDrawing!: Function;
+  @Action(ActionTypes.GetClampingPlan)
+  public getClampingPlan!: Function;
 
   @Mutation(MutationTypes.UpdateRepairMouldIndex)
   public updateRepairMouldIndex!: Function;
@@ -488,6 +500,28 @@ export default class MouldView extends Vue {
           margin-right 4px
           &-blue
             border solid 1px $color-bd-blue
+        &-buttons
+          margin 16px 0
+          display flex
+          justify-content flex-end
+          align-items center
+        &-button
+          border-radius 4px
+          padding 4px 8px
+          font-size 14px
+          border solid 1px $color-bd-blue
+          color $color-text-blue
+          background $color-bg-white
+          cursor pointer
+          margin-left 20px
+          &-blue
+            border solid 1px $color-bd-blue
+            color $color-text-blue
+            background $color-bg-white
+          &-red
+            border solid 1px $color-bd-red
+            color $color-text-red
+            background $color-bg-white
       &-buttons
         margin 16px 0
         display flex

@@ -1,10 +1,11 @@
-import { State, InitInfo, Mould, RepairMould } from "./state";
+import { State, InitInfo, Mould, RepairMould, ClampingPlan } from "./state";
 
 export enum MutationTypes {
   UpdateInitInfo = "UpdateInitInfo",
   UpdateMould = "UpdateMould",
   UpdateRepairMouldIndex = "UpdateRepairMouldIndex",
   UpdateRepairMouldList = "UpdateRepairMouldList",
+  UpdateClampingPlan = "UpdateClampingPlan",
 }
 
 export default {
@@ -39,5 +40,17 @@ export default {
   // 更新修模列表
   [MutationTypes.UpdateRepairMouldList](state: State, repairMouldList: Array<RepairMould>) {
     state.repairMouldList = repairMouldList;
+  },
+
+  // 更新合模方案
+  [MutationTypes.UpdateClampingPlan](state: State, params: ClampingPlan) {
+    const { clampingPlan } = state;
+    const temp: ClampingPlan = clampingPlan;
+    (function<T>(state: State, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.clampingPlan = Object.assign(clampingPlan, temp);
+    })(state, params, temp);
   },
 }

@@ -8,7 +8,7 @@ export enum GetterTypes {
 
 const getters: GetterTree<State, RootState> = {
   [GetterTypes.RepairMould](state: State) {
-    const { repairMouldIndex, repairMouldList } = state;
+    const { repairMouldIndex = -1, repairMouldList = [] } = state;
     return repairMouldList[repairMouldIndex] || {};
   }
 };

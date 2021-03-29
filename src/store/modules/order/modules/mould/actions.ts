@@ -9,6 +9,7 @@ import { Dispatch, Commit, GetterTree } from "vuex";
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
 import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { BASE_IMAGE_URL } from "@/config";
 
 import {
   UploadForm
@@ -20,6 +21,7 @@ import {
   GetMouldDetail,
   GetAllRepair,
   CommitRepairMould,
+  GetClampingPlan,
 } from "@/api/order/mould";
 
 interface Store {
@@ -39,6 +41,7 @@ export enum ActionTypes {
   GetAllRepair = "GetAllRepair",
   UpdateRepairMould = "UpdateRepairMould",
   CommitRepairMould = "CommitRepairMould",
+  GetClampingPlan = "GetClampingPlan",
 }
 
 export default {
@@ -187,6 +190,32 @@ export default {
         Message.success(message);
         dispatch(ActionTypes.GetMould);
         dispatch("order/GetRemainTime", null, { root: true });
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+
+  // 获取合模方案
+  async [ActionTypes.GetClampingPlan](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { mould } = state;
+      const { mouldId } = mould || {};
+      const { success, message, data }: any = await GetClampingPlan({ orderMouldId: mouldId });
+      if (success) {
+        const temp = data || {};
+        const { matchedPlan } = temp || {};
+        const { mouldLabeImage } = matchedPlan || {};
+        let mouldLabeImages = mouldLabeImage ? mouldLabeImage.split(",") : [];
+        
+        if (mouldLabeImages.length) {
+          mouldLabeImages = mouldLabeImages.map(v => BASE_IMAGE_URL + v);
+        }
+        commit(MutationTypes.UpdateClampingPlan, { ...temp, mouldLabeImages, isShow: true });
       } else {
         Message.error(message);
       }
