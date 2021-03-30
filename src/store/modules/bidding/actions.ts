@@ -238,16 +238,17 @@ export default {
   [ActionTypes.GetBiddingTechnology](store: Store) {
     const { state, dispatch, commit } = store;
     const { biddingDetail } = state;
-    const { headId } = biddingDetail || {}; 
-    commit(MutationTypes.UpdateBiddingTechnology, { isShow: true, headId });
+    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+    const { id } = productInfos[productInfoIndex] || {};
+    commit(MutationTypes.UpdateBiddingTechnology, { isShow: true, headId: id });
     dispatch(ActionTypes.GetProductTechnology);
   },
   // 获取竞价单二次工艺
   async [ActionTypes.GetProductTechnology](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { biddingDetail } = state;
-      const { headId = "" } = biddingDetail || {};
+      const { biddingTechnology } = state;
+      const { headId = "" } = biddingTechnology || {};
       const { success, message, data }: any = await GetProductTechnology({ headId });
       if (success) {
         commit(MutationTypes.UpdateBiddingTechnology, data || {});
@@ -263,16 +264,17 @@ export default {
   [ActionTypes.GetBiddingMaterial](store: Store) {
     const { state, dispatch, commit } = store;
     const { biddingDetail } = state;
-    const { headId } = biddingDetail || {}; 
-    commit(MutationTypes.UpdateBiddingMaterial, { isShow: true, headId });
+    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+    const { id } = productInfos[productInfoIndex] || {};
+    commit(MutationTypes.UpdateBiddingMaterial, { isShow: true, headId: id });
     dispatch(ActionTypes.GetMaterialAndColor);
   },
   // 获取竞价单材料颜色
   async [ActionTypes.GetMaterialAndColor](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { biddingDetail } = state;
-      const { headId = "" } = biddingDetail || {};
+      const { biddingMaterial } = state;
+      const { headId = "" } = biddingMaterial || {};
       const { success, message, data }: any = await GetMaterialAndColor({ headId });
       if (success) {
         commit(MutationTypes.UpdateBiddingMaterial, data || {});

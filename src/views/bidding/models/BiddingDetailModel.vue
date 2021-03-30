@@ -93,7 +93,7 @@
                 </div>
               </div>
             </div>
-            <div class="model-flex-arrow" @click="updateProductInfoIndex(2)">
+            <div class="model-flex-arrow" @click="updateProductInfoIndex(1)">
               <img
                 class="model-flex-arrow-icon"
                 src="../../../assets/images/arrow_right.png"

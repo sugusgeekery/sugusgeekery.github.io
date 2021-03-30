@@ -38,7 +38,6 @@ export default {
         temp[key] = params[key];
       }
       state.biddingDetail = Object.assign(biddingDetail, temp);
-      console.log(state.biddingDetail.isShow)
     })(state, params, temp);
   },
   // 更新竞价单二次工艺
