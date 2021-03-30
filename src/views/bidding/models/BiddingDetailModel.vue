@@ -6,7 +6,7 @@
           <div class="model-title-text">
             模具{{ biddingDetail.realMouldNo || "" }}
           </div>
-          <div class="model-title-button">DFM</div>
+          <div class="model-title-button">{{ biddingDetail.typeDesc }}</div>
         </div>
         <div
           class="model-cancel"
