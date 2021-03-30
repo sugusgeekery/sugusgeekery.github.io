@@ -251,7 +251,7 @@ export default {
       const { headId = "" } = biddingTechnology || {};
       const { success, message, data }: any = await GetProductTechnology({ headId });
       if (success) {
-        commit(MutationTypes.UpdateBiddingTechnology, data || {});
+        commit(MutationTypes.UpdateBiddingTechnology, { list: data || [] });
       } else {
         Message.error(message);
       }

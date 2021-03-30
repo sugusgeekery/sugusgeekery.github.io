@@ -12,7 +12,7 @@
           @click="updateBiddingTechnology({ isShow: false })"
         ></div>
       </div>
-      <div class="model-body">
+      <div class="model-body" v-if="biddingTechnology.list.length">
         <div
           class="model-flex"
           v-for="(a, b) in biddingTechnology.list"
@@ -21,7 +21,8 @@
           <template v-if="a.type === 1">
             <div class="model-flex-text">
               <span class="model-flex-text-black">工艺{{ b + 1 }}：</span>
-              <span>{{ a.technologyName || "" }}</span>
+              <span v-if="a.technologyName">{{ a.technologyName || "" }}</span>
+              <span v-if="a.technologySpecName">--{{ a.technologySpecName || "" }}</span>
             </div>
             <div class="model-flex-text">
               <span>颜色：</span>
