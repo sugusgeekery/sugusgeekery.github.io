@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import store from "@/store";
 import router from "@/router";
 
-import { Message, MessageBox  } from "element-ui";
+import { Message, MessageBox, Notification } from "element-ui";
 import { getSessionStorage, getLocalStorage } from "@/utils/storage";
 import { TIME_OUT, BASE_API_URL, INTERFACE_ERROR_TEXT } from "@/config";
 
@@ -39,6 +39,7 @@ const service = axios.create(axiosConfig);
 // 网络请求前拦截器
 service.interceptors.request.use(
   (resquest: any = {}) => {
+    // Notification.success("加载中...");
     return Promise.resolve(resquest);
   },
   (error = {}) => {
@@ -56,11 +57,13 @@ service.interceptors.response.use(
     } = response;
     const { message = INTERFACE_ERROR_TEXT } = data;
     if (status >= 200 && status < 300) {
+      // Notification.success("加载完");
       return Promise.resolve({
         ...data,
         message: message || statusText || INTERFACE_ERROR_TEXT
       });
     } else {
+      // Notification.error("加载失败");
       return Promise.resolve({
         code: "000",
         message: message || statusText || INTERFACE_ERROR_TEXT
@@ -127,6 +130,7 @@ service.interceptors.response.use(
         //   code: "401"
         // });
       default:
+        // Notification.error("加载失败");
         if (isTimeOut && isTimeOut.length > 0) {
           message = "网络响应超时！请稍后重试！";
         }

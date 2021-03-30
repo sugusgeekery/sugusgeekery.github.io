@@ -38,7 +38,7 @@
             </div>
           </div>
         </div>
-        <div class="li-title" v-if="prototype.receiveStatus === 1">
+        <div class="li-title" v-if="prototype.productSamplePostInfo.receiveStatus === 1">
           客户已经验收
         </div>
         <div class="li-title" v-else>请等待客户验收</div>
