@@ -27,6 +27,8 @@ export enum ActionTypes {
   Init = "Init",
   GetStatistics = "GetStatistics",
   GetToBeDeal = "GetToBeDeal",
+  UpdatePageNum = "UpdatePageNum",
+  UpdatePageSize = "UpdatePageSize"
 }
 
 export default {
@@ -78,13 +80,25 @@ export default {
       const { state, dispatch, commit } = store;
       const { success, message, data }: any = await GetToBeDeal();
       if (success) {
-        const { list = [] } = data || {};
-        commit(MutationTypes.UpdateJobList, list);
+        const { list = [], total = 0 } = data || {};
+        commit(MutationTypes.UpdateJob, { list, total: Number(total) });
       } else {
         Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
     }
+  },
+  // 更新待办任务页码
+  [ActionTypes.UpdatePageNum](store: Store, pageNum: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateJob, { pageNum });
+    dispatch(ActionTypes.GetToBeDeal);
+  },
+  // 更新待办任务每页条数
+  [ActionTypes.UpdatePageSize](store: Store, pageSize: number) {
+    const { state, dispatch, commit } = store;
+    commit(MutationTypes.UpdateJob, { pageSize });
+    dispatch(ActionTypes.UpdatePageNum, 1);
   },
 }

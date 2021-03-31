@@ -255,11 +255,11 @@
                     :filterable="true"
                     placeholder="请选择省市区"
                     :value="[
-                      companyInfo.provinceId || '',
-                      companyInfo.cityId || '',
-                      companyInfo.districtId || ''
+                      String(companyInfo.provinceId) || '',
+                      String(companyInfo.cityId) || '',
+                      String(companyInfo.districtId) || ''
                     ]"
-                    :options="provinceCityDistrict"
+                    :options="regionData"
                     :props="{
                       expandTrigger: 'click'
                     }"
@@ -360,6 +360,14 @@ import validate, {
   ValidateFailedParams
 } from "@/utils/validate";
 import { Message, MessageBox } from "element-ui";
+import { 
+  provinceAndCityData,
+  regionData,
+  provinceAndCityDataPlus,
+  regionDataPlus,
+  CodeToText,
+  TextToCode,
+} from "element-china-area-data";
 
 import Selection from "@/components/Selection.vue";
 
@@ -371,6 +379,7 @@ import Selection from "@/components/Selection.vue";
 })
 export default class InformationView extends Vue {
   public BASE_IMAGE_URL = BASE_IMAGE_URL;
+  public regionData = regionData;
 
   @State("initInfo")
   public initInfo!: any | InitInfo;
@@ -511,9 +520,9 @@ export default class InformationView extends Vue {
   }
 
   public updateProvinceCityDistrict(value: any) {
-    const { provinceCityDistrict = [] } = this;
+    const { regionData = [] } = this;
     const label: any = ((ls, arr) => {
-      const array = [];
+      const array: any = [];
       for (const [a, b] of ls.entries()) {
         const { value, label, children = [] } = b;
         if (children.length && value === arr[0]) {
@@ -533,7 +542,7 @@ export default class InformationView extends Vue {
           }
         }
       }
-    })(provinceCityDistrict, value);
+    })(regionData, value);
     this.updateCompanyInfo({
       provinceId: value[0],
       cityId: value[1],
@@ -551,6 +560,7 @@ export default class InformationView extends Vue {
 
   public created() {
     this.getInformationDefInfo();
+    console.log(this.provinceCityDistrict)
   }
   public mounted() {
     const { loginInfo } = this.initInfo || {};

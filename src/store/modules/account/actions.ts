@@ -59,7 +59,7 @@ export default {
     const { type = 0 } = accountInfo || {};
     const typeStr = type === 1 ? "公司" : type === 2 ? "个人" : "";
     commit(MutationTypes.UpdateInitInfo, { type, typeStr, loginInfo, accountInfo, ...params });
-    dispatch(ActionTypes.GetProvinceCityCountry);
+    // dispatch(ActionTypes.GetProvinceCityCountry);
     dispatch(ActionTypes.GetUserInfo);
     dispatch(ActionTypes.GetCompanyInfo);
   },

@@ -17,10 +17,10 @@
         <div class="list-row">
           <div class="list-flex">
             <div class="list-flex-title">待办任务</div>
-            <div class="list-flex-items">
+            <div class="list-flex-items" v-if="job.list.length">
               <div
                 class="list-flex-item"
-                v-for="(a, b) in jobList"
+                v-for="(a, b) in job.list"
                 :key="'_待办任务消息_' + b"
               >
                 <div class="list-flex-item-text">
@@ -84,6 +84,18 @@
               </div>
             </div>
           </div> -->
+        </div>
+        <div class="list-footer">
+          <el-pagination
+            @size-change="updatePageSize"
+            @current-change="updatePageNum"
+            :current-page="job.pageNo"
+            :page-sizes="job.pageSizes"
+            :page-size="job.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="job.total"
+          >
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -155,13 +167,17 @@ export default class HomeTemplate extends Vue {
   public initInfo!: any | InitInfo;
   @State("orderMessageList")
   public orderMessageList!: Array<OrderMessage>;
-  @State("jobList")
-  public jobList!: Array<Job>;
+  @State("job")
+  public job!: Job;
   @State("userMessageList")
   public userMessageList!: Array<UserMessage>;
 
   @Action(ActionTypes.Init)
   public init!: Function;
+  @Action(ActionTypes.UpdatePageNum)
+  public updatePageNum!: Function;
+  @Action(ActionTypes.UpdatePageSize)
+  public updatePageSize!: Function;
 
   public created() {
     this.init();
@@ -200,9 +216,14 @@ export default class HomeTemplate extends Vue {
       max-width 1200px
       padding 0 20px
       border-radius 8px
-      overflow auto
+      overflow hidden
+      display flex
+      flex-direction column
+      justify-content flex-start
+      align-items flex-start
       &-title
-        margin 28px 0
+        width 100%
+        margin 28px 0 0 0
         color $color-text-black
         font-size 16px
       &-items
@@ -229,7 +250,10 @@ export default class HomeTemplate extends Vue {
           font-size 100px
           text-align right
       &-row
-        margin 28px 0
+        flex 1
+        width 100%
+        overflow auto
+        margin 0
         display flex
         justify-content space-between
         align-items flex-start
@@ -290,6 +314,12 @@ export default class HomeTemplate extends Vue {
             display flex
             justify-content flex-end
             align-items center
+      &-footer
+        width 100%
+        background $color-bg-white
+        margin 0 auto
+        padding 5px
+        text-align center
   .fixed
     position fixed
     top 50%

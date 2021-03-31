@@ -3,7 +3,7 @@ import { State, InitInfo, OrderMessage, Job, UserMessage } from "./state";
 export enum MutationTypes {
   UpdateInitInfo = "UpdateInitInfo",
   UpdateOrderMessageList = "UpdateOrderMessageList",
-  UpdateJobList = "UpdateJobList",
+  UpdateJob = "UpdateJob",
   UpdateUserMessageList = "UpdateUserMessageList"
 }
 
@@ -25,11 +25,20 @@ export default {
     state.orderMessageList = orderMessageList;
   },
   // 更新代办任务
-  [MutationTypes.UpdateJobList](state: State, jobList: Array<Job>) {
-    state.jobList = jobList;
+  [MutationTypes.UpdateJob](state: State, params: Job) {
+    const { job } = state;
+    const temp: Job = job;
+    (function<T>(state: State, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.job = Object.assign(job, temp);
+    })(state, params, temp);
   },
   // 更新个人信息列表
   [MutationTypes.UpdateUserMessageList](state: State, userMessageList: Array<UserMessage>) {
     state.userMessageList = userMessageList;
   },
+
+  
 }

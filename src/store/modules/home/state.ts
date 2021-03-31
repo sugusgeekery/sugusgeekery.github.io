@@ -1,7 +1,7 @@
 export interface State {
   initInfo: any | InitInfo;
   orderMessageList: Array<OrderMessage>;
-  jobList: Array<Job>;
+  job: Job;
   userMessageList: Array<UserMessage>;
 };
 
@@ -14,6 +14,14 @@ export interface OrderMessage {
 }
 // 待办任务
 export interface Job {
+  pageNum: number;
+  pageSize: number;
+  pageSizes: number[];
+  total: number;
+  list: Array<JobList>;
+}
+// 待办任务列表
+export interface JobList {
   taskName: string;
   id: number;
   orderNo: string;
@@ -46,7 +54,14 @@ const state: State = {
       count: 0,
     },
   ],
-  jobList: [
+  job: {
+    pageNum: 1,
+    pageSize: 10,
+    pageSizes: [10, 20, 50, 100],
+    total: 0,
+    list: [],
+  },
+  // jobList: [
     // {
     //   "id": 12,
     //   "orderNo": "7687634534543435",
@@ -68,7 +83,7 @@ const state: State = {
     //   "title": "需要确认图纸",
     //   "url": "www.baidu.com"
     // },
-  ],
+  // ],
   userMessageList: [
     // {
     //   "id": 12,
