@@ -125,7 +125,7 @@
       </div>
     </div>
     <div class="items" v-if="initInfo.type === Supplier.Injection && injectionStepList && injectionStepList.length">
-      <div class="items-text">注塑</div>
+      <div class="items-text">试模</div>
       <div class="item" v-for="(a, b) in injectionStepList" :key="b">
         <div class="item-label">
           <div
@@ -187,7 +187,7 @@
       完成所有加工环节后点击此按钮
     </div>
     <div class="text-black" v-else-if="initInfo.type === Supplier.Injection">
-      完成所有注塑环节工作后点击此按钮
+      完成所有试模环节工作后点击此按钮
     </div>
     <div class="buttons">
       <div
@@ -202,11 +202,11 @@
         v-else-if="initInfo.type === Supplier.Injection"
         @click="commitStep()"
       >
-        完成注塑阶段
+        完成试模阶段
       </div>
     </div>
     <div class="text-gray" v-if="initInfo.type === Supplier.Machining">
-      提示：需要协助注塑方完成样件注塑，并将样件回给平台
+      提示：需要协助试模方完成样件试模，并将样件回给平台
     </div>
     <div class="text-gray" v-else-if="initInfo.type === Supplier.Injection">
       提示：如果是试模，需要将样件给到加工方，寄回给平台

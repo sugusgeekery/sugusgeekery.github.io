@@ -51,18 +51,22 @@ export default {
         const orderMessageList = [];
         orderMessageList.push({
           text: "新竞价单",
+          path: "/bidding",
           count: newBiddingCount || 0
         });
         orderMessageList.push({
           text: "未完成订单",
+          path: "/orderHome",
           count: inCompleteOrderCount || 0
         });
         orderMessageList.push({
           text: "待处理订单",
+          path: "/orderHome",
           count: pendingOrderCount || 0
         });
         orderMessageList.push({
           text: "新消息",
+          path: "",
           count: messageCount || 0
         });
         commit(MutationTypes.UpdateOrderMessageList, orderMessageList);

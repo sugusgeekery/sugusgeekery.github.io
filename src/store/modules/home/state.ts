@@ -10,6 +10,7 @@ export interface InitInfo {};
 // 订单消息
 export interface OrderMessage {
   text: string;
+  path: string;
   count: number;
 }
 // 待办任务
@@ -39,18 +40,22 @@ const state: State = {
   orderMessageList: [
     {
       text: "新竞价单",
+      path: "/bidding",
       count: 0,
     },
     {
       text: "未完成订单",
+      path: "/orderHome",
       count: 0,
     },
     {
       text: "待处理订单",
+      path: "/orderHome",
       count: 0,
     },
     {
       text: "新消息",
+      path: "",
       count: 0,
     },
   ],

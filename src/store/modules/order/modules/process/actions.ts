@@ -105,7 +105,7 @@ export default {
       throw new Error(e);
     }
   },
-  // 获取注塑步骤
+  // 获取试模步骤
   async [ActionTypes.GetInjectionSteps](store: Store) {
     try {
       const { state, dispatch, commit } = store;

@@ -171,6 +171,7 @@ const state: State = {
   ],
   biddingDetail: {
     isShow: false,
+    isEdit: false,
     headId: 0,
     biddingIndex: 0,
     "biddingHeadInfo": {

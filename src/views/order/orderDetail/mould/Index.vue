@@ -29,7 +29,7 @@
         </div>
         <div class="li-row">
           <div class="li-text">
-            <span class="li-text-button" @click="getClampingPlan()">合模方案</span>
+            <span class="li-text-button" @click="getClampingPlan()">排模方案</span>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
         class="li"
         v-for="(a, b) in mould.mouldProductList"
         :key="b"
-        v-show="mould.mouldProductList && mould.mouldProductList.length"
+        v-show="mould.mouldProductList.length"
       >
         <div class="li-text">
           <span class="li-text-black">产品：</span>
@@ -134,7 +134,7 @@
         </div>
         <div class="li-row">
           <div class="li-text">
-            <span class="li-text-button" @click="getClampingPlan()">合模方案</span>
+            <span class="li-text-button" @click="getClampingPlan()">排模方案</span>
           </div>
           <div class="li-text">
             <span class="li-text-gray">开机费</span>
@@ -272,7 +272,7 @@
           <div class="filter-item-label">小时</div>
         </div>
         <div class="filter-item">
-          <div class="filter-item-label">注塑交期</div>
+          <div class="filter-item-label">试模交期</div>
           <div class="filter-item-content">
             <input
               class="filter-item-input"

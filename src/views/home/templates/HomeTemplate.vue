@@ -9,6 +9,7 @@
             class="list-item"
             v-for="(a, b) in orderMessageList"
             :key="'_订单消息_' + b"
+            @click="navigateToPath(a.path)"
           >
             <div class="list-item-title">{{ a.text }}</div>
             <div class="list-item-text">{{ a.count }}</div>
@@ -158,6 +159,8 @@ const { State, Getter, Action, Mutation } = namespace("home");
 import { InitInfo, OrderMessage, Job, UserMessage } from "@/store/modules/home/state";
 import { ActionTypes } from "@/store/modules/home/actions";
 
+import router from "@/router";
+
 @Component({
   name: "HomeTemplate",
   components: {}
@@ -181,6 +184,12 @@ export default class HomeTemplate extends Vue {
 
   public created() {
     this.init();
+  }
+
+  public navigateToPath (path: string) {
+    if (path) {
+      router.push(path);
+    }
   }
 }
 </script>
@@ -213,7 +222,7 @@ export default class HomeTemplate extends Vue {
       left 0
       width 100%
       height 100%
-      max-width 1200px
+      max-width 1400px
       padding 0 20px
       border-radius 8px
       overflow hidden

@@ -631,7 +631,7 @@ export default class InformationView extends Vue {
     .list
       width 100%
       height 100%
-      max-width 1200px
+      // max-width 1200px
       flex 1
       display flex
       flex-direction column

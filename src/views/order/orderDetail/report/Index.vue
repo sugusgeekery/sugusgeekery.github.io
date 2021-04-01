@@ -145,7 +145,7 @@
           </div>
         </div>
         <div class="item-cell" v-if="a.injectionApprovalInfo">
-          <div class="item-cell-text item-cell-text-black">注塑方：</div>
+          <div class="item-cell-text item-cell-text-black">试模方：</div>
           <div
             class="item-cell-text item-cell-text-red"
             v-if="a.injectionApprovalInfo.approvalStatus === 0"
@@ -216,7 +216,7 @@
         v-if="a.state && initInfo.type === Supplier.Machining"
       >
         <div class="item-cell" v-if="a.injectionApprovalInfo">
-          <div class="item-cell-text item-cell-text-black">注塑方：</div>
+          <div class="item-cell-text item-cell-text-black">试模方：</div>
           <div
             class="item-cell-text item-cell-text-red"
             v-if="a.injectionApprovalInfo.approvalStatus === 0"
@@ -428,7 +428,7 @@
           </div>
         </div>
         <div class="item-cell item-cell-line" v-if="a.injectionApprovalInfo">
-          <div class="item-cell-text item-cell-text-black">注塑方：</div>
+          <div class="item-cell-text item-cell-text-black">试模方：</div>
           <div
             class="item-cell-text item-cell-text-red"
             v-if="a.injectionApprovalInfo.approvalStatus === 0"

@@ -131,7 +131,7 @@ export default {
         return;
       }
       if (!injectionTime) {
-        Message.error("请输入注塑交期");
+        Message.error("请输入试模交期");
         return;
       }
       const { success, message, data }: any = await CommitRepairMould({ 

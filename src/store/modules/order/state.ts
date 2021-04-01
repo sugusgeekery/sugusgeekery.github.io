@@ -77,7 +77,7 @@ export enum Supplier {
   Design = "plan_design",
   // 加工供应商
   Machining = "machining",
-  // 注塑供应商
+  // 试模供应商
   Injection = "injection"
 };
 
@@ -108,8 +108,8 @@ const state: State = {
       //   type: "加工",
       // },
       // {
-      //   text: "注塑",
-      //   type: "注塑",
+      //   text: "试模",
+      //   type: "试模",
       // },
     ],
     statusIndex: 0,

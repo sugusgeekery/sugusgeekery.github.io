@@ -78,7 +78,7 @@
             加工方：
           </span>
           <span class="design-item-content-text-black" v-else-if="c.type == 2">
-            注塑方：
+            试模方：
           </span>
           <span class="design-item-content-text-red" v-if="c.opinion === 0">
             驳回
@@ -106,7 +106,7 @@
             name="file"
             id="file"
             hidden="hidden"
-            accept=".step, .stp, .stl"
+            accept=".step, .stp, .stl, .prt"
             @change="uploadFile"
           />
           <span class="design-item-content-button-text" @click="checkFile()">

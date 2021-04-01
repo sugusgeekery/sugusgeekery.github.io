@@ -102,8 +102,9 @@
               class="item"
               v-for="(a, b) in biddingList[biddingIndex].list"
               :key="a.id + '_竞价单_' + b"
+              @click="getBiddingDetail(b)"
             >
-              <div class="item-rows" @click="getBiddingDetail(b)">
+              <div class="item-rows">
                 <div class="item-row">
                   <div class="item-flex">
                     <span class="item-text">单号：</span>
@@ -144,7 +145,7 @@
                 </div>
               </div>
               <div class="item-rows" v-if="biddingIndex === 0">
-                <!-- <div class="item-row">
+                <div class="item-row">
                   <div class="item-flex">
                     <img
                       class="item-icon"
@@ -155,7 +156,7 @@
                       {{ a.address || "" }}
                     </span>
                   </div>
-                </div> -->
+                </div>
                 <div class="item-row">
                   <div class="item-flex">
                     <img
@@ -170,7 +171,6 @@
                   <div class="item-flex" v-if="a.isUserBid === 0">
                     <span
                       class="item-button item-button-blue"
-                      @click="joinBidding(b)"
                     >
                       竞价
                     </span>
@@ -282,7 +282,7 @@ export default class BiddingHomeTemplate extends Vue {
     padding 20px
     .list
       width 100%
-      max-width 1400px
+      // max-width 1400px
       flex 1
       display flex
       flex-direction column

@@ -76,7 +76,7 @@ const state: RootState = {
       text: "验证码登录"
     }
   ],
-  isCheckProtocol: true,
+  isCheckProtocol: false,
   isShowProtocol: false,
   registerNavIndex: 0,
   registerNavList: [

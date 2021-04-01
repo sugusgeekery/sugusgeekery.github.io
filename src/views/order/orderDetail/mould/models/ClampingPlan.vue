@@ -3,7 +3,7 @@
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
-          <div class="model-title-text">合模方案</div>
+          <div class="model-title-text">排模方案</div>
         </div>
         <div
           class="model-cancel"
@@ -11,8 +11,8 @@
         ></div>
       </div>
       <div class="model-body" v-if="clampingPlan.matchedPlan">
-        <div class="model-label">合模方案</div>
-        <div class="model-text">合模产品拼图：</div>
+        <div class="model-label">排模方案</div>
+        <div class="model-text">排模产品拼图：</div>
         <div class="model-images" v-if="clampingPlan.mouldLabeImages && clampingPlan.mouldLabeImages.length">
           <el-image class="model-image" v-show="a" :src="a" v-for="(a, b) in clampingPlan.mouldLabeImages" :key="b" :preview-src-list="clampingPlan.mouldLabeImages"></el-image>
         </div>
@@ -85,81 +85,11 @@ import { BASE_IMAGE_URL } from "@/config";
   components: {}
 })
 export default class ClampingPlanModel extends Vue {
-  public readonly BASE_IMAGE_URL = BASE_IMAGE_URL
-  // 供应商类型列表
-  public Supplier = Supplier;
-
-  @State("initInfo")
-  public initInfo!: any | InitInfo;
-  @State("mould")
-  public mould!: Mould;
   @State("clampingPlan")
   public clampingPlan!: any | ClampingPlan;
 
-  // @Action(ActionTypes.UpdateBOMPageNum)
-  // public updatePageNum!: Function;
-  // @Action(ActionTypes.UpdateBOMPageSize)
-  // public updatePageSize!: Function;
-  // @Action(ActionTypes.ImportBom)
-  // public importBom!: Function;
-  // @Action(ActionTypes.ApprovalBom)
-  // public approvalBom!: Function;
-
   @Mutation(MutationTypes.UpdateClampingPlan)
   public updateClampingPlan!: Function;
-
-  // public downloadFile(url: string, name: string) {
-  //   if (url) {
-  //     downloadByUrl(url, name);
-  //   }
-  // }
-
-  // public checkFile() {
-  //   const dom: any = document.querySelector("#file");
-  //   dom.click();
-  // }
-  // public async uploadFile(e: any) {
-  //   try {
-  //     const file = e.target.files[0];
-  //     const formData = new FormData();
-  //     formData.append("files", file);
-  //     const { success, message, data }: any = await UploadForm(formData);
-  //     if (success) {
-  //       const { pics = [] } = data || {};
-  //       const { filePath = "", fileName, id } = pics[0];
-  //       this.importBom(id);
-  //     } else {
-  //       Message.error(message);
-  //     }
-  //     e.target.value = null;
-  //   } catch (e) {
-  //     throw new Error(e);
-  //   }
-  // }
-
-  // public showMessageBox() {
-  //   const { Supplier, initInfo } = this;
-  //   MessageBox({
-  //     message: "",
-  //     title: "温馨提示",
-  //     confirmButtonText: "确定",
-  //     cancelButtonText: "取消",
-  //     showClose: true,
-  //     showInput: true,
-  //     closeOnClickModal: false,
-  //     closeOnPressEscape: false,
-  //     center: true,
-  //     roundButton: false,
-  //     showConfirmButton: true,
-  //     showCancelButton: true
-  //   })
-  //     .then(({ action, value }: any) => {
-  //       if (action === "confirm") {
-  //         this.approvalBom({ cause: value, opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })
-  //       }
-  //     })
-  //     .catch(() => {});
-  // }
 }
 </script>
 

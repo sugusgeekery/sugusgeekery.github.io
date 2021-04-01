@@ -113,11 +113,11 @@
                 @click="updateIsCheckProtocol(!isCheckProtocol)"
               ></div>
               <div class="model-form-context-text">
-                已阅读并遵守 平台用户服务协议
+                已阅读并遵守平台用户服务协议
               </div>
             </div>
             <div class="model-form-buttons">
-              <div class="model-form-button" @click="registerCtl">注册</div>
+              <div class="model-form-button" @click="registerCtl()">注册</div>
             </div>
           </div>
         </div>
@@ -248,7 +248,7 @@ export default class RegisterView extends Vue {
     this.getVerificationCode({ phone, type: 1 });
   }
   public registerCtl() {
-    const { companyName = "", userName = "", phone = "", code = "" } = this;
+    const { companyName = "", userName = "", phone = "", code = "", isCheckProtocol = false } = this;
     if (!companyName) {
       this.$message.error("请输入公司名称");
       return;
@@ -263,6 +263,10 @@ export default class RegisterView extends Vue {
     }
     if (!code) {
       this.$message.error("请输入验证码");
+      return;
+    }
+    if (!isCheckProtocol) {
+      this.$message.error("请阅读并勾选协议");
       return;
     }
     this.register({ companyName, userName, phone, code });

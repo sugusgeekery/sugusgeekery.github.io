@@ -15,7 +15,7 @@
       <div class="model-body">
         <div class="model-flex">
           <div class="model-flex-text">
-            <span>材材：</span>
+            <span>产品材质：</span>
             <span>
               {{ biddingMaterial.materialName || "" }}
             </span>

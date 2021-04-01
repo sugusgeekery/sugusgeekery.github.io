@@ -6,8 +6,11 @@ export const GetSelectByUser = (params: object = {}): object => fetch({ url: "/s
 // 获取我的竞价单，竞价历史列表
 export const GetSelectMyBidding = (params: object = {}): object => fetch({ url: "/supplier/userMouldBidding/selectMyBidding", method: "GET", params });
 
-// 竞价
+// 参与竞价
 export const JoinBidding = (data: object = {}): object => fetch({ url: "/supplier/userMouldBidding/joinMouldBidding", data });
+
+// 取消竞价
+export const RemoveBidding = (data: object = {}): object => fetch({ url: "/supplier/userMouldBidding/removeMouldBidding", data });
 
 // 修改竞价详情
 export const UpdateMouldBidding = (data: object = {}): object => fetch({ url: "/supplier/userMouldBidding/updateMouldBidding", data });

@@ -185,6 +185,20 @@ export default {
     const navigationList = [];
     switch(type) {
       case Supplier.Dfm:
+        dispatch("order/report/Init", {...list[index]}, { root: true });
+        dispatch("order/design/Init", {...list[index]}, { root: true });
+        dispatch("order/mould/Init", {...list[index]}, { root: true });
+        navigationList.push(...[
+          {
+            text: "DFM报告",
+            path: "/order/report",
+          },
+          {
+            text: "模具信息",
+            path: "/order/mould",
+          },
+        ]);
+        break;
       case Supplier.Design:
         dispatch("order/report/Init", {...list[index]}, { root: true });
         dispatch("order/design/Init", {...list[index]}, { root: true });
@@ -252,7 +266,7 @@ export default {
             path: "/order/design",
           },
           {
-            text: "注塑",
+            text: "试模",
             path: "/order/process",
           },
         ]);

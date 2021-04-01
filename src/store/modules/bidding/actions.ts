@@ -13,6 +13,7 @@ import {
   GetSelectByUser,
   GetSelectMyBidding,
   JoinBidding,
+  RemoveBidding,
   UpdateMouldBidding,
   GetMouldBiddingDetail,
   GetProductTechnology,
@@ -39,6 +40,7 @@ export enum ActionTypes {
   UpdatePayDate = "UpdatePayDate",
   UpdateProvinceCityCountry = "UpdateProvinceCityCountry",
   JoinBidding = "JoinBidding",
+  RemoveBidding = "RemoveBidding",
   UpdateMouldBidding = "UpdateMouldBidding",
   GetBiddingDetail = "GetBiddingDetail",
   UpdateProductInfoIndex = "UpdateProductInfoIndex",
@@ -138,7 +140,7 @@ export default {
     // dispatch(ActionTypes.UpdatePageNum, 1);
   },
 
-  // 竞价
+  // 参与竞价
   async [ActionTypes.JoinBidding](store: Store, index: number) {
     try {
       const { state, dispatch, commit } = store;
@@ -156,6 +158,24 @@ export default {
       throw new Error(e);
     }
   },
+  // 取消竞价
+  // async [ActionTypes.RemoveBidding](store: Store, index: number) {
+  //   try {
+  //     const { state, dispatch, commit } = store;
+  //     const { biddingIndex = 0, biddingList = [] } = state;
+  //     const { list = [] } = biddingList[biddingIndex] || {}; 
+  //     const { amount, id, workPeriod } = list[index] || {};
+  //     const { success, message, data }: any = await RemoveBidding({ amount, biddingHeadId: id, workPeriod });
+  //     if (success) {
+  //       Message.success(message);
+  //       dispatch(ActionTypes.GetBiddingList);
+  //     } else {
+  //       Message.error(message);
+  //     }
+  //   } catch (e) {
+  //     throw new Error(e);
+  //   }
+  // },
 
   // 更新竞价详情
   [ActionTypes.GetBiddingDetail](store: Store, index: number) {
@@ -191,21 +211,24 @@ export default {
     }
   },
   // 切换产品列表
-  [ActionTypes.UpdateProductInfoIndex](store: Store, status: number) {
+  [ActionTypes.UpdateProductInfoIndex](store: Store, params: { type: number; index: number }) {
     const { state, dispatch, commit } = store;
     const { biddingDetail } = state;
+    const { type, index } = params || {};
     const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
     if (productInfoIndex < 0) {
       return;
     }
-    if (status === 1) {
+    if (type === 1) {
       if (productInfoIndex < productInfos.length - 1) {
         commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: productInfoIndex + 1 });
       }
-    } else if (status === 2) {
+    } else if (type === 2) {
       if (productInfoIndex > 0) {
         commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: productInfoIndex - 1 });
       }
+    } else if (type === 3) {
+      commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: index });
     }
   },
   // 更新竞价信息
@@ -222,6 +245,25 @@ export default {
         fn = await JoinBidding({ amount, biddingHeadId: headId, workPeriod });
       }
       const { success, message, data }: any = fn;
+      if (success) {
+        Message.success(message);
+        dispatch(ActionTypes.GetBiddingList);
+        dispatch(ActionTypes.GetMouldBiddingDetail);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 取消竞价
+  async [ActionTypes.RemoveBidding](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { biddingDetail } = state;
+      const { joinBiddingInfo, biddingState, headId } = biddingDetail || {}; 
+      const { supplierBiddingId, amount, workPeriod } = joinBiddingInfo || {};
+      const { success, message, data }: any = await RemoveBidding({ amount, biddingHeadId: headId, workPeriod });
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetBiddingList);

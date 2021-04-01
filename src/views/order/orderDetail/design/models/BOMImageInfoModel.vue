@@ -27,7 +27,7 @@
               id="bomimagefile"
               hidden="hidden"
               multiple="multiple"
-              accept=".pdf, .step, .stp, .stl"
+              accept=".pdf, .step, .stp, .stl, .prt"
               @change="uploadFile"
             />
             <input
@@ -35,7 +35,7 @@
               name="bomimagelifile"
               id="bomimagelifile"
               hidden="hidden"
-              accept=".pdf, .step, .stp, .stl"
+              accept=".pdf, .step, .stp, .stl,.prt"
               @change="uploadFile"
             />
             <div class="model-button" @click="checkFile()">

@@ -1,18 +1,12 @@
 import fetch from "@/axios";
 
-// 查看当前进行到哪一步
-// export const GetStep = (params: any = {}): object => fetch({ url: `/supplier/conceptualDesign/getStep`, method: "GET", params });
-
-// 获取步骤详情
-// export const GetStepDetail = (params: any = {}): object => fetch({ url: `/supplier/conceptualDesign/listByMouldNo`, method: "GET", params });
-
 // 获取DFM方方案设计
 export const GetDfmRealtime = (params: any = {}): object => fetch({ url: `/supplier/planDesign/getDfmRealtime`, method: "GET", params });
 
 // 获取加工方方案设计
 export const GetMachinRealtime = (params: any = {}): object => fetch({ url: `/supplier/planDesign/getMachinRealtime`, method: "GET", params });
 
-// 获取注塑方方案设计
+// 获取试模方方案设计
 export const GetInjectionRealtime = (params: any = {}): object => fetch({ url: `/supplier/planDesign/getInjectionRealtime`, method: "GET", params });
 
 // 上传3D图纸方案

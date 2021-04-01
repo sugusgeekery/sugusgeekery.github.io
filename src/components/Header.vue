@@ -1,6 +1,6 @@
 <template>
   <div class="header-container">
-    <div class="header-left"></div>
+    <!-- <div class="header-left"></div> -->
     <div class="header-wrapper">
       <div class="header-logo">
         <img class="header-logo-image" src="../assets/images/logo.png" alt="" />
@@ -26,7 +26,7 @@
         <div class="header-icon-tip">5</div> -->
       </div>
     </div>
-    <div class="header-right"></div>
+    <!-- <div class="header-right"></div> -->
   </div>
 </template>
 
@@ -86,6 +86,7 @@ export default class Header extends Vue {
     display flex
     justify-content space-between
     align-items flex-start
+    padding 0 20px
   &-logo
     display flex
     justify-content center

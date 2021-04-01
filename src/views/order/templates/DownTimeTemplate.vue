@@ -136,7 +136,7 @@ export default class DownTimeTemplate extends Vue {
   overflow auto
   margin 0 0 0 20px
   padding 20px
-  min-width 340px
+  min-width 300px
   &-title
     font-size 16px
     color $color-text-black

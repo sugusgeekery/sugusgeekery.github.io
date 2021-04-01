@@ -17,7 +17,18 @@
         <div class="model-flex">
           <div class="model-flex-title">模具信息</div>
           <div class="model-flex-row">
-            <div class="model-flex-arrow" @click="updateProductInfoIndex(2)">
+            <div class="model-flex-navigations">
+              <div 
+                class="model-flex-navigation" 
+                :class="{'model-flex-navigation-active': b === biddingDetail.productInfoIndex}" 
+                v-for="(a, b) in biddingDetail.productInfos.length" 
+                :key="b" 
+                @click="updateProductInfoIndex({ type: 3, index: b })"
+              >
+                {{ a }}
+              </div>
+            </div>
+            <div class="model-flex-arrow" @click="updateProductInfoIndex({ type: 2 })">
               <img
                 class="model-flex-arrow-icon"
                 src="../../../assets/images/arrow_left.png"
@@ -91,9 +102,18 @@
                     点击查看
                   </span>
                 </div>
+                <div class="model-flex-text">
+                  <span>排模方案：</span>
+                  <span
+                    class="model-flex-text-blue"
+                    @click="getBiddingTechnology()"
+                  >
+                    点击查看
+                  </span>
+                </div>
               </div>
             </div>
-            <div class="model-flex-arrow" @click="updateProductInfoIndex(1)">
+            <div class="model-flex-arrow" @click="updateProductInfoIndex({ type: 1 })">
               <img
                 class="model-flex-arrow-icon"
                 src="../../../assets/images/arrow_right.png"
@@ -188,7 +208,7 @@
                   <span>中标交期</span>
                 </div>
               </div>
-              <div class="model-flex-context">
+              <div class="model-flex-context" v-if="biddingDetail.selectedUserBiddingInfo">
                 <div class="model-flex-text">
                   <span>￥</span>
                   <span>
@@ -209,22 +229,31 @@
           </div>
           <div class="model-flex-row">
             <div class="model-flex-content">
-              <div class="model-flex-context">
+              <div class="model-flex-context" v-if="biddingDetail.joinBiddingInfo">
                 <div class="model-flex-text">
                   <span>竞标价格</span>
                 </div>
                 <div class="model-flex-text">
                   <span>竞标交期</span>
                 </div>
-                <div
-                  class="model-flex-button model-flex-button-blue"
-                  @click="updateMouldBidding()"
-                  v-if="
-                    biddingDetail.biddingIndex === 0 ||
-                      biddingDetail.biddingIndex === 1
-                  "
-                >
-                  {{ biddingDetail.biddingState === 1 ? "编辑" : "竞价" }}
+                <div class="model-flex-buttons">
+                  <div
+                    class="model-flex-button model-flex-button-blue"
+                    @click="updateMouldBidding()"
+                    v-if="
+                      biddingDetail.biddingIndex === 0 ||
+                        biddingDetail.biddingIndex === 1
+                    "
+                  >
+                    {{ biddingDetail.isEdit ? "修改" : biddingDetail.biddingState === 1 ? "编辑" : "竞价" }}
+                  </div>
+                  <div
+                    class="model-flex-button model-flex-button-blue"
+                    @click="removeBidding()"
+                    v-if="biddingDetail.biddingState === 1"
+                  >
+                    取消竞价
+                  </div>
                 </div>
               </div>
               <div class="model-flex-context">
@@ -238,6 +267,7 @@
                     @change="
                       e =>
                         updateBiddingDetail({
+                          isEdit: true,
                           joinBiddingInfo: {
                             ...biddingDetail.joinBiddingInfo,
                             amount: Number(e.target.value)
@@ -262,6 +292,7 @@
                     @change="
                       e =>
                         updateBiddingDetail({
+                          isEdit: true,
                           joinBiddingInfo: {
                             ...biddingDetail.joinBiddingInfo,
                             workPeriod: Number(e.target.value)
@@ -293,6 +324,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("bidding");
+// const 
 
 import { BiddingDetail } from "@/store/modules/bidding/state";
 import { ActionTypes } from "@/store/modules/bidding/actions";
@@ -325,6 +357,11 @@ export default class BiddingDetailModel extends Vue {
   public getBiddingMaterial!: Function;
   @Action(ActionTypes.UpdateMouldBidding)
   public updateMouldBidding!: Function;
+  @Action(ActionTypes.RemoveBidding)
+  public removeBidding!: Function;
+
+  // @Action(ActionTypes.GetClampingPlan)
+  // public getClampingPlan!: Function;
 
   @Mutation(MutationTypes.UpdateBiddingDetail)
   public updateBiddingDetail!: Function;
@@ -398,9 +435,11 @@ export default class BiddingDetailModel extends Vue {
     justify-content space-between
     align-items flex-start
   &-flex
+    min-width 230px
     padding 20px
-    min-height 350px
+    min-height 400px
     border-right solid 1px $color-bd
+    position relative
     &:nth-last-of-type(1)
       border-right none
     &-title
@@ -411,6 +450,30 @@ export default class BiddingDetailModel extends Vue {
       display flex
       justify-content space-between
       align-items center
+    &-navigations
+      position absolute
+      bottom 10px
+      left 50%
+      transform translateX(-50%)
+      display flex
+      justify-content center
+      align-items center
+    &-navigation
+      margin 10px
+      border-radius 50%
+      width 24px
+      height 24px
+      font-size 12px
+      color $color-text-gray
+      background $color-bg
+      text-align center
+      line-height 26px
+      cursor pointer
+      transition all .3s
+      &:hover,
+      &-active
+        color $color-text-white
+        background $color-bg-blue
     &-arrow
       width 20px
       height 20px
@@ -458,8 +521,14 @@ export default class BiddingDetailModel extends Vue {
       color $color-text-gray
       margin 0 8px
       padding 4px
+    &-buttons
+      margin-top 20px
+      width 100%
+      display flex
+      justify-content space-between
+      align-items center
     &-button
-      margin-top 50px
+      margin-right 20px
       padding 9px 16px
       border-radius 4px
       font-size 14px
