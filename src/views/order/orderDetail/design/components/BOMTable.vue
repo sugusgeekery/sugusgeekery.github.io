@@ -6,10 +6,10 @@
           <div class="model-title-text" v-if="Supplier.Design === initInfo.type">
             导入BOM表
           </div>
-          <div class="model-title-text" v-else-if="Supplier.Dfm === initInfo.type">
+          <div class="model-title-text" v-else-if="Supplier.Dfm === initInfo.type || Supplier.Injection === initInfo.type">
             查看BOM表
           </div>
-          <div class="model-title-text" v-else-if="Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type">
+          <div class="model-title-text" v-else-if="Supplier.Machining === initInfo.type">
             验收BOM表
           </div>
         </div>
@@ -26,7 +26,7 @@
               name="file"
               id="file"
               hidden="hidden"
-              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .step, .stp, .stl, .prt, .pdf"
               @change="uploadFile"
             />
             <div class="model-button" @click="checkFile()">导入BOM表</div>
@@ -79,16 +79,16 @@
             </el-pagination>
           </div>
         </div>
-        <div class="model-buttons" v-if="(Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type) && BOMTable.isEdit">
+        <div class="model-buttons" v-if="(Supplier.Machining === initInfo.type) && BOMTable.isEdit">
           <div
             class="model-button model-button-blue"
-            @click="approvalBom({ cause: '', opinion: 1, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"
+            @click="approvalBom({ cause: '', opinion: 1, role: Supplier.Machining === initInfo.type ? 1 : 0 })"
           >
             通过
           </div>
           <div
             class="model-button"
-            @click="approvalBom({ cause: '', opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })"
+            @click="approvalBom({ cause: '', opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : 0 })"
           >
             驳回
           </div>
@@ -118,10 +118,10 @@ import { Message, MessageBox } from "element-ui";
 import { UploadForm } from "@/api";
 
 @Component({
-  name: "BOMTableModel",
+  name: "BOMTable",
   components: {}
 })
-export default class BOMTableModel extends Vue {
+export default class BOMTable extends Vue {
   // 供应商类型列表
   public Supplier = Supplier;
 
@@ -172,30 +172,6 @@ export default class BOMTableModel extends Vue {
       throw new Error(e);
     }
   }
-
-  // public showMessageBox() {
-  //   const { Supplier, initInfo } = this;
-  //   MessageBox({
-  //     message: "",
-  //     title: "温馨提示",
-  //     confirmButtonText: "确定",
-  //     cancelButtonText: "取消",
-  //     showClose: true,
-  //     showInput: true,
-  //     closeOnClickModal: false,
-  //     closeOnPressEscape: false,
-  //     center: true,
-  //     roundButton: false,
-  //     showConfirmButton: true,
-  //     showCancelButton: true
-  //   })
-  //     .then(({ action, value }: any) => {
-  //       if (action === "confirm") {
-  //         this.approvalBom({ cause: value, opinion: 0, role: Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0 })
-  //       }
-  //     })
-  //     .catch(() => {});
-  // }
 }
 </script>
 

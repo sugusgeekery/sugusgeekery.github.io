@@ -60,7 +60,7 @@
         <div class="tip-text">交付失误率：10%</div>
       </div>
     </div>
-    <!-- <AddAccountModel></AddAccountModel> -->
+    <!-- <AddAccount></AddAccount> -->
   </div>
 </template>
 
@@ -72,12 +72,12 @@ import { Component, Vue } from "vue-property-decorator";
 // import {} from "@/store/modules/account/state";
 // import { ActionTypes } from "@/store/modules/account/actions";
 
-import AddAccountModel from "../models/AddAccountModel.vue";
+import AddAccount from "../components/AddAccount.vue";
 
 @Component({
   name: "ManagementView",
   components: {
-    AddAccountModel
+    AddAccount
   }
 })
 export default class ManagementView extends Vue {

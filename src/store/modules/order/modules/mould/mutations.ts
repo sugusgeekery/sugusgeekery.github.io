@@ -1,11 +1,11 @@
-import { State, InitInfo, Mould, RepairMould, ClampingPlan } from "./state";
+import { State, InitInfo, Mould, RepairMould } from "./state";
 
 export enum MutationTypes {
   UpdateInitInfo = "UpdateInitInfo",
   UpdateMould = "UpdateMould",
   UpdateRepairMouldIndex = "UpdateRepairMouldIndex",
   UpdateRepairMouldList = "UpdateRepairMouldList",
-  UpdateClampingPlan = "UpdateClampingPlan",
+  UpdateArrangementScheme = "UpdateArrangementScheme",
 }
 
 export default {
@@ -43,14 +43,14 @@ export default {
   },
 
   // 更新合模方案
-  [MutationTypes.UpdateClampingPlan](state: State, params: ClampingPlan) {
-    const { clampingPlan } = state;
-    const temp: ClampingPlan = clampingPlan;
+  [MutationTypes.UpdateArrangementScheme](state: State, params: ArrangementSchemeTypes) {
+    const { arrangementScheme } = state;
+    const temp: ArrangementSchemeTypes = arrangementScheme;
     (function<T>(state: State, params: T, temp: T) {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.clampingPlan = Object.assign(clampingPlan, temp);
+      state.arrangementScheme = Object.assign(arrangementScheme, temp);
     })(state, params, temp);
   },
 }

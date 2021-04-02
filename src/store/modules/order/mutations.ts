@@ -1,4 +1,4 @@
-import { State, InitInfo, Advantage, Order, NavigationList, RemainTime } from "./state";
+import { State, InitInfo, Advantage, Order, NavigationList } from "./state";
 
 export enum MutationTypes {
   UpdateInitInfo = "UpdateInitInfo",
@@ -6,7 +6,7 @@ export enum MutationTypes {
   UpdateOrder = "UpdateOrder",
   UpdateNavigationList = "UpdateNavigationList",
   UpdateNavigationIndex = "UpdateNavigationIndex",
-  UpdateRemainTime = "UpdateRemainTime",
+  UpdateCountdown = "UpdateCountdown",
 }
 
 export default {
@@ -55,14 +55,14 @@ export default {
   },
 
   // 更新交付倒计时
-  [MutationTypes.UpdateRemainTime](state: State, params: RemainTime) {
-    const { remainTime } = state;
-    const temp: RemainTime = remainTime;
+  [MutationTypes.UpdateCountdown](state: State, params: CountdownTypes) {
+    const { countdown } = state;
+    const temp: CountdownTypes = countdown;
     (function<T>(state: State, params: T, temp: T) {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.remainTime = Object.assign(remainTime, temp);
+      state.countdown = Object.assign(countdown, temp);
     })(state, params, temp);
   },
 }

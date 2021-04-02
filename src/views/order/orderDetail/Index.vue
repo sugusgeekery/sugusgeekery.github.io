@@ -31,12 +31,7 @@
           <router-view />
         </div>
       </div>
-      <DownTimeTemplate></DownTimeTemplate>
-      <!-- <div class="tip">
-        <div class="tip-title">我的竞价指标</div>
-        <div class="tip-text">交期准时率:：%</div>
-        <div class="tip-text">交付失误率：%</div>
-      </div> -->
+      <Countdown :data="countdown"></Countdown>
     </div>
   </div>
 </template>
@@ -50,12 +45,12 @@ import { NavigationList } from "@/store/modules/order/state";
 import { GetterTypes } from "@/store/modules/order/getters";
 import { ActionTypes } from "@/store/modules/order/actions";
 
-import DownTimeTemplate from "../templates/DownTimeTemplate.vue";
+import Countdown from "@/components/templates/Countdown.vue";
 
 @Component({
   name: "OrderDetailView",
   components: {
-    DownTimeTemplate
+    Countdown
   }
 })
 export default class OrderDetailView extends Vue {
@@ -63,12 +58,24 @@ export default class OrderDetailView extends Vue {
   public navigationIndex!: number;
   @State("navigationList")
   public navigationList!: Array<NavigationList>;
+  @State("countdown")
+  public countdown!: CountdownTypes;
 
   @Getter(GetterTypes.OrderObject)
   public orderObject!: object;
 
   @Action(ActionTypes.UpdateNavigationIndex)
   public updateNavigationIndex!: Function;
+  @Action(ActionTypes.GetCountdown)
+  public getCountdown!: Function;
+
+  public created() {
+    this.getCountdown();
+  }
+
+  public beforeDestroy() {
+    this.getCountdown(false);
+  }
 }
 </script>
 

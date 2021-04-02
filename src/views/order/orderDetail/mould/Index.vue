@@ -29,7 +29,7 @@
         </div>
         <div class="li-row">
           <div class="li-text">
-            <span class="li-text-button" @click="getClampingPlan()">排模方案</span>
+            <span class="li-text-button" @click="getArrangementScheme()">排模方案</span>
           </div>
         </div>
       </div>
@@ -134,14 +134,14 @@
         </div>
         <div class="li-row">
           <div class="li-text">
-            <span class="li-text-button" @click="getClampingPlan()">排模方案</span>
+            <span class="li-text-button" @click="getArrangementScheme()">排模方案</span>
           </div>
-          <div class="li-text">
+          <!-- <div class="li-text">
             <span class="li-text-gray">开机费</span>
             <img src="../../../../assets/images/tip_4.png" class="li-text-icon" alt="">
             <span class="li-text-gray">：</span>
             <span class="li-text-gray">￥{{ mould.poweronCost || 0 }}</span>
-          </div>
+          </div> -->
         </div>
       </div>
       <div
@@ -291,7 +291,7 @@
         </div>
       </div>
     </div>
-    <ClampingPlan></ClampingPlan>
+    <ArrangementScheme :data="arrangementScheme" @updateData="updateArrangementScheme"></ArrangementScheme>
   </div>
 </template>
 
@@ -314,12 +314,12 @@ import validate, {
   ValidateFailedParams
 } from "@/utils/validate";
 
-import ClampingPlan from "./models/ClampingPlan.vue";
+import ArrangementScheme from "@/components/models/ArrangementScheme.vue";
 
 @Component({
   name: "MouldView",
   components: {
-    ClampingPlan
+    ArrangementScheme
   }
 })
 export default class MouldView extends Vue {
@@ -339,6 +339,8 @@ export default class MouldView extends Vue {
   public repairMouldIndex!: number;
   @State("repairMouldList")
   public repairMouldList!: Array<RepairMould>;
+  @State("arrangementScheme")
+  public arrangementScheme!: ArrangementScheme;
 
   @Getter(GetterTypes.RepairMould)
   public repairMould!: RepairMould;
@@ -355,11 +357,13 @@ export default class MouldView extends Vue {
   public needChangeDrawing!: Function;
   @Action(ActionTypes.DfmApprovalDrawing)
   public dfmApprovalDrawing!: Function;
-  @Action(ActionTypes.GetClampingPlan)
-  public getClampingPlan!: Function;
+  @Action(ActionTypes.GetArrangementScheme)
+  public getArrangementScheme!: Function;
 
   @Mutation(MutationTypes.UpdateRepairMouldIndex)
   public updateRepairMouldIndex!: Function;
+  @Mutation(MutationTypes.UpdateArrangementScheme)
+  public updateArrangementScheme!: Function;
 
   public created() {
     this.getMould();

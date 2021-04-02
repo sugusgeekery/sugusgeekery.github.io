@@ -27,7 +27,7 @@
               id="bomimagefile"
               hidden="hidden"
               multiple="multiple"
-              accept=".pdf, .step, .stp, .stl, .prt"
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .step, .stp, .stl, .prt, .pdf"
               @change="uploadFile"
             />
             <input
@@ -35,7 +35,7 @@
               name="bomimagelifile"
               id="bomimagelifile"
               hidden="hidden"
-              accept=".pdf, .step, .stp, .stl,.prt"
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .step, .stp, .stl, .prt, .pdf"
               @change="uploadFile"
             />
             <div class="model-button" @click="checkFile()">
@@ -213,10 +213,10 @@ import { Message, MessageBox } from "element-ui";
 import { UploadForm } from "@/api";
 
 @Component({
-  name: "BOMImageInfoModel",
+  name: "BOMImageInfo",
   components: {}
 })
-export default class BOMImageInfoModel extends Vue {
+export default class BOMImageInfo extends Vue {
   // 供应商类型列表
   public Supplier = Supplier;
 

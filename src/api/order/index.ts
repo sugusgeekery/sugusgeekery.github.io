@@ -13,4 +13,4 @@ export const GetOrderList = (params: any = {}): object => fetch({ url: `/supplie
 export const GetMyBidAdvantage = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getMyBidAdvantage`, method: "GET", params });
 
 // 获取订单倒计时
-export const GetRemainTime = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getRemainTime`, method: "GET", params });
+export const GetCountdown = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getRemainTime`, method: "GET", params });

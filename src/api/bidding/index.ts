@@ -32,3 +32,6 @@ export const GetMaterialAndColor = (params: any = {}): object => {
   const { headId = "" } = params;
   return fetch({ url: `/supplier/userMouldBidding/getMaterialAndColor/${headId}`, method: "GET", params: {} });
 };
+
+// 获取合模方案
+export const GetArrangementScheme = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getPolyteneMatchedMould`, method: "GET", params });

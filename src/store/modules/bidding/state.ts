@@ -2,9 +2,10 @@ export interface State {
   initInfo: any | InitInfo;
   biddingIndex: number;
   biddingList: Array<BiddingList>;
-  biddingDetail: any | BiddingDetail;
-  biddingTechnology: any | BiddingTechnology;
-  biddingMaterial: any | BiddingMaterial;
+  biddingDetail: any | BiddingDetailTypes;
+  materialAndColor: MaterialAndColorTypes;
+  technology: TechnologyTypes;
+  arrangementScheme: ArrangementSchemeTypes;
 };
 
 // 初始化参数
@@ -52,9 +53,7 @@ export interface BiddingObjectMyself {
   workPeriod: number;
 }
 
-export interface BiddingDetail {}
-export interface BiddingTechnology {}
-export interface BiddingMaterial {}
+export interface BiddingDetailTypes {}
 
 const state: State = {
   initInfo: {},
@@ -215,9 +214,8 @@ const state: State = {
     "type": "",
     "typeDesc": ""
   },
-  biddingTechnology: {
+  technology: {
     isShow: false,
-    headId: 0,
     list: [
       // {
       //   "colorType": "",
@@ -265,9 +263,8 @@ const state: State = {
       // },
     ]
   },
-  biddingMaterial: {
+  materialAndColor: {
     isShow: false,
-    headId: 0,
     "additiveType": "",
     "additiveValue": "",
     "brandNumber": "",
@@ -276,7 +273,50 @@ const state: State = {
     "materialName": "",
     "purpose": "",
     "specialType": ""
-  }
+  },
+  arrangementScheme: {
+    isShow: false,
+    mouldLabeImages: [],
+
+    "isMatchedMould": 0,
+    "matchedPlan": {
+      "attachment": [
+        {
+          "fileName": "",
+          "filePath": ""
+        }
+      ],
+      "attachmentAddress": "",
+      "cylinderNum": 0,
+      "gateItems": [
+        {
+          "gateSort": 0,
+          "productIds": ""
+        }
+      ],
+      "gateType": "",
+      "hotRunnerHeight": "",
+      "hotRunnerNum": 0,
+      "hotRunnerType": "",
+      "id": 0,
+      "isHardnessMould": 0,
+      "isMouldTemperature": 0,
+      "isSimpleMould": 0,
+      "looseCoreNum": 0,
+      "moldingCycle": 0,
+      "mouldCoreCncHeight": "",
+      "mouldCoreHeight": "",
+      "mouldCoreLength": "",
+      "mouldCoreWidth": "",
+      "mouldDelivery": 0,
+      "mouldLabeImage": "",
+      "mouldType": "",
+      "orderMouldId": 0,
+      "predictGateWeight": "",
+      "supplierName": ""
+    },
+    "moldingMaterialType": 0
+  },
 };
 
 export default state;

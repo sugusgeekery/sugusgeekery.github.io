@@ -21,7 +21,7 @@ import {
   GetMouldDetail,
   GetAllRepair,
   CommitRepairMould,
-  GetClampingPlan,
+  GetArrangementScheme,
 } from "@/api/order/mould";
 
 interface Store {
@@ -41,7 +41,7 @@ export enum ActionTypes {
   GetAllRepair = "GetAllRepair",
   UpdateRepairMould = "UpdateRepairMould",
   CommitRepairMould = "CommitRepairMould",
-  GetClampingPlan = "GetClampingPlan",
+  GetArrangementScheme = "GetArrangementScheme",
 }
 
 export default {
@@ -200,12 +200,12 @@ export default {
 
 
   // 获取合模方案
-  async [ActionTypes.GetClampingPlan](store: Store) {
+  async [ActionTypes.GetArrangementScheme](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { mould } = state;
       const { mouldId } = mould || {};
-      const { success, message, data }: any = await GetClampingPlan({ orderMouldId: mouldId });
+      const { success, message, data }: any = await GetArrangementScheme({ orderMouldId: mouldId });
       if (success) {
         const temp = data || {};
         const { matchedPlan } = temp || {};
@@ -214,7 +214,7 @@ export default {
         if (mouldLabeImages.length) {
           mouldLabeImages = mouldLabeImages.map((v: string) => BASE_IMAGE_URL + v);
         }
-        commit(MutationTypes.UpdateClampingPlan, { ...temp, mouldLabeImages, isShow: true });
+        commit(MutationTypes.UpdateArrangementScheme, { ...temp, mouldLabeImages, isShow: true });
       } else {
         Message.error(message);
       }

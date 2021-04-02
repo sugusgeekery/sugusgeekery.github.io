@@ -100,13 +100,13 @@
             c.approvalTime || ""
           }}</span>
         </div>
-        <div class="design-item-content-button" v-if="Supplier.Design === initInfo.type && a.canUse && (a.approveStatus === 0 || a.approveStatus === 2) && b === 0">
+        <div class="design-item-content-button" v-if="Supplier.Design === initInfo.type && a.canUse && (a.approveStatus === 0 || a.approveStatus === 1 || a.approveStatus === 2) && a.isEdit && b === 0">
           <input
             type="file"
             name="file"
             id="file"
             hidden="hidden"
-            accept=".step, .stp, .stl, .prt"
+            accept=".step, .stp, .stl, .prt, .pdf"
             @change="uploadFile"
           />
           <span class="design-item-content-button-text" @click="checkFile()">
@@ -128,8 +128,8 @@
         </div>
       </div>
     </div>
-    <BOMTableModel></BOMTableModel>
-    <BOMImageInfoModel></BOMImageInfoModel>
+    <BOMTable></BOMTable>
+    <BOMImageInfo></BOMImageInfo>
   </div>
 </template>
 
@@ -148,14 +148,14 @@ import { Message, MessageBox } from "element-ui";
 import { UploadForm } from "@/api";
 import { BASE_IMAGE_URL } from "@/config";
 
-import BOMTableModel from "./models/BOMTableModel.vue";
-import BOMImageInfoModel from "./models/BOMImageInfoModel.vue";
+import BOMTable from "./components/BOMTable.vue";
+import BOMImageInfo from "./components/BOMImageInfo.vue";
 
 @Component({
   name: "DesignView",
   components: {
-    BOMTableModel,
-    BOMImageInfoModel
+    BOMTable,
+    BOMImageInfo
   }
 })
 export default class DesignView extends Vue {

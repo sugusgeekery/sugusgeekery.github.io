@@ -17,7 +17,7 @@
         <div class="model-flex">
           <div class="model-flex-title">模具信息</div>
           <div class="model-flex-row">
-            <div class="model-flex-navigations">
+            <!-- <div class="model-flex-navigations">
               <div 
                 class="model-flex-navigation" 
                 :class="{'model-flex-navigation-active': b === biddingDetail.productInfoIndex}" 
@@ -27,7 +27,8 @@
               >
                 {{ a }}
               </div>
-            </div>
+            </div> -->
+            <div class="model-flex-tips">{{ biddingDetail.productInfoIndex + 1 }}/{{ biddingDetail.productInfos.length }}</div>
             <div class="model-flex-arrow" @click="updateProductInfoIndex({ type: 2 })">
               <img
                 class="model-flex-arrow-icon"
@@ -51,7 +52,7 @@
                   <span>{{ a.productNo || "" }}</span>
                 </div>
                 <div class="model-flex-image">
-                  <img v-if="a.productImage" :src="BASE_IMAGE_URL + a.productImage" alt="" />
+                  <img v-if="a.productImage" :src="a.productImage" alt="" />
                 </div>
               </div>
               <div class="model-flex-context">
@@ -88,7 +89,7 @@
                   <span>材料及颜色：</span>
                   <span
                     class="model-flex-text-blue"
-                    @click="getBiddingMaterial()"
+                    @click="getMaterialAndColor()"
                   >
                     点击查看
                   </span>
@@ -97,7 +98,7 @@
                   <span>二次工艺：</span>
                   <span
                     class="model-flex-text-blue"
-                    @click="getBiddingTechnology()"
+                    @click="getTechnology()"
                   >
                     点击查看
                   </span>
@@ -106,7 +107,7 @@
                   <span>排模方案：</span>
                   <span
                     class="model-flex-text-blue"
-                    @click="getBiddingTechnology()"
+                    @click="getArrangementScheme()"
                   >
                     点击查看
                   </span>
@@ -239,7 +240,7 @@
                 <div class="model-flex-buttons">
                   <div
                     class="model-flex-button model-flex-button-blue"
-                    @click="updateMouldBidding()"
+                    @click="joinBidding()"
                     v-if="
                       biddingDetail.biddingIndex === 0 ||
                         biddingDetail.biddingIndex === 1
@@ -250,7 +251,8 @@
                   <div
                     class="model-flex-button model-flex-button-blue"
                     @click="removeBidding()"
-                    v-if="biddingDetail.biddingState === 1"
+                    v-if="(biddingDetail.biddingIndex === 0 ||
+                        biddingDetail.biddingIndex === 1) && biddingDetail.biddingState === 1"
                   >
                     取消竞价
                   </div>
@@ -315,8 +317,6 @@
         </div>
       </div>
     </div>
-    <BiddingMaterialModel></BiddingMaterialModel>
-    <BiddingTechnologyModel></BiddingTechnologyModel>
   </div>
 </template>
 
@@ -324,47 +324,52 @@
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 const { State, Getter, Action, Mutation } = namespace("bidding");
-// const 
 
-import { BiddingDetail } from "@/store/modules/bidding/state";
+import { BiddingDetailTypes } from "@/store/modules/bidding/state";
 import { ActionTypes } from "@/store/modules/bidding/actions";
 import { MutationTypes } from "@/store/modules/bidding/mutations";
 
-import { BASE_IMAGE_URL } from "@/config";
-
-import BiddingMaterialModel from "./BiddingMaterialModel.vue";
-import BiddingTechnologyModel from "./BiddingTechnologyModel.vue";
-
 @Component({
-  name: "BiddingDetailModel",
-  components: {
-    BiddingMaterialModel,
-    BiddingTechnologyModel
-  }
+  name: "BiddingDetail",
+  components: {}
 })
-export default class BiddingDetailModel extends Vue {
-  // 图片域名
-  public BASE_IMAGE_URL = BASE_IMAGE_URL;
-
+export default class BiddingDetail extends Vue {
   @State("biddingDetail")
-  public biddingDetail!: any | BiddingDetail;
+  public biddingDetail!: any | BiddingDetailTypes;
 
-  @Action(ActionTypes.UpdateProductInfoIndex)
-  public updateProductInfoIndex!: Function;
-  @Action(ActionTypes.GetBiddingTechnology)
-  public getBiddingTechnology!: Function;
-  @Action(ActionTypes.GetBiddingMaterial)
-  public getBiddingMaterial!: Function;
-  @Action(ActionTypes.UpdateMouldBidding)
-  public updateMouldBidding!: Function;
+  @Action(ActionTypes.GetTechnology)
+  public getTechnology!: Function;
+  @Action(ActionTypes.GetMaterialAndColor)
+  public getMaterialAndColor!: Function;
+  @Action(ActionTypes.GetArrangementScheme)
+  public getArrangementScheme!: Function;
+  @Action(ActionTypes.JoinBidding)
+  public joinBidding!: Function;
   @Action(ActionTypes.RemoveBidding)
   public removeBidding!: Function;
 
-  // @Action(ActionTypes.GetClampingPlan)
-  // public getClampingPlan!: Function;
-
   @Mutation(MutationTypes.UpdateBiddingDetail)
   public updateBiddingDetail!: Function;
+
+  public updateProductInfoIndex(params: { type: number; index: number; }) {
+    const { biddingDetail } = this;
+    const { type, index } = params || {};
+    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+    if (productInfoIndex < 0) {
+      return;
+    }
+    if (type === 1) {
+      if (productInfoIndex < productInfos.length - 1) {
+        this.updateBiddingDetail({ productInfoIndex: productInfoIndex + 1 });
+      }
+    } else if (type === 2) {
+      if (productInfoIndex > 0) {
+        this.updateBiddingDetail({ productInfoIndex: productInfoIndex - 1 });
+      }
+    } else if (type === 3) {
+      this.updateBiddingDetail({ productInfoIndex: index });
+    }
+  }
 }
 </script>
 
@@ -450,6 +455,14 @@ export default class BiddingDetailModel extends Vue {
       display flex
       justify-content space-between
       align-items center
+    &-tips
+      position absolute
+      bottom 10px
+      left 50%
+      transform translateX(-50%)
+      font-size 14px
+      color $color-text-gray
+      background $color-bg-white
     &-navigations
       position absolute
       bottom 10px

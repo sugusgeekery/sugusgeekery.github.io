@@ -92,24 +92,18 @@ export default {
         const stepInfoListTemp = (stepInfoList => {
           for (const [a, b] of stepInfoList.entries()) {
             const { approvalInfoList = [] } = b;
-            stepInfoList[a].isEdit = true;
             if (approvalInfoList.length) {
-              for (const [c, d] of approvalInfoList.entries()) {
-                switch(type) {
-                  case Supplier.Dfm:
-                  case Supplier.Design:
-                    break;
-                  case Supplier.Machining:
-                    if (d.type == 1) {
-                      stepInfoList[a].isEdit = false;
-                    }
-                    break;
-                  case Supplier.Injection:
-                    if (d.type == 2) {
-                      stepInfoList[a].isEdit = false;
-                    }
-                    break;
-                }
+              switch(type) {
+                case Supplier.Dfm:
+                case Supplier.Design:
+                  stepInfoList[a].isEdit = approvalInfoList.some((v: any) => v.opinion === 0);
+                  break;
+                case Supplier.Machining:
+                  stepInfoList[a].isEdit = approvalInfoList.every((v: any) => v.type !== 1);
+                  break;
+                case Supplier.Injection:
+                  stepInfoList[a].isEdit = approvalInfoList.every((v: any) => v.type !== 2);
+                  break;
               }
             }
           }

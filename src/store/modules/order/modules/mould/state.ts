@@ -4,20 +4,20 @@ export interface State {
   mould: any | Mould;
   repairMouldIndex: number;
   repairMouldList: any | Array<RepairMould>;
-  clampingPlan: any | ClampingPlan;
+  arrangementScheme: any | ArrangementSchemeTypes;
 };
 
 export interface InitInfo {};
 export interface Mould {};
 export interface RepairMould {};
-export interface ClampingPlan {};
+// export interface ClampingPlan {};
 
 const state: State = {
   initInfo: {},
   mould: {},
   repairMouldIndex: -1,
   repairMouldList: [],
-  clampingPlan: {
+  arrangementScheme: {
     isShow: false,
     mouldLabeImages: [],
 

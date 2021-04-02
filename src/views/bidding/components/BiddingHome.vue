@@ -201,7 +201,10 @@
         </div>
       </div>
     </div>
-    <BiddingDetailModel></BiddingDetailModel>
+    <BiddingDetail></BiddingDetail>
+    <MaterialAndColor :data="materialAndColor" @updateData="updateMaterialAndColor"></MaterialAndColor>
+    <Technology :data="technology" @updateData="updateTechnology"></Technology>
+    <ArrangementScheme :data="arrangementScheme" @updateData="updateArrangementScheme"></ArrangementScheme>
   </div>
 </template>
 
@@ -212,24 +215,38 @@ const { State, Getter, Action, Mutation } = namespace("bidding");
 
 import { BiddingList } from "@/store/modules/bidding/state";
 import { ActionTypes } from "@/store/modules/bidding/actions";
+import { MutationTypes } from "@/store/modules/bidding/mutations";
 
 import { ElementUIProvinces, ElementUICasCader } from "@/utils/provinces";
 
-import BiddingDetailModel from "../models/BiddingDetailModel.vue";
+import BiddingDetail from "./BiddingDetail.vue";
+
+import MaterialAndColor from "@/components/models/MaterialAndColor.vue";
+import Technology from "@/components/models/Technology.vue";
+import ArrangementScheme from "@/components/models/ArrangementScheme.vue";
 
 @Component({
-  name: "BiddingHomeTemplate",
+  name: "BiddingHome",
   components: {
-    BiddingDetailModel
+    BiddingDetail,
+    MaterialAndColor,
+    Technology,
+    ArrangementScheme
   }
 })
-export default class BiddingHomeTemplate extends Vue {
+export default class BiddingHome extends Vue {
   @State("biddingIndex")
   public biddingIndex!: number;
   @State("biddingList")
   public biddingList!: Array<BiddingList>;
+  @State("materialAndColor")
+  public materialAndColor!: MaterialAndColorTypes;
+  @State("technology")
+  public technology!: TechnologyTypes;
+  @State("arrangementScheme")
+  public arrangementScheme!: ArrangementSchemeTypes;
 
-  public provinces: ElementUICasCader[] = ElementUIProvinces;
+  // public provinces: ElementUICasCader[] = ElementUIProvinces;
 
   // @Action(ActionTypes.UpdatePageNum)
   // public updatePageNum!: Function;
@@ -245,12 +262,19 @@ export default class BiddingHomeTemplate extends Vue {
   public updateMaxPrice!: Function;
   @Action(ActionTypes.UpdatePayDate)
   public updatePayDate!: Function;
-  @Action(ActionTypes.UpdateProvinceCityCountry)
-  public updateProvinceCityCountry!: Function;
+  // @Action(ActionTypes.UpdateProvinceCityCountry)
+  // public updateProvinceCityCountry!: Function;
   @Action(ActionTypes.JoinBidding)
   public joinBidding!: Function;
   @Action(ActionTypes.GetBiddingDetail)
   public getBiddingDetail!: Function;
+
+  @Mutation(MutationTypes.UpdateMaterialAndColor)
+  public updateMaterialAndColor!: Function;
+  @Mutation(MutationTypes.UpdateTechnology)
+  public updateTechnology!: Function;
+  @Mutation(MutationTypes.UpdateArrangementScheme)
+  public updateArrangementScheme!: Function;
 
   public created() {
     this.updatePageNum(1);

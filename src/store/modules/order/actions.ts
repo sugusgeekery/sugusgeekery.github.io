@@ -1,6 +1,6 @@
 import { RootState } from "@/store/state";
 import rootGetters, { RootGetterTypes } from "@/store/getters";
-import { RemainTime, State, Supplier } from "./state";
+import { State, Supplier } from "./state";
 import getters, { GetterTypes } from "./getters";
 import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
@@ -14,7 +14,7 @@ import {
   GetOrderStatus,
   GetMyBidAdvantage,
   GetOrderList,
-  GetRemainTime
+  GetCountdown
 
   // GetDfmRemainTime,
   // GetMachiningRemainTime,
@@ -44,7 +44,7 @@ export enum ActionTypes {
   GetOrderDetail = "GetOrderDetail",
   UpdateNavigationIndex = "UpdateNavigationIndex",
 
-  GetRemainTime = "GetRemainTime",
+  GetCountdown = "GetCountdown",
 }
 
 export default {
@@ -285,34 +285,34 @@ export default {
   },
 
   // 获取倒计时
-  async [ActionTypes.GetRemainTime](store: Store, isDownTime: boolean = true) {
+  async [ActionTypes.GetCountdown](store: Store, isDownTime: boolean = true) {
     try {
       const { state, dispatch, commit } = store;
-      const { order, remainTime } = state;
+      const { order, countdown } = state;
       const { list = [], index = -1 } = order || {};
       const { id } = list[index] || {};
-      const { success, message, data }: any = await GetRemainTime({ orderId: id });
+      const { success, message, data }: any = await GetCountdown({ orderId: id });
       if (success) {
-        const tempRemainTime = { ...remainTime, ...(data || {})};
-        const fn = (remainTime: RemainTime) => {
-          const { remainSeconds } = remainTime;
+        const tempCountdown = { ...countdown, ...(data || {})};
+        const fn = (countdown: CountdownTypes) => {
+          const { remainSeconds } = countdown;
           const timeNumber = Math.abs(remainSeconds);
-          remainTime.isTimeout = remainSeconds < 0;
-          remainTime.hour = Math.floor(timeNumber / (60 * 60));
-          remainTime.minute = Math.floor((timeNumber % (60 * 60)) / 60);
-          remainTime.second = timeNumber % 60;
-          commit(MutationTypes.UpdateRemainTime, { ...remainTime });
+          countdown.isTimeout = remainSeconds < 0;
+          countdown.hour = Math.floor(timeNumber / (60 * 60));
+          countdown.minute = Math.floor((timeNumber % (60 * 60)) / 60);
+          countdown.second = timeNumber % 60;
+          commit(MutationTypes.UpdateCountdown, { ...countdown });
         };
-        fn(tempRemainTime);
-        if (tempRemainTime.setTimeInterval) {
-          clearInterval(tempRemainTime.setTimeInterval);
+        fn(tempCountdown);
+        if (tempCountdown.setTimeInterval) {
+          clearInterval(tempCountdown.setTimeInterval);
         }
-        if (isDownTime && tempRemainTime.state === 0) {
-          tempRemainTime.setTimeInterval = setInterval(() => {
-            tempRemainTime.remainSeconds--;
-            fn(tempRemainTime);
+        if (isDownTime && tempCountdown.state === 0) {
+          tempCountdown.setTimeInterval = setInterval(() => {
+            tempCountdown.remainSeconds--;
+            fn(tempCountdown);
           }, 1000);
-          commit(MutationTypes.UpdateRemainTime, { ...tempRemainTime });
+          commit(MutationTypes.UpdateCountdown, { ...tempCountdown });
         }
       } else {
         Message.error(message);

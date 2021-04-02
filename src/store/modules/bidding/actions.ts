@@ -8,6 +8,7 @@ import { Dispatch, Commit, GetterTree } from "vuex";
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
 import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { BASE_IMAGE_URL } from "@/config";
 
 import {
   GetSelectByUser,
@@ -18,6 +19,7 @@ import {
   GetMouldBiddingDetail,
   GetProductTechnology,
   GetMaterialAndColor,
+  GetArrangementScheme
 } from "@/api/bidding";
 
 interface Store {
@@ -41,14 +43,12 @@ export enum ActionTypes {
   UpdateProvinceCityCountry = "UpdateProvinceCityCountry",
   JoinBidding = "JoinBidding",
   RemoveBidding = "RemoveBidding",
-  UpdateMouldBidding = "UpdateMouldBidding",
   GetBiddingDetail = "GetBiddingDetail",
   UpdateProductInfoIndex = "UpdateProductInfoIndex",
   GetMouldBiddingDetail = "GetMouldBiddingDetail",
-  GetBiddingTechnology = "GetBiddingTechnology",
-  GetProductTechnology = "GetProductTechnology",
-  GetBiddingMaterial = "GetBiddingMaterial",
-  GetMaterialAndColor = "GetMaterialAndColor"
+  GetTechnology = "GetTechnology",
+  GetMaterialAndColor = "GetMaterialAndColor",
+  GetArrangementScheme = "GetArrangementScheme",
 }
 
 export default {
@@ -141,23 +141,23 @@ export default {
   },
 
   // 参与竞价
-  async [ActionTypes.JoinBidding](store: Store, index: number) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { biddingIndex = 0, biddingList = [] } = state;
-      const { list = [] } = biddingList[biddingIndex] || {}; 
-      const { amount, id, workPeriod } = list[index] || {};
-      const { success, message, data }: any = await JoinBidding({ amount, biddingHeadId: id, workPeriod });
-      if (success) {
-        Message.success(message);
-        dispatch(ActionTypes.GetBiddingList);
-      } else {
-        Message.error(message);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
+  // async [ActionTypes.JoinBidding](store: Store, index: number) {
+  //   try {
+  //     const { state, dispatch, commit } = store;
+  //     const { biddingIndex = 0, biddingList = [] } = state;
+  //     const { list = [] } = biddingList[biddingIndex] || {}; 
+  //     const { amount, id, workPeriod } = list[index] || {};
+  //     const { success, message, data }: any = await JoinBidding({ amount, biddingHeadId: id, workPeriod });
+  //     if (success) {
+  //       Message.success(message);
+  //       dispatch(ActionTypes.GetBiddingList);
+  //     } else {
+  //       Message.error(message);
+  //     }
+  //   } catch (e) {
+  //     throw new Error(e);
+  //   }
+  // },
   // 取消竞价
   // async [ActionTypes.RemoveBidding](store: Store, index: number) {
   //   try {
@@ -202,7 +202,14 @@ export default {
       const { success, message, data }: any = await GetMouldBiddingDetail({ headId });
       if (success) {
         const { productInfos = [] } = data || {};
-        commit(MutationTypes.UpdateBiddingDetail, { ...(data || {}), productInfoIndex: productInfos.length ? 0 : -1, isShow: true, });
+        const productInfoIndex = productInfos.length ? 0 : -1;
+        const tempProductInfos = productInfos.map((v: any) => {
+          if (v.productImage) {
+            v.productImage = BASE_IMAGE_URL + v.productImage;
+          }
+          return v;
+        });
+        commit(MutationTypes.UpdateBiddingDetail, { ...(data || {}), productInfos: tempProductInfos, productInfoIndex, isShow: true, });
       } else {
         Message.error(message);
       }
@@ -211,28 +218,28 @@ export default {
     }
   },
   // 切换产品列表
-  [ActionTypes.UpdateProductInfoIndex](store: Store, params: { type: number; index: number }) {
-    const { state, dispatch, commit } = store;
-    const { biddingDetail } = state;
-    const { type, index } = params || {};
-    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
-    if (productInfoIndex < 0) {
-      return;
-    }
-    if (type === 1) {
-      if (productInfoIndex < productInfos.length - 1) {
-        commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: productInfoIndex + 1 });
-      }
-    } else if (type === 2) {
-      if (productInfoIndex > 0) {
-        commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: productInfoIndex - 1 });
-      }
-    } else if (type === 3) {
-      commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: index });
-    }
-  },
+  // [ActionTypes.UpdateProductInfoIndex](store: Store, params: { type: number; index: number }) {
+  //   const { state, dispatch, commit } = store;
+  //   const { biddingDetail } = state;
+  //   const { type, index } = params || {};
+  //   const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+  //   if (productInfoIndex < 0) {
+  //     return;
+  //   }
+  //   if (type === 1) {
+  //     if (productInfoIndex < productInfos.length - 1) {
+  //       commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: productInfoIndex + 1 });
+  //     }
+  //   } else if (type === 2) {
+  //     if (productInfoIndex > 0) {
+  //       commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: productInfoIndex - 1 });
+  //     }
+  //   } else if (type === 3) {
+  //     commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex: index });
+  //   }
+  // },
   // 更新竞价信息
-  async [ActionTypes.UpdateMouldBidding](store: Store) {
+  async [ActionTypes.JoinBidding](store: Store) {
     try {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
@@ -276,24 +283,16 @@ export default {
     }
   },
 
-  // 更新竞价单二次工艺
-  [ActionTypes.GetBiddingTechnology](store: Store) {
-    const { state, dispatch, commit } = store;
-    const { biddingDetail } = state;
-    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
-    const { id } = productInfos[productInfoIndex] || {};
-    commit(MutationTypes.UpdateBiddingTechnology, { isShow: true, headId: id });
-    dispatch(ActionTypes.GetProductTechnology);
-  },
   // 获取竞价单二次工艺
-  async [ActionTypes.GetProductTechnology](store: Store) {
+  async [ActionTypes.GetTechnology](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { biddingTechnology } = state;
-      const { headId = "" } = biddingTechnology || {};
-      const { success, message, data }: any = await GetProductTechnology({ headId });
+      const { biddingDetail } = state;
+      const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+      const { id } = productInfos[productInfoIndex] || {};
+      const { success, message, data }: any = await GetProductTechnology({ headId: id });
       if (success) {
-        commit(MutationTypes.UpdateBiddingTechnology, { list: data || [] });
+        commit(MutationTypes.UpdateTechnology, { list: data || [], isShow: true });
       } else {
         Message.error(message);
       }
@@ -302,24 +301,41 @@ export default {
     }
   },
 
-  // 更新竞价单材料颜色
-  [ActionTypes.GetBiddingMaterial](store: Store) {
-    const { state, dispatch, commit } = store;
-    const { biddingDetail } = state;
-    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
-    const { id } = productInfos[productInfoIndex] || {};
-    commit(MutationTypes.UpdateBiddingMaterial, { isShow: true, headId: id });
-    dispatch(ActionTypes.GetMaterialAndColor);
-  },
   // 获取竞价单材料颜色
   async [ActionTypes.GetMaterialAndColor](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { biddingMaterial } = state;
-      const { headId = "" } = biddingMaterial || {};
-      const { success, message, data }: any = await GetMaterialAndColor({ headId });
+      const { biddingDetail } = state;
+      const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+      const { id } = productInfos[productInfoIndex] || {};
+      const { success, message, data }: any = await GetMaterialAndColor({ headId: id });
       if (success) {
-        commit(MutationTypes.UpdateBiddingMaterial, data || {});
+        commit(MutationTypes.UpdateMaterialAndColor, { ...(data || {}), isShow: true });
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 获取合模方案
+  async [ActionTypes.GetArrangementScheme](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { biddingDetail } = state;
+      const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+      const { id } = productInfos[productInfoIndex] || {};
+      const { success, message, data }: any = await GetArrangementScheme({ orderMouldId: id });
+      if (success) {
+        const temp = data || {};
+        const { matchedPlan } = temp || {};
+        const { mouldLabeImage } = matchedPlan || {};
+        let mouldLabeImages = mouldLabeImage ? mouldLabeImage.split(",") : [];
+        if (mouldLabeImages.length) {
+          mouldLabeImages = mouldLabeImages.map((v: string) => BASE_IMAGE_URL + v);
+        }
+        commit(MutationTypes.UpdateArrangementScheme, { ...temp, mouldLabeImages, isShow: true });
       } else {
         Message.error(message);
       }

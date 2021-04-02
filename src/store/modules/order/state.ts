@@ -4,7 +4,7 @@ export interface State {
   order: Order;
   navigationIndex: number;
   navigationList: Array<NavigationList>;
-  remainTime: RemainTime;
+  countdown: CountdownTypes;
 };
 
 // 初始化参数
@@ -55,18 +55,18 @@ export interface NavigationList {
   text: string;
   path: string;
 };
-export interface RemainTime {
-  finishTime: string;
-  remainSeconds: number;
-  startTime: string;
-  state: number;
+// export interface RemainTime {
+//   finishTime: string;
+//   remainSeconds: number;
+//   startTime: string;
+//   state: number;
 
-  isTimeout: boolean;
-  hour: number;
-  minute: number;
-  second: number;
-  setTimeInterval: number;
-};
+//   isTimeout: boolean;
+//   hour: number;
+//   minute: number;
+//   second: number;
+//   setTimeInterval: number;
+// };
 
 
 // 供应商对应的类型值
@@ -166,7 +166,7 @@ const state: State = {
     //   path: "/order/information",
     // },
   ],
-  remainTime: {
+  countdown: {
     finishTime: "--",
     remainSeconds: 0,
     startTime: "--",

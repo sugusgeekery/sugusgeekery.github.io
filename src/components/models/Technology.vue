@@ -1,5 +1,5 @@
 <template>
-  <div class="model-container" v-show="biddingTechnology.isShow">
+  <div class="model-container" v-show="data.isShow">
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
@@ -9,13 +9,13 @@
         </div>
         <div
           class="model-cancel"
-          @click="updateBiddingTechnology({ isShow: false })"
+          @click="updateData({ isShow: false })"
         ></div>
       </div>
-      <div class="model-body" v-if="biddingTechnology.list.length">
+      <div class="model-body" v-if="data.list.length">
         <div
           class="model-flex"
-          v-for="(a, b) in biddingTechnology.list"
+          v-for="(a, b) in data.list"
           :key="b"
         >
           <template v-if="a.type === 1">
@@ -81,26 +81,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { namespace } from "vuex-class";
-const { State, Getter, Action, Mutation } = namespace("bidding");
-
-import { BiddingTechnology } from "@/store/modules/bidding/state";
-import { ActionTypes } from "@/store/modules/bidding/actions";
-import { MutationTypes } from "@/store/modules/bidding/mutations";
+import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 
 import downloadByUrl from "@/utils/downloadByUrl";
 
 @Component({
-  name: "BiddingTechnologyModel",
+  name: "Technology",
   components: {}
 })
-export default class BiddingTechnologyModel extends Vue {
-  @State("biddingTechnology")
-  public biddingTechnology!: any | BiddingTechnology;
+export default class Technology extends Vue {
+  @Prop(Object) 
+  private readonly data!: TechnologyTypes;
 
-  @Mutation(MutationTypes.UpdateBiddingTechnology)
-  public updateBiddingTechnology!: Function;
+  @Emit("updateData") 
+  private updateData(params: TechnologyTypes) {
+    return { ...this.data, ...params };
+  };
 
   public downloadFile(url: string, name: string) {
     if (url) {
@@ -111,7 +107,7 @@ export default class BiddingTechnologyModel extends Vue {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../stylus/index.styl';
+@import '../../stylus/index.styl';
 .model
   &-container
     position fixed

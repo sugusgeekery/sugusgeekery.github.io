@@ -1,5 +1,5 @@
 <template>
-  <div class="model-container" v-show="biddingMaterial.isShow">
+  <div class="model-container" v-show="data.isShow">
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
@@ -9,7 +9,7 @@
         </div>
         <div
           class="model-cancel"
-          @click="updateBiddingMaterial({ isShow: false })"
+          @click="updateData({ isShow: false })"
         ></div>
       </div>
       <div class="model-body">
@@ -17,44 +17,44 @@
           <div class="model-flex-text">
             <span>产品材质：</span>
             <span>
-              {{ biddingMaterial.materialName || "" }}
+              {{ data.materialName || "" }}
             </span>
           </div>
           <div class="model-flex-text">
             <span>添加剂类型:</span>
             <span>
-              {{ biddingMaterial.additiveType || "" }}
+              {{ data.additiveType || "" }}
             </span>
           </div>
           <div class="model-flex-text">
             <span>添加剂数值：</span>
             <span>
-              {{ biddingMaterial.additiveValue || "" }}
+              {{ data.additiveValue || "" }}
             </span>
           </div>
           <div class="model-flex-text">
             <span>潘通色号:</span>
             <span>
-              {{ biddingMaterial.colorValue || "" }}
-              {{ biddingMaterial.colorType || "" }}
+              {{ data.colorValue || "" }}
+              {{ data.colorType || "" }}
             </span>
           </div>
           <div class="model-flex-text">
             <span>材料特殊要求：</span>
             <span>
-              {{ biddingMaterial.specialType || "" }}
+              {{ data.specialType || "" }}
             </span>
           </div>
           <div class="model-flex-text">
             <span>对应牌号：</span>
             <span>
-              {{ biddingMaterial.brandNumber || "" }}
+              {{ data.brandNumber || "" }}
             </span>
           </div>
           <div class="model-flex-text">
             <span>用途：</span>
             <span>
-              {{ biddingMaterial.purpose || "" }}
+              {{ data.purpose || "" }}
             </span>
           </div>
         </div>
@@ -64,37 +64,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { namespace } from "vuex-class";
-const { State, Getter, Action, Mutation } = namespace("bidding");
-
-import { BiddingMaterial } from "@/store/modules/bidding/state";
-import { ActionTypes } from "@/store/modules/bidding/actions";
-import { MutationTypes } from "@/store/modules/bidding/mutations";
-
-import downloadByUrl from "@/utils/downloadByUrl";
+import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 
 @Component({
-  name: "BiddingMaterialModel",
+  name: "MaterialAndColorComponent",
   components: {}
 })
-export default class BiddingMaterialModel extends Vue {
-  @State("biddingMaterial")
-  public biddingMaterial!: any | BiddingMaterial;
+export default class MaterialAndColorComponent extends Vue {
+  @Prop(Object) 
+  private readonly data!: MaterialAndColorTypes;
 
-  @Mutation(MutationTypes.UpdateBiddingMaterial)
-  public updateBiddingMaterial!: Function;
-
-  public downloadFile(url: string, name: string) {
-    if (url) {
-      downloadByUrl(url, name);
-    }
-  }
+  @Emit("updateData") 
+  private updateData(params: MaterialAndColorTypes) {
+    return { ...this.data, ...params };
+  };
 }
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../stylus/index.styl';
+@import '../../stylus/index.styl';
 .model
   &-container
     position fixed

@@ -23,6 +23,6 @@ export const CommitRepairMould = (data: any = {}): object => fetch({ url: `/supp
 
 
 // 获取合模方案
-export const GetClampingPlan = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getPolyteneMatchedMould`, method: "GET", params });
+export const GetArrangementScheme = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getPolyteneMatchedMould`, method: "GET", params });
 
 

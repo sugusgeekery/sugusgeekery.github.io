@@ -560,7 +560,6 @@ export default class InformationView extends Vue {
 
   public created() {
     this.getInformationDefInfo();
-    console.log(this.provinceCityDistrict)
   }
   public mounted() {
     const { loginInfo } = this.initInfo || {};

@@ -162,10 +162,10 @@ import { ActionTypes } from "@/store/modules/home/actions";
 import router from "@/router";
 
 @Component({
-  name: "HomeTemplate",
+  name: "Home",
   components: {}
 })
-export default class HomeTemplate extends Vue {
+export default class Home extends Vue {
   @State("initInfo")
   public initInfo!: any | InitInfo;
   @State("orderMessageList")

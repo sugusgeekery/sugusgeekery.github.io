@@ -1,5 +1,5 @@
 <template>
-  <div class="model-container" v-show="clampingPlan.isShow">
+  <div class="model-container" v-show="data.isShow">
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
@@ -7,38 +7,38 @@
         </div>
         <div
           class="model-cancel"
-          @click="updateClampingPlan({ isShow: false })"
+          @click="updateData({ isShow: false })"
         ></div>
       </div>
-      <div class="model-body" v-if="clampingPlan.matchedPlan">
+      <div class="model-body" v-if="data.matchedPlan">
         <div class="model-label">排模方案</div>
         <div class="model-text">排模产品拼图：</div>
-        <div class="model-images" v-if="clampingPlan.mouldLabeImages && clampingPlan.mouldLabeImages.length">
-          <el-image class="model-image" v-show="a" :src="a" v-for="(a, b) in clampingPlan.mouldLabeImages" :key="b" :preview-src-list="clampingPlan.mouldLabeImages"></el-image>
+        <div class="model-images" v-if="data.mouldLabeImages && data.mouldLabeImages.length">
+          <el-image class="model-image" v-show="a" :src="a" v-for="(a, b) in data.mouldLabeImages" :key="b" :preview-src-list="data.mouldLabeImages"></el-image>
         </div>
         <div class="model-row">
           <div class="model-flex">
             <div class="model-flex-label">模具类型：</div>
-            <div class="model-flex-input">{{ clampingPlan.matchedPlan.mouldType || "" }}</div>
+            <div class="model-flex-input">{{ data.matchedPlan.mouldType || "" }}</div>
           </div>
           <div class="model-flex">
             <div class="model-flex-label">是否加硬模具：</div>
-            <div class="model-flex-input" v-if="clampingPlan.matchedPlan.isHardnessMould === 1">是</div>
-            <div class="model-flex-input" v-else-if="clampingPlan.matchedPlan.isHardnessMould === 0">否</div>
+            <div class="model-flex-input" v-if="data.matchedPlan.isHardnessMould === 1">是</div>
+            <div class="model-flex-input" v-else-if="data.matchedPlan.isHardnessMould === 0">否</div>
           </div>
         </div>
         <div class="model-row">
           <div class="model-flex">
             <div class="model-flex-label">水口类型：</div>
-            <div class="model-flex-input">{{ clampingPlan.matchedPlan.gateType || "" }}</div>
+            <div class="model-flex-input">{{ data.matchedPlan.gateType || "" }}</div>
           </div>
           <div class="model-flex">
             <div class="model-flex-label">预估水口重量（g）：</div>
-            <div class="model-flex-input">{{ clampingPlan.matchedPlan.predictGateWeight || "" }}</div>
+            <div class="model-flex-input">{{ data.matchedPlan.predictGateWeight || "" }}</div>
           </div>
         </div>
         <div class="model-text">转水口：</div>
-        <div class="model-row" v-show="clampingPlan.matchedPlan.gateItems.length" v-for="(a, b) in clampingPlan.matchedPlan.gateItems" :key="b">
+        <div class="model-row" v-show="data.matchedPlan.gateItems.length" v-for="(a, b) in data.matchedPlan.gateItems" :key="b">
           <div class="model-flex">
             <div class="model-flex-label">转水口{{ a.gateSort || "" }}：</div>
             <div class="model-flex-input">{{ a.productIds || "" }}</div>
@@ -49,12 +49,12 @@
         <div class="model-row">
           <div class="model-flex">
             <div class="model-flex-label">热流道类型：</div>
-            <div class="model-flex-input">{{ clampingPlan.matchedPlan.hotRunnerType || "" }}</div>
+            <div class="model-flex-input">{{ data.matchedPlan.hotRunnerType || "" }}</div>
           </div>
           <div class="model-flex">
             <div class="model-flex-label">是否有模温机：</div>
-            <div class="model-flex-input" v-if="clampingPlan.matchedPlan.isMouldTemperature === 1">是</div>
-            <div class="model-flex-input" v-else-if="clampingPlan.matchedPlan.isMouldTemperature === 0">否</div>
+            <div class="model-flex-input" v-if="data.matchedPlan.isMouldTemperature === 1">是</div>
+            <div class="model-flex-input" v-else-if="data.matchedPlan.isMouldTemperature === 0">否</div>
           </div>
         </div>
       </div>
@@ -63,38 +63,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { namespace } from "vuex-class";
-const { State, Getter, Action, Mutation } = namespace("order/mould");
-
-import { Supplier } from "@/store/modules/order/state";
-import { InitInfo, Mould, ClampingPlan } from "@/store/modules/order/modules/mould/state";
-import { GetterTypes } from "@/store/modules/order/modules/mould/getters";
-import { ActionTypes } from "@/store/modules/order/modules/mould/actions";
-import { MutationTypes } from "@/store/modules/order/modules/mould/mutations";
-
-import downloadByUrl from "@/utils/downloadByUrl";
-
-import { Message, MessageBox } from "element-ui";
-
-import { UploadForm } from "@/api";
-import { BASE_IMAGE_URL } from "@/config";
+import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 
 @Component({
-  name: "ClampingPlanModel",
+  name: "ArrangementScheme",
   components: {}
 })
-export default class ClampingPlanModel extends Vue {
-  @State("clampingPlan")
-  public clampingPlan!: any | ClampingPlan;
+export default class ArrangementScheme extends Vue {
+  @Prop(Object) 
+  private readonly data!: ArrangementSchemeTypes;
 
-  @Mutation(MutationTypes.UpdateClampingPlan)
-  public updateClampingPlan!: Function;
+  @Emit("updateData") 
+  private updateData(params: ArrangementSchemeTypes) {
+    return { ...this.data, ...params };
+  };
 }
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../../../stylus/index.styl';
+@import '../../stylus/index.styl';
 .model
   &-container
     position fixed
