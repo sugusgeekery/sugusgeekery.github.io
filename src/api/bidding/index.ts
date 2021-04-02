@@ -1,5 +1,8 @@
 import fetch from "@/axios";
 
+// 获取订单类型筛选项
+export const GetMouldOrderType = (params: any = {}): object => fetch({ url: `/supplier/common/getMouldOrderType`, method: "GET", params });
+
 // 获取竞价单，竞价中列表
 export const GetSelectByUser = (params: object = {}): object => fetch({ url: "/supplier/userMouldBidding/selectByUser", method: "GET", params });
 

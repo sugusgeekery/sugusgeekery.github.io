@@ -55,6 +55,25 @@
                 </el-date-picker>
               </div>
             </div>
+            <div class="filter-item">
+              <div class="filter-item-label">项目类型</div>
+              <div class="filter-item-content">
+                <el-select
+                  multiple
+                  :value="biddingList[biddingIndex].projectList[biddingList[biddingIndex].projectIndex] ? biddingList[biddingIndex].projectList[biddingList[biddingIndex].projectIndex].text : ''"
+                  @change="v => updateProjectIndex(v)"
+                  placeholder="请选择项目类型"
+                >
+                  <el-option
+                    :label="a.text"
+                    :value="String(b)"
+                    v-for="(a, b) in biddingList[biddingIndex].projectList"
+                    :key="String(b)"
+                  ></el-option>
+                </el-select>
+              </div>
+            </div>
+            
             <!-- <div class="filter-item">
               <div class="filter-item-label">交付地区</div>
               <div class="filter-item-content">
@@ -262,6 +281,8 @@ export default class BiddingHome extends Vue {
   public updateMaxPrice!: Function;
   @Action(ActionTypes.UpdatePayDate)
   public updatePayDate!: Function;
+  @Action(ActionTypes.UpdateProjectIndex)
+  public updateProjectIndex!: Function;
   // @Action(ActionTypes.UpdateProvinceCityCountry)
   // public updateProvinceCityCountry!: Function;
   @Action(ActionTypes.JoinBidding)
@@ -277,7 +298,7 @@ export default class BiddingHome extends Vue {
   public updateArrangementScheme!: Function;
 
   public created() {
-    this.updatePageNum(1);
+    this.updateBiddingIndex(0);
   }
 }
 </script>

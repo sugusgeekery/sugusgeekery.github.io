@@ -92,7 +92,7 @@ export default {
         const stepInfoListTemp = (stepInfoList => {
           for (const [a, b] of stepInfoList.entries()) {
             const { approvalInfoList = [] } = b;
-            if (approvalInfoList.length) {
+            // if (approvalInfoList.length) {
               switch(type) {
                 case Supplier.Dfm:
                 case Supplier.Design:
@@ -105,7 +105,7 @@ export default {
                   stepInfoList[a].isEdit = approvalInfoList.every((v: any) => v.type !== 2);
                   break;
               }
-            }
+            // }
           }
           return stepInfoList;
         })(stepInfoList);

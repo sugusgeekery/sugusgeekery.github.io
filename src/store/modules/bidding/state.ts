@@ -21,8 +21,14 @@ export interface BiddingList {
   minPrice?: string | number;
   maxPrice?: string | number;
   payDate?: string;
+  projectIndex?: number;
+  projectList?: Array<ProjectList>;
   provinceCityCountry?: string[];
   list: Array<BiddingObject | BiddingObjectMyself>;
+}
+export interface ProjectList {
+  text: string;
+  type: string;
 }
 export interface BiddingObject {
   biddingHeadId?: string;
@@ -69,6 +75,8 @@ const state: State = {
       minPrice: "",
       maxPrice: "",
       payDate: "",
+      projectIndex: 0,
+      projectList: [],
       provinceCityCountry: [],
       list: [
         // {
@@ -97,6 +105,8 @@ const state: State = {
       minPrice: "",
       maxPrice: "",
       payDate: "",
+      projectIndex: 0,
+      projectList: [],
       provinceCityCountry: [],
       list: [
         // {

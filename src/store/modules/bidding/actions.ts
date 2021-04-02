@@ -11,6 +11,7 @@ import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 import { BASE_IMAGE_URL } from "@/config";
 
 import {
+  GetMouldOrderType,
   GetSelectByUser,
   GetSelectMyBidding,
   JoinBidding,
@@ -33,6 +34,7 @@ interface Store {
 
 export enum ActionTypes {
   Init = "Init",
+  GetMouldOrderType = "GetMouldOrderType",
   UpdateBiddingIndex = "UpdateBiddingIndex",
   GetBiddingList = "GetBiddingList",
   UpdatePageNum = "UpdatePageNum",
@@ -40,6 +42,7 @@ export enum ActionTypes {
   UpdateMinPrice = "UpdateMinPrice",
   UpdateMaxPrice = "UpdateMaxPrice",
   UpdatePayDate = "UpdatePayDate",
+  UpdateProjectIndex = "UpdateProjectIndex",
   UpdateProvinceCityCountry = "UpdateProvinceCityCountry",
   JoinBidding = "JoinBidding",
   RemoveBidding = "RemoveBidding",
@@ -58,10 +61,43 @@ export default {
     commit(MutationTypes.UpdateInitInfo, { ...(params || {}) });
   },
 
+  // 获取订单类型筛选项
+  async [ActionTypes.GetMouldOrderType](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { biddingIndex = 0, biddingList = [] } = state;
+      const { type = 0, pageNum = 1, pageSize = 10 } = biddingList[biddingIndex] || {}; 
+      const { success, message, data }: any = await GetMouldOrderType();
+      if (success) {
+        const projectList = (list => {
+          const arr = [
+            {
+              text: "项目类型",
+              type: "",
+            },
+          ];
+          for (const [a, b] of list.entries()) {
+            const { index, label } = b;
+            arr.push({ text: label, type: index });
+          }
+          return arr;
+        })(data || {});
+        biddingList[biddingIndex].projectIndex = projectList.length ? 0 : -1;
+        biddingList[biddingIndex].projectList = projectList;
+        commit(MutationTypes.UpdateBiddingList, biddingList);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
   // 更新竞价导航下标
   [ActionTypes.UpdateBiddingIndex](store: Store, biddingIndex: number) {
     const { state, dispatch, commit } = store;
     commit(MutationTypes.UpdateBiddingIndex, biddingIndex);
+    dispatch(ActionTypes.GetMouldOrderType);
     dispatch(ActionTypes.GetBiddingList);
   },
   // 获取竞价导航列表
@@ -129,6 +165,16 @@ export default {
     console.log(payDate)
     biddingList[biddingIndex].payDate = payDate;
     commit(MutationTypes.UpdateBiddingList, biddingList);
+    // dispatch(ActionTypes.UpdatePageNum, 1);
+  },
+  // 更新竞价导航项目类型
+  [ActionTypes.UpdateProjectIndex](store: Store, payDate: string) {
+    console.log(payDate);
+    // const { state, dispatch, commit } = store;
+    // const { biddingIndex = 0, biddingList = [] } = state;
+    // console.log(payDate)
+    // biddingList[biddingIndex].payDate = payDate;
+    // commit(MutationTypes.UpdateBiddingList, biddingList);
     // dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新竞价导航交付地区
