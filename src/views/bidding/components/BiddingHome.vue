@@ -44,15 +44,21 @@
             <div class="filter-item">
               <div class="filter-item-label">建议交期</div>
               <div class="filter-item-content">
-                <el-date-picker
-                  type="date"
+                <el-input
+                  :value="biddingList[biddingIndex].payDate" 
+                  @input="value => changeInput(value, 'payDate')" 
+                  clearable
+                  placeholder="选择建议交期"
+                ></el-input>
+                <!-- <el-date-picker
+                  type="datetime"
                   :value="biddingList[biddingIndex].payDate"
-                  placeholder="选择日期"
+                  placeholder="选择建议交期"
                   format="yyyy-MM-dd"
                   value-format="yyyy-MM-dd"
                   @input="updatePayDate($event)"
                 >
-                </el-date-picker>
+                </el-date-picker> -->
               </div>
             </div>
             <div class="filter-item">
@@ -60,15 +66,15 @@
               <div class="filter-item-content">
                 <el-select
                   multiple
-                  :value="biddingList[biddingIndex].projectList[biddingList[biddingIndex].projectIndex] ? biddingList[biddingIndex].projectList[biddingList[biddingIndex].projectIndex].text : ''"
-                  @change="v => updateProjectIndex(v)"
+                  :value="biddingList[biddingIndex].mouldTypes"
+                  @change="v => updateMouldTypes(v)"
                   placeholder="请选择项目类型"
                 >
                   <el-option
+                    v-for="(a) in biddingList[biddingIndex].projectList"
+                    :key="a.type"
                     :label="a.text"
-                    :value="String(b)"
-                    v-for="(a, b) in biddingList[biddingIndex].projectList"
-                    :key="String(b)"
+                    :value="a.type"
                   ></el-option>
                 </el-select>
               </div>
@@ -238,6 +244,14 @@ import { MutationTypes } from "@/store/modules/bidding/mutations";
 
 import { ElementUIProvinces, ElementUICasCader } from "@/utils/provinces";
 
+import { Message } from "element-ui";
+
+import validate, {
+  ValidateTypes,
+  ValidateSuccessParams,
+  ValidateFailedParams
+} from "@/utils/validate";
+
 import BiddingDetail from "./BiddingDetail.vue";
 
 import MaterialAndColor from "@/components/models/MaterialAndColor.vue";
@@ -281,8 +295,8 @@ export default class BiddingHome extends Vue {
   public updateMaxPrice!: Function;
   @Action(ActionTypes.UpdatePayDate)
   public updatePayDate!: Function;
-  @Action(ActionTypes.UpdateProjectIndex)
-  public updateProjectIndex!: Function;
+  @Action(ActionTypes.UpdateMouldTypes)
+  public updateMouldTypes!: Function;
   // @Action(ActionTypes.UpdateProvinceCityCountry)
   // public updateProvinceCityCountry!: Function;
   @Action(ActionTypes.JoinBidding)
@@ -299,6 +313,24 @@ export default class BiddingHome extends Vue {
 
   public created() {
     this.updateBiddingIndex(0);
+  }
+
+  public changeInput(value: string, key: string) {
+    console.log(value)
+    if (key === "payDate") {
+      validate[ValidateTypes.ValidateNumber]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updatePayDate(value);
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          if (value) {
+            Message.error(message);
+            this.updatePayDate("");
+          }
+        }
+      });
+    }
   }
 }
 </script>

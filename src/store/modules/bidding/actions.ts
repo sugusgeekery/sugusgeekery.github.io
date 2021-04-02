@@ -42,7 +42,7 @@ export enum ActionTypes {
   UpdateMinPrice = "UpdateMinPrice",
   UpdateMaxPrice = "UpdateMaxPrice",
   UpdatePayDate = "UpdatePayDate",
-  UpdateProjectIndex = "UpdateProjectIndex",
+  UpdateMouldTypes = "UpdateMouldTypes",
   UpdateProvinceCityCountry = "UpdateProvinceCityCountry",
   JoinBidding = "JoinBidding",
   RemoveBidding = "RemoveBidding",
@@ -71,10 +71,10 @@ export default {
       if (success) {
         const projectList = (list => {
           const arr = [
-            {
-              text: "项目类型",
-              type: "",
-            },
+            // {
+            //   text: "项目类型",
+            //   type: "",
+            // },
           ];
           for (const [a, b] of list.entries()) {
             const { index, label } = b;
@@ -82,6 +82,7 @@ export default {
           }
           return arr;
         })(data || {});
+        biddingList[biddingIndex].mouldTypes = [];
         biddingList[biddingIndex].projectIndex = projectList.length ? 0 : -1;
         biddingList[biddingIndex].projectList = projectList;
         commit(MutationTypes.UpdateBiddingList, biddingList);
@@ -97,8 +98,7 @@ export default {
   [ActionTypes.UpdateBiddingIndex](store: Store, biddingIndex: number) {
     const { state, dispatch, commit } = store;
     commit(MutationTypes.UpdateBiddingIndex, biddingIndex);
-    dispatch(ActionTypes.GetMouldOrderType);
-    dispatch(ActionTypes.GetBiddingList);
+    dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 获取竞价导航列表
   async [ActionTypes.GetBiddingList](store: Store) {
@@ -108,7 +108,8 @@ export default {
       const { type = 0, pageNum = 1, pageSize = 10 } = biddingList[biddingIndex] || {}; 
       let fn = null;
       if (biddingIndex === 0 || biddingIndex === 1) {
-        fn = await GetSelectByUser({ type, pageNum, pageSize });
+        const { mouldTypes, minPrice, maxPrice, payDate } = biddingList[biddingIndex] || {}; 
+        fn = await GetSelectByUser({ type, pageNum, pageSize, workPeriod: payDate, minAmount: minPrice, maxAmount: maxPrice, mouldTypes });
       } else if (biddingIndex === 2 || biddingIndex === 3) {
         fn = await GetSelectMyBidding({ type, pageNum, pageSize });
       }
@@ -148,7 +149,7 @@ export default {
     const { biddingIndex = 0, biddingList = [] } = state;
     biddingList[biddingIndex].minPrice = Number(minPrice);
     commit(MutationTypes.UpdateBiddingList, biddingList);
-    // dispatch(ActionTypes.UpdatePageNum, 1);
+    dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新竞价导航最多价格
   [ActionTypes.UpdateMaxPrice](store: Store, maxPrice: string | number) {
@@ -156,7 +157,7 @@ export default {
     const { biddingIndex = 0, biddingList = [] } = state;
     biddingList[biddingIndex].maxPrice = Number(maxPrice);
     commit(MutationTypes.UpdateBiddingList, biddingList);
-    // dispatch(ActionTypes.UpdatePageNum, 1);
+    dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新竞价导航交付日期
   [ActionTypes.UpdatePayDate](store: Store, payDate: string) {
@@ -165,17 +166,15 @@ export default {
     console.log(payDate)
     biddingList[biddingIndex].payDate = payDate;
     commit(MutationTypes.UpdateBiddingList, biddingList);
-    // dispatch(ActionTypes.UpdatePageNum, 1);
+    dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新竞价导航项目类型
-  [ActionTypes.UpdateProjectIndex](store: Store, payDate: string) {
-    console.log(payDate);
-    // const { state, dispatch, commit } = store;
-    // const { biddingIndex = 0, biddingList = [] } = state;
-    // console.log(payDate)
-    // biddingList[biddingIndex].payDate = payDate;
-    // commit(MutationTypes.UpdateBiddingList, biddingList);
-    // dispatch(ActionTypes.UpdatePageNum, 1);
+  [ActionTypes.UpdateMouldTypes](store: Store, mouldTypes: string[]) {
+    const { state, dispatch, commit } = store;
+    const { biddingIndex = 0, biddingList = [] } = state;
+    biddingList[biddingIndex].mouldTypes = mouldTypes;
+    commit(MutationTypes.UpdateBiddingList, biddingList);
+    dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 更新竞价导航交付地区
   [ActionTypes.UpdateProvinceCityCountry](store: Store, provinceCityCountry: string[]) {
@@ -183,7 +182,7 @@ export default {
     const { biddingIndex = 0, biddingList = [] } = state;
     biddingList[biddingIndex].provinceCityCountry = provinceCityCountry;
     commit(MutationTypes.UpdateBiddingList, biddingList);
-    // dispatch(ActionTypes.UpdatePageNum, 1);
+    dispatch(ActionTypes.UpdatePageNum, 1);
   },
 
   // 参与竞价

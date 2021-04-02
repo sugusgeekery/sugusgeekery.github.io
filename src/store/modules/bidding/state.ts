@@ -21,6 +21,7 @@ export interface BiddingList {
   minPrice?: string | number;
   maxPrice?: string | number;
   payDate?: string;
+  mouldTypes?: string[];
   projectIndex?: number;
   projectList?: Array<ProjectList>;
   provinceCityCountry?: string[];
@@ -75,6 +76,7 @@ const state: State = {
       minPrice: "",
       maxPrice: "",
       payDate: "",
+      mouldTypes: [],
       projectIndex: 0,
       projectList: [],
       provinceCityCountry: [],
@@ -105,6 +107,7 @@ const state: State = {
       minPrice: "",
       maxPrice: "",
       payDate: "",
+      mouldTypes: [],
       projectIndex: 0,
       projectList: [],
       provinceCityCountry: [],
