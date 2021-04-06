@@ -146,7 +146,6 @@ export default class LoginView extends Vue {
   public login() {
     // 微信扫码登录所需code码
     const jsCode = getUrlParas("code");
-    console.log(jsCode);
     const phoneNo = getUrlParas("phoneNo");
     if (phoneNo) {
       this.phoneLogin({ phoneNo });

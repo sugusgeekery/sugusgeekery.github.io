@@ -96,7 +96,7 @@ export default {
               switch(type) {
                 case Supplier.Dfm:
                 case Supplier.Design:
-                  stepInfoList[a].isEdit = approvalInfoList.some((v: any) => v.opinion === 0);
+                  stepInfoList[a].isEdit = approvalInfoList.length ? approvalInfoList.some((v: any) => v.opinion === 0) : true;
                   break;
                 case Supplier.Machining:
                   stepInfoList[a].isEdit = approvalInfoList.every((v: any) => v.type !== 1);

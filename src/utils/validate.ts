@@ -46,7 +46,6 @@ export default {
       failed({ value, message: "内容不能为空" });
     } else {
       const reg = /^[\d\.]+$/;
-      console.log(reg.test(value), value, reg)
       if (reg.test(value)) {
         success({ value,  message: "内容验证通过" });
       } else {

@@ -29,7 +29,7 @@
                   type="text"
                   placeholder="最少价格"
                   :value="biddingList[biddingIndex].minPrice"
-                  @change="updateMinPrice($event.target.value)"
+                  @change="changeInput($event.target.value, 'minPrice')"
                 />
                 <span class="filter-item-text">至</span>
                 <input
@@ -37,7 +37,7 @@
                   type="text"
                   placeholder="最多价格"
                   :value="biddingList[biddingIndex].maxPrice"
-                  @change="updateMaxPrice($event.target.value)"
+                  @change="changeInput($event.target.value, 'maxPrice')"
                 />
               </div>
             </div>
@@ -50,6 +50,7 @@
                   clearable
                   placeholder="选择建议交期"
                 ></el-input>
+                <span class="filter-item-text">天</span>
                 <!-- <el-date-picker
                   type="datetime"
                   :value="biddingList[biddingIndex].payDate"
@@ -324,10 +325,36 @@ export default class BiddingHome extends Vue {
           this.updatePayDate(value);
         },
         failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
+          // if (value) {
             Message.error(message);
             this.updatePayDate("");
-          }
+          // }
+        }
+      });
+    } else if (key === "minPrice") {
+      validate[ValidateTypes.ValidateNumber]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateMinPrice(value);
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          // if (value) {
+            Message.error(message);
+            this.updateMinPrice("");
+          // }
+        }
+      });
+    } else if (key === "maxPrice") {
+      validate[ValidateTypes.ValidateNumber]({
+        value,
+        success: ({ value }: ValidateSuccessParams) => {
+          this.updateMaxPrice(value);
+        },
+        failed: ({ value, message }: ValidateFailedParams) => {
+          // if (value) {
+            Message.error(message);
+            this.updateMaxPrice("");
+          // }
         }
       });
     }
@@ -414,7 +441,7 @@ export default class BiddingHome extends Vue {
           &-label
             font-size 14px
             color $color-text-gray
-            margin-right 12px
+            margin-right 8px
           &-content
             display flex
             justify-content flex-start
@@ -422,7 +449,7 @@ export default class BiddingHome extends Vue {
           &-text
             font-size 14px
             color $color-text-gray
-            margin-right 8px
+            margin 0 8px
           &-input
             max-width 100px
             min-height 40px
@@ -431,7 +458,6 @@ export default class BiddingHome extends Vue {
             outline none
             font-size 14px
             color $color-text-gray
-            margin-right 8px
             padding 10px
       &-footer
         width 100%

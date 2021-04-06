@@ -98,6 +98,7 @@ export default {
   [ActionTypes.UpdateBiddingIndex](store: Store, biddingIndex: number) {
     const { state, dispatch, commit } = store;
     commit(MutationTypes.UpdateBiddingIndex, biddingIndex);
+    dispatch(ActionTypes.GetMouldOrderType);
     dispatch(ActionTypes.UpdatePageNum, 1);
   },
   // 获取竞价导航列表
@@ -108,8 +109,8 @@ export default {
       const { type = 0, pageNum = 1, pageSize = 10 } = biddingList[biddingIndex] || {}; 
       let fn = null;
       if (biddingIndex === 0 || biddingIndex === 1) {
-        const { mouldTypes, minPrice, maxPrice, payDate } = biddingList[biddingIndex] || {}; 
-        fn = await GetSelectByUser({ type, pageNum, pageSize, workPeriod: payDate, minAmount: minPrice, maxAmount: maxPrice, mouldTypes });
+        const { mouldTypes, minPrice, maxPrice, payDate, unit } = biddingList[biddingIndex] || {};
+        fn = await GetSelectByUser({ type, pageNum, pageSize, workPeriod: payDate, minAmount: minPrice, maxAmount: maxPrice, mouldTypes: mouldTypes && mouldTypes.join(","), unit });
       } else if (biddingIndex === 2 || biddingIndex === 3) {
         fn = await GetSelectMyBidding({ type, pageNum, pageSize });
       }
