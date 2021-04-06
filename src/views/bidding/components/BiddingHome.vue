@@ -231,6 +231,7 @@
     <MaterialAndColor :data="materialAndColor" @updateData="updateMaterialAndColor"></MaterialAndColor>
     <Technology :data="technology" @updateData="updateTechnology"></Technology>
     <ArrangementScheme :data="arrangementScheme" @updateData="updateArrangementScheme"></ArrangementScheme>
+    <Ever3D :data="productInfo" @updateData="updateProductInfo" v-if="productInfo.isShow"></Ever3D>
   </div>
 </template>
 
@@ -258,6 +259,7 @@ import BiddingDetail from "./BiddingDetail.vue";
 import MaterialAndColor from "@/components/models/MaterialAndColor.vue";
 import Technology from "@/components/models/Technology.vue";
 import ArrangementScheme from "@/components/models/ArrangementScheme.vue";
+import Ever3D from "@/components/models/Ever3D.vue";
 
 @Component({
   name: "BiddingHome",
@@ -265,7 +267,8 @@ import ArrangementScheme from "@/components/models/ArrangementScheme.vue";
     BiddingDetail,
     MaterialAndColor,
     Technology,
-    ArrangementScheme
+    ArrangementScheme,
+    Ever3D
   }
 })
 export default class BiddingHome extends Vue {
@@ -279,6 +282,8 @@ export default class BiddingHome extends Vue {
   public technology!: TechnologyTypes;
   @State("arrangementScheme")
   public arrangementScheme!: ArrangementSchemeTypes;
+  @State("productInfo")
+  public productInfo!: any | ProductInfoTypes;
 
   // public provinces: ElementUICasCader[] = ElementUIProvinces;
 
@@ -311,6 +316,8 @@ export default class BiddingHome extends Vue {
   public updateTechnology!: Function;
   @Mutation(MutationTypes.UpdateArrangementScheme)
   public updateArrangementScheme!: Function;
+  @Mutation(MutationTypes.UpdateProductInfo)
+  public updateProductInfo!: Function;
 
   public created() {
     this.updateBiddingIndex(0);

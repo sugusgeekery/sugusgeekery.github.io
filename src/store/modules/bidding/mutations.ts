@@ -7,7 +7,8 @@ export enum MutationTypes {
   UpdateBiddingDetail = "UpdateBiddingDetail",
   UpdateMaterialAndColor = "UpdateMaterialAndColor",
   UpdateTechnology = "UpdateTechnology",
-  UpdateArrangementScheme = "UpdateArrangementScheme"
+  UpdateArrangementScheme = "UpdateArrangementScheme",
+  UpdateProductInfo = "UpdateProductInfo",
 }
 
 export default {
@@ -73,6 +74,17 @@ export default {
         temp[key] = params[key];
       }
       state.arrangementScheme = Object.assign(arrangementScheme, temp);
+    })(state, params, temp);
+  },
+  // 更新产品详情
+  [MutationTypes.UpdateProductInfo](state: State, params: ProductInfoTypes) {
+    const { productInfo } = state;
+    const temp: ProductInfoTypes = productInfo;
+    (function<T>(state: State, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.productInfo = Object.assign(productInfo, temp);
     })(state, params, temp);
   },
 }

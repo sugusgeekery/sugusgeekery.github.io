@@ -52,6 +52,7 @@ export enum ActionTypes {
   GetTechnology = "GetTechnology",
   GetMaterialAndColor = "GetMaterialAndColor",
   GetArrangementScheme = "GetArrangementScheme",
+  GetProductInfo = "GetProductInfo",
 }
 
 export default {
@@ -253,6 +254,9 @@ export default {
           if (v.productImage) {
             v.productImage = BASE_IMAGE_URL + v.productImage;
           }
+          if (v.fileUrl) {
+            v.fileUrl = BASE_IMAGE_URL + v.fileUrl;
+          }
           return v;
         });
         commit(MutationTypes.UpdateBiddingDetail, { ...(data || {}), productInfos: tempProductInfos, productInfoIndex, isShow: true, });
@@ -385,6 +389,32 @@ export default {
       } else {
         Message.error(message);
       }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 获取产品详情
+  [ActionTypes.GetProductInfo](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { biddingDetail } = state;
+      const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+      const productInfo = productInfos[productInfoIndex] || {};
+      commit(MutationTypes.UpdateProductInfo, { ...productInfo, isShow: true });
+      // const { success, message, data }: any = await GetArrangementScheme({ orderMouldId: id });
+      // if (success) {
+      //   const temp = data || {};
+      //   const { matchedPlan } = temp || {};
+      //   const { mouldLabeImage } = matchedPlan || {};
+      //   let mouldLabeImages = mouldLabeImage ? mouldLabeImage.split(",") : [];
+      //   if (mouldLabeImages.length) {
+      //     mouldLabeImages = mouldLabeImages.map((v: string) => BASE_IMAGE_URL + v);
+      //   }
+      //   commit(MutationTypes.UpdateArrangementScheme, { ...temp, mouldLabeImages, isShow: true });
+      // } else {
+      //   Message.error(message);
+      // }
     } catch (e) {
       throw new Error(e);
     }

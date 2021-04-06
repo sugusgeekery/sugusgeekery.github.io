@@ -6,6 +6,7 @@ export interface State {
   materialAndColor: MaterialAndColorTypes;
   technology: TechnologyTypes;
   arrangementScheme: ArrangementSchemeTypes;
+  productInfo: ProductInfoTypes;
 };
 
 // 初始化参数
@@ -62,6 +63,7 @@ export interface BiddingObjectMyself {
 }
 
 export interface BiddingDetailTypes {}
+// export interface ProductInfoTypes {}
 
 const state: State = {
   initInfo: {},
@@ -333,6 +335,19 @@ const state: State = {
     },
     "moldingMaterialType": 0
   },
+  productInfo: {
+    isShow: false,
+    "id": 0,
+    productImage: "",
+    "productHeight": "",
+    "productLength": "",
+    "productNo": "",
+    "productNum": 0,
+    "productWeight": "",
+    "productWidth": "",
+    "surfaceTreatment": "",
+    fileUrl: "",
+  }
 };
 
 export default state;

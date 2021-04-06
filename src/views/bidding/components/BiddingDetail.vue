@@ -51,7 +51,7 @@
                   <span class="model-flex-text-black">产品：</span>
                   <span>{{ a.productNo || "" }}</span>
                 </div>
-                <div class="model-flex-image">
+                <div class="model-flex-image" @click="getProductInfo()" @contextmenu.prevent="onContextmenu($event)">
                   <img v-if="a.productImage" :src="a.productImage" alt="" />
                 </div>
               </div>
@@ -329,6 +329,8 @@ import { BiddingDetailTypes } from "@/store/modules/bidding/state";
 import { ActionTypes } from "@/store/modules/bidding/actions";
 import { MutationTypes } from "@/store/modules/bidding/mutations";
 
+import downloadFile from "@/utils/downloadByUrl";
+
 @Component({
   name: "BiddingDetail",
   components: {}
@@ -343,6 +345,8 @@ export default class BiddingDetail extends Vue {
   public getMaterialAndColor!: Function;
   @Action(ActionTypes.GetArrangementScheme)
   public getArrangementScheme!: Function;
+  @Action(ActionTypes.GetProductInfo)
+  public getProductInfo!: Function;
   @Action(ActionTypes.JoinBidding)
   public joinBidding!: Function;
   @Action(ActionTypes.RemoveBidding)
@@ -369,6 +373,69 @@ export default class BiddingDetail extends Vue {
     } else if (type === 3) {
       this.updateBiddingDetail({ productInfoIndex: index });
     }
+  }
+
+  public onContextmenu(event: any) {
+    const { biddingDetail } = this;
+    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+    const { fileUrl, productImage } = productInfos[productInfoIndex] || {};
+    // @ts-ignore
+    this.$contextmenu({
+      items: [
+        { 
+          label: "下载", 
+          icon: "el-icon-download",
+          onClick: () => {
+            if (fileUrl) {
+              downloadFile(fileUrl, fileUrl);
+            } else {
+              downloadFile(productImage, productImage);
+            }
+            
+          }
+        },
+        // {
+        //   label: "返回(B)",
+        //   onClick: () => {
+        //     this.message = "返回(B)";
+        //     console.log("返回(B)");
+        //   }
+        // },
+        // { label: "前进(F)", disabled: true },
+        // { label: "重新加载(R)", divided: true, icon: "el-icon-refresh" },
+        // { label: "另存为(A)..." },
+        // { label: "打印(P)...", icon: "el-icon-printer" },
+        // { label: "投射(C)...", divided: true },
+        // {
+        //   label: "使用网页翻译(T)",
+        //   divided: true,
+        //   minWidth: 0,
+        //   children: [{ label: "翻译成简体中文" }, { label: "翻译成繁体中文" }]
+        // },
+        // {
+        //   label: "截取网页(R)",
+        //   minWidth: 0,
+        //   children: [
+        //     {
+        //       label: "截取可视化区域",
+        //       onClick: () => {
+        //         this.message = "截取可视化区域";
+        //         console.log("截取可视化区域");
+        //       }
+        //     },
+        //     { label: "截取全屏" }
+        //   ]
+        // },
+        // { label: "查看网页源代码(V)", icon: "el-icon-view" },
+        // { label: "检查(N)" }
+      ],
+      event,
+      //x: event.clientX,
+      //y: event.clientY,
+      customClass: "class-a",
+      zIndex: 3,
+      minWidth: 230
+    });
   }
 }
 </script>

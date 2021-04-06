@@ -100,7 +100,7 @@
           </div>
         </div>
         <div class="li-buttons" v-if="Supplier.Dfm === initInfo.type">
-          <div class="li-button li-button-blue" v-if="a.isUpdateImage === 0" @click="needChangeDrawing({ index: b })">需要更新图纸</div>
+          <div class="li-button li-button-blue" v-if="a.isUpdateImage === 1" @click="needChangeDrawing({ index: b })">需要更新图纸</div>
           <div class="li-button li-button-blue" v-if="a.isUpdateImage === 2" @click="dfmApprovalDrawing({ opinion: 1, index: b })">确认图纸</div>
           <div class="li-button li-button-red" v-if="a.isUpdateImage === 2" @click="dfmApprovalDrawing({ opinion: 1, index: b })">驳回图纸</div>
         </div>

@@ -9,6 +9,9 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 Vue.use(ElementUI);
 
+import Contextmenu from "vue-contextmenujs";
+Vue.use(Contextmenu);
+
 import "./stylus/common.styl";
 
 Vue.config.productionTip = false;

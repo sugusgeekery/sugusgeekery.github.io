@@ -1,7 +1,5 @@
-
-declare module "mint-ui";
-
 declare module "element-china-area-data";
+declare module "vue-contextmenujs";
 
 // 排模方案数据
 interface ArrangementSchemeTypes {
@@ -89,4 +87,19 @@ interface CountdownTypes {
   minute: number;
   second: number;
   setTimeInterval: number;
+}
+
+// 产品详情
+interface ProductInfoTypes {
+  isShow: boolean;
+  id: number;
+  productImage: string;
+  productHeight: string;
+  productLength: string;
+  productNo: string;
+  productNum: number;
+  productWeight: string;
+  productWidth: string;
+  surfaceTreatment: string;
+  fileUrl: string;
 }
