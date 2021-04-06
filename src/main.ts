@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
+import "./stylus/common.styl";
 // import "lib-flexible";
 
 import ElementUI from "element-ui";
@@ -12,7 +13,6 @@ Vue.use(ElementUI);
 import Contextmenu from "vue-contextmenujs";
 Vue.use(Contextmenu);
 
-import "./stylus/common.styl";
 
 Vue.config.productionTip = false;
 

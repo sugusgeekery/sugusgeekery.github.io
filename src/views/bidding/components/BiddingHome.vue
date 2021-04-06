@@ -168,6 +168,10 @@
                     <span class="item-text">竞价交期：</span>
                     <span class="item-text">{{ a.workPeriod || 0 }}天</span>
                   </div>
+                  <div class="item-flex">
+                    <span class="item-text">倒计时：</span>
+                    <span class="item-text item-text-red">{{ a.workPeriod || 0 }}天</span>
+                  </div>
                 </div>
               </div>
               <div class="item-rows" v-if="biddingIndex === 0">

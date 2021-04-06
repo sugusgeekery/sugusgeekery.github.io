@@ -52,7 +52,7 @@ switch(NODE_ENV) {
 
     `);
     break;
-  case "test":
+  case "tests":
     // 测试环境 
     // BASE_API_URL = "http://192.168.0.22:9090";
     BASE_API_URL = "http://testsupplierapi.hotpick.com";

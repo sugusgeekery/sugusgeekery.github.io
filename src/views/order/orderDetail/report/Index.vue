@@ -659,15 +659,15 @@ export default class ReportView extends Vue {
   width 100%
   height 100%
   overflow auto
-  padding 20px
-  display flex
-  flex-direction row
-  flex-wrap wrap
-  justify-content flex-start
-  align-items flex-start
+  padding 0 20px
+  // display flex
+  // flex-direction row
+  // flex-wrap wrap
+  // justify-content flex-start
+  // align-items flex-start
   .item
-    margin 1%
-    width 48%
+    margin 20px auto
+    // width 48%
     border-radius 8px
     background $color-bg-blue-white
     padding 1px
