@@ -23,6 +23,13 @@ export interface BiddingList {
   maxPrice?: string | number;
   payDate?: string;
   unit?: string;
+  unitDes?: string;
+  units?: Array<
+    {
+      label: string;
+      value: string;
+    }
+  >,
   mouldTypes?: string[];
   projectIndex?: number;
   projectList?: Array<ProjectList>;
@@ -90,6 +97,17 @@ const state: State = {
       maxPrice: "",
       payDate: "",
       unit: "day",
+      unitDes: "天",
+      units: [
+        {
+          label: "天",
+          value: "day"
+        },
+        {
+          label: "小时",
+          value: "hour"
+        },
+      ],
       mouldTypes: [],
       projectIndex: 0,
       projectList: [],
@@ -123,6 +141,17 @@ const state: State = {
       maxPrice: "",
       payDate: "",
       unit: "day",
+      unitDes: "天",
+      units: [
+        {
+          label: "天",
+          value: "day"
+        },
+        {
+          label: "小时",
+          value: "hour"
+        },
+      ],
       mouldTypes: [],
       projectIndex: 0,
       projectList: [],

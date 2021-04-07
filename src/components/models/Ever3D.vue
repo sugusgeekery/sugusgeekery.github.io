@@ -4,7 +4,7 @@
       <div class="model-header">
         <div class="model-title">
           <div class="model-title-text">
-            3D
+            {{ data.productNo || "无"}}
           </div>
         </div>
         <div
@@ -14,7 +14,7 @@
       </div>
       <div class="model-body">
         <div class="model-content" v-if="isShowImage">
-          <img class="model-content-image" :src="data.productImage" alt="" v-if="data.productImage">
+          <img class="model-content-image" :src="data.productImageFull" alt="" v-if="data.productImageFull">
         </div>
         <div id="ever3D" class="model-content" v-else></div>
       </div>
@@ -49,7 +49,7 @@ export default class Ever3D extends Vue {
 
   }
   public mounted() {
-    const { productImage, fileUrl } = this.data || {};
+    const { fileUrl } = this.data || {};
     if (fileUrl) {
       const arr = fileUrl.split('.');
       const str = arr[arr.length - 1].toLocaleLowerCase();

@@ -43,6 +43,7 @@ export enum ActionTypes {
   UpdateMinPrice = "UpdateMinPrice",
   UpdateMaxPrice = "UpdateMaxPrice",
   UpdatePayDate = "UpdatePayDate",
+  UpdateUnit = "UpdateUnit",
   UpdateMouldTypes = "UpdateMouldTypes",
   UpdateProvinceCityCountry = "UpdateProvinceCityCountry",
   JoinBidding = "JoinBidding",
@@ -230,8 +231,27 @@ export default {
   [ActionTypes.UpdatePayDate](store: Store, payDate: string) {
     const { state, dispatch, commit } = store;
     const { biddingIndex = 0, biddingList = [] } = state;
-    console.log(payDate)
     biddingList[biddingIndex].payDate = payDate;
+    commit(MutationTypes.UpdateBiddingList, biddingList);
+    dispatch(ActionTypes.UpdatePageNum, 1);
+  },
+  // 更新竞价导航交付日期单位
+  [ActionTypes.UpdateUnit](store: Store, label: string) {
+    const { state, dispatch, commit } = store;
+    const { biddingIndex = 0, biddingList = [] } = state;
+    const { units = [] } = biddingList[biddingIndex] || {};
+    const fn = (ls: Array<any>, name: string, str: string, value: string) => {
+      if (ls.length) {
+        for (const v of ls) {
+          if (v[name] === str) {
+            return v[value];
+          }
+        }
+      }
+      return "";
+    };
+    biddingList[biddingIndex].unit = fn(units, "label", label, "value");
+    biddingList[biddingIndex].unitDes = label;
     commit(MutationTypes.UpdateBiddingList, biddingList);
     dispatch(ActionTypes.UpdatePageNum, 1);
   },
@@ -317,10 +337,10 @@ export default {
         const productInfoIndex = productInfos.length ? 0 : -1;
         const tempProductInfos = productInfos.map((v: any) => {
           if (v.productImage) {
-            v.productImage = BASE_IMAGE_URL + v.productImage;
+            v.productImageFull = BASE_IMAGE_URL + v.productImage;
           }
           if (v.fileUrl) {
-            v.fileUrl = BASE_IMAGE_URL + v.fileUrl;
+            v.fileUrlFull = BASE_IMAGE_URL + v.fileUrl;
           }
           return v;
         });

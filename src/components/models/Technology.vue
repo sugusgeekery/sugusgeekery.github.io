@@ -31,7 +31,7 @@
                 {{ a.colorValue || "" }}
               </span>
             </div>
-            <div class="model-flex-text">
+            <div class="model-flex-text" v-if="a.subsidiaryFileUrl">
               <span>{{ a.technologyName || "" }}附件：</span>
               <span
                 class="model-flex-text-blue"
@@ -64,7 +64,7 @@
                 {{ a.componentNum || 0 }}
               </span>
             </div>
-            <div class="model-flex-text">
+            <div class="model-flex-text" v-if="a.subsidiaryFileUrl">
               <span>{{ a.technologyName || "" }}附件：</span>
               <span
                 class="model-flex-text-blue"

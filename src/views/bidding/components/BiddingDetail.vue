@@ -52,7 +52,7 @@
                   <span>{{ a.productNo || "" }}</span>
                 </div>
                 <div class="model-flex-image" @click="getProductInfo()" @contextmenu.prevent="onContextmenu($event)">
-                  <img v-if="a.productImage" :src="a.productImage" alt="" />
+                  <img v-if="a.productImageFull" :src="a.productImageFull" alt="" />
                 </div>
               </div>
               <div class="model-flex-context">
@@ -379,7 +379,7 @@ export default class BiddingDetail extends Vue {
   public onContextmenu(event: any) {
     const { biddingDetail } = this;
     const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
-    const { fileUrl, productImage } = productInfos[productInfoIndex] || {};
+    const { fileUrlFull, productImageFull } = productInfos[productInfoIndex] || {};
     // @ts-ignore
     this.$contextmenu({
       items: [
@@ -387,10 +387,10 @@ export default class BiddingDetail extends Vue {
           label: "下载", 
           icon: "el-icon-download",
           onClick: () => {
-            if (fileUrl) {
-              downloadFile(fileUrl, fileUrl);
+            if (fileUrlFull) {
+              downloadFile(fileUrlFull, fileUrlFull);
             } else {
-              downloadFile(productImage, productImage);
+              downloadFile(productImageFull, productImageFull);
             }
             
           }

@@ -50,7 +50,12 @@
                   clearable
                   placeholder="选择建议交期"
                 ></el-input>
-                <span class="filter-item-text">天</span>
+                <div class="filter-item-group">
+                  <el-radio-group v-model="biddingList[biddingIndex].unitDes" @change="v => updateUnit(v)">
+                    <el-radio-button :label="a.label" :name="a.value" v-for="(a) in biddingList[biddingIndex].units" :key="a.value" ></el-radio-button>
+                  </el-radio-group>
+                </div>
+                
                 <!-- <el-date-picker
                   type="datetime"
                   :value="biddingList[biddingIndex].payDate"
@@ -166,15 +171,15 @@
                 <div class="item-row">
                   <div class="item-flex">
                     <span class="item-text">竞价交期：</span>
-                    <span class="item-text">{{ a.workPeriod || 0 }}天</span>
+                    <span class="item-text">{{ a.workPeriod || 0 }}{{ a.unitDesc || ""}}</span>
                   </div>
                   <div class="item-flex" v-if="a.countdown">
                     <!-- <span class="item-text">倒计时：</span> -->
                     <span class="item-text item-text-red" v-if="a.countdown.isTimeout">已超时</span>
                     <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.day">{{ a.countdown.day || 0 }}天</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.hour || 0 }}:</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.minute || 0 }}:</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.second || 0 }}</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.hour">{{ a.countdown.hour || 0 }}:</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.minute">{{ a.countdown.minute || 0 }}:</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.second">{{ a.countdown.second || 0 }}</span>
                   </div>
                 </div>
               </div>
@@ -309,6 +314,8 @@ export default class BiddingHome extends Vue {
   public updateMaxPrice!: Function;
   @Action(ActionTypes.UpdatePayDate)
   public updatePayDate!: Function;
+  @Action(ActionTypes.UpdateUnit)
+  public updateUnit!: Function;
   @Action(ActionTypes.UpdateMouldTypes)
   public updateMouldTypes!: Function;
   // @Action(ActionTypes.UpdateProvinceCityCountry)
@@ -339,7 +346,6 @@ export default class BiddingHome extends Vue {
   }
 
   public changeInput(value: string, key: string) {
-    console.log(value)
     if (key === "payDate") {
       validate[ValidateTypes.ValidateNumber]({
         value,
@@ -481,6 +487,9 @@ export default class BiddingHome extends Vue {
             font-size 14px
             color $color-text-gray
             padding 10px
+          &-group
+            width 200px
+            height 40px
       &-footer
         width 100%
         background $color-bg-white
