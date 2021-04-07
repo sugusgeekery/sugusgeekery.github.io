@@ -136,7 +136,7 @@ export default {
     const { biddingIndex = 0, biddingList = [] } = state;
     const { type = 0, pageNum = 1, pageSize = 10, setTimeInterval } = biddingList[biddingIndex] || {}; 
     if (biddingIndex === 0 || biddingIndex === 1) {
-      const { list } = biddingList[biddingIndex] || {};
+      const { list = [] } = biddingList[biddingIndex] || {};
       if (list.length) {
         const fn = (ls: any) => {
           if (ls && ls.length) {
@@ -185,6 +185,10 @@ export default {
           }, 1000);
           biddingList[biddingIndex].setTimeInterval = setTimeIntervalTemp;
           commit(MutationTypes.UpdateBiddingList, biddingList);
+        }
+      } else {
+        if (setTimeInterval) {
+          clearInterval(setTimeInterval);
         }
       }
     }

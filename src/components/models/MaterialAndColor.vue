@@ -16,11 +16,17 @@
         <div class="model-flex">
           <div class="model-flex-text">
             <span>产品材质：</span>
-            <span>
+            <span v-if="data.materialName">
               {{ data.materialName || "" }}
             </span>
+            <span v-if="data.additiveValue">
+              +{{ data.additiveValue || "" }}%
+            </span>
+            <span class="model-flex-text-left" v-if="data.additiveType">
+              {{ data.additiveType || "" }}
+            </span>
           </div>
-          <div class="model-flex-text">
+          <!-- <div class="model-flex-text">
             <span>添加剂类型:</span>
             <span>
               {{ data.additiveType || "" }}
@@ -31,7 +37,7 @@
             <span>
               {{ data.additiveValue || "" }}
             </span>
-          </div>
+          </div> -->
           <div class="model-flex-text">
             <span>潘通色号:</span>
             <span>
@@ -150,4 +156,8 @@ export default class MaterialAndColorComponent extends Vue {
         color $color-text-black
       &-blue
         color $color-text-blue
+      &-right
+        margin-right 5px
+      &-left
+        margin-left 5px
 </style>
