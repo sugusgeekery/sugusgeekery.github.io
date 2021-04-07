@@ -25,7 +25,9 @@
 <script lang="ts">
 import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 
-import { EVER_CRAFT } from "@/config";
+import { EVER_CRAFT, BASE_IMAGE_URL } from "@/config";
+import { GetStpRender } from "@/api";
+import { Message } from "element-ui";
 
 @Component({
   name: "Ever3D",
@@ -41,6 +43,7 @@ export default class Ever3D extends Vue {
   };
 
   public isShowImage = false;
+  public fileList: Array<{ filename: string; url: string; }> = [];
 
   public created() {
 
@@ -52,7 +55,7 @@ export default class Ever3D extends Vue {
       const str = arr[arr.length - 1].toLocaleLowerCase();
       if (str === "stp" || str === "step") {
         this.showImage(false);
-        this.startRender();
+        this.getStpRender(fileUrl);
       } else {
         this.showImage(true);
       }
@@ -63,6 +66,28 @@ export default class Ever3D extends Vue {
 
   public showImage(isShow: boolean) {
     this.isShowImage = isShow;
+  }
+
+  public async getStpRender(filePath: string) {
+    try {
+      const { success, message, data }: any = await GetStpRender({ filePath });
+      if (success) {
+        const { fileE3dx } = data || {};
+        const arr = fileE3dx.split('/');
+        const filename = arr[arr.length - 1];
+        this.fileList = [
+          {
+            filename,
+            url: BASE_IMAGE_URL + fileE3dx
+          }
+        ];
+        this.startRender();
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
   public startRender() {
@@ -78,9 +103,8 @@ export default class Ever3D extends Vue {
     const api: any = new EverAPI(EVER_CRAFT.AppID, EVER_CRAFT.AppKey, config);
     // api 加载成功后调用 loadApi 函数
     window.addEventListener('oneverapiloaded', () => {
-      const { fileUrl } = this.data || {};
       // 此处放需要渲染的文件
-      const files: any = [{ filename: fileUrl, url: fileUrl }];
+      const files: any = this.fileList;
       loadApi(files)
     })
 

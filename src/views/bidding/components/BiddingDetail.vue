@@ -246,7 +246,8 @@
                         biddingDetail.biddingIndex === 1
                     "
                   >
-                    {{ biddingDetail.isEdit ? "修改" : biddingDetail.biddingState === 1 ? "编辑" : "竞价" }}
+                    <!-- {{ biddingDetail.isEdit ? "修改" : biddingDetail.biddingState === 1 ? "编辑" : "竞价" }} -->
+                    {{ biddingDetail.biddingState !== 1 ? "竞价" : biddingDetail.isEdit ? "修改" :  "编辑" }}
                   </div>
                   <div
                     class="model-flex-button model-flex-button-blue"

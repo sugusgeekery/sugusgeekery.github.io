@@ -37,6 +37,7 @@ export enum ActionTypes {
   GetMouldOrderType = "GetMouldOrderType",
   UpdateBiddingIndex = "UpdateBiddingIndex",
   GetBiddingList = "GetBiddingList",
+  CaculateCountdown = "CaculateCountdown",
   UpdatePageNum = "UpdatePageNum",
   UpdatePageSize = "UpdatePageSize",
   UpdateMinPrice = "UpdateMinPrice",
@@ -121,11 +122,71 @@ export default {
         biddingList[biddingIndex].list = list;
         biddingList[biddingIndex].total = Number(total);
         commit(MutationTypes.UpdateBiddingList, biddingList);
+        dispatch(ActionTypes.CaculateCountdown);
       } else {
         Message.error(message);
       }
     } catch (e) {
       throw new Error(e);
+    }
+  },
+  // 计算倒计时
+  [ActionTypes.CaculateCountdown](store: Store, isCountdown: boolean = true) {
+    const { state, dispatch, commit } = store;
+    const { biddingIndex = 0, biddingList = [] } = state;
+    const { type = 0, pageNum = 1, pageSize = 10, setTimeInterval } = biddingList[biddingIndex] || {}; 
+    if (biddingIndex === 0 || biddingIndex === 1) {
+      const { list } = biddingList[biddingIndex] || {};
+      if (list.length) {
+        const fn = (ls: any) => {
+          if (ls && ls.length) {
+            for (const [a, b] of ls.entries()) {
+              const { termTime } = b;
+              ls[a].countdown = { 
+                isTimeout: false,
+                year: 0,
+                month: 0,
+                day: 0,
+                hour: 0,
+                minute: 0,
+                second: 0,
+              };
+              if (termTime) {
+                const time = termTime.replace("-", "/");
+                const remainSeconds = (new Date(time).getTime() - new Date().getTime()) / 1000;
+                const timeNumber = Math.abs(remainSeconds);
+                ls[a].countdown.isTimeout = remainSeconds < 0;
+                if (remainSeconds < 0) {
+                  continue;
+                }
+                // 多少年
+                ls[a].countdown.year = Math.floor(timeNumber / (60 * 60 * 24 * 365));
+                // 多少月
+                ls[a].countdown.month = Math.floor(timeNumber / (60 * 60 * 24 * 30));
+                // 多少天
+                ls[a].countdown.day = Math.floor(timeNumber / (60 * 60 * 24));
+                ls[a].countdown.hour = Math.floor((timeNumber % (60 * 60 * 24)) / (60 * 60));
+                ls[a].countdown.minute = Math.floor((timeNumber % (60 * 60)) / 60);
+                ls[a].countdown.second = Math.floor((timeNumber % (60 * 1)) / 1);
+                // console.log(ls[a].countdown.day, ls[a].countdown.hour, ls[a].countdown.minute, ls[a].countdown.second);
+              }
+            }
+          }
+          biddingList[biddingIndex].list = JSON.parse(JSON.stringify(ls));
+          commit(MutationTypes.UpdateBiddingList, biddingList);
+        };
+        fn(list);
+        if (setTimeInterval) {
+          clearInterval(setTimeInterval);
+        }
+        if (isCountdown) {
+          const setTimeIntervalTemp = setInterval(() => {
+            fn(list);
+          }, 1000);
+          biddingList[biddingIndex].setTimeInterval = setTimeIntervalTemp;
+          commit(MutationTypes.UpdateBiddingList, biddingList);
+        }
+      }
     }
   },
   

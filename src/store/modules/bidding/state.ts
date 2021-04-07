@@ -27,7 +27,8 @@ export interface BiddingList {
   projectIndex?: number;
   projectList?: Array<ProjectList>;
   provinceCityCountry?: string[];
-  list: Array<BiddingObject | BiddingObjectMyself>;
+  setTimeInterval?: number;
+  list: Array<BiddingObject & BiddingObjectMyself>;
 }
 export interface ProjectList {
   text: string;
@@ -47,6 +48,15 @@ export interface BiddingObject {
   unit: string;
   unitDesc: string;
   workPeriod: number;
+  countdown: {
+    isTimeout: boolean;
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    minute: number;
+    second: number;
+  }
 }
 export interface BiddingObjectMyself {
   biddingHeadId?: string;
@@ -84,6 +94,7 @@ const state: State = {
       projectIndex: 0,
       projectList: [],
       provinceCityCountry: [],
+      setTimeInterval: 0,
       list: [
         // {
         //   "address": "",
@@ -116,6 +127,7 @@ const state: State = {
       projectIndex: 0,
       projectList: [],
       provinceCityCountry: [],
+      setTimeInterval: 0,
       list: [
         // {
         //   "address": "",

@@ -78,15 +78,15 @@ interface TechnologyTypes {
 
 // 倒计时
 interface CountdownTypes {
-  finishTime: string;
+  finishTime?: string;
   remainSeconds: number;
-  startTime: string;
-  state: number;
+  startTime?: string;
+  state?: number;
   isTimeout: boolean;
   hour: number;
   minute: number;
   second: number;
-  setTimeInterval: number;
+  setTimeInterval?: number;
 }
 
 // 产品详情

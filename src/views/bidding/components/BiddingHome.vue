@@ -168,9 +168,13 @@
                     <span class="item-text">竞价交期：</span>
                     <span class="item-text">{{ a.workPeriod || 0 }}天</span>
                   </div>
-                  <div class="item-flex">
-                    <span class="item-text">倒计时：</span>
-                    <span class="item-text item-text-red">{{ a.workPeriod || 0 }}天</span>
+                  <div class="item-flex" v-if="a.countdown">
+                    <!-- <span class="item-text">倒计时：</span> -->
+                    <span class="item-text item-text-red" v-if="a.countdown.isTimeout">已超时</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.day">{{ a.countdown.day || 0 }}天</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.hour || 0 }}:</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.minute || 0 }}:</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.second || 0 }}</span>
                   </div>
                 </div>
               </div>
@@ -313,6 +317,9 @@ export default class BiddingHome extends Vue {
   public joinBidding!: Function;
   @Action(ActionTypes.GetBiddingDetail)
   public getBiddingDetail!: Function;
+  @Action(ActionTypes.CaculateCountdown)
+  public caculateCountdown!: Function;
+  
 
   @Mutation(MutationTypes.UpdateMaterialAndColor)
   public updateMaterialAndColor!: Function;
@@ -325,6 +332,10 @@ export default class BiddingHome extends Vue {
 
   public created() {
     this.updateBiddingIndex(0);
+  }
+
+  public beforeDestroy() {
+    this.caculateCountdown(false);
   }
 
   public changeInput(value: string, key: string) {

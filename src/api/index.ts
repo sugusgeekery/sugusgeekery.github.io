@@ -7,6 +7,10 @@ export const GetOssfsToken = (data: object = {}): object => fetch({ url: "/sz/ap
 // 上传文件
 export const UploadForm = (data: object = {}): object => fetch({ url: "/supplier/common/uploadForm", headers: { "Content-Type": "multipart/form-data;" }, data });
 
+// 统一处理 step文件
+export const GetStpRender = (data: object = {}): object => fetch({ url: "/supplier/common/getStpRender", data });
+
+
 
 // 获取验证码
 export const GetVerificationCode = (params: object = {}): object => fetch({ url: "/supplier/oauth/sendCode", method: "GET", params });
