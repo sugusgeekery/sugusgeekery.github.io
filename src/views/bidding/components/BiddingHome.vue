@@ -177,9 +177,9 @@
                     <!-- <span class="item-text">倒计时：</span> -->
                     <span class="item-text item-text-red" v-if="a.countdown.isTimeout">已超时</span>
                     <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.day">{{ a.countdown.day || 0 }}天</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.hour">{{ a.countdown.hour || 0 }}:</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.minute">{{ a.countdown.minute || 0 }}:</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.second">{{ a.countdown.second || 0 }}</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.hour || 0 }}:</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.minute || 0 }}:</span>
+                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.second || 0 }}</span>
                   </div>
                 </div>
               </div>

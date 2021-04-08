@@ -75,10 +75,11 @@
             <div
               class="swiper-slide"
               v-if="!a.state && initInfo.type === Supplier.Dfm  && a.canCommit"
-              @click="selectFile(b)"
+              @click="index = b"
             >
               <div class="swiper-slide-box">
-                <div class="swiper-slide-button">+图片</div>
+                <div class="swiper-slide-button" @click="selectFile(b)">上传本地图片</div>
+                <div class="swiper-slide-button" @paste="handlePaste">ctrl+v粘贴图片</div>
               </div>
             </div>
           </div>
@@ -538,8 +539,11 @@ import {
   ReportList
 } from "@/store/modules/order/modules/report/state";
 import { ActionTypes } from "@/store/modules/order/modules/report/actions";
+import { MutationTypes } from "@/store/modules/order/modules/report/mutations";
 
 import { BASE_IMAGE_URL } from "@/config";
+import Upload from "@/api/upload";
+import { Message } from "element-ui";
 
 // import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import Swiper from "swiper";
@@ -570,7 +574,7 @@ export default class ReportView extends Vue {
   @State("initInfo")
   public initInfo!: InitInfo;
   @State("reportList")
-  public reportList!: Array<ReportList>;
+  public reportList!: any | Array<ReportList>;
   @State("timestamp")
   public timestamp!: number;
 
@@ -587,9 +591,15 @@ export default class ReportView extends Vue {
   @Action(ActionTypes.DeleteReportFile)
   public deleteReportFile!: Function;
 
+  @Mutation(MutationTypes.UpdateReportList)
+  public updateReportList!: Function;
+
   public async created() {
     await this.getDfmReportList();
     this.initSwiper();
+  }
+  public mounted() {
+    document.addEventListener("paste", this.handlePaste);
   }
 
   public index = -1;
@@ -598,14 +608,50 @@ export default class ReportView extends Vue {
     const dom: any = document.querySelector("#file");
     dom.click();
   }
-  public uploadFile(e: any) {
+  public async uploadFile(e: any) {
     const files = e.target.files;
-    let len = files.length;
-    while (len > 0) {
-      this.uploadForm({ file: files[files.length - len], index: this.index });
-      len--;
+    const fileList: any = await Upload({ files });
+    for (const v of fileList) {
+      this.updateReport(v);
     }
     e.target.value = null;
+  }
+  public async handlePaste(event: any) {
+    if (this.index === -1) {
+      Message.error("请选择你需要粘贴的地方");
+      return;
+    }
+    const items = (event.clipboardData || (window as any).clipboardData).items;
+    //去除粘贴到div事件
+    event.preventDefault();
+    event.returnValue = false;
+    let file = null
+    if (!items || items.length === 0) {
+      this.$message.error('当前不支持本地图片上传')
+      return
+    }
+    // 搜索剪切板items
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.includes('image')) {
+        file = items[i].getAsFile()
+        break
+      }
+    }
+    if (!file) {
+      return
+    }
+    const fileList: any = await Upload({ files: [file]});
+    for (const v of fileList) {
+      this.updateReport(v);
+    }
+  }
+
+  public updateReport(file: any) {
+    const { reportList, index } = this;
+    const { fileList = [] } = reportList[index] || {};
+    const { filePath, fileName, id } = file || {};
+    reportList[index].fileList = [...(fileList || []), { filePath, fileName, fileId: id }];
+    this.updateReportList(reportList);
   }
 
   public isShowSwiper: boolean = false;
@@ -775,9 +821,15 @@ export default class ReportView extends Vue {
             background $color-bg-blue-white
             color $color-text-red
             cursor pointer
+        &-buttons
+          display flex
+          justify-content center
+          align-items center
         &-button
           color $color-text-blue
           font-size 16px
+          padding 5px
+          border solid 1px $color-bd-blue
           // background $color-bg-white
       .swiper-button-prev,
       .swiper-button-next

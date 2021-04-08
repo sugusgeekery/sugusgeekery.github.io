@@ -456,6 +456,10 @@ export default class BiddingDetail extends Vue {
     justify-content center
     align-items center
   &-wrapper
+    // position absolute
+    // top 50%
+    // left 50%
+    // transform translate(-50%, -50%)
     background $color-bg-white
   &-header
     display flex

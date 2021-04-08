@@ -1,5 +1,5 @@
 <template>
-  <div class="model-container" v-show="data.isShow">
+  <div class="model-container" v-dialogDrag v-show="data.isShow">
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
@@ -98,10 +98,14 @@ export default class MaterialAndColorComponent extends Vue {
     height 100%
     background rgba($color-bg-black, 0.3)
     z-index 999
-    display flex
-    justify-content center
-    align-items center
+    // display flex
+    // justify-content center
+    // align-items center
   &-wrapper
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
     background $color-bg-white
   &-header
     display flex
@@ -109,6 +113,7 @@ export default class MaterialAndColorComponent extends Vue {
     align-items center
     padding 20px 20px 15px 20px
     background $color-bg
+    cursor none
   &-title
     display flex
     justify-content center

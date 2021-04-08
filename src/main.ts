@@ -13,6 +13,8 @@ Vue.use(ElementUI);
 import Contextmenu from "vue-contextmenujs";
 Vue.use(Contextmenu);
 
+import Directives from "@/directives";
+Vue.use(Directives);
 
 Vue.config.productionTip = false;
 

@@ -460,8 +460,8 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
-      const { id } = productInfos[productInfoIndex] || {};
-      const { success, message, data }: any = await GetArrangementScheme({ orderMouldId: id });
+      const { orderMouldId } = productInfos[productInfoIndex] || {};
+      const { success, message, data }: any = await GetArrangementScheme({ orderMouldId });
       if (success) {
         const temp = data || {};
         const { matchedPlan } = temp || {};
