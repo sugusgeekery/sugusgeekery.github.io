@@ -478,12 +478,12 @@ export default {
   },
   
   // 获取方案设计版本
-  async [ActionTypes.GetDesignVersion](store: Store) {
+  async [ActionTypes.GetDesignVersion](store: Store, stepId: string) {
     try {
       const { state, dispatch, commit } = store;
       const { initInfo } = state;
       const { mouldProduceId } = initInfo;
-      const { success, message, data }: any = await GetDesignVersion({ mouldProduceId });
+      const { success, message, data }: any = await GetDesignVersion({ mouldProduceId, stageStepId: stepId });
       if (success) {
         commit(MutationTypes.UpdateDesignVersion, { list: (data || []), isShow: true });
       } else {

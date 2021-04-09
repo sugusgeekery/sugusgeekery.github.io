@@ -8,9 +8,9 @@
       accept=".step, .stp, .stl, .prt, .pdf, image/*"
       @change="uploadFile"
     />
-    <div class="design-title">
+    <!-- <div class="design-title">
       <span class="design-title-text" @click="getDesignVersion()">查看版本信息</span>
-    </div>
+    </div> -->
     <div
       class="design-item"
       v-for="(a, b) in design.stepInfoList"
@@ -59,6 +59,7 @@
           >
             {{ a.approveStatus === 1 ? "验收" : a.approveStatus > 1 ? "查看" : "" }}{{ a.stepName }}
           </span>
+          <span class="design-item-content-button-text" v-if="a.stepId" @click="getDesignVersion(a.stepId)">查看版本记录</span>
           <span
             class="design-item-content-text-blue design-item-content-text-pointer"
             v-if="a.fileName"
