@@ -20,7 +20,7 @@
             <div class="model-item-content">
               <div class="model-item-content-text">
                 <span class="model-item-content-text-gray" v-if="a.version">
-                  {{ a.version || "" }}
+                  版本：{{ a.version || "" }}
                 </span>
                 <span
                   class="model-item-content-text-gray model-item-content-text-pointer"
@@ -33,7 +33,7 @@
 
               <div
                 class="model-item-content-text"
-                v-for="(c, d) in a.approvalInfoList"
+                v-for="(c, d) in a.allApprovalInfoList"
                 :key="'_方案设计版本列表详情对应处理方_' + d"
               >
                 <span class="model-item-content-text-black" v-if="c.type == 1">
@@ -49,7 +49,7 @@
                   class="model-item-content-text-blue model-item-content-text-pointer"
                   v-if="c.opinion === 0"
                 >
-                  驳回理由：{{ c.cause }}
+                  驳回理由：{{ c.cause || "无" }}
                 </span>
                 <span
                   class="model-item-content-text-green"
@@ -57,9 +57,9 @@
                 >
                   验收通过
                 </span>
-                <span class="model-item-content-text-gray">{{
-                  c.approvalTime || ""
-                }}</span>
+                <span class="model-item-content-text-gray">
+                  时间：{{ c.approvalTime || "" }}
+                </span>
               </div>
               
             </div>
@@ -181,8 +181,6 @@ export default class DesignVersion extends Vue {
       &-text
         font-size 14px
         margin 15px 0
-        &-pointer
-          cursor pointer
         &-black
           color $color-text-black
           margin-right 20px
@@ -198,4 +196,7 @@ export default class DesignVersion extends Vue {
         &-gray
           color $color-text-gray
           margin-right 20px
+        &-pointer
+          cursor pointer
+          color $color-text-blue
 </style>

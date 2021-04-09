@@ -485,7 +485,8 @@ export default {
       const { mouldProduceId } = initInfo;
       const { success, message, data }: any = await GetDesignVersion({ mouldProduceId, stageStepId: stepId });
       if (success) {
-        commit(MutationTypes.UpdateDesignVersion, { list: (data || []), isShow: true });
+        const list = data || [];
+        commit(MutationTypes.UpdateDesignVersion, { list, isShow: true });
       } else {
         Message.error(message);
       }

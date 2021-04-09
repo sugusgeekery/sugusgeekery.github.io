@@ -41,7 +41,323 @@ const state: State = {
   },
   designVersion: {
     isShow: false,
-    list: []
+    list: [
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdfsf",
+      //       "cause": "sdf",
+      //       "filePath": "sdf",
+      //       "opinion": 1,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "fffff",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdfsf",
+      //       "cause": "sdf",
+      //       "filePath": "sdf",
+      //       "opinion": 1,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "fffff",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdfsf",
+      //       "cause": "sdf",
+      //       "filePath": "sdf",
+      //       "opinion": 1,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "fffff",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdfsf",
+      //       "cause": "sdf",
+      //       "filePath": "sdf",
+      //       "opinion": 1,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "fffff",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdfsf",
+      //       "cause": "sdf",
+      //       "filePath": "sdf",
+      //       "opinion": 1,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "fffff",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdfsf",
+      //       "cause": "sdf",
+      //       "filePath": "sdf",
+      //       "opinion": 1,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "fffff",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdfsf",
+      //       "cause": "sdf",
+      //       "filePath": "sdf",
+      //       "opinion": 1,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "fffff",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdfsf",
+      //       "cause": "sdf",
+      //       "filePath": "sdf",
+      //       "opinion": 1,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "fffff",
+      //   "version": 1
+      // },
+      // {
+      //   "allApprovalInfoList": [
+      //     {
+      //       "approvalTime": "sdf",
+      //       "cause": "",
+      //       "filePath": "sf",
+      //       "opinion": 0,
+      //       "opinionDesc": "sdf",
+      //       "type": 1,
+      //       "version": 1
+      //     }
+      //   ],
+      //   "filePath": "sfdsf",
+      //   "version": 1
+      // },
+    ]
   },
 };
 
