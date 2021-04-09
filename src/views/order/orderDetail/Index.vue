@@ -11,7 +11,7 @@
             <div
               class="nav-item"
               v-for="(a, b) in navigationList"
-              :key="a.text + '_DFM供应商导航_' + b"
+              :key="a.text + '_供应商导航_' + b"
             >
               <div
                 class="nav-item-text"

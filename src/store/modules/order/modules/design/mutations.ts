@@ -5,6 +5,7 @@ export enum MutationTypes {
   UpdateDesign = "UpdateDesign",
   UpdateBOMTable = "UpdateBOMTable",
   UpdateBOMImageInfo = "UpdateBOMImageInfo",
+  UpdateDesignVersion = "UpdateDesignVersion",
 }
 
 export default {
@@ -53,6 +54,18 @@ export default {
         temp[key] = params[key];
       }
       state.BOMImageInfo = Object.assign(BOMImageInfo, temp);
+    })(state, params, temp);
+  },
+
+  // 更新方案设计记录
+  [MutationTypes.UpdateDesignVersion](state: State, params: DesignVersionTypes) {
+    const { designVersion } = state;
+    const temp: DesignVersionTypes = designVersion;
+    (function<T>(state: State, params: T, temp: T) {
+      for (const key in params) {
+        temp[key] = params[key];
+      }
+      state.designVersion = Object.assign(designVersion, temp);
     })(state, params, temp);
   },
 }

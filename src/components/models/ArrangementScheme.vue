@@ -101,8 +101,8 @@ export default class ArrangementScheme extends Vue {
     transform translate(-50%, -50%)
     max-width 90%
     max-height 90%
-    min-width 80%
-    min-height 80%
+    min-width 50%
+    min-height 50%
     background $color-bg-white
     display flex
     flex-direction column

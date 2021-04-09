@@ -106,6 +106,10 @@ export default class MaterialAndColorComponent extends Vue {
     top 50%
     left 50%
     transform translate(-50%, -50%)
+    max-width 90%
+    max-height 90%
+    min-width 30%
+    min-height 30%
     background $color-bg-white
   &-header
     display flex
@@ -113,7 +117,6 @@ export default class MaterialAndColorComponent extends Vue {
     align-items center
     padding 20px 20px 15px 20px
     background $color-bg
-    cursor none
   &-title
     display flex
     justify-content center

@@ -103,3 +103,24 @@ interface ProductInfoTypes {
   surfaceTreatment: string;
   fileUrl: string;
 }
+
+
+// 方案设计版本
+interface DesignVersionTypes {
+  isShow: boolean;
+  list: Array<{
+    allApprovalInfoList: Array<
+      {
+        approvalTime: string;
+        cause: string;
+        filePath: string;
+        opinion: number;
+        opinionDesc: string;
+        type: number;
+        version: number;
+      }
+    >;
+    filePath: string;
+    version: number;
+  }>;
+}

@@ -33,4 +33,7 @@ export const ImportBomImage = (data: any = {}): object => fetch({ url: `/supplie
 // 验收BOM零件图纸
 export const ApprovalBomImage = (data: any = {}): object => fetch({ url: `/supplier/planDesign/bomDesign/approval`, data });
 
+// 获取方案设计记录
+export const GetDesignVersion = (params: any = {}): object => fetch({ url: `/supplier/planDesign/getVersionList`, method: "GET", params });
+
 

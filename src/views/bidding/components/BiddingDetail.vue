@@ -1,5 +1,5 @@
 <template>
-  <div class="model-container" :data="biddingDetail.isShow" v-show="biddingDetail.isShow">
+  <div class="model-container" v-dialogDrag :data="biddingDetail.isShow" v-show="biddingDetail.isShow">
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
@@ -456,10 +456,14 @@ export default class BiddingDetail extends Vue {
     justify-content center
     align-items center
   &-wrapper
-    // position absolute
-    // top 50%
-    // left 50%
-    // transform translate(-50%, -50%)
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
+    max-width 90%
+    max-height 90%
+    min-width 60%
+    min-height 50%
     background $color-bg-white
   &-header
     display flex

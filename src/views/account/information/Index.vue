@@ -436,80 +436,127 @@ export default class InformationView extends Vue {
   }
 
   public changeUserInfoInput(value: string, key: string) {
-    if (key === "phoneNo") {
-      validate[ValidateTypes.ValidatePhone]({
-        value,
-        success: ({ value }: ValidateSuccessParams) => {
-          this.updateUserInfo({ [key]: value });
-        },
-        failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
-            Message.error(message);
-            this.updateUserInfo({ [key]: "" });
+    const obj = {
+      phoneNo: ValidateTypes.ValidatePhone,
+      telephoneNo: ValidateTypes.ValidateTelephone,
+      email: ValidateTypes.ValidateEmail
+    };
+    for (const [a, b] of Object.entries(obj)) {
+      if (a === key) {
+        validate[b]({
+          value,
+          success: ({ value }: ValidateSuccessParams) => {
+            this.updateUserInfo({ [key]: value });
+          },
+          failed: ({ value, message }: ValidateFailedParams) => {
+            if (value) {
+              Message.error(message);
+              this.updateUserInfo({ [key]: "" });
+            }
           }
-        }
-      });
-    } else if (key === "telephoneNo") {
-      validate[ValidateTypes.ValidateTelephone]({
-        value,
-        success: ({ value }: ValidateSuccessParams) => {
-          this.updateUserInfo({ [key]: value });
-        },
-        failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
-            Message.error(message);
-            this.updateUserInfo({ [key]: "" });
-          }
-        }
-      });
-    } else if (key === "email") {
-      validate[ValidateTypes.ValidateEmail]({
-        value,
-        success: ({ value }: ValidateSuccessParams) => {
-          this.updateUserInfo({ [key]: value });
-        },
-        failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
-            Message.error(message);
-            this.updateUserInfo({ [key]: "" });
-          }
-        }
-      });
-    } else {
-      this.updateUserInfo({ [key]: value });
+        });
+        return;
+      }
     }
+    this.updateUserInfo({ [key]: value });
+
+    // if (key === "phoneNo") {
+    //   validate[ValidateTypes.ValidatePhone]({
+    //     value,
+    //     success: ({ value }: ValidateSuccessParams) => {
+    //       this.updateUserInfo({ [key]: value });
+    //     },
+    //     failed: ({ value, message }: ValidateFailedParams) => {
+    //       if (value) {
+    //         Message.error(message);
+    //         this.updateUserInfo({ [key]: "" });
+    //       }
+    //     }
+    //   });
+    // } else if (key === "telephoneNo") {
+    //   validate[ValidateTypes.ValidateTelephone]({
+    //     value,
+    //     success: ({ value }: ValidateSuccessParams) => {
+    //       this.updateUserInfo({ [key]: value });
+    //     },
+    //     failed: ({ value, message }: ValidateFailedParams) => {
+    //       if (value) {
+    //         Message.error(message);
+    //         this.updateUserInfo({ [key]: "" });
+    //       }
+    //     }
+    //   });
+    // } else if (key === "email") {
+    //   validate[ValidateTypes.ValidateEmail]({
+    //     value,
+    //     success: ({ value }: ValidateSuccessParams) => {
+    //       this.updateUserInfo({ [key]: value });
+    //     },
+    //     failed: ({ value, message }: ValidateFailedParams) => {
+    //       if (value) {
+    //         Message.error(message);
+    //         this.updateUserInfo({ [key]: "" });
+    //       }
+    //     }
+    //   });
+    // } else {
+    //   this.updateUserInfo({ [key]: value });
+    // }
   }
 
   public changeCompanyInfoInput(value: string, key: string) {
-    if (key === "companyPhoneNo") {
-      validate[ValidateTypes.ValidateTelephone]({
-        value,
-        success: ({ value }: ValidateSuccessParams) => {
-          this.updateCompanyInfo({ [key]: value });
-        },
-        failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
-            Message.error(message);
-            this.updateCompanyInfo({ [key]: "" });
+    const obj = {
+      companyPhoneNo: ValidateTypes.ValidateTelephone,
+      officialWebsite: ValidateTypes.ValidateWebsite
+    };
+    for (const [a, b] of Object.entries(obj)) {
+      if (a === key) {
+        validate[b]({
+          value,
+          success: ({ value }: ValidateSuccessParams) => {
+            this.updateCompanyInfo({ [key]: value });
+          },
+          failed: ({ value, message }: ValidateFailedParams) => {
+            if (value) {
+              Message.error(message);
+              this.updateCompanyInfo({ [key]: "" });
+            }
           }
-        }
-      });
-    } else if (key === "officialWebsite") {
-      validate[ValidateTypes.ValidateWebsite]({
-        value,
-        success: ({ value }: ValidateSuccessParams) => {
-          this.updateCompanyInfo({ [key]: value });
-        },
-        failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
-            Message.error(message);
-            this.updateCompanyInfo({ [key]: "" });
-          }
-        }
-      });
-    } else {
-      this.updateCompanyInfo({ [key]: value });
+        });
+        return;
+      }
     }
+    this.updateCompanyInfo({ [key]: value });
+
+    // if (key === "companyPhoneNo") {
+    //   validate[ValidateTypes.ValidateTelephone]({
+    //     value,
+    //     success: ({ value }: ValidateSuccessParams) => {
+    //       this.updateCompanyInfo({ [key]: value });
+    //     },
+    //     failed: ({ value, message }: ValidateFailedParams) => {
+    //       if (value) {
+    //         Message.error(message);
+    //         this.updateCompanyInfo({ [key]: "" });
+    //       }
+    //     }
+    //   });
+    // } else if (key === "officialWebsite") {
+    //   validate[ValidateTypes.ValidateWebsite]({
+    //     value,
+    //     success: ({ value }: ValidateSuccessParams) => {
+    //       this.updateCompanyInfo({ [key]: value });
+    //     },
+    //     failed: ({ value, message }: ValidateFailedParams) => {
+    //       if (value) {
+    //         Message.error(message);
+    //         this.updateCompanyInfo({ [key]: "" });
+    //       }
+    //     }
+    //   });
+    // } else {
+    //   this.updateCompanyInfo({ [key]: value });
+    // }
   }
 
   public updateDate(e: any) {

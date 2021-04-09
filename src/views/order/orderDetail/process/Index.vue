@@ -29,12 +29,12 @@
           ></div>
         </div>
         <div class="item-content">
-          <div
+          <!-- <div
             class="item-content-text"
             v-if="initInfo.type === Supplier.Injection"
           >
             20201112
-          </div>
+          </div> -->
           <div class="item-content-title">{{ a.stepName }}</div>
         </div>
         <div class="item-buttons" v-if="a.isNext === 1">
@@ -87,12 +87,12 @@
           ></div>
         </div>
         <div class="item-content">
-          <div
+          <!-- <div
             class="item-content-text"
             v-if="initInfo.type === Supplier.Injection"
           >
             20201112
-          </div>
+          </div> -->
           <div class="item-content-title">{{ a.stepName }}</div>
         </div>
         <div class="item-buttons" v-if="a.isNext === 1">

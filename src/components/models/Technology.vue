@@ -125,6 +125,10 @@ export default class Technology extends Vue {
     top 50%
     left 50%
     transform translate(-50%, -50%)
+    max-width 90%
+    max-height 90%
+    min-width 30%
+    min-height 30%
     background $color-bg-white
   &-header
     display flex

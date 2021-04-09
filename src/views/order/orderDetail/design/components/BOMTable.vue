@@ -1,5 +1,5 @@
 <template>
-  <div class="model-container" v-show="BOMTable.isShow">
+  <div class="model-container" v-dialogDrag v-show="BOMTable.isShow">
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
@@ -186,10 +186,14 @@ export default class BOMTable extends Vue {
     height 100%
     background rgba($color-bg-black, 0.3)
     z-index 999
-    display flex
-    justify-content center
-    align-items center
+    // display flex
+    // justify-content center
+    // align-items center
   &-wrapper
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
     max-width 90%
     max-height 90%
     min-width 80%

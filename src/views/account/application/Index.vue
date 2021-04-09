@@ -372,48 +372,71 @@ export default class ApplicationView extends Vue {
   // }
 
   public changeCompanyQualifyInput(value: string, key: string) {
-    if (key === "creditCode") {
-      validate[ValidateTypes.ValidateCreditCode]({
-        value,
-        success: ({ value }: ValidateSuccessParams) => {
-          this.updateCompanyQualify({ [key]: value });
-        },
-        failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
-            Message.error(message);
-            this.updateCompanyQualify({ [key]: "" });
+    const obj = {
+      creditCode: ValidateTypes.ValidateCreditCode,
+      operIdcardNo: ValidateTypes.ValidateIdentityCard,
+      operPhoneNo: ValidateTypes.ValidatePhone
+    };
+    for (const [a, b] of Object.entries(obj)) {
+      if (a === key) {
+        validate[b]({
+          value,
+          success: ({ value }: ValidateSuccessParams) => {
+            this.updateCompanyQualify({ [key]: value });
+          },
+          failed: ({ value, message }: ValidateFailedParams) => {
+            if (value) {
+              Message.error(message);
+              this.updateCompanyQualify({ [key]: "" });
+            }
           }
-        }
-      });
-    } else if (key === "operIdcardNo") {
-      validate[ValidateTypes.ValidateIdentityCard]({
-        value,
-        success: ({ value }: ValidateSuccessParams) => {
-          this.updateCompanyQualify({ [key]: value });
-        },
-        failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
-            Message.error(message);
-            this.updateCompanyQualify({ [key]: "" });
-          }
-        }
-      });
-    } else if (key === "operPhoneNo") {
-      validate[ValidateTypes.ValidatePhone]({
-        value,
-        success: ({ value }: ValidateSuccessParams) => {
-          this.updateCompanyQualify({ [key]: value });
-        },
-        failed: ({ value, message }: ValidateFailedParams) => {
-          if (value) {
-            Message.error(message);
-            this.updateCompanyQualify({ [key]: "" });
-          }
-        }
-      });
-    } else {
-      this.updateCompanyQualify({ [key]: value });
+        });
+        return;
+      }
     }
+    this.updateCompanyQualify({ [key]: value });
+    // if (key === "creditCode") {
+    //   validate[ValidateTypes.ValidateCreditCode]({
+    //     value,
+    //     success: ({ value }: ValidateSuccessParams) => {
+    //       this.updateCompanyQualify({ [key]: value });
+    //     },
+    //     failed: ({ value, message }: ValidateFailedParams) => {
+    //       if (value) {
+    //         Message.error(message);
+    //         this.updateCompanyQualify({ [key]: "" });
+    //       }
+    //     }
+    //   });
+    // } else if (key === "operIdcardNo") {
+    //   validate[ValidateTypes.ValidateIdentityCard]({
+    //     value,
+    //     success: ({ value }: ValidateSuccessParams) => {
+    //       this.updateCompanyQualify({ [key]: value });
+    //     },
+    //     failed: ({ value, message }: ValidateFailedParams) => {
+    //       if (value) {
+    //         Message.error(message);
+    //         this.updateCompanyQualify({ [key]: "" });
+    //       }
+    //     }
+    //   });
+    // } else if (key === "operPhoneNo") {
+    //   validate[ValidateTypes.ValidatePhone]({
+    //     value,
+    //     success: ({ value }: ValidateSuccessParams) => {
+    //       this.updateCompanyQualify({ [key]: value });
+    //     },
+    //     failed: ({ value, message }: ValidateFailedParams) => {
+    //       if (value) {
+    //         Message.error(message);
+    //         this.updateCompanyQualify({ [key]: "" });
+    //       }
+    //     }
+    //   });
+    // } else {
+    //   this.updateCompanyQualify({ [key]: value });
+    // }
   }
 
   public created() {

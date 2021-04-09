@@ -9,6 +9,7 @@ import { Dispatch, Commit, GetterTree } from "vuex";
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
 import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { BASE_IMAGE_URL } from "@/config";
 
 import {
   UploadForm
@@ -25,6 +26,7 @@ import {
   ApprovalBom,
   ImportBomImage,
   ApprovalBomImage,
+  GetDesignVersion
 } from "@/api/order/design";
 
 interface Store {
@@ -57,7 +59,8 @@ export enum ActionTypes {
   CheckBOMImage = "CheckBOMImage",
   CheckBOMImageAll = "CheckBOMImageAll",
   ImportBomImage = "ImportBomImage",
-  ApprovalBomImage = "ApprovalBomImage"
+  ApprovalBomImage = "ApprovalBomImage",
+  GetDesignVersion = "GetDesignVersion",
 }
 
 export default {
@@ -91,7 +94,11 @@ export default {
         const { stepInfoList = [] } = data || {};
         const stepInfoListTemp = (stepInfoList => {
           for (const [a, b] of stepInfoList.entries()) {
-            const { approvalInfoList = [] } = b;
+            const { approvalInfoList = [], filePath } = b;
+            stepInfoList[a].filePath = filePath ? BASE_IMAGE_URL + filePath : filePath;
+            stepInfoList[a].fileList = [];
+            stepInfoList[a].opinion = 1;
+            stepInfoList[a].cause = "";
             // if (approvalInfoList.length) {
               switch(type) {
                 case Supplier.Dfm:
@@ -110,6 +117,7 @@ export default {
           return stepInfoList;
         })(stepInfoList);
         commit(MutationTypes.UpdateDesign, { stepInfoList: stepInfoListTemp });
+        return;
       } else {
         Message.error(message);
       }
@@ -119,13 +127,18 @@ export default {
   },
 
   // 上传3D图纸方案
-  async [ActionTypes.ImportDesign](store: Store, params: any) {
+  async [ActionTypes.ImportDesign](store: Store) {
     try {
       const { state, dispatch, commit } = store;
-      const { initInfo } = state;
+      const { initInfo, design } = state;
       const { mouldProduceId } = initInfo;
-      const { threeFacePlanFileId } = params || {};
-      const { success, message, data }: any = await ImportDesign({ mouldProduceId, threeFacePlanFileId });
+      const { stepInfoList } = design || {};
+      const { fileId } = stepInfoList[0] || {};
+      if (!fileId) {
+        Message.error("请上传3D图纸");
+        return;
+      }
+      const { success, message, data }: any = await ImportDesign({ mouldProduceId, threeFacePlanFileId: fileId });
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetStepDetail);
@@ -138,14 +151,22 @@ export default {
     }
   },
   // 通过或者驳回3D图纸
-  async [ActionTypes.ApprovalDesign](store: Store, params: any) {
+  async [ActionTypes.ApprovalDesign](store: Store) {
     const { state, dispatch, commit } = store;
-    const { opinion, role } = params || {};
-    const { initInfo } = state;
+    // const { opinion, role } = params || {};
+    const { initInfo, design } = state;
     const { mouldProduceId } = initInfo;
-    const fn = async(datas = {}) => {
+    const { stepInfoList } = design || {};
+    const { fileList, opinion, cause } = stepInfoList[0] || {};
+    const { fileId } = fileList[0] || {};
+    const role = Supplier.Machining === initInfo.type ? 1 : Supplier.Injection === initInfo.type ? 2 : 0
+    if (opinion === 0 && (!cause || !fileId)) {
+      Message.error("请输入驳回理由或上传驳回图片");
+      return;
+    }
+    // const fn = async(datas = {}) => {
       try {
-        const { success, message, data }: any = await ApprovalDesign(datas);
+        const { success, message, data }: any = await ApprovalDesign({ opinion, fileId, role, mouldProduceId, cause });
         if (success) {
           // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
           Message.success(message);
@@ -157,32 +178,32 @@ export default {
       } catch (e) {
         throw new Error(e);
       }
-    };
-    if (opinion === 0) {
-      MessageBox({
-        message: "驳回原因描述",
-        title: "温馨提示",
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        showClose: false,
-        showInput: true,
-        closeOnClickModal: false,
-        closeOnPressEscape: false,
-        center: true,
-        roundButton: false,
-        showConfirmButton: true,
-        showCancelButton: true
-      })
-        .then(({ action, value }: any = {}) => {
-          if (action === "confirm") {
-            const cause = value;
-            fn({ opinion, role, mouldProduceId, cause });
-          }
-        })
-        .catch(() => {});
-    } else {
-      fn({ opinion, role, mouldProduceId, cause: "" });
-    }
+    // };
+    // if (opinion === 0) {
+    //   MessageBox({
+    //     message: "驳回原因描述",
+    //     title: "温馨提示",
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     showClose: false,
+    //     showInput: true,
+    //     closeOnClickModal: false,
+    //     closeOnPressEscape: false,
+    //     center: true,
+    //     roundButton: false,
+    //     showConfirmButton: true,
+    //     showCancelButton: true
+    //   })
+    //     .then(({ action, value }: any = {}) => {
+    //       if (action === "confirm") {
+    //         const cause = value;
+    //         fn({ opinion, role, mouldProduceId, cause });
+    //       }
+    //     })
+    //     .catch(() => {});
+    // } else {
+    //   fn({ opinion, role, mouldProduceId, cause: "" });
+    // }
   },
 
   // 获取BOM表
@@ -454,6 +475,23 @@ export default {
       fn({ mouldProduceId, cause, mouldBomListIds, opinion });
     }
     
+  },
+  
+  // 获取方案设计版本
+  async [ActionTypes.GetDesignVersion](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { initInfo } = state;
+      const { mouldProduceId } = initInfo;
+      const { success, message, data }: any = await GetDesignVersion({ mouldProduceId });
+      if (success) {
+        commit(MutationTypes.UpdateDesignVersion, { list: (data || []), isShow: true });
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
   },
   
 }

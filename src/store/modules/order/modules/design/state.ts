@@ -4,6 +4,7 @@ export interface State {
   design: any | Design;
   BOMTable: any | BOMTable;
   BOMImageInfo: any | BOMImageInfo;
+  designVersion: DesignVersionTypes;
 };
 
 export interface InitInfo {};
@@ -13,7 +14,10 @@ export interface BOMImageInfo {};
 
 const state: State = {
   initInfo: {},
-  design: {},
+  design: {
+    stepInfoList: [],
+    fileList: [],
+  },
   BOMTable: {
     isShow: false,
     pageNum: 1,
@@ -34,6 +38,10 @@ const state: State = {
     bomDesignFiles: [],
     list: [],
     isEdit: false,
+  },
+  designVersion: {
+    isShow: false,
+    list: []
   },
 };
 
