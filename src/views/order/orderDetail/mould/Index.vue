@@ -5,7 +5,7 @@
     </div>
     <div
       class="list"
-      v-if="Supplier.Dfm === initInfo.type || Supplier.Design === initInfo.type"
+      v-if="(Supplier.Dfm === initInfo.type || Supplier.Design === initInfo.type) && mould.mouldProductList.length"
     >
       <div class="li li-bg">
         <div class="li-row">
@@ -37,7 +37,6 @@
         class="li"
         v-for="(a, b) in mould.mouldProductList"
         :key="b"
-        v-show="mould.mouldProductList.length"
       >
         <div class="li-text">
           <span class="li-text-black">产品：</span>

@@ -120,7 +120,13 @@
           <span class="design-item-content-button-text design-item-content-button-text-blue" @click="importDesign()">
             确定
           </span>
-          <el-image class="design-item-content-button-image" v-if="a.filePath" :src="a.filePath" :preview-src-list="[a.filePath]"></el-image>
+          <span
+            class="design-item-content-text-blue design-item-content-text-pointer"
+            v-if="a.fileName"
+          >
+            {{ a.fileName || "" }}
+          </span>
+          <!-- <el-image class="design-item-content-button-image" v-if="a.filePath" :src="a.filePath" :preview-src-list="[a.filePath]"></el-image> -->
         </div>
 
         <div class="design-item-content-button" v-if="(Supplier.Machining === initInfo.type || Supplier.Injection === initInfo.type) && a.approveStatus === 1 && b === 0 && a.isEdit">
