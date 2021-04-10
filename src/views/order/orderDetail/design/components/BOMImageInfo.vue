@@ -189,9 +189,9 @@
             驳回
           </div>
         </div>
-        <div class="model-buttons" v-else>
+        <!-- <div class="model-buttons" v-else>
           <div class="model-button model-button-blue" @click="updateBOMImageInfo({ isShow: false })">确定</div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
