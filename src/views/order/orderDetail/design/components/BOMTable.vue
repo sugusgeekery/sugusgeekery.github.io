@@ -4,6 +4,7 @@
       type="file"
       name="fileBom"
       id="fileBom"
+      hidden="hidden"
       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .step, .stp, .stl, .prt, .pdf"
       @change="uploadFiles"
     />
