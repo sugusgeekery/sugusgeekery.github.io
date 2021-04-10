@@ -112,7 +112,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetPrototype);
-        dispatch("order/GetRemainTime", null, { root: true });
+        dispatch("order/GetCountdown", null, { root: true });
       } else {
         Message.error(message);
       }

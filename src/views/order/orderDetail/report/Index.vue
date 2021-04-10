@@ -619,6 +619,7 @@ export default class ReportView extends Vue {
   public async handlePaste(event: any) {
     if (this.index === -1) {
       Message.error("请选择你需要粘贴的地方");
+      console.log(this.index);
       return;
     }
     const items = (event.clipboardData || (window as any).clipboardData).items;

@@ -142,7 +142,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetStepDetail);
-        dispatch("order/GetRemainTime", null, { root: true });
+        dispatch("order/GetCountdown", null, { root: true });
       } else {
         Message.error(message);
       }
@@ -171,7 +171,7 @@ export default {
           // commit(MutationTypes.UpdateBOMTable, { list: data || [], isShow: true });
           Message.success(message);
           dispatch(ActionTypes.GetStepDetail);
-          dispatch("order/GetRemainTime", null, { root: true });
+          dispatch("order/GetCountdown", null, { root: true });
         } else {
           Message.error(message);
         }
@@ -252,7 +252,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetBOMList);
-        dispatch("order/GetRemainTime", null, { root: true });
+        dispatch("order/GetCountdown", null, { root: true });
       } else {
         Message.error(message);
       }
@@ -274,7 +274,7 @@ export default {
           // dispatch(ActionTypes.GetBOMList);
           commit(MutationTypes.UpdateBOMTable, { isShow: false });
           dispatch(ActionTypes.GetStepDetail);
-          dispatch("order/GetRemainTime", null, { root: true });
+          dispatch("order/GetCountdown", null, { root: true });
         } else {
           Message.error(message);
         }
@@ -404,7 +404,7 @@ export default {
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetBOMImageInfo);
-        dispatch("order/GetRemainTime", null, { root: true });
+        dispatch("order/GetCountdown", null, { root: true });
       } else {
         Message.error(message);
       }
@@ -441,7 +441,7 @@ export default {
           // dispatch(ActionTypes.GetBOMImageInfo);
           commit(MutationTypes.UpdateBOMImageInfo, { isShow: false });
           dispatch(ActionTypes.GetStepDetail);
-          dispatch("order/GetRemainTime", null, { root: true });
+          dispatch("order/GetCountdown", null, { root: true });
         } else {
           Message.error(message);
         }

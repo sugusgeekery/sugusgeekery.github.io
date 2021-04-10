@@ -188,7 +188,7 @@ export default {
         } else if (type === 3) {
           dispatch(ActionTypes.GetInjectionSteps);
         }
-        dispatch("order/GetRemainTime", null, { root: true });
+        dispatch("order/GetCountdown", null, { root: true });
       } else {
         Message.error(message);
       }

@@ -1,5 +1,12 @@
 <template>
   <div class="model-container" v-dialogDrag v-show="BOMTable.isShow">
+    <input
+      type="file"
+      name="fileBom"
+      id="fileBom"
+      accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .step, .stp, .stl, .prt, .pdf"
+      @change="uploadFiles"
+    />
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
@@ -21,14 +28,6 @@
       <div class="model-body">
         <div class="model-row">
           <div class="model-flex" v-if="(Supplier.Design === initInfo.type) && BOMTable.isEdit">
-            <input
-              type="file"
-              name="file"
-              id="file"
-              hidden="hidden"
-              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .step, .stp, .stl, .prt, .pdf"
-              @change="uploadFile"
-            />
             <div class="model-button" @click="checkFile()">导入BOM表</div>
           </div>
           <div class="model-flex" v-else></div>
@@ -115,7 +114,7 @@ import downloadByUrl from "@/utils/downloadByUrl";
 
 import { Message, MessageBox } from "element-ui";
 
-import { UploadForm } from "@/api";
+import Upload from "@/api/upload";
 
 @Component({
   name: "BOMTable",
@@ -151,21 +150,16 @@ export default class BOMTable extends Vue {
   }
 
   public checkFile() {
-    const dom: any = document.querySelector("#file");
+    const dom: any = document.getElementById("fileBom");
     dom.click();
   }
-  public async uploadFile(e: any) {
+  public async uploadFiles(e: any) {
     try {
-      const file = e.target.files[0];
-      const formData = new FormData();
-      formData.append("files", file);
-      const { success, message, data }: any = await UploadForm(formData);
-      if (success) {
-        const { pics = [] } = data || {};
-        const { filePath = "", fileName, id } = pics[0];
+      const { files } = e.target;
+      const fileList: any = await Upload({ files });
+      for (const v of fileList) {
+        const { id, fileName, filePath } = v;
         this.importBom(id);
-      } else {
-        Message.error(message);
       }
       e.target.value = null;
     } catch (e) {
