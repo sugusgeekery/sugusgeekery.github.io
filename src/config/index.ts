@@ -37,8 +37,7 @@ const NODE_ENV: string = process.env.NODE_ENV;
 
 switch(NODE_ENV) {
   case "development":
-    // 开发环境 
-    // BASE_API_URL = "http://192.168.0.22:9090";
+    // 开发环境
     BASE_API_URL = "http://testsupplierapi.hotpick.com";
     BASE_IMAGE_URL = "http://testsupplierapi.hotpick.com/upload";
     WX_APPID = "wx483c7d15d7b94566";
@@ -53,8 +52,7 @@ switch(NODE_ENV) {
     `);
     break;
   case "tests":
-    // 测试环境 
-    // BASE_API_URL = "http://192.168.0.22:9090";
+    // 测试环境
     BASE_API_URL = "http://testsupplierapi.hotpick.com";
     BASE_IMAGE_URL = "http://testsupplierapi.hotpick.com/upload";
     WX_APPID = "wx483c7d15d7b94566";
@@ -68,7 +66,6 @@ switch(NODE_ENV) {
 
     `);
     break;
-  case "release":
   case "production":
     // 生产环境
     BASE_API_URL = "https://supplierapi.hotpick.com";
