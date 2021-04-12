@@ -51,8 +51,8 @@ switch(NODE_ENV) {
 
     `);
     break;
-  case "tests":
-    // 测试环境
+  case "release":
+    // 预发布环境
     BASE_API_URL = "http://testsupplierapi.hotpick.com";
     BASE_IMAGE_URL = "http://testsupplierapi.hotpick.com/upload";
     WX_APPID = "wx483c7d15d7b94566";
