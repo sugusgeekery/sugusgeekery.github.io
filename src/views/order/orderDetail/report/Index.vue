@@ -79,7 +79,7 @@
             >
               <div class="swiper-slide-box">
                 <div class="swiper-slide-button" @click="selectFile(b)">上传本地图片</div>
-                <div class="swiper-slide-button" @paste="handlePaste">ctrl+v粘贴图片</div>
+                <div class="swiper-slide-tip" @paste="handlePaste">ctrl+v粘贴图片</div>
               </div>
             </div>
           </div>
@@ -832,6 +832,11 @@ export default class ReportView extends Vue {
           padding 5px
           border solid 1px $color-bd-blue
           // background $color-bg-white
+        &-tip
+          position absolute
+          right 0
+          bottom 0
+          
       .swiper-button-prev,
       .swiper-button-next
         color $color-text-gray
