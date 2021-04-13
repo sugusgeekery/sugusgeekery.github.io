@@ -77,9 +77,12 @@
               v-if="!a.state && initInfo.type === Supplier.Dfm  && a.canCommit"
               @click="index = b"
             >
-              <div class="swiper-slide-box">
-                <div class="swiper-slide-button" @click="selectFile(b)">上传本地图片</div>
-                <div class="swiper-slide-tip" @paste="handlePaste">ctrl+v粘贴图片</div>
+              <div class="swiper-slide-box" :class="{'swiper-slide-box-active': index === b}" @paste="handlePaste">
+                <div class="swiper-slide-button" @click="selectFile(b)">+</div>
+                <div class="swiper-slide-tip">
+                  <div class="swiper-slide-tip-button">选中</div>
+                  <div class="swiper-slide-tip-text">（ctrl+v粘贴图片）</div>
+                </div>
               </div>
             </div>
           </div>
@@ -803,6 +806,8 @@ export default class ReportView extends Vue {
           -ms-flex-align center
           -webkit-align-items center
           align-items center
+          &-active
+            border solid 1px $color-bd-blue
         &-image
           width 100%
           object-fit contain
@@ -828,14 +833,24 @@ export default class ReportView extends Vue {
           align-items center
         &-button
           color $color-text-blue
-          font-size 16px
+          font-size 100px
           padding 5px
-          border solid 1px $color-bd-blue
+          cursor pointer
+          // border solid 1px $color-bd-blue
           // background $color-bg-white
         &-tip
           position absolute
           right 0
           bottom 0
+          text-align center
+          &-button
+            color $color-text-blue
+            font-size 16px
+            padding 5px
+          &-text
+            color $color-text-gray
+            font-size 12px
+            padding 5px
           
       .swiper-button-prev,
       .swiper-button-next
