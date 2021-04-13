@@ -249,14 +249,6 @@
                     <!-- {{ biddingDetail.isEdit ? "修改" : biddingDetail.biddingState === 1 ? "编辑" : "竞价" }} -->
                     {{ biddingDetail.biddingState !== 1 ? "竞价" : biddingDetail.isEdit ? "修改" :  "编辑" }}
                   </div>
-                  <div
-                    class="model-flex-button model-flex-button-blue"
-                    @click="removeBidding()"
-                    v-if="(biddingDetail.biddingIndex === 0 ||
-                        biddingDetail.biddingIndex === 1) && biddingDetail.biddingState === 1"
-                  >
-                    取消竞价
-                  </div>
                 </div>
               </div>
               <div class="model-flex-context">
@@ -311,6 +303,16 @@
                     {{ biddingDetail.joinBiddingInfo.workPeriod || 0 }}
                   </span>
                   <span>小时</span>
+                </div>
+                <div class="model-flex-buttons">
+                  <div
+                    class="model-flex-button model-flex-button-blue"
+                    @click="removeBidding()"
+                    v-if="(biddingDetail.biddingIndex === 0 ||
+                        biddingDetail.biddingIndex === 1) && biddingDetail.biddingState === 1"
+                  >
+                    取消竞价
+                  </div>
                 </div>
               </div>
             </div>
@@ -462,9 +464,10 @@ export default class BiddingDetail extends Vue {
     transform translate(-50%, -50%)
     max-width 90%
     max-height 90%
-    min-width 60%
-    min-height 50%
+    min-width 1100px
+    min-height 400px
     background $color-bg-white
+    overflow auto
   &-header
     display flex
     justify-content space-between

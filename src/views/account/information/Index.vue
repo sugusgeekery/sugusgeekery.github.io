@@ -115,6 +115,7 @@
                     type="text"
                     placeholder="请输入手机号码"
                     :value="userInfo.phoneNo"
+                    readonly
                     @change="
                       changeUserInfoInput($event.target.value, 'phoneNo')
                     "
