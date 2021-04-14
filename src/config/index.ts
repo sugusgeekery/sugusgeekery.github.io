@@ -2,7 +2,7 @@
 const APPLICATION_NAME = "supplier";
 
 // 项目版本号
-const APPLICATION_VERSION = "0.1.1";
+const APPLICATION_VERSION = "2.1.0";
 
 // 项目更新信息
 const APPLICATION_UPDATE_INFORMATION = `
@@ -38,10 +38,10 @@ const NODE_ENV: string = process.env.NODE_ENV;
 switch(NODE_ENV) {
   case "development":
     // 开发环境
-    BASE_API_URL = "http://testsupplierapi.hotpick.com";
-    BASE_IMAGE_URL = "http://testsupplierapi.hotpick.com/upload";
+    BASE_API_URL = "http://developsupplierapi.hotpick.com";
+    BASE_IMAGE_URL = "http://developsupplierapi.hotpick.com/upload";
     WX_APPID = "wx483c7d15d7b94566";
-    WX_REDIRECT_URL = "http://testsupplier.hotpick.com";
+    WX_REDIRECT_URL = "http://developsupplier.hotpick.com";
     EVER_CRAFT.AppID = "6103ec4a2189";
     EVER_CRAFT.AppKey = "cc239b39cd09383aba9b1310db8cf334";
     console.log(`

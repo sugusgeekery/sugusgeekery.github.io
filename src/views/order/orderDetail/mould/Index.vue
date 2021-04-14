@@ -5,7 +5,7 @@
     </div>
     <div
       class="list"
-      v-if="(Supplier.Dfm === initInfo.type || Supplier.Design === initInfo.type) && mould.mouldProductList.length"
+      v-if="(Supplier.Dfm === initInfo.type || Supplier.Design === initInfo.type) && mould.mouldProductList && mould.mouldProductList.length"
     >
       <div class="li li-bg">
         <div class="li-row">
@@ -333,7 +333,7 @@ export default class MouldView extends Vue {
   public initInfo!: any | InitInfo;
 
   @State("mould")
-  public mould!: Mould;
+  public mould!: any | Mould;
   @State("repairMouldIndex")
   public repairMouldIndex!: number;
   @State("repairMouldList")

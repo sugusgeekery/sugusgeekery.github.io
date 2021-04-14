@@ -15,7 +15,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.initInfo = Object.assign(initInfo, temp);
+      state.initInfo = Object.assign({}, initInfo, temp);
     })(state, params, temp);
   },
 

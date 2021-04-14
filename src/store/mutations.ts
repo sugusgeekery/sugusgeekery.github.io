@@ -23,7 +23,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.initInfo = Object.assign(initInfo, temp);
+      state.initInfo = Object.assign({}, initInfo, temp);
     })(state, params, temp);
   },
 
@@ -40,7 +40,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.loginInfo = Object.assign(loginInfo, temp);
+      state.loginInfo = Object.assign({}, loginInfo, temp);
     })(state, params, temp);
   },
   // 更新账号信息
@@ -51,7 +51,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.accountInfo = Object.assign(accountInfo, temp);
+      state.accountInfo = Object.assign({}, accountInfo, temp);
     })(state, params, temp);
   },
   // 更新验证码倒计时状态

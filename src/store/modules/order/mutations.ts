@@ -18,7 +18,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.initInfo = Object.assign(initInfo, temp);
+      state.initInfo = Object.assign({}, initInfo, temp);
     })(state, params, temp);
   },
 
@@ -30,7 +30,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.advantage = Object.assign(advantage, temp);
+      state.advantage = Object.assign({}, advantage, temp);
     })(state, params, temp);
   },
   // 更新订单数据
@@ -41,7 +41,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.order = Object.assign(order, temp);
+      state.order = Object.assign({}, order, temp);
     })(state, params, temp);
   },
 
@@ -62,7 +62,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.countdown = Object.assign(countdown, temp);
+      state.countdown = Object.assign({}, countdown, temp);
     })(state, params, temp);
   },
 }

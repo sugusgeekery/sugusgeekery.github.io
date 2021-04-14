@@ -17,7 +17,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.initInfo = Object.assign(initInfo, temp);
+      state.initInfo = Object.assign({}, initInfo, temp);
     })(state, params, temp);
   },
 
@@ -29,7 +29,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.design = Object.assign(design, temp);
+      state.design = Object.assign({}, design, temp);
     })(state, params, temp);
   },
 
@@ -41,7 +41,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.BOMTable = Object.assign(BOMTable, temp);
+      state.BOMTable = Object.assign({}, BOMTable, temp);
     })(state, params, temp);
   },
 
@@ -53,7 +53,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.BOMImageInfo = Object.assign(BOMImageInfo, temp);
+      state.BOMImageInfo = Object.assign({}, BOMImageInfo, temp);
     })(state, params, temp);
   },
 
@@ -65,7 +65,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.designVersion = Object.assign(designVersion, temp);
+      state.designVersion = Object.assign({}, designVersion, temp);
     })(state, params, temp);
   },
 }

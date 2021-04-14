@@ -17,7 +17,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.initInfo = Object.assign(initInfo, temp);
+      state.initInfo = Object.assign({}, initInfo, temp);
     })(state, params, temp);
   },
 
@@ -29,7 +29,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.mould = Object.assign(mould, temp);
+      state.mould = Object.assign({}, mould, temp);
     })(state, params, temp);
   },
 
@@ -50,7 +50,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.arrangementScheme = Object.assign(arrangementScheme, temp);
+      state.arrangementScheme = Object.assign({}, arrangementScheme, temp);
     })(state, params, temp);
   },
 }
