@@ -52,7 +52,7 @@ switch(NODE_ENV) {
     `);
     break;
   case "release":
-    // 预发布环境
+    // 预发布（测试）环境
     BASE_API_URL = "http://testsupplierapi.hotpick.com";
     BASE_IMAGE_URL = "http://testsupplierapi.hotpick.com/upload";
     WX_APPID = "wx483c7d15d7b94566";
@@ -60,7 +60,7 @@ switch(NODE_ENV) {
     EVER_CRAFT.AppID = "a0d328dd6c4b";
     EVER_CRAFT.AppKey = "6b522e0af482b7fa1911764b693172cb";
     console.log(`
-        项目环境：测试环境（${NODE_ENV}）；
+        项目环境：预发布（测试）环境（${NODE_ENV}）；
         项目版本：${APPLICATION_VERSION}；
         项目更新内容：${APPLICATION_UPDATE_INFORMATION}；
 
