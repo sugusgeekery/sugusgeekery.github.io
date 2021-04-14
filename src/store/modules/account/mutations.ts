@@ -18,7 +18,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.initInfo = Object.assign(initInfo, temp);
+      state.initInfo = Object.assign({}, initInfo, temp);
     })(state, params, temp);
   },
   // 更新省市区列表
@@ -33,7 +33,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.userInfo = Object.assign(userInfo, temp);
+      state.userInfo = Object.assign({}, userInfo, temp);
     })(state, params, temp);
   },
   // 更新公司信息
@@ -44,7 +44,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.companyInfo = Object.assign(companyInfo, temp);
+      state.companyInfo = Object.assign({}, companyInfo, temp);
     })(state, params, temp);
   },
   // 更新用户资质信息
@@ -55,7 +55,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.userQualify = Object.assign(userQualify, temp);
+      state.userQualify = Object.assign({}, userQualify, temp);
     })(state, params, temp);
   },
   // 更新公司资质信息
@@ -66,7 +66,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.companyQualify = Object.assign(companyQualify, temp);
+      state.companyQualify = Object.assign({}, companyQualify, temp);
     })(state, params, temp);
   },
 }

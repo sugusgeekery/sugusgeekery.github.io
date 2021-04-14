@@ -20,7 +20,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.initInfo = Object.assign(initInfo, temp);
+      state.initInfo = Object.assign({}, initInfo, temp);
     })(state, params, temp);
   },
   // 更新竞价导航下标
@@ -39,7 +39,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.biddingDetail = Object.assign(biddingDetail, temp);
+      state.biddingDetail = Object.assign({}, biddingDetail, temp);
     })(state, params, temp);
   },
  
@@ -51,7 +51,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.materialAndColor = Object.assign(materialAndColor, temp);
+      state.materialAndColor = Object.assign({}, materialAndColor, temp);
     })(state, params, temp);
   },
   // 更新竞价单二次工艺
@@ -62,7 +62,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.technology = Object.assign(technology, temp);
+      state.technology = Object.assign({}, technology, temp);
     })(state, params, temp);
   },
   // 更新合模方案
@@ -73,7 +73,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.arrangementScheme = Object.assign(arrangementScheme, temp);
+      state.arrangementScheme = Object.assign({}, arrangementScheme, temp);
     })(state, params, temp);
   },
   // 更新产品详情
@@ -84,7 +84,7 @@ export default {
       for (const key in params) {
         temp[key] = params[key];
       }
-      state.productInfo = Object.assign(productInfo, temp);
+      state.productInfo = Object.assign({}, productInfo, temp);
     })(state, params, temp);
   },
 }
