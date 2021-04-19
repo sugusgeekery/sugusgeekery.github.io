@@ -15,10 +15,6 @@ import {
   GetMyBidAdvantage,
   GetOrderList,
   GetCountdown
-
-  // GetDfmRemainTime,
-  // GetMachiningRemainTime,
-  // GetInjectRemainTime
 } from "@/api/order";
 
 interface Store {

@@ -55,18 +55,6 @@ export interface NavigationList {
   text: string;
   path: string;
 };
-// export interface RemainTime {
-//   finishTime: string;
-//   remainSeconds: number;
-//   startTime: string;
-//   state: number;
-
-//   isTimeout: boolean;
-//   hour: number;
-//   minute: number;
-//   second: number;
-//   setTimeInterval: number;
-// };
 
 
 // 供应商对应的类型值

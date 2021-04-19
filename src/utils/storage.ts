@@ -3,7 +3,7 @@ import { APPLICATION_NAME } from "@/config";
 import { formatDateTime } from "@/utils/util";
 
 // 创建本地储存仓库
-const cacheStore = localforage.createInstance({
+const DBStore = localforage.createInstance({
   driver: [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
   name: APPLICATION_NAME
 });
@@ -14,67 +14,68 @@ const localStore = localforage.createInstance({
   name: APPLICATION_NAME
 });
 
-// indexDB
+
+
+// forage indexDB
 // 获取本地永久储存
-export const getStore = async (k: string) => {
+export const getDBStore = async (k: string) => {
   try {
-    const { data = null } = (await cacheStore.getItem(k)) || {};
+    const { data = null } = (await DBStore.getItem(k)) || {};
     return data;
   } catch (e) {
-    console.error(e);
-    return null;
+    throw new Error(e);
   }
 };
 
 // 写入本地永久储存
-export const setStore = (k: string, v: any) => {
+export const setDBStore = (k: string, v: any) => {
   try {
-    cacheStore.setItem(k, {
+    DBStore.setItem(k, {
       date: formatDateTime({ formatType: "yyyy/mm/dd hh:mm:ss" }),
       data: v
     });
   } catch (e) {
-    console.error(e);
+    throw new Error(e);
   }
 };
 
 // 移除本地永久储存
-export const removeStore = (k: string) => {
+export const removeDBStore = (k: string) => {
   try {
-    cacheStore.removeItem(k);
+    DBStore.removeItem(k);
   } catch (e) {
-    console.error(e);
+    throw new Error(e);
   }
 };
 
 // 移除本地所有永久储存
-export const clearStore = () => {
+export const clearDBStore = () => {
   try {
-    cacheStore.clear();
+    DBStore.clear();
   } catch (e) {
-    console.error(e);
+    throw new Error(e);
   }
 };
 
 // 获取本地永久储存所有 value/key 键值对。
-export const getStoreIterate = async (fn: any = function() {}) => {
+export const getDBStoreIterate = async (fn: any = function() {}) => {
   try {
-    return (await cacheStore.iterate(fn)) || [];
+    return (await DBStore.iterate(fn)) || [];
   } catch (e) {
-    console.error(e);
-    return [];
+    throw new Error(e);
   }
 };
 
-// localStore
+
+
+// forage localStore
 // 获取本地永久缓存
 export const getLocalStore = async (k: string) => {
   try {
     const { data = null } = (await localStore.getItem(k)) || {};
     return data;
   } catch (e) {
-    console.error(e);
-    return null;
+    throw new Error(e);
   }
 };
 
@@ -86,7 +87,7 @@ export const setLocalStore = (k: string, v: any) => {
       data: v
     });
   } catch (e) {
-    console.error(e);
+    throw new Error(e);
   }
 };
 
@@ -95,7 +96,7 @@ export const removeLocalStore = (k: string) => {
   try {
     localStore.removeItem(k);
   } catch (e) {
-    console.error(e);
+    throw new Error(e);
   }
 };
 
@@ -104,7 +105,7 @@ export const clearLocalStore = () => {
   try {
     localStore.clear();
   } catch (e) {
-    console.error(e);
+    throw new Error(e);
   }
 };
 
@@ -113,12 +114,13 @@ export const getLocalStoreIterate = async (fn: any = function() {}) => {
   try {
     return (await localStore.iterate(fn)) || [];
   } catch (e) {
-    console.error(e);
-    return [];
+    throw new Error(e);
   }
 };
 
-// localStorage
+
+
+// web localStorage
 // 获取本地永久缓存
 export const getLocalStorage = (k: string) => {
   const strings: string | null = window.localStorage.getItem(
@@ -142,7 +144,9 @@ export const clearLocalStorage = () => {
   window.localStorage.clear();
 };
 
-// sessionStorage
+
+
+// web sessionStorage
 // 获取网页即使缓存
 export const getSessionStorage = (k: string) => {
   const strings: string | null = window.sessionStorage.getItem(
