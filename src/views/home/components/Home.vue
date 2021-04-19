@@ -1,6 +1,11 @@
 <template>
   <div class="context">
     <div class="context-title">首页</div>
+    <!-- <VueDragResize :isActive="false" :w="200" :h="200" :zindex="900" v-on:resizing="resize" v-on:dragging="resize">
+      <h3>Hello World!</h3>
+      <p>{{ top }} х {{ left }} </p>
+      <p>{{ width }} х {{ height }}</p>
+    </VueDragResize> -->
     <div class="context-body">
       <div class="list">
         <div class="list-title" v-if="initInfo.accountInfo && initInfo.accountInfo.userName">{{ initInfo.accountInfo.userName }}，您好！</div>
@@ -161,11 +166,20 @@ import { ActionTypes } from "@/store/modules/home/actions";
 
 import router from "@/router";
 
+// import VueDragResize from "vue-drag-resize";
+
 @Component({
   name: "Home",
-  components: {}
+  components: {
+    // VueDragResize
+  }
 })
 export default class Home extends Vue {
+  // public width = 0;
+  // public height = 0;
+  // public top = 0;
+  // public left = 0;
+
   @State("initInfo")
   public initInfo!: any | InitInfo;
   @State("orderMessageList")
@@ -191,6 +205,13 @@ export default class Home extends Vue {
       router.push(path);
     }
   }
+
+  // public resize(newRect: any) {
+  //     this.width = newRect.width;
+  //     this.height = newRect.height;
+  //     this.top = newRect.top;
+  //     this.left = newRect.left;
+  // }
 }
 </script>
 

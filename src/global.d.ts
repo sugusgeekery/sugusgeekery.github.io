@@ -1,5 +1,6 @@
 declare module "element-china-area-data";
 declare module "vue-contextmenujs";
+declare module "vue-drag-resize";
 
 // 排模方案数据
 interface ArrangementSchemeTypes {
