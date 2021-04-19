@@ -41,7 +41,7 @@
         <div class="li-text">
           <span class="li-text-black">产品：</span>
           <span class="li-text-black">{{ a.realProductNo }}</span>
-          <span class="li-text-tips" v-if="a.isUpdateImage === 1">
+          <span class="li-text-tips" v-if="a.isUpdateImage !== 2">
             <img src="../../../../assets/images/tip_3.png" class="li-text-icon" alt="">
             <span class="li-text-tip">需要更新图纸</span>
           </span>
@@ -99,7 +99,7 @@
           </div>
         </div>
         <div class="li-buttons" v-if="Supplier.Dfm === initInfo.type">
-          <div class="li-button li-button-blue" v-if="a.isUpdateImage === 1" @click="needChangeDrawing({ index: b })">需要更新图纸</div>
+          <div class="li-button li-button-blue" v-if="a.isUpdateImage !== 2" @click="needChangeDrawing({ index: b })">需要更新图纸</div>
           <div class="li-button li-button-blue" v-if="a.isUpdateImage === 2" @click="dfmApprovalDrawing({ opinion: 1, index: b })">确认图纸</div>
           <div class="li-button li-button-red" v-if="a.isUpdateImage === 2" @click="dfmApprovalDrawing({ opinion: 1, index: b })">驳回图纸</div>
         </div>
