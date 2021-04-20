@@ -36,5 +36,11 @@ export const GetMaterialAndColor = (params: any = {}): object => {
   return fetch({ url: `/supplier/userMouldBidding/getMaterialAndColor/${headId}`, method: "GET", params: {} });
 };
 
-// 获取合模方案
-export const GetArrangementScheme = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getPolyteneMatchedMould`, method: "GET", params });
+// 获取塑胶合模方案
+export const GetPolyteneMatchedMould = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getPolyteneMatchedMould`, method: "GET", params });
+
+// 获取硅胶合模方案
+export const GetSilicagelMould = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getSilicagelMould`, method: "GET", params });
+
+// 获取金属合模方案
+export const GetMetalMould = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getMetalMould`, method: "GET", params });

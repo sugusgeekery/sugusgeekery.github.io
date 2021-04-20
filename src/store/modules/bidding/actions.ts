@@ -20,7 +20,9 @@ import {
   GetMouldBiddingDetail,
   GetProductTechnology,
   GetMaterialAndColor,
-  GetArrangementScheme
+  GetPolyteneMatchedMould,
+  GetSilicagelMould,
+  GetMetalMould
 } from "@/api/bidding";
 
 interface Store {
@@ -460,8 +462,23 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
-      const { orderMouldId } = productInfos[productInfoIndex] || {};
-      const { success, message, data }: any = await GetArrangementScheme({ orderMouldId });
+      const { orderMouldId, moldingMaterialType } = productInfos[productInfoIndex] || {};
+      let fn = null;
+      switch(moldingMaterialType) {
+        case 1:
+          fn = await GetPolyteneMatchedMould({ orderMouldId });
+          break;
+        case 2:
+          fn = await GetSilicagelMould({ orderMouldId });
+          break;
+        case 3:
+          fn = await GetMetalMould({ orderMouldId });
+          break;
+        default:
+          fn = await GetPolyteneMatchedMould({ orderMouldId });
+          break;
+      }
+      const { success, message, data }: any = fn;
       if (success) {
         const temp = data || {};
         const { matchedPlan } = temp || {};
