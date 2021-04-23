@@ -381,12 +381,12 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { joinBiddingInfo, biddingState, headId } = biddingDetail || {}; 
-      const { supplierBiddingId, amount, workPeriod } = joinBiddingInfo || {};
+      const { supplierBiddingId, amount, workPeriod, unit } = joinBiddingInfo || {};
       let fn = null;
       if (biddingState === 1) {
-        fn = await UpdateMouldBidding({ amount, id: supplierBiddingId, workPeriod });
+        fn = await UpdateMouldBidding({ amount, id: supplierBiddingId, workPeriod, unit });
       } else {
-        fn = await JoinBidding({ amount, biddingHeadId: headId, workPeriod });
+        fn = await JoinBidding({ amount, biddingHeadId: headId, workPeriod, unit });
       }
       const { success, message, data }: any = fn;
       if (success) {
