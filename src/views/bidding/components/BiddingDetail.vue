@@ -161,12 +161,12 @@
                 </div>
                 <div class="model-flex-text">
                   <span>
-                    {{ biddingDetail.biddingHeadInfo.accuracy || 0 }}
+                    {{ biddingDetail.biddingHeadInfo.accuracy || 0 }}%
                   </span>
                 </div>
                 <div class="model-flex-text">
                   <span>
-                    {{ biddingDetail.biddingHeadInfo.anerror || 0 }}
+                    {{ biddingDetail.biddingHeadInfo.anerror || 0 }}%
                   </span>
                 </div>
                 <div class="model-flex-text">
