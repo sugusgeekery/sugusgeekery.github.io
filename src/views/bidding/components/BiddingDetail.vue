@@ -302,7 +302,7 @@
                   <span v-else>
                     {{ biddingDetail.joinBiddingInfo.workPeriod || 0 }}
                   </span>
-                  <span>小时</span>
+                  <span>{{ biddingDetail.joinBiddingInfo.unitDesc }}</span>
                 </div>
                 <div class="model-flex-buttons">
                   <div
