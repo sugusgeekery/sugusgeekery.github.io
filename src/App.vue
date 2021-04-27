@@ -1,5 +1,8 @@
 <template>
-  <router-view id="App" />
+  <div id="App">
+    <router-view />
+    <AsideNotification></AsideNotification>
+  </div>
 </template>
 
 <script lang="ts">
@@ -12,9 +15,13 @@ import {
 } from "@/utils/storage";
 import { isEmptyObj } from "@/utils/util";
 
+import AsideNotification from "@/components/templates/AsideNotification.vue";
+
 @Component({
   name: "App",
-  components: {}
+  components: {
+    AsideNotification
+  }
 })
 export default class App extends Vue {
   public created() {

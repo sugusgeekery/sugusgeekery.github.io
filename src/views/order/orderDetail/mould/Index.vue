@@ -55,6 +55,9 @@
                 alt=""
               />
             </div>
+            <div class="li-text">
+              <span class="li-text-blue li-text-pointer" @click="downloadFile(a.fileUrl, a.productName)">下载</span>
+            </div>
           </div>
           <div class="li-row">
             <div class="li-text">
@@ -306,6 +309,7 @@ import { ActionTypes } from "@/store/modules/order/modules/mould/actions";
 import { MutationTypes } from "@/store/modules/order/modules/mould/mutations";
 
 import { BASE_IMAGE_URL } from "@/config";
+import downloadByUrl from "@/utils/downloadByUrl";
 import { Message, MessageBox } from "element-ui";
 import validate, {
   ValidateTypes,
@@ -391,6 +395,12 @@ export default class MouldView extends Vue {
 
   public showImage(isShowImage: boolean) {
     this.isShowImage = isShowImage;
+  }
+
+  public downloadFile(url: string, name: string) {
+    if (url) {
+      downloadByUrl(BASE_IMAGE_URL + url, name);
+    }
   }
 }
 </script>
@@ -492,6 +502,8 @@ export default class MouldView extends Vue {
           margin-left 5px
           width 13px
           object-fit contain
+        &-pointer
+          cursor pointer
         &-gray
           color $color-text-gray
         &-black
