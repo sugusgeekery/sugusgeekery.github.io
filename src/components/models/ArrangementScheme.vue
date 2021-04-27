@@ -37,6 +37,12 @@
             <div class="model-flex-input">{{ data.matchedPlan.predictGateWeight || "" }}</div>
           </div>
         </div>
+        <div class="model-row">
+          <div class="model-flex">
+            <div class="model-flex-label">热嘴数量：</div>
+            <div class="model-flex-input">{{ data.matchedPlan.hotRunnerNum || "" }}</div>
+          </div>
+        </div>
         <div class="model-text">转水口：</div>
         <div class="model-row" v-show="data.matchedPlan.gateItems.length" v-for="(a, b) in data.matchedPlan.gateItems" :key="b">
           <div class="model-flex">

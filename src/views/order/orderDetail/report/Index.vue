@@ -13,6 +13,7 @@
       :class="{ 'item-green': a.state === 2 }"
       v-for="(a, b) in reportList"
       :key="b"
+      @click="index = b"
     >
       <div class="item-title">
         <div class="item-title-text">
@@ -58,11 +59,19 @@
               :key="d"
             >
               <div class="swiper-slide-box">
-                <img
-                  class="swiper-slide-image"
-                  :src="BASE_IMAGE_URL + c.filePath"
-                  alt=""
-                />
+                <div class="swiper-slide-images">
+                  <img
+                    class="swiper-slide-image"
+                    :src="BASE_IMAGE_URL + c.filePath"
+                    alt=""
+                    :preview="'report_' + b"
+                  />
+                  <!-- <el-image 
+                    class="swiper-slide-image"
+                    :src="BASE_IMAGE_URL + c.filePath"
+                    :preview-src-list="a.fileListUrl"
+                  ></el-image> -->
+                </div>
                 <div
                   class="swiper-slide-delete"
                   v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit"
@@ -619,35 +628,83 @@ export default class ReportView extends Vue {
     }
     e.target.value = null;
   }
-  public async handlePaste(event: any) {
-    if (this.index === -1) {
+  public async handlePaste(e: any) {
+    const { index = -1 } = this;
+    const { clipboardData } = e || window;
+    const { items } = clipboardData || {};
+    if (!(items && items.length)) {
+        return ;
+    }
+    if (index === -1) {
       Message.error("请选择你需要粘贴的地方");
-      console.log(this.index);
       return;
     }
-    const items = (event.clipboardData || (window as any).clipboardData).items;
-    //去除粘贴到div事件
-    event.preventDefault();
-    event.returnValue = false;
-    let file = null
-    if (!items || items.length === 0) {
-      this.$message.error('当前不支持本地图片上传')
-      return
-    }
-    // 搜索剪切板items
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].type.includes('image')) {
-        file = items[i].getAsFile()
-        break
+
+    // 更新报告图片
+    const uploadFile = async (file: any) => {
+      const fileList: any = await Upload({ files: [file]});
+      for (const v of fileList) {
+        this.updateReport(v);
+      }
+    };
+    // 更新报告内容
+    const updataReport = (value: string) => {
+      this.updateReportData({
+        index,
+        name: 'describe',
+        value
+      })
+    };
+
+    for (let i = 0, len = items.length; i < len; i++) {
+      const { type } = items[i];
+      if (type.includes("image")) {
+        const file = items[i].getAsFile();
+        if (file) {
+          uploadFile(file);
+        }
+        break;
+      } else {
+        items[i].getAsString((str: string) => {
+          if (str) {
+            updataReport(str);
+          }
+        });
+        break;
       }
     }
-    if (!file) {
-      return
-    }
-    const fileList: any = await Upload({ files: [file]});
-    for (const v of fileList) {
-      this.updateReport(v);
-    }
+
+    
+
+    //去除粘贴到div事件
+    // event.preventDefault();
+    // event.returnValue = false;
+    // let file = null
+    // if (!items || items.length === 0) {
+    //   this.$message.error('当前不支持本地图片上传')
+    //   return
+    // }
+    // // 搜索剪切板items
+    // for (let i = 0; i < items.length; i++) {
+    //   console.log("type===", items[i], items[i].type)
+    //   if (items[i].type.includes('image')) {
+    //     file = items[i].getAsFile()
+    //     break
+    //   } else if (items[i].type.includes('text')) {
+    //     items[i].getAsString(function(str: string) {
+    //       // str 是获取到的字符串
+    //       console.log("text====", str);
+    //     })
+    //     break
+    //   }
+    // }
+    // if (!file) {
+    //   return
+    // }
+    // const fileList: any = await Upload({ files: [file]});
+    // for (const v of fileList) {
+    //   this.updateReport(v);
+    // }
   }
 
   public updateReport(file: any) {
@@ -808,6 +865,8 @@ export default class ReportView extends Vue {
           align-items center
           &-active
             border solid 1px $color-bd-blue
+        &-images
+          width 100%
         &-image
           width 100%
           object-fit contain

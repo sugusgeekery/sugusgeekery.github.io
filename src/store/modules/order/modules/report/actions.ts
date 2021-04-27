@@ -7,8 +7,9 @@ import { MutationTypes } from "./mutations";
 import { Dispatch, Commit, GetterTree } from "vuex";
 
 import router from "@/router";
-import { Message, MessageBox } from "element-ui";
+import { Message, MessageBox, Slider } from "element-ui";
 import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { BASE_IMAGE_URL } from "@/config";
 
 import {
   UploadForm
@@ -69,7 +70,25 @@ export default {
       }
       const { success, message, data }: any = fn;
       if (success) {
-        commit(MutationTypes.UpdateReportList, data || []);
+        const reportList = (ls => {
+          for (const [a, b] of ls.entries()) {
+            const { fileList = [] } = b;
+            if (fileList && fileList.length) {
+              ls[a]["fileListUrl"] = (l => {
+                const arr = [];
+                for (const v of l) {
+                  const { filePath } = v;
+                  if (filePath) {
+                    arr.push(BASE_IMAGE_URL + filePath);
+                  }
+                }
+                return arr;
+              })(fileList);
+            }
+          }
+          return ls;
+        })(data || []);
+        commit(MutationTypes.UpdateReportList, reportList);
         return;
       } else {
         Message.error(message);
@@ -93,6 +112,16 @@ export default {
         const { pics = [] } = data || {};
         const { filePath = "", fileName, id } = pics[0];
         reportList[index].fileList = [...(fileList || []), { filePath, fileName, fileId: id }];
+        reportList[index].fileListUrl = (l => {
+          const arr = [];
+          for (const v of l) {
+            const { filePath } = v;
+            if (filePath) {
+              arr.push(BASE_IMAGE_URL + filePath);
+            }
+          }
+          return arr;
+        })(reportList[index].fileList);
         commit(MutationTypes.UpdateReportList, reportList);
         commit(MutationTypes.UpdateTimestamp, new Date().getTime());
       } else {
@@ -108,6 +137,7 @@ export default {
       const { reportList = [] } = state;
       const { index, key } = params || {};
       reportList[index].fileList.splice(key, 1);
+      reportList[index].fileListUrl.splice(key, 1);
       commit(MutationTypes.UpdateReportList, reportList);
   },
 
