@@ -131,14 +131,13 @@ export default class App extends Vue {
       overflow auto
       .aside
         position relative
-        flex 1
         height 100%
         overflow auto
         margin auto
         background transparent
       .section
         position relative
-        flex 9
+        flex 1
         height 100%
         overflow auto
         background transparent
