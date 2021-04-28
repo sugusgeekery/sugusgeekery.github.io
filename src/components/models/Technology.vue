@@ -94,7 +94,7 @@ export default class Technology extends Vue {
   private readonly data!: TechnologyTypes;
 
   @Emit("updateData") 
-  private updateData(params: TechnologyTypes) {
+  public updateData(params: TechnologyTypes) {
     return { ...this.data, ...params };
   };
 

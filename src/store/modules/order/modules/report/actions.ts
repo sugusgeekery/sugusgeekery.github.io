@@ -12,9 +12,6 @@ import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 import { BASE_IMAGE_URL } from "@/config";
 
 import {
-  UploadForm
-} from "@/api";
-import {
   GetDfmReportList,
   GetMachiningDfmReportList,
   GetInjectDfmReportList,
@@ -35,7 +32,6 @@ interface Store {
 export enum ActionTypes {
   Init = "Init",
   GetDfmReportList = "GetDfmReportList",
-  UploadForm = "UploadForm",
   DeleteReportFile = "DeleteReportFile",
   UpdateReportData = "UpdateReportData",
   CommitReport = "CommitReport",
@@ -98,39 +94,6 @@ export default {
     }
   },
   
-  // 上传文件
-  async [ActionTypes.UploadForm](store: Store, params: any) {
-    try {
-      const { state, dispatch, commit } = store;
-      const { reportList = [] } = state;
-      const { file, index } = params || {};
-      const { fileList } = reportList[index] || {};
-      const formData = new FormData();
-      formData.append("files", file);
-      const { success, message, data }: any = await UploadForm(formData);
-      if (success) {
-        const { pics = [] } = data || {};
-        const { filePath = "", fileName, id } = pics[0];
-        reportList[index].fileList = [...(fileList || []), { filePath, fileName, fileId: id }];
-        reportList[index].fileListUrl = (l => {
-          const arr = [];
-          for (const v of l) {
-            const { filePath } = v;
-            if (filePath) {
-              arr.push(BASE_IMAGE_URL + filePath);
-            }
-          }
-          return arr;
-        })(reportList[index].fileList);
-        commit(MutationTypes.UpdateReportList, reportList);
-        commit(MutationTypes.UpdateTimestamp, new Date().getTime());
-      } else {
-        Message.error(message);
-      }
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
   // 删除图片
   [ActionTypes.DeleteReportFile](store: Store, params: any) {
       const { state, dispatch, commit } = store;

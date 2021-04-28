@@ -38,7 +38,7 @@ export default class Ever3D extends Vue {
   private readonly data!: ProductInfoTypes;
 
   @Emit("updateData") 
-  private updateData(params: ProductInfoTypes) {
+  public updateData(params: ProductInfoTypes) {
     return { ...this.data, ...params };
   };
 

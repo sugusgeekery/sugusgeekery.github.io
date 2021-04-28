@@ -2,8 +2,8 @@ export default (Vue: any) => {
   Vue.directive("paste", {
     bind(el: any, binding: any, vnode: any) {
       el.addEventListener("paste", function (event: any) {
-        binding.value(event)
-      })
+        binding.value(event);
+      });
     }
   });
 
@@ -46,8 +46,8 @@ export default (Vue: any) => {
         const maxY = window.innerHeight - styH / 2;
 
         // 鼠标按下，计算当前元素距离可视区的距离
-        const disX = e.clientX - dialogHeaderEl.offsetLeft
-        const disY = e.clientY - dialogHeaderEl.offsetTop
+        const disX = e.clientX - dialogHeaderEl.offsetLeft;
+        const disY = e.clientY - dialogHeaderEl.offsetTop;
 
         document.onmousemove = function (e: any) {
           // 通过事件委托，计算移动的距离
@@ -61,12 +61,12 @@ export default (Vue: any) => {
           // 移动当前元素
           dragDom.style.left = `${x}px`;
           dragDom.style.top = `${y}px`;
-        }
+        };
 
         document.onmouseup = function (e: any) {
           document.onmousemove = null;
           document.onmouseup = null;
-        }
+        };
       }
     }
   });

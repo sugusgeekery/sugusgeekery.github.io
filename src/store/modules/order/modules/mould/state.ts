@@ -24,18 +24,18 @@ const state: State = {
     "isMatchedMould": 0,
     "matchedPlan": {
       "attachment": [
-        {
-          "fileName": "",
-          "filePath": ""
-        }
+        // {
+        //   "fileName": "",
+        //   "filePath": ""
+        // }
       ],
       "attachmentAddress": "",
       "cylinderNum": 0,
       "gateItems": [
-        {
-          "gateSort": 0,
-          "productIds": ""
-        }
+        // {
+        //   "gateSort": 0,
+        //   "productIds": ""
+        // }
       ],
       "gateType": "",
       "hotRunnerHeight": "",

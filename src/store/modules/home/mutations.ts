@@ -39,6 +39,4 @@ export default {
   [MutationTypes.UpdateUserMessageList](state: State, userMessageList: Array<UserMessage>) {
     state.userMessageList = userMessageList;
   },
-
-  
 }

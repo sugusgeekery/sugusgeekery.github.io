@@ -81,7 +81,7 @@ export default class MaterialAndColorComponent extends Vue {
   private readonly data!: MaterialAndColorTypes;
 
   @Emit("updateData") 
-  private updateData(params: MaterialAndColorTypes) {
+  public updateData(params: MaterialAndColorTypes) {
     return { ...this.data, ...params };
   };
 }

@@ -592,8 +592,6 @@ export default class ReportView extends Vue {
 
   @Action(ActionTypes.GetDfmReportList)
   public getDfmReportList!: Function;
-  @Action(ActionTypes.UploadForm)
-  public uploadForm!: Function;
   @Action(ActionTypes.UpdateReportData)
   public updateReportData!: Function;
   @Action(ActionTypes.CommitReport)

@@ -11,9 +11,6 @@ import { Message, MessageBox } from "element-ui";
 import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
-  UploadForm
-} from "@/api";
-import {
   GetCheckAndAcceptInfo,
   CommitMailInfo,
 } from "@/api/order/prototype";
