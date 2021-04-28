@@ -251,16 +251,16 @@ const state: State = {
     "lifetime": "",
     productInfoIndex: -1,
     "productInfos": [
-      {
-        "id": 0,
-        "productHeight": "",
-        "productLength": "",
-        "productNo": "",
-        "productNum": 0,
-        "productWeight": "",
-        "productWidth": "",
-        "surfaceTreatment": ""
-      }
+      // {
+      //   "id": 0,
+      //   "productHeight": "",
+      //   "productLength": "",
+      //   "productNo": "",
+      //   "productNum": 0,
+      //   "productWeight": "",
+      //   "productWidth": "",
+      //   "surfaceTreatment": ""
+      // }
     ],
     "realMouldNo": "",
     "selectedUserBiddingInfo": {
@@ -340,18 +340,18 @@ const state: State = {
     "isMatchedMould": 0,
     "matchedPlan": {
       "attachment": [
-        {
-          "fileName": "",
-          "filePath": ""
-        }
+        // {
+        //   "fileName": "",
+        //   "filePath": ""
+        // }
       ],
       "attachmentAddress": "",
       "cylinderNum": 0,
       "gateItems": [
-        {
-          "gateSort": 0,
-          "productIds": ""
-        }
+        // {
+        //   "gateSort": 0,
+        //   "productIds": ""
+        // }
       ],
       "gateType": "",
       "hotRunnerHeight": "",

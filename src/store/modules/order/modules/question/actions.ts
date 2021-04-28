@@ -11,9 +11,6 @@ import { Message, MessageBox } from "element-ui";
 import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
-  UploadForm
-} from "@/api";
-import {
   GetQuestions,
   AnswerQuestion
 } from "@/api/order/question";

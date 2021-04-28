@@ -80,7 +80,7 @@ export default class ArrangementScheme extends Vue {
   private readonly data!: ArrangementSchemeTypes;
 
   @Emit("updateData") 
-  private updateData(params: ArrangementSchemeTypes) {
+  public updateData(params: ArrangementSchemeTypes) {
     return { ...this.data, ...params };
   };
 }
