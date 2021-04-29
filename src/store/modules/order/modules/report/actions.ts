@@ -69,6 +69,7 @@ export default {
         const reportList = (ls => {
           for (const [a, b] of ls.entries()) {
             const { fileList = [] } = b;
+            ls[a]["required"] = false;
             if (fileList && fileList.length) {
               ls[a]["fileListUrl"] = (l => {
                 const arr = [];

@@ -10,7 +10,10 @@
     />
     <div
       class="item"
-      :class="{ 'item-green': a.state === 2 }"
+      :class="{ 
+        'item-green': a.state === 2,
+        'item-gray': a.required,
+      }"
       v-for="(a, b) in reportList"
       :key="b"
       @click="index = b"
@@ -18,6 +21,14 @@
       <div class="item-title">
         <div class="item-title-text">
           {{ a.reportTitle }}
+        </div>
+        <div class="item-title-select" v-if="!a.state">
+          <el-checkbox 
+            class="item-title-select-box" 
+            v-model="a.required" 
+            @change="v => updateReportData({ index: b, name: 'required', value: v })"
+          ></el-checkbox>
+          <span class="item-title-select-span">标记为非必填项</span>
         </div>
         <img class="item-title-icon" src="../../../../assets/images/select_green.png" alt="" v-if="a.state === 2" />
         <div
@@ -34,23 +45,8 @@
           修改
         </div>
       </div>
-      <div class="item-swiper">
-        <!-- <swiper
-          class="swiper-container"
-          :slides-per-view="4"
-          :space-between="10"
-          navigation
-          :pagination="{ clickable: true }"
-          :scrollbar="{ draggable: true }"
-          @swiper="onSwiper"
-          @slideChange="onSlideChange"
-        >
-          <swiper-slide>Slide 1</swiper-slide>
-          <swiper-slide>Slide 2</swiper-slide>
-          <swiper-slide>Slide 3</swiper-slide>
-          ...
-        </swiper> -->
-        <div class="swiper-container" v-show="isShowSwiper">
+      <div class="item-row">
+        <div class="swiper-container">
           <div class="swiper-wrapper">
             <div
               class="swiper-slide"
@@ -95,14 +91,51 @@
               </div>
             </div>
           </div>
-          <!-- <div class="swiper-button-prev"></div> -->
-          <!-- v-if="a.fileList && a.fileList.length > 4"
-          @click="swiperPrev()" -->
-          <!-- <div class="swiper-button-next"></div> -->
-          <!-- v-if="a.fileList && a.fileList.length > 4"
-          @click="swiperNext()" -->
         </div>
       </div>
+      <!-- <div class="item-swiper">
+        <div class="swiper-container" v-show="isShowSwiper">
+          <div class="swiper-wrapper">
+            <div
+              class="swiper-slide"
+              v-show="a.fileList && a.fileList.length"
+              v-for="(c, d) in a.fileList"
+              :key="d"
+            >
+              <div class="swiper-slide-box">
+                <div class="swiper-slide-images">
+                  <img
+                    class="swiper-slide-image"
+                    :src="BASE_IMAGE_URL + c.filePath"
+                    alt=""
+                    :preview="'report_' + b"
+                  />
+                </div>
+                <div
+                  class="swiper-slide-delete"
+                  v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit"
+                  @click="deleteReportFile({ index: b, key: d })"
+                >
+                  X
+                </div>
+              </div>
+            </div>
+            <div
+              class="swiper-slide"
+              v-if="!a.state && initInfo.type === Supplier.Dfm  && a.canCommit"
+              @click="index = b"
+            >
+              <div class="swiper-slide-box" :class="{'swiper-slide-box-active': index === b}" @paste="handlePaste">
+                <div class="swiper-slide-button" @click="selectFile(b)">+</div>
+                <div class="swiper-slide-tip">
+                  <div class="swiper-slide-tip-button">选中</div>
+                  <div class="swiper-slide-tip-text">（ctrl+v粘贴图片）</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
       <div class="item-content">
         <div
           class="item-content-textarea"
@@ -557,10 +590,10 @@ import { BASE_IMAGE_URL } from "@/config";
 import Upload from "@/api/upload";
 import { Message } from "element-ui";
 
-// import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import Swiper from "swiper";
-// import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import "swiper/swiper-bundle.min.css";
+// // import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+// import Swiper from "swiper";
+// // import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+// import "swiper/swiper-bundle.min.css";
 
 // import "swiper/swiper.scss";
 // import "swiper/components/navigation/navigation.scss";
@@ -606,7 +639,7 @@ export default class ReportView extends Vue {
 
   public async created() {
     await this.getDfmReportList();
-    this.initSwiper();
+    // this.initSwiper();
   }
   public mounted() {
     document.addEventListener("paste", this.handlePaste);
@@ -713,49 +746,143 @@ export default class ReportView extends Vue {
     this.updateReportList(reportList);
   }
 
-  public isShowSwiper: boolean = false;
-  public swiper: any = null;
-  public swiperOptions: any = {
-    slidesPerView: 4,
-    spaceBetween: 10,
-    slidesPerGroup: 1,
-    loop: false,
-    loopFillGroupWithBlank: true,
-    observer: true,
-    observeParents: true,
-    observeSlideChildren: true,
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
-    }
-  };
-  public initSwiper() {
-    this.swiper = new Swiper(".swiper-container", this.swiperOptions);
-    this.isShowSwiper = true;
-  }
+  // public isShowSwiper: boolean = false;
+  // public swiper: any = null;
+  // public swiperOptions: any = {
+  //   slidesPerView: 4,
+  //   spaceBetween: 10,
+  //   slidesPerGroup: 1,
+  //   loop: false,
+  //   loopFillGroupWithBlank: true,
+  //   observer: true,
+  //   observeParents: true,
+  //   observeSlideChildren: true,
+  //   pagination: {
+  //     el: ".swiper-pagination",
+  //     clickable: true
+  //   },
+  //   navigation: {
+  //     nextEl: ".swiper-button-next",
+  //     prevEl: ".swiper-button-prev"
+  //   }
+  // };
+  // public initSwiper() {
+  //   this.swiper = new Swiper(".swiper-container", this.swiperOptions);
+  //   this.isShowSwiper = true;
+  // }
 
-  public swiperPrev(index: number) {
-    this.swiper[index] && this.swiper[index].slidePrev();
-  }
-  public swiperNext(index: number) {
-    this.swiper[index] && this.swiper[index].slideNext();
-  }
+  // public swiperPrev(index: number) {
+  //   this.swiper[index] && this.swiper[index].slidePrev();
+  // }
+  // public swiperNext(index: number) {
+  //   this.swiper[index] && this.swiper[index].slideNext();
+  // }
 
-  public onSwiper(swiper: any) {
-    console.log(swiper);
-  }
-  public onSlideChange(swiper: any) {
-    console.log(swiper);
-  }
+  // public onSwiper(swiper: any) {
+  //   console.log(swiper);
+  // }
+  // public onSlideChange(swiper: any) {
+  //   console.log(swiper);
+  // }
 }
 </script>
 
 <style lang="stylus" scoped>
 @import '../../../../stylus/index.styl';
+
+
+.swiper-container
+  flex 1
+  background red
+  min-height 200px
+  // width 100%
+  // height 100%
+.swiper-wrapper
+  // width 100%
+  // height 100%
+.swiper-slide
+  /* Center slide text vertically */
+  // display -webkit-box
+  // display -ms-flexbox
+  // display -webkit-flex
+  // display flex
+  // -webkit-box-pack center
+  // -ms-flex-pack center
+  // -webkit-justify-content center
+  // justify-content center
+  // -webkit-box-align center
+  // -ms-flex-align center
+  // -webkit-align-items center
+  // align-items center
+
+  position relative
+  padding 11.2%
+  background $color-bg-white
+  &-box
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+    display -webkit-box
+    display -ms-flexbox
+    display -webkit-flex
+    display flex
+    -webkit-box-pack center
+    -ms-flex-pack center
+    -webkit-justify-content center
+    justify-content center
+    -webkit-box-align center
+    -ms-flex-align center
+    -webkit-align-items center
+    align-items center
+    &-active
+      border solid 1px $color-bd-blue
+  &-images
+    width 100%
+  &-image
+    width 100%
+    object-fit contain
+  &-delete
+    display none
+  &:hover
+    .swiper-slide-delete
+      position absolute
+      top 0
+      right 0
+      width 30%
+      height 30%
+      display flex
+      justify-content center
+      align-items center
+      border-radius 100px
+      background $color-bg-blue-white
+      color $color-text-red
+      cursor pointer
+  &-buttons
+    display flex
+    justify-content center
+    align-items center
+  &-button
+    color $color-text-blue
+    font-size 100px
+    padding 5px
+    cursor pointer
+    // border solid 1px $color-bd-blue
+    // background $color-bg-white
+  &-tip
+    position absolute
+    right 0
+    bottom 0
+    text-align center
+    &-button
+      color $color-text-blue
+      font-size 16px
+      padding 5px
+    &-text
+      color $color-text-gray
+      font-size 12px
+      padding 5px
 
 .report
   position absolute
@@ -778,6 +905,8 @@ export default class ReportView extends Vue {
     padding 1px
     &-green
       background $color-bg-green-white
+    &-gray
+      background #F2F2F2
     &-blue
       background $color-bg-blue-white
     &-white
@@ -793,13 +922,27 @@ export default class ReportView extends Vue {
         font-size 16px
         color $color-text-black
         flex 1
+      &-select
+        >>>
+            .is-focus,
+            .is-hover
+              .el-checkbox__inner,
+              .el-checkbox__inner:hover
+                border-color gray
+            .is-checked
+              .el-checkbox__inner
+                background gray
+        &-span
+          margin-left 8px
+          font-size 12px
+          color $color-text-grayer
       &-button
         border-radius 4px
         padding 5px 10px
         font-size 14px
         border solid 1px $color-bd-blue
         color $color-text-blue
-        background $color-bg-white
+        background transparent
         cursor pointer
         &-blue
           border solid 1px $color-bd-blue
@@ -809,109 +952,113 @@ export default class ReportView extends Vue {
         width 24px
         height 24px
         object-fit contain
-    &-swiper
-      margin 16px 18px
+    &-row
       display flex
-      justify-content space-between
-      align-items center
-      &-label
-        width 9px
-        height 17px
-        object-fit contain
-      .swiper-container
-        flex 1
-        width 100%
-        height 100%
-      .swiper-wrapper
-        width 100%
-        height 100%
-      .swiper-slide
-        /* Center slide text vertically */
-        // display -webkit-box
-        // display -ms-flexbox
-        // display -webkit-flex
-        // display flex
-        // -webkit-box-pack center
-        // -ms-flex-pack center
-        // -webkit-justify-content center
-        // justify-content center
-        // -webkit-box-align center
-        // -ms-flex-align center
-        // -webkit-align-items center
-        // align-items center
+      justify-content flex-start
+      align-items flex-start
+    // &-swiper
+    //   margin 16px 18px
+    //   display flex
+    //   justify-content space-between
+    //   align-items center
+    //   &-label
+    //     width 9px
+    //     height 17px
+    //     object-fit contain
+    //   .swiper-container
+    //     flex 1
+    //     width 100%
+    //     height 100%
+    //   .swiper-wrapper
+    //     width 100%
+    //     height 100%
+    //   .swiper-slide
+    //     /* Center slide text vertically */
+    //     // display -webkit-box
+    //     // display -ms-flexbox
+    //     // display -webkit-flex
+    //     // display flex
+    //     // -webkit-box-pack center
+    //     // -ms-flex-pack center
+    //     // -webkit-justify-content center
+    //     // justify-content center
+    //     // -webkit-box-align center
+    //     // -ms-flex-align center
+    //     // -webkit-align-items center
+    //     // align-items center
 
-        position relative
-        padding 11.2%
-        background $color-bg-white
-        &-box
-          position absolute
-          top 0
-          left 0
-          width 100%
-          height 100%
-          display -webkit-box
-          display -ms-flexbox
-          display -webkit-flex
-          display flex
-          -webkit-box-pack center
-          -ms-flex-pack center
-          -webkit-justify-content center
-          justify-content center
-          -webkit-box-align center
-          -ms-flex-align center
-          -webkit-align-items center
-          align-items center
-          &-active
-            border solid 1px $color-bd-blue
-        &-images
-          width 100%
-        &-image
-          width 100%
-          object-fit contain
-        &-delete
-          display none
-        &:hover
-          .swiper-slide-delete
-            position absolute
-            top 0
-            right 0
-            width 30%
-            height 30%
-            display flex
-            justify-content center
-            align-items center
-            border-radius 100px
-            background $color-bg-blue-white
-            color $color-text-red
-            cursor pointer
-        &-buttons
-          display flex
-          justify-content center
-          align-items center
-        &-button
-          color $color-text-blue
-          font-size 100px
-          padding 5px
-          cursor pointer
-          // border solid 1px $color-bd-blue
-          // background $color-bg-white
-        &-tip
-          position absolute
-          right 0
-          bottom 0
-          text-align center
-          &-button
-            color $color-text-blue
-            font-size 16px
-            padding 5px
-          &-text
-            color $color-text-gray
-            font-size 12px
-            padding 5px
+    //     position relative
+    //     padding 11.2%
+    //     background $color-bg-white
+    //     &-box
+    //       position absolute
+    //       top 0
+    //       left 0
+    //       width 100%
+    //       height 100%
+    //       display -webkit-box
+    //       display -ms-flexbox
+    //       display -webkit-flex
+    //       display flex
+    //       -webkit-box-pack center
+    //       -ms-flex-pack center
+    //       -webkit-justify-content center
+    //       justify-content center
+    //       -webkit-box-align center
+    //       -ms-flex-align center
+    //       -webkit-align-items center
+    //       align-items center
+    //       &-active
+    //         border solid 1px $color-bd-blue
+    //     &-images
+    //       width 100%
+    //     &-image
+    //       width 100%
+    //       object-fit contain
+    //     &-delete
+    //       display none
+    //     &:hover
+    //       .swiper-slide-delete
+    //         position absolute
+    //         top 0
+    //         right 0
+    //         width 30%
+    //         height 30%
+    //         display flex
+    //         justify-content center
+    //         align-items center
+    //         border-radius 100px
+    //         background $color-bg-blue-white
+    //         color $color-text-red
+    //         cursor pointer
+    //     &-buttons
+    //       display flex
+    //       justify-content center
+    //       align-items center
+    //     &-button
+    //       color $color-text-blue
+    //       font-size 100px
+    //       padding 5px
+    //       cursor pointer
+    //       // border solid 1px $color-bd-blue
+    //       // background $color-bg-white
+    //     &-tip
+    //       position absolute
+    //       right 0
+    //       bottom 0
+    //       text-align center
+    //       &-button
+    //         color $color-text-blue
+    //         font-size 16px
+    //         padding 5px
+    //       &-text
+    //         color $color-text-gray
+    //         font-size 12px
+    //         padding 5px
           
-      .swiper-button-prev,
-      .swiper-button-next
-        color $color-text-gray
+    //   .swiper-button-prev,
+    //   .swiper-button-next
+    //     color $color-text-gray
     &-content
       margin 16px 18px
       &-text
