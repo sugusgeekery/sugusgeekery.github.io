@@ -56,7 +56,7 @@
               />
             </div>
             <div class="li-text">
-              <span class="li-text-blue li-text-pointer" @click="downloadFile(a.fileUrl, a.productName)">下载</span>
+              <span class="li-text-blue li-text-pointer" @click="downloadFile(a.fileUrl, a.productName + '.' + (a.fileUrl.split('.')[1]))">下载</span>
             </div>
           </div>
           <div class="li-row">
