@@ -133,9 +133,93 @@
               class="item"
               v-for="(a, b) in biddingList[biddingIndex].list"
               :key="a.id + '_竞价单_' + b"
-              @click="getBiddingDetail(b)"
             >
+              <div class="item-title">
+                <div class="item-row">
+                  <div class="item-flex">
+                    <span class="item-button item-button-right">{{ a.typeDesc }}</span>
+                    <span class="item-text">单号：</span>
+                    <span class="item-text">{{ a.mouldNo || "" }}</span>
+                  </div>
+                  <div class="item-flex" v-if="a.countdown">
+                    <span class="item-text item-text-red" v-if="a.countdown.isTimeout">已超时</span>
+                    <span class="item-text item-text-blue" v-if="!a.countdown.isTimeout && a.countdown.day">{{ a.countdown.day || 0 }}天</span>
+                    <span class="item-text item-text-blue" v-if="!a.countdown.isTimeout">{{ a.countdown.hour || 0 }}:</span>
+                    <span class="item-text item-text-blue" v-if="!a.countdown.isTimeout">{{ a.countdown.minute || 0 }}:</span>
+                    <span class="item-text item-text-blue" v-if="!a.countdown.isTimeout">{{ a.countdown.second || 0 }}</span>
+                  </div>
+                </div>
+              </div>
               <div class="item-rows">
+                <div class="item-row">
+                  <div class="item-flex">
+                    <img class="item-icon" src="../../../assets/images/j_price.png" alt=""  />
+                    <span class="item-text">建议价格：￥{{ a.amount || 0 }}</span>
+                  </div>
+                </div>
+                <div class="item-row">
+                  <div class="item-flex">
+                    <img class="item-icon" src="../../../assets/images/j_date.png" alt=""  />
+                    <span class="item-text">建议交期：{{ a.workPeriod || 0 }}{{ a.unitDesc || ""}}</span>
+                  </div>
+                </div>
+                <div class="item-row">
+                  <div class="item-flex">
+                    <img class="item-icon" src="../../../assets/images/j_address.png" alt=""  />
+                    <span class="item-text">{{ a.address || "" }}</span>
+                  </div>
+                </div>
+                <div class="item-row">
+                  <div class="item-flex">
+                    <img class="item-icon" src="../../../assets/images/j_time.png" alt=""  />
+                    <span class="item-text">截止至{{ a.termTime || "" }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="item-rows">
+                <div class="item-row item-line">
+                  <div class="item-flex" v-if="biddingIndex === 0">
+                    <span class="item-text item-text-small">已有</span>
+                    <span class="item-text item-text-small item-text-red">
+                      {{ a.joinSupplierCount || 0 }}
+                    </span>
+                    <span class="item-text">公司参加</span>
+                  </div>
+                  <div class="item-flex" v-else-if="biddingIndex === 2">
+                    <span class="item-text item-text-red">
+                      {{ a.biddingStatusDesc || "" }}
+                    </span>
+                  </div>
+                  <div class="item-flex" v-if="a.countdown.isTimeout">
+                    <span
+                      class="item-button item-button-gray"
+                    >
+                      竞价
+                    </span>
+                  </div>
+                  <div 
+                    class="item-flex" 
+                    v-else-if="a.isUserBid === 0" 
+                    @click="getBiddingDetail(b)"
+                  >
+                    <span
+                      class="item-button item-button-blue"
+                    >
+                      竞价
+                    </span>
+                  </div>
+                  <div class="item-flex" v-else>
+                    <span
+                      class="item-button"
+                    >
+                      竞价中
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- <div class="item-rows">
                 <div class="item-row">
                   <div class="item-flex">
                     <span class="item-text">单号：</span>
@@ -174,7 +258,6 @@
                     <span class="item-text">{{ a.workPeriod || 0 }}{{ a.unitDesc || ""}}</span>
                   </div>
                   <div class="item-flex" v-if="a.countdown">
-                    <!-- <span class="item-text">倒计时：</span> -->
                     <span class="item-text item-text-red" v-if="a.countdown.isTimeout">已超时</span>
                     <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.day">{{ a.countdown.day || 0 }}天</span>
                     <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.hour || 0 }}:</span>
@@ -222,7 +305,7 @@
                     </span>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -540,38 +623,37 @@ export default class BiddingHome extends Vue {
           flex-wrap wrap
           justify-content flex-start
           align-items flex-start
-          padding 0 12px
+          padding 0 15px
         .item
-          margin 1%
-          width 23%
+          flex 1
+          margin 15px
           border-radius 4px
-          border solid 1px $color-bd
-          background $color-bg
-          padding 10px
+          border solid 1px #DDDDDD
+          background #FBFCFE
           &-rows
-            padding 5px
-            border-bottom solid 1px $color-bd
-            &:nth-last-of-type(1)
-              border-bottom none
+            padding 8px 18px 0 18px
+          &-title
+            padding 0px 8px
+            background #EBEFF8
           &-row
             width 100%
             display flex
             justify-content space-between
             align-items center
-            margin-top 4px
-            &:nth-of-type(1)
-              margin-top 0
+            padding 8px 0
+          &-line
+            border-top solid 1px #DDDDDD
+            padding 16px 0
           &-flex
             display flex
             justify-content flex-start
             align-items center
-            margin 5px
           &-icon
             width 20px
             object-fit contain
             margin-right 8px
           &-text
-            line-height 20px
+            // line-height 20px
             font-size 14px
             color $color-text-black
             &-small
@@ -579,14 +661,23 @@ export default class BiddingHome extends Vue {
               color $color-text-gray
             &-red
               color $color-text-red
+            &-blue
+              color $color-text-blue
           &-button
             padding 9px 16px
             border-radius 4px
             font-size 14px
             color $color-text-blue
             background rgba($color-bg-blue, .3)
+            min-width 80px
+            text-align center
+            &-right
+              margin-right 8px
             &-blue
               color $color-text-white
               background rgba($color-bg-blue, 1)
               cursor pointer
+            &-gray
+              color $color-text-white
+              background rgba(#BFBFBF, 1)
 </style>

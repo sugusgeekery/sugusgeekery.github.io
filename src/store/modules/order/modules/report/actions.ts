@@ -16,6 +16,7 @@ import {
   GetMachiningDfmReportList,
   GetInjectDfmReportList,
   CommitReport,
+  SaveReport,
   MachiningApprovalDfmReport,
   InjectApprovalDfmReport,
 } from "@/api/order/report";
@@ -33,9 +34,11 @@ export enum ActionTypes {
   Init = "Init",
   GetDfmReportList = "GetDfmReportList",
   DeleteReportFile = "DeleteReportFile",
+  DeleteReportApprovalFile = "DeleteReportApprovalFile",
   UpdateReportData = "UpdateReportData",
   CommitReport = "CommitReport",
-  ApprovalDfmReport = "ApprovalDfmReport"
+  ApprovalDfmReport = "ApprovalDfmReport",
+  GetReasonContent = "GetReasonContent",
 }
 
 export default {
@@ -68,20 +71,50 @@ export default {
       if (success) {
         const reportList = (ls => {
           for (const [a, b] of ls.entries()) {
-            const { fileList = [] } = b;
+            const { fileList = [], machiningApprovalInfo, injectionApprovalInfo } = b;
             ls[a]["required"] = false;
-            if (fileList && fileList.length) {
-              ls[a]["fileListUrl"] = (l => {
-                const arr = [];
-                for (const v of l) {
-                  const { filePath } = v;
-                  if (filePath) {
-                    arr.push(BASE_IMAGE_URL + filePath);
-                  }
-                }
-                return arr;
-              })(fileList);
-            }
+            // if (fileList && fileList.length) {
+            //   ls[a]["fileListUrl"] = (l => {
+            //     const arr = [];
+            //     for (const v of l) {
+            //       const { filePath } = v;
+            //       if (filePath) {
+            //         arr.push(BASE_IMAGE_URL + filePath);
+            //       }
+            //     }
+            //     return arr;
+            //   })(fileList);
+            // }
+            // if (machiningApprovalInfo) {
+            //   const { approvalFiles = [] } = machiningApprovalInfo || {};
+            //   if (approvalFiles && approvalFiles.length) {
+            //     ls[a].machiningApprovalInfo["approvalFilesUrl"] = (l => {
+            //       const arr = [];
+            //       for (const v of l) {
+            //         const { filePath } = v;
+            //         if (filePath) {
+            //           arr.push(BASE_IMAGE_URL + filePath);
+            //         }
+            //       }
+            //       return arr;
+            //     })(approvalFiles);
+            //   }
+            // }
+            // if (injectionApprovalInfo) {
+            //   const { approvalFiles = [] } = injectionApprovalInfo || {};
+            //   if (approvalFiles && approvalFiles.length) {
+            //     ls[a].injectionApprovalInfo["approvalFilesUrl"] = (l => {
+            //       const arr = [];
+            //       for (const v of l) {
+            //         const { filePath } = v;
+            //         if (filePath) {
+            //           arr.push(BASE_IMAGE_URL + filePath);
+            //         }
+            //       }
+            //       return arr;
+            //     })(approvalFiles);
+            //   }
+            // }
           }
           return ls;
         })(data || []);
@@ -101,9 +134,29 @@ export default {
       const { reportList = [] } = state;
       const { index, key } = params || {};
       reportList[index].fileList.splice(key, 1);
-      reportList[index].fileListUrl.splice(key, 1);
+      // reportList[index].fileListUrl.splice(key, 1);
       commit(MutationTypes.UpdateReportList, reportList);
   },
+  // 删除审核图片
+  [ActionTypes.DeleteReportApprovalFile](store: Store, params: any) {
+    const { state, dispatch, commit } = store;
+    const { reportList = [], initInfo } = state;
+    const { type } = initInfo || {};
+    const { index, text, name, key } = params || {};
+    switch(type) {
+      case Supplier.Dfm:
+        break;
+      case Supplier.Machining:
+        reportList[index].machiningApprovalInfo.approvalFiles.splice(key, 1);
+        reportList[index].machiningApprovalInfo.approvalFilesUrl.splice(key, 1);
+        break;
+      case Supplier.Injection:
+        reportList[index].injectionApprovalInfo.approvalFiles.splice(key, 1);
+        reportList[index].injectionApprovalInfo.approvalFilesUrl.splice(key, 1);
+        break;
+    }
+    commit(MutationTypes.UpdateReportList, reportList);
+},
 
   // 更新报告信息
   [ActionTypes.UpdateReportData](store: Store, params: any) {
@@ -126,27 +179,66 @@ export default {
       const { state, dispatch, commit } = store;
       const { reportList = [], initInfo } = state;
       const { id } = initInfo || {};
-      const { index } = params || {};
-      const { describe, reportTitleId, fileList } = reportList[index] || {};
-      const images = (fileList => {
-        const images = [];
-        for (const v of fileList) {
-          const { fileId } = v;
-          if (fileId) {
-            images.push(fileId);
+      const { type } = params || {};
+      const dfmReportInfoList = [];
+      if (reportList && reportList.length) {
+        for (const [a, b] of reportList.entries()) {
+          const { describe, reportTitleId, fileList = [], required, canCommit } = b;
+          const images = (fileList => {
+            const images = [];
+            if (fileList && fileList.length) {
+              for (const v of fileList) {
+                const { fileId } = v;
+                if (fileId) {
+                  images.push(fileId);
+                }
+              }
+            }
+            return images;
+          })(fileList);
+          if (!required) {
+            if (!describe) {
+              Message.error("请输入报告描述");
+              return;
+            }
+            if (!images || !images.length) {
+              Message.error("请上传图片");
+              return;
+            }
           }
+          dfmReportInfoList.push({ reportTitleId, required: Number(!required), images, describe, canCommit })
         }
-        return images;
-      })(fileList);
-      if (!describe) {
-        Message.error("请输入报告描述");
-        return;
       }
-      if (!images || !images.length) {
-        Message.error("请上传图片");
-        return;
-      }
-      const { success, message, data }: any = await CommitReport({ supplierOrderId: id, describe, reportTitleId, images });
+
+      // const { describe, reportTitleId, fileList } = reportList[index] || {};
+      // const images = (fileList => {
+      //   const images = [];
+      //   for (const v of fileList) {
+      //     const { fileId } = v;
+      //     if (fileId) {
+      //       images.push(fileId);
+      //     }
+      //   }
+      //   return images;
+      // })(fileList);
+      // if (!describe) {
+      //   Message.error("请输入报告描述");
+      //   return;
+      // }
+      // if (!images || !images.length) {
+      //   Message.error("请上传图片");
+      //   return;
+      // }
+      let fn = null;
+      switch(type) {
+        case 1:
+          fn = await SaveReport({ supplierOrderId: id, dfmReportInfoList });
+          break;
+        case 2:
+          fn = await CommitReport({ supplierOrderId: id, dfmReportInfoList });
+          break;
+    }
+      const { success, message, data }: any = fn;
       if (success) {
         Message.success(message);
         dispatch(ActionTypes.GetDfmReportList);
@@ -176,14 +268,46 @@ export default {
             Message.error("请输入驳回原因");
             return;
           }
-          fn = await MachiningApprovalDfmReport({ approvalContent: machiningApprovalInfo.approvalContent, dfmReportId: reportId, opinion: machiningApprovalInfo.opinion });
+          fn = await MachiningApprovalDfmReport({ 
+            approvalContent: machiningApprovalInfo.approvalContent, 
+            dfmReportId: reportId, 
+            opinion: machiningApprovalInfo.opinion,
+            approvalFileIds: (ls => {
+              const arr = [];
+              if (ls && ls.length) {
+                for (const v of ls) {
+                  const { fileId } = v;
+                  if (fileId) {
+                    arr.push(fileId);
+                  }
+                }
+              }
+              return arr;
+            })(machiningApprovalInfo.approvalFiles)
+          });
           break;
         case Supplier.Injection:
           if (injectionApprovalInfo.opinion === 0 && !injectionApprovalInfo.approvalContent) {
             Message.error("请输入驳回原因");
             return;
           }
-          fn = await InjectApprovalDfmReport({ approvalContent: injectionApprovalInfo.approvalContent, dfmReportId: reportId, opinion: injectionApprovalInfo.opinion });
+          fn = await InjectApprovalDfmReport({ 
+            approvalContent: injectionApprovalInfo.approvalContent,
+            dfmReportId: reportId, 
+            opinion: injectionApprovalInfo.opinion,
+            approvalFileIds: (ls => {
+              const arr = [];
+              if (ls && ls.length) {
+                for (const v of ls) {
+                  const { fileId } = v;
+                  if (fileId) {
+                    arr.push(fileId);
+                  }
+                }
+              }
+              return arr;
+            })(injectionApprovalInfo.approvalFiles)
+          });
           break;
       }
       const { success, message, data }: any = fn;
@@ -198,5 +322,24 @@ export default {
       throw new Error(e);
     }
   },
+
+  [ActionTypes.GetReasonContent](store: Store, params: any) {
+    const { state, dispatch, commit } = store;
+    const { approvalContent = "", approvalFiles = [] } = params || {};
+    const content = approvalContent;
+    const fileList = (l => {
+      const arr = [];
+      if (l && l.length) {
+        for (const v of l) {
+          const { filePath } = v;
+          if (filePath) {
+            arr.push({ ...v, filePath: BASE_IMAGE_URL + filePath });
+          }
+        }
+      }
+      return arr;
+    })(approvalFiles)
+    commit(MutationTypes.UpdateReasonContent, { isShow: true, content, fileList });
+  }
   
 }

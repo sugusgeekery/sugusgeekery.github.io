@@ -3,6 +3,7 @@ export interface State {
   initInfo: any | InitInfo;
   timestamp: number;
   reportList: any | Array<ReportList>;
+  reasonContent: ReasonContentTypes;
 };
 
 export interface InitInfo {};
@@ -34,7 +35,13 @@ const state: State = {
     //   "reportTitleId": 3,
     //   "state": 3
     // }
-  ]
+  ],
+  reasonContent: {
+    isShow: false,
+    title: "驳回原因",
+    content: "",
+    fileList: []
+  }
 };
 
 export default state;

@@ -12,6 +12,9 @@ export const GetInjectDfmReportList = (params: any = {}): object => fetch({ url:
 // 提交DFM报告
 export const CommitReport = (data: any = {}): object => fetch({ url: `/supplier/dfmReport/commitReport`, data });
 
+// 暂存DFM报告
+export const SaveReport = (data: any = {}): object => fetch({ url: `/supplier/dfmReport/saveReport`, data });
+
 // 加工供应商确认驳回
 export const MachiningApprovalDfmReport = (data: any = {}): object => fetch({ url: `/supplier/machining/approvalDfmReport`, data });
 

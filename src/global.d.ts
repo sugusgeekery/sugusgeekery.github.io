@@ -126,3 +126,16 @@ interface DesignVersionTypes {
     version: number;
   }>;
 }
+
+
+// DFM报告查看驳回原因
+interface ReasonContentTypes {
+  isShow: boolean;
+  title?: string;
+  content: string;
+  fileList: Array<{
+    fileId: string;
+    fileName: string;
+    filePath: string;
+  }>;
+}
