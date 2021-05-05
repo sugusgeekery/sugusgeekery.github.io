@@ -15,7 +15,7 @@
                 :class="{ 'nav-item-text-active': b === biddingIndex }"
                 @click="updateBiddingIndex(b)"
               >
-                {{ a.text }}
+                {{ a.text || "--" }}
               </div>
             </div>
           </div>
@@ -117,9 +117,9 @@
               v-for="(a, b) in biddingList[biddingIndex].list"
               :key="a.id + '_竞价单_' + b"
             >
-              <div class="cell-text">{{ a.mouldNo || "" }}</div>
-              <div class="cell-text">{{ a.biddingStatusDesc || "" }}</div>
-              <div class="cell-text">{{ a.biddingTime || "" }}</div>
+              <div class="cell-text">{{ a.mouldNo || "--" }}</div>
+              <div class="cell-text">{{ a.biddingStatusDesc || "--" }}</div>
+              <div class="cell-text">{{ a.biddingTime || "--" }}</div>
               <div
                 class="cell-text cell-text-blue"
                 @click="getBiddingDetail(b)"
@@ -137,11 +137,11 @@
               <div class="item-title">
                 <div class="item-row">
                   <div class="item-flex">
-                    <span class="item-button item-button-right">{{ a.typeDesc }}</span>
+                    <span class="item-button item-button-right">{{ a.typeDesc || "--" }}</span>
                     <span class="item-text">单号：</span>
-                    <span class="item-text">{{ a.mouldNo || "" }}</span>
+                    <span class="item-text">{{ a.mouldNo || "--" }}</span>
                   </div>
-                  <div class="item-flex" v-if="a.countdown">
+                  <div class="item-flex" v-if="(biddingIndex === 0 || biddingIndex === 1) && a.countdown">
                     <span class="item-text item-text-red" v-if="a.countdown.isTimeout">已超时</span>
                     <span class="item-text item-text-blue" v-if="!a.countdown.isTimeout && a.countdown.day">{{ a.countdown.day || 0 }}天</span>
                     <span class="item-text item-text-blue" v-if="!a.countdown.isTimeout">{{ a.countdown.hour || 0 }}:</span>
@@ -154,25 +154,25 @@
                 <div class="item-row">
                   <div class="item-flex">
                     <img class="item-icon" src="../../../assets/images/j_price.png" alt=""  />
-                    <span class="item-text">建议价格：￥{{ a.amount || 0 }}</span>
+                    <span class="item-text">建议价格：￥{{ a.amount || "--" }}</span>
                   </div>
                 </div>
                 <div class="item-row">
                   <div class="item-flex">
                     <img class="item-icon" src="../../../assets/images/j_date.png" alt=""  />
-                    <span class="item-text">建议交期：{{ a.workPeriod || 0 }}{{ a.unitDesc || ""}}</span>
+                    <span class="item-text">建议交期：{{ a.workPeriod || "--" }}{{ a.unitDesc || "小时" }}</span>
                   </div>
                 </div>
                 <div class="item-row">
                   <div class="item-flex">
                     <img class="item-icon" src="../../../assets/images/j_address.png" alt=""  />
-                    <span class="item-text">{{ a.address || "" }}</span>
+                    <span class="item-text">{{ a.address || "--" }}</span>
                   </div>
                 </div>
                 <div class="item-row">
                   <div class="item-flex">
                     <img class="item-icon" src="../../../assets/images/j_time.png" alt=""  />
-                    <span class="item-text">截止至{{ a.termTime || "" }}</span>
+                    <span class="item-text">截止至{{ a.termTime || "--" }}</span>
                   </div>
                 </div>
               </div>
@@ -181,16 +181,16 @@
                   <div class="item-flex" v-if="biddingIndex === 0">
                     <span class="item-text item-text-small">已有</span>
                     <span class="item-text item-text-small item-text-red">
-                      {{ a.joinSupplierCount || 0 }}
+                      {{ a.joinSupplierCount || "--" }}
                     </span>
                     <span class="item-text">公司参加</span>
                   </div>
                   <div class="item-flex" v-else-if="biddingIndex === 2">
                     <span class="item-text item-text-red">
-                      {{ a.biddingStatusDesc || "" }}
+                      {{ a.biddingStatusDesc || "--" }}
                     </span>
                   </div>
-                  <div class="item-flex" v-if="a.countdown.isTimeout">
+                  <div class="item-flex" v-if="a.countdown && a.countdown.isTimeout">
                     <span
                       class="item-button item-button-gray"
                     >
@@ -211,101 +211,13 @@
                   <div class="item-flex" v-else>
                     <span
                       class="item-button"
+                      @click="getBiddingDetail(b)"
                     >
                       竞价中
                     </span>
                   </div>
                 </div>
               </div>
-
-
-              <!-- <div class="item-rows">
-                <div class="item-row">
-                  <div class="item-flex">
-                    <span class="item-text">单号：</span>
-                    <span class="item-text">{{ a.mouldNo || "" }}</span>
-                  </div>
-                  <div class="item-flex" v-if="biddingIndex === 0">
-                    <span class="item-text item-text-small">已有</span>
-                    <span class="item-text item-text-small item-text-red">
-                      {{ a.joinSupplierCount || 0 }}
-                    </span>
-                    <span class="item-text">公司参加</span>
-                  </div>
-                  <div class="item-flex" v-else-if="biddingIndex === 2">
-                    <span class="item-text item-text-red">
-                      {{ a.biddingStatusDesc || "" }}
-                    </span>
-                  </div>
-                </div>
-                <div class="item-row">
-                  <div class="item-flex">
-                    <span class="item-text item-text-red" v-if="a.isBidding === 0">（已暂停）</span>
-                  </div>
-                  <div class="item-flex">
-                    <span class="item-button">{{ a.typeDesc }}</span>
-                  </div>
-                </div>
-                <div class="item-row">
-                  <div class="item-flex">
-                    <span class="item-text">竞价价格：</span>
-                    <span class="item-text">￥{{ a.amount || 0 }}</span>
-                  </div>
-                </div>
-                <div class="item-row">
-                  <div class="item-flex">
-                    <span class="item-text">竞价交期：</span>
-                    <span class="item-text">{{ a.workPeriod || 0 }}{{ a.unitDesc || ""}}</span>
-                  </div>
-                  <div class="item-flex" v-if="a.countdown">
-                    <span class="item-text item-text-red" v-if="a.countdown.isTimeout">已超时</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout && a.countdown.day">{{ a.countdown.day || 0 }}天</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.hour || 0 }}:</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.minute || 0 }}:</span>
-                    <span class="item-text item-text-red" v-if="!a.countdown.isTimeout">{{ a.countdown.second || 0 }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item-rows" v-if="biddingIndex === 0">
-                <div class="item-row">
-                  <div class="item-flex">
-                    <img
-                      class="item-icon"
-                      src="../../../assets/images/address.png"
-                      alt=""
-                    />
-                    <span class="item-text">
-                      {{ a.address || "" }}
-                    </span>
-                  </div>
-                </div>
-                <div class="item-row">
-                  <div class="item-flex">
-                    <img
-                      class="item-icon"
-                      src="../../../assets/images/date.png"
-                      alt=""
-                    />
-                    <span class="item-text">
-                      截止至{{ a.termTime || "" }}
-                    </span>
-                  </div>
-                  <div class="item-flex" v-if="a.isUserBid === 0">
-                    <span
-                      class="item-button item-button-blue"
-                    >
-                      竞价
-                    </span>
-                  </div>
-                  <div class="item-flex" v-else>
-                    <span
-                      class="item-button"
-                    >
-                      竞价中
-                    </span>
-                  </div>
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
@@ -623,9 +535,10 @@ export default class BiddingHome extends Vue {
           flex-wrap wrap
           justify-content flex-start
           align-items flex-start
-          padding 0 15px
+          padding 15px
         .item
-          flex 1
+          // flex 1 1 300
+          min-width 300px
           margin 15px
           border-radius 4px
           border solid 1px #DDDDDD
