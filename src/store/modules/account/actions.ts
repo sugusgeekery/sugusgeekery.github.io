@@ -292,6 +292,7 @@ export default {
       const { success, message, data }: any = await GetPersonQualifyInfo({});
       if (success) {
         commit(MutationTypes.UpdateUserQualify, { ...(data || {})});
+        dispatch(ActionTypes.GetCompQualifyLabelInfo, 1);
       } else {
         Message.error(message);
       }
@@ -305,12 +306,12 @@ export default {
       const { state, dispatch, commit } = store;
       const { userQualify } = state;
       const { idcardBackImgId, idcardFrontImgId, labelList = [] } = userQualify || {};
-      const labelCodeList = (ls => {
+      const labelIdList = (ls => {
         const arr = [];
         for (const v of ls) {
-          const { isSelected, code } = v;
+          const { isSelected, id } = v;
           if (isSelected) {
-            arr.push(code);
+            arr.push(id);
           }
         }
         return arr;
@@ -323,11 +324,11 @@ export default {
         Message.error("请上传身份证背面照！");
         return;
       }
-      if (!labelCodeList.length) {
+      if (!labelIdList.length) {
         Message.error("请选择你拥有的生产能力标签！");
         return;
       }
-      const { success, message, data }: any = await SavePersonQualifyInfo({ idcardBackImgId, idcardFrontImgId, labelCodeList });
+      const { success, message, data }: any = await SavePersonQualifyInfo({ idcardBackImgId, idcardFrontImgId, label: labelIdList.join(",") });
       if (success) {
         Message.success(message);
       } else {
@@ -345,7 +346,7 @@ export default {
       const { success, message, data }: any = await GetCompQualifyInfo({});
       if (success) {
         commit(MutationTypes.UpdateCompanyQualify, { ...(data || {})});
-        dispatch(ActionTypes.GetCompQualifyLabelInfo);
+        dispatch(ActionTypes.GetCompQualifyLabelInfo, 2);
       } else {
         Message.error(message);
       }
@@ -353,8 +354,8 @@ export default {
       throw new Error(e);
     }
   },
-  // 获取公司资质生产能力标签
-  async [ActionTypes.GetCompQualifyLabelInfo](store: Store) {
+  // 获取资质生产能力标签
+  async [ActionTypes.GetCompQualifyLabelInfo](store: Store, status = 1) {
     try {
       const { state, dispatch, commit } = store;
       const { companyQualify } = state;
@@ -372,7 +373,11 @@ export default {
           }
           return list;
         })(list, label);
-        commit(MutationTypes.UpdateCompanyQualify, { labelList });
+        if (status === 1) {
+          commit(MutationTypes.UpdateUserQualify, { labelList });
+        } else if (status === 2) {
+          commit(MutationTypes.UpdateCompanyQualify, { labelList });
+        }
       } else {
         Message.error(message);
       }
