@@ -239,13 +239,13 @@
           </div>
           <div
             class="model-flex-title"
-            v-if="biddingDetail.selectedUserBiddingInfo"
+            v-if="!biddingDetail.getBiddingStatus && biddingDetail.selectedUserBiddingInfo"
           >
             中标信息
           </div>
           <div 
             class="model-flex-items"
-            v-if="biddingDetail.selectedUserBiddingInfo"
+            v-if="!biddingDetail.getBiddingStatus && biddingDetail.selectedUserBiddingInfo"
           >
             <div class="model-flex-item">
               <div class="model-flex-item-label">中标价格</div>
