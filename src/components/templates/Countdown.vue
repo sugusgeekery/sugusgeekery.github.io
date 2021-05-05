@@ -94,15 +94,15 @@ export default class Countdown extends Vue {
   overflow auto
   margin 0 0 0 20px
   padding 20px
-  min-width 300px
+  min-width 380px
   &-title
     font-size 16px
     color $color-text-black
-    margin 10px 0
+    margin 10px 20px
   &-content
     font-size 16px
     color $color-text-black
-    margin 30px 0 40px 0
+    margin 30px 20px
     &-label
       margin-right 18px
     &-red
@@ -115,7 +115,7 @@ export default class Countdown extends Vue {
   &-text
     font-size 14px
     color $color-text-gray
-    margin 10px 0
+    margin 10px 20px
     &-gray
       color $color-text-gray
       margin-right 18px

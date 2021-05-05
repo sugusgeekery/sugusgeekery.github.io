@@ -35,3 +35,15 @@ export const Logout = (params: object = {}): object => fetch({ url: "/supplier/o
 
 
 
+
+// 获取订单类型筛选项
+export const GetMouldOrderType = (params: any = {}): object => fetch({ url: `/supplier/common/getMouldOrderType`, method: "GET", params });
+
+// 获取资质认证生产能力标签
+export const GetCompQualifyLabelInfo = (params: any = {}): object => fetch({ url: `/supplier/userManage/getLabelList`, method: "GET", params });
+
+// 获取订单状态筛选项
+export const GetOrderStatus = (params: any = {}): object => fetch({ url: `/supplier/common/getOrderStatus`, method: "GET", params });
+
+
+

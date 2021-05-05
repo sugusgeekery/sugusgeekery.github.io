@@ -3,259 +3,156 @@
     <div class="model-wrapper">
       <div class="model-header">
         <div class="model-title">
-          <div class="model-title-text">
-            模具{{ biddingDetail.realMouldNo || "" }}
-          </div>
           <div class="model-title-button">{{ biddingDetail.typeDesc }}</div>
+          <div class="model-title-text">
+            <span class="model-title-text-black">模具{{ biddingDetail.realMouldNo || "--" }}</span>
+          </div>
+          <div class="model-title-text">
+            <span class="model-title-text-red">{{ biddingDetail.companyNum || "--" }}</span>
+            <span class="model-title-text-gray">家公司正在参与竞价</span>
+          </div>
         </div>
-        <div
-          class="model-cancel"
-          @click="updateBiddingDetail({ isShow: false })"
-        ></div>
+        <div class="model-cancel" @click="updateBiddingDetail({ isShow: false })"></div>
       </div>
       <div class="model-body">
         <div class="model-flex">
-          <div class="model-flex-title">模具信息</div>
-          <div class="model-flex-row">
-            <!-- <div class="model-flex-navigations">
-              <div 
-                class="model-flex-navigation" 
-                :class="{'model-flex-navigation-active': b === biddingDetail.productInfoIndex}" 
-                v-for="(a, b) in biddingDetail.productInfos.length" 
-                :key="b" 
-                @click="updateProductInfoIndex({ type: 3, index: b })"
-              >
-                {{ a }}
+          <div class="model-flex-list">
+            <div>
+              <div class="model-flex-li">
+                <span class="model-flex-li-label">模具寿命：</span>
+                <span class="model-flex-li-text">{{ biddingDetail.lifetime || "--" }}</span>
               </div>
-            </div> -->
-            <div class="model-flex-tips">{{ biddingDetail.productInfoIndex + 1 }}/{{ biddingDetail.productInfos.length }}</div>
-            <div class="model-flex-arrow" @click="updateProductInfoIndex({ type: 2 })">
-              <img
-                class="model-flex-arrow-icon"
-                src="../../../assets/images/arrow_left.png"
-                alt=""
-              />
             </div>
+            <div>
+              <div class="model-flex-li">
+                <span class="model-flex-li-label">精度标准：</span>
+                <span class="model-flex-li-text">{{ biddingDetail.toleranceValue || "--" }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="model-flex-cells" v-if="biddingDetail.productInfos && biddingDetail.productInfos.length">
             <div
-              class="model-flex-content"
+              class="model-flex-cell"
               v-for="(a, b) in biddingDetail.productInfos"
               :key="'_产品列表_' + b"
               v-show="b === biddingDetail.productInfoIndex"
             >
-              <div class="model-flex-context">
-                <div class="model-flex-text">
-                  <span>模具寿命：</span>
-                  <span>{{ biddingDetail.lifetime || "" }}</span>
-                </div>
-                <div class="model-flex-text">
-                  <span class="model-flex-text-black">产品：</span>
-                  <span>{{ a.productNo || "" }}</span>
-                </div>
-                <div class="model-flex-image" @click="getProductInfo()" @contextmenu.prevent="onContextmenu($event)">
-                  <img v-if="a.productImageFull" :src="a.productImageFull" alt="" />
-                </div>
+              <div class="model-flex-cell-title">
+                <span class="model-flex-cell-title-blue">产品：{{ a.productNo || "--" }}</span>
               </div>
-              <div class="model-flex-context">
-                <div class="model-flex-text">
-                  <span>精度标准：</span>
-                  <span>{{ biddingDetail.toleranceValue || "" }}</span>
+              <div class="model-flex-cell-row">
+                <div class="model-flex-cell-left">
+                  <div class="model-flex-cell-image" @click="getProductInfo()" @contextmenu.prevent="onContextmenu($event)">
+                    <img v-if="a.productImageFull" :src="a.productImageFull" alt="" />
+                  </div>
                 </div>
-                <div class="model-flex-text">
-                  <span>表面要求：</span>
-                  <span>
-                    {{ a.surfaceTreatment || "" }}
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>产品数量：</span>
-                  <span>
-                    {{ a.productNum || "" }}
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>重量(g)：</span>
-                  <span>
-                    {{ a.productWeight || "" }}
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>尺寸(mm)：</span>
-                  <span>
-                    {{ a.productLength || "" }}
-                    *{{ a.productWidth || "" }} *{{ a.productHeight || "" }}
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>材料及颜色：</span>
-                  <span
-                    class="model-flex-text-blue"
-                    @click="getMaterialAndColor()"
-                  >
-                    点击查看
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>二次工艺：</span>
-                  <span
-                    class="model-flex-text-blue"
-                    @click="getTechnology()"
-                  >
-                    点击查看
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>排模方案：</span>
-                  <span
-                    class="model-flex-text-blue"
-                    @click="getArrangementScheme()"
-                  >
-                    点击查看
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="model-flex-arrow" @click="updateProductInfoIndex({ type: 1 })">
-              <img
-                class="model-flex-arrow-icon"
-                src="../../../assets/images/arrow_right.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-        <div class="model-flex">
-          <div class="model-flex-title">派单信息</div>
-          <div class="model-flex-row">
-            <div class="model-flex-content">
-              <div class="model-flex-context">
-                <div class="model-flex-text">
-                  <span>建议价格</span>
-                </div>
-                <div class="model-flex-text">
-                  <span>建议交期</span>
-                </div>
-                <div class="model-flex-text">
-                  <span>准时率（≥）</span>
-                </div>
-                <div class="model-flex-text">
-                  <span>失误率（≤）</span>
-                </div>
-                <div class="model-flex-text">
-                  <span>派单期限</span>
-                </div>
-                <div class="model-flex-text">
-                  <span>交付地址</span>
-                </div>
-              </div>
-              <div class="model-flex-context">
-                <div class="model-flex-text">
-                  <span>
-                    ￥{{ biddingDetail.biddingHeadInfo.amount || 0 }}
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>
-                    {{ biddingDetail.biddingHeadInfo.workPeriod || "" }}
-                    {{ biddingDetail.biddingHeadInfo.unitDesc || "" }}
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>
-                    {{ biddingDetail.biddingHeadInfo.accuracy || 0 }}%
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>
-                    {{ biddingDetail.biddingHeadInfo.anerror || 0 }}%
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>
-                    {{ biddingDetail.biddingHeadInfo.termTime || "" }}
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>
-                    {{ biddingDetail.biddingHeadInfo.address || "" }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="model-flex">
-          <div
-            class="model-flex-title"
-            v-if="
-              biddingDetail.biddingIndex === 2 ||
-                biddingDetail.biddingIndex === 3
-            "
-          >
-            中标信息
-          </div>
-          <div
-            class="model-flex-row"
-            v-if="
-              biddingDetail.biddingIndex === 2 ||
-                biddingDetail.biddingIndex === 3
-            "
-          >
-            <div class="model-flex-content">
-              <div class="model-flex-context">
-                <div class="model-flex-text">
-                  <span>中标价格</span>
-                </div>
-                <div class="model-flex-text">
-                  <span>中标交期</span>
-                </div>
-              </div>
-              <div class="model-flex-context" v-if="biddingDetail.selectedUserBiddingInfo">
-                <div class="model-flex-text">
-                  <span>￥</span>
-                  <span>
-                    {{ biddingDetail.selectedUserBiddingInfo.amount || 0 }}
-                  </span>
-                </div>
-                <div class="model-flex-text">
-                  <span>
-                    {{ biddingDetail.selectedUserBiddingInfo.workPeriod || 0 }}
-                  </span>
-                  <span>小时</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="model-flex-title">
-            竞价信息
-          </div>
-          <div class="model-flex-row">
-            <div class="model-flex-content">
-              <div class="model-flex-context" v-if="biddingDetail.joinBiddingInfo">
-                <div class="model-flex-text">
-                  <span>竞标价格</span>
-                </div>
-                <div class="model-flex-text">
-                  <span>竞标交期</span>
-                </div>
-                <div class="model-flex-buttons">
-                  <div
-                    class="model-flex-button model-flex-button-blue"
-                    @click="joinBidding()"
-                    v-if="
-                      biddingDetail.biddingIndex === 0 ||
-                        biddingDetail.biddingIndex === 1
-                    "
-                  >
-                    <!-- {{ biddingDetail.isEdit ? "修改" : biddingDetail.biddingState === 1 ? "编辑" : "竞价" }} -->
-                    {{ biddingDetail.biddingState !== 1 ? "竞价" : biddingDetail.isEdit ? "修改" :  "编辑" }}
+                <div class="model-flex-cell-right">
+                  <div class="model-flex-cell-text">
+                    <span>表面要求：</span>
+                    <span>
+                      {{ a.surfaceTreatment || "--" }}
+                    </span>
+                  </div>
+                  <div class="model-flex-cell-text">
+                    <span>产品数量：</span>
+                    <span>
+                      {{ a.productNum || "--" }}
+                    </span>
+                  </div>
+                  <div class="model-flex-cell-text">
+                    <span>重量(g)：</span>
+                    <span>
+                      {{ a.productWeight || "--" }}
+                    </span>
+                  </div>
+                  <div class="model-flex-cell-text">
+                    <span>尺寸(mm)：</span>
+                    <span>
+                      {{ a.productLength || "--" }}
+                      *{{ a.productWidth || "--" }} 
+                      *{{ a.productHeight || "--" }}
+                    </span>
+                  </div>
+                  <div class="model-flex-cell-text">
+                    <span>材料及颜色：</span>
+                    <span class="model-flex-cell-text-blue" @click="getMaterialAndColor()">
+                      点击查看
+                    </span>
+                  </div>
+                  <div class="model-flex-cell-text">
+                    <span>二次工艺：</span>
+                    <span class="model-flex-cell-text-blue" @click="getTechnology()">
+                      点击查看
+                    </span>
+                  </div>
+                  <div class="model-flex-cell-text">
+                    <span>排模方案：</span>
+                    <span class="model-flex-cell-text-blue" @click="getArrangementScheme()">
+                      点击查看
+                    </span>
                   </div>
                 </div>
               </div>
-              <div class="model-flex-context">
-                <div class="model-flex-text">
-                  <span>￥</span>
+            </div>
+          </div>
+        </div>
+        <div class="model-flex" v-if="biddingDetail.biddingHeadInfo">
+          <div class="model-flex-title">派单信息</div>
+          <div class="model-flex-items">
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">建议价格</div>
+              <div class="model-flex-item-text">￥{{ biddingDetail.biddingHeadInfo.amount || "--" }}</div>
+            </div>
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">建议交期</div>
+              <div class="model-flex-item-text">
+                {{ biddingDetail.biddingHeadInfo.workPeriod || "--" }}
+                {{ biddingDetail.biddingHeadInfo.unitDesc || "小时" }}
+              </div>
+            </div>
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">准时率（≥）</div>
+              <div class="model-flex-item-text">{{ biddingDetail.biddingHeadInfo.accuracy || "--" }}%</div>
+            </div>
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">失误率（≤）</div>
+              <div class="model-flex-item-text">{{ biddingDetail.biddingHeadInfo.anerror || "--" }}%</div>
+            </div>
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">派单期限</div>
+              <div class="model-flex-item-text">{{ biddingDetail.biddingHeadInfo.termTime || "--" }}</div>
+            </div>
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">交付地址</div>
+              <div class="model-flex-item-text">{{ biddingDetail.biddingHeadInfo.address || "--" }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="model-flex">
+          <div class="model-flex-title" v-if="biddingDetail.biddingIndex">
+            <span>我的竞价信息</span>
+            <span class="model-flex-title-button model-flex-title-button-red" v-if="biddingDetail.getBiddingStatus">已中标</span>
+            <span class="model-flex-title-button model-flex-title-button-gray" v-else>未中标</span>
+          </div>
+          <div class="model-flex-title" v-else>
+            <span>竞价信息</span>
+          </div>
+          <div class="model-flex-items">
+            <div class="model-flex-item" v-if="biddingDetail.joinBiddingInfo">
+              <div class="model-flex-item-label">竞标价格</div>
+              <div 
+                class="model-flex-item-input"
+                v-if="
+                  biddingDetail.biddingIndex === 0 ||
+                    biddingDetail.biddingIndex === 1
+                "
+              >
+                <span>￥</span>
+                <div 
+                  class="model-flex-item-input-box" 
+                  
+                >
                   <input
-                    class="model-flex-input"
                     type="text"
                     placeholder="请输入竞标价格"
                     :value="biddingDetail.joinBiddingInfo.amount || 0"
@@ -269,18 +166,30 @@
                           }
                         })
                     "
-                    v-if="
-                      biddingDetail.biddingIndex === 0 ||
-                        biddingDetail.biddingIndex === 1
-                    "
                   />
-                  <span v-else>{{
-                    biddingDetail.joinBiddingInfo.amount || 0
-                  }}</span>
                 </div>
-                <div class="model-flex-text">
+              </div>
+              <div 
+                class="model-flex-item-text"
+                v-else
+              >
+                <span>￥</span>
+                <span>
+                  {{ biddingDetail.joinBiddingInfo.amount || 0 }}
+                </span>
+              </div>
+            </div>
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">竞标交期</div>
+              <div 
+                class="model-flex-item-input"
+                v-if="
+                  biddingDetail.biddingIndex === 0 ||
+                    biddingDetail.biddingIndex === 1
+                "
+              >
+                <div class="model-flex-item-input-box">
                   <input
-                    class="model-flex-input"
                     type="text"
                     placeholder="请输入竞标交期"
                     :value="biddingDetail.joinBiddingInfo.workPeriod || 0"
@@ -294,26 +203,61 @@
                           }
                         })
                     "
-                    v-if="
-                      biddingDetail.biddingIndex === 0 ||
-                        biddingDetail.biddingIndex === 1
-                    "
                   />
-                  <span v-else>
-                    {{ biddingDetail.joinBiddingInfo.workPeriod || 0 }}
-                  </span>
-                  <span>{{ biddingDetail.joinBiddingInfo.unitDesc }}</span>
                 </div>
-                <div class="model-flex-buttons">
-                  <div
-                    class="model-flex-button model-flex-button-blue"
-                    @click="removeBidding()"
-                    v-if="(biddingDetail.biddingIndex === 0 ||
-                        biddingDetail.biddingIndex === 1) && biddingDetail.biddingState === 1"
-                  >
-                    取消竞价
-                  </div>
+                <span>{{ biddingDetail.joinBiddingInfo.unitDesc || "小时" }}</span>
+              </div>
+              <div class="model-flex-item-text" v-else>
+                <span>
+                  {{ biddingDetail.joinBiddingInfo.workPeriod || "--" }}
+                </span>
+                <span>{{ biddingDetail.joinBiddingInfo.unitDesc || "小时" }}</span>
+              </div>
+            </div>
+            <div class="model-flex-item">
+              <div class="model-flex-buttons">
+                <div
+                  class="model-flex-button model-flex-button-blue"
+                  @click="joinBidding()"
+                  v-if="
+                    biddingDetail.biddingIndex === 0 ||
+                      biddingDetail.biddingIndex === 1
+                  "
+                >
+                  {{ biddingDetail.biddingState !== 1 ? "竞价" : biddingDetail.isEdit ? "修改" :  "编辑" }}
                 </div>
+                <div
+                  class="model-flex-button model-flex-button-blue"
+                  @click="removeBidding()"
+                  v-if="(biddingDetail.biddingIndex === 0 ||
+                      biddingDetail.biddingIndex === 1) && biddingDetail.biddingState === 1"
+                >
+                  取消竞价
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="model-flex-title"
+            v-if="!biddingDetail.getBiddingStatus && biddingDetail.selectedUserBiddingInfo"
+          >
+            中标信息
+          </div>
+          <div 
+            class="model-flex-items"
+            v-if="!biddingDetail.getBiddingStatus && biddingDetail.selectedUserBiddingInfo"
+          >
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">中标价格</div>
+              <div class="model-flex-item-text" >
+                ￥{{ biddingDetail.selectedUserBiddingInfo.amount || "--" }}
+              </div>
+            </div>
+            <div class="model-flex-item">
+              <div class="model-flex-item-label">中标交期</div>
+              <div class="model-flex-item-text">
+                {{ biddingDetail.selectedUserBiddingInfo.workPeriod || "--" }}
+                {{ biddingDetail.selectedUserBiddingInfo.unitDesc || "小时" }}
               </div>
             </div>
           </div>
@@ -462,13 +406,15 @@ export default class BiddingDetail extends Vue {
     top 50%
     left 50%
     transform translate(-50%, -50%)
-    max-width 90%
-    max-height 90%
-    min-width 1100px
-    min-height 400px
+    width 80%
+    height 70%
     background $color-bg-white
-    overflow auto
+    display flex
+    flex-direction column
+    justify-content flex-start
+    align-items flex-start
   &-header
+    width 100%
     display flex
     justify-content space-between
     align-items center
@@ -478,9 +424,19 @@ export default class BiddingDetail extends Vue {
     justify-content flex-start
     align-items center
     &-text
-      font-size 16px
-      color $color-text-black
-      margin-right 20px
+      margin-left 20px
+      display flex
+      justify-content flex-start
+      align-items center
+      &-black
+        font-size 16px
+        color $color-text-black
+      &-red
+        font-size 18px
+        color $color-text-red
+      &-gray
+        font-size 14px
+        color $color-text-gray
     &-button
       padding 9px 16px
       border-radius 4px
@@ -514,110 +470,179 @@ export default class BiddingDetail extends Vue {
       transform-origin 0 100%
       transform rotate(-45deg)
   &-body
+    flex 1
+    width 100%
     border-top solid 1px $color-bd
     display flex
-    justify-content space-between
+    justify-content flex-start
     align-items flex-start
+    overflow auto
   &-flex
-    min-width 230px
-    padding 20px
-    min-height 400px
     border-right solid 1px $color-bd
-    position relative
+    flex 1
+    height 100%
+    display flex
+    flex-direction column
+    justify-content flex-start
+    align-items flex-start
     &:nth-last-of-type(1)
       border-right none
     &-title
       font-size 16px
       color $color-text-black
-    &-row
-      height 100%
-      display flex
-      justify-content space-between
-      align-items center
-    &-tips
-      position absolute
-      bottom 10px
-      left 50%
-      transform translateX(-50%)
-      font-size 14px
-      color $color-text-gray
-      background $color-bg-white
-    &-navigations
-      position absolute
-      bottom 10px
-      left 50%
-      transform translateX(-50%)
-      display flex
-      justify-content center
-      align-items center
-    &-navigation
-      margin 10px
-      border-radius 50%
-      width 24px
-      height 24px
-      font-size 12px
-      color $color-text-gray
-      background $color-bg
-      text-align center
-      line-height 26px
-      cursor pointer
-      transition all .3s
-      &:hover,
-      &-active
-        color $color-text-white
-        background $color-bg-blue
-    &-arrow
-      width 20px
-      height 20px
-      margin-right 20px
-      cursor pointer
-      &-icon
-        width 100%
-        height 100%
-        object-fit cover
-    &-content
+      font-weight bold
+      margin 16px 24px
+      &-button
+        margin-left 5px
+        padding 4px 8px
+        border-radius 4px
+        font-size 12px
+        color $color-text-blue
+        background rgba($color-bg-blue, .3)
+        &-blue
+          color $color-text-white
+          background rgba($color-bg-blue, 1)
+          cursor pointer
+        &-red
+          color $color-text-white
+          background rgba($color-bg-red, 1)
+          cursor pointer
+        &-gray
+          color $color-text-white
+          background rgba(#BFBFBF, 1)
+          cursor pointer
+    &-list
+      width 100%
       display flex
       justify-content flex-start
       align-items flex-start
-      margin 10px 0
-    &-context
-      margin 0 20px 0 0
-      &:nth-last-of-type(1)
-        margin 0
-    &-image
-      width 110px
-      height 110px
-      img
-        width 100%
-        height 100%
-        object-fit contain
-    &-text
-      line-height 36px
-      font-size 14px
-      color $color-text-gray
+      background #F2F2F2
+    &-li
       display flex
       justify-content flex-start
       align-items center
-      &-black
-        color $color-text-black
-      &-blue
-        color $color-text-blue
-        cursor pointer
-    &-input
-      max-width 80px
-      min-height 30px
-      border solid 1px $color-bd
-      border-radius 4px
-      outline none
-      font-size 14px
-      color $color-text-gray
-      margin 0 8px
-      padding 4px
-    &-buttons
-      margin-top 20px
+      margin 16px 12px
+      &-label
+        min-width 80px
+        text-align right
+        font-size 14px
+        color: black
+      &-text
+        text-align left
+        font-size 14px
+        color black
+        &-red
+          font-size 16px
+          color red
+    &-cells
       width 100%
+      flex 1
+      overflow auto
+      padding 0 24px
+    &-cell
+      padding 6px 0
+      border-bottom solid 1px #EEEEEE
+      &:nth-last-of-type(1) 
+        border-bottom solid 1px transparent
+      &-title
+        padding 12px 0
+        font-size 16px
+        font-weight bold
+        &-blue
+          color $color-text-blue
+      &-row
+        display flex
+        justify-content flex-start
+        align-items flex-start
+      &-left
+        margin-right 24px
+      &-right
+        flex 1
+      &-image
+        width 120px
+        height 120px
+        background #F2F2F2
+        margin 0 0 10px 0
+        img
+          width 100%
+          height 100%
+          object-fit contain
+      &-text
+        margin 0 0 10px 0
+        font-size 14px
+        color $color-text-gray
+        display flex
+        justify-content flex-start
+        align-items center
+        &-black
+          color $color-text-black
+        &-blue
+          color $color-text-blue
+          cursor pointer
+    &-items
+      width 100%
+      overflow auto
+      padding 0 24px
+    &-item
+      padding 10px 0
+      display flex
+      justify-content flex-start
+      align-items center
+      &-label
+        min-width 100px
+        font-size 14px
+        color $color-text-black
+      &-text
+        flex 1
+        font-size 14px
+        color $color-text-black
+        &-red
+          font-size 16px
+          color $color-text-red
+      &-input
+        max-width 150px
+        min-width 100px
+        display flex
+        justify-content flex-start
+        align-items center
+        border-radius 4px
+        border solid 1px $color-bd
+        padding 8px
+        cursor pointer
+        &:hover
+          border solid 1px $color-bd-blue
+        &-box
+          flex 1
+          margin 0 8px
+          input
+            width 100%
+            outline none
+            border none
+            font-size 14px
+            color $color-text-gray
+        
+
+    &-row
       display flex
       justify-content space-between
+      align-items center
+      overflow auto
+      margin 16px 24px
+    // &-input
+    //   max-width 100px
+    //   min-height 30px
+    //   border solid 1px $color-bd
+    //   border-radius 4px
+    //   outline none
+    //   font-size 14px
+    //   color $color-text-gray
+    //   margin 0 8px
+    //   padding 4px 8px
+    &-buttons
+      margin-top 40px
+      width 100%
+      display flex
+      justify-content flex-start
       align-items center
     &-button
       margin-right 20px

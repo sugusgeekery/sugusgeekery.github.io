@@ -66,7 +66,7 @@ export default class AsideNotification extends Vue {}
   position fixed
   top 50%
   right 0
-  z-index 999
+  z-index 1
   border solid 1px $color-bd
   background $color-bg-white
   transform translateY(-50%)

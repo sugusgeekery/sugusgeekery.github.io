@@ -16,10 +16,10 @@ export const SaveUserInfo = (data: object = {}): object => fetch({ url: "/suppli
 
 
 // 获取个人资质信息
-export const GetPersonQualifyInfo = (params: any): object => fetch({ url: `/supplier/userManage/getPersonQualifyInfo`, method: "GET", params });
+export const GetPersonQualifyInfo = (params: any): object => fetch({ url: `/supplier/userManage/getPersonQualifyInfoV1`, method: "GET", params });
 
 // 保存个人资质信息
-export const SavePersonQualifyInfo = (data: object = {}): object => fetch({ url: "/supplier/userManage/savePersonQualifyInfo", data });
+export const SavePersonQualifyInfo = (data: object = {}): object => fetch({ url: "/supplier/userManage/savePersonQualifyInfoV1", data });
 
 
 // 获取公司信息
@@ -30,7 +30,7 @@ export const SaveCompanyInfo = (data: object = {}): object => fetch({ url: "/sup
 
 
 // 获取公司资质信息
-export const GetCompQualifyInfo = (params: any): object => fetch({ url: `/supplier/userManage/getCompQualifyInfo`, method: "GET", params });
+export const GetCompQualifyInfo = (params: any): object => fetch({ url: `/supplier/userManage/getCompQualifyInfoV1`, method: "GET", params });
 
 // 保存公司资质信息
-export const SaveCompanyQualifyInfo = (data: object = {}): object => fetch({ url: "/supplier/userManage/saveCompanyQualifyInfo", data });
+export const SaveCompanyQualifyInfo = (data: object = {}): object => fetch({ url: "/supplier/userManage/saveCompanyQualifyInfoV1", data });

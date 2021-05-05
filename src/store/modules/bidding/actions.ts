@@ -12,6 +12,8 @@ import { BASE_IMAGE_URL } from "@/config";
 
 import {
   GetMouldOrderType,
+} from "@/api";
+import {
   GetSelectByUser,
   GetSelectMyBidding,
   JoinBidding,
@@ -137,7 +139,7 @@ export default {
   [ActionTypes.CaculateCountdown](store: Store, isCountdown: boolean = true) {
     const { state, dispatch, commit } = store;
     const { biddingIndex = 0, biddingList = [] } = state;
-    const { type = 0, pageNum = 1, pageSize = 10, setTimeInterval } = biddingList[biddingIndex] || {}; 
+    const { setTimeInterval } = biddingList[biddingIndex] || {}; 
     if (biddingIndex === 0 || biddingIndex === 1) {
       const { list = [] } = biddingList[biddingIndex] || {};
       if (list.length) {

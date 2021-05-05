@@ -70,7 +70,7 @@ export default class OrderDetailView extends Vue {
   public getCountdown!: Function;
 
   public created() {
-    this.getCountdown();
+    // this.getCountdown();
   }
 
   public beforeDestroy() {
