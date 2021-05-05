@@ -22,7 +22,7 @@
           <div class="item-title-text">
             {{ a.reportTitle }}
           </div>
-          <div class="item-title-select" v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit">
+          <div class="item-title-select" v-if="!a.state && initInfo.type === Supplier.Dfm">
             <el-checkbox 
               class="item-title-select-box" 
               v-model="a.required" 
@@ -33,7 +33,7 @@
           <img class="item-title-icon" src="../../../../assets/images/select_green.png" alt="" v-if="a.state === 2" />
           <div
             class="item-title-button"
-            v-else-if="a.state === 3 && initInfo.type === Supplier.Dfm && a.canCommit"
+            v-else-if="a.state === 3 && initInfo.type === Supplier.Dfm"
             @click="
               updateReportData({
                 index: b,
@@ -52,7 +52,7 @@
             @click="(index = b, pasteType = 1) "
           >
           
-            <!-- @click="(!a.state && initInfo.type === Supplier.Dfm && a.canCommit) ? (index = b, pasteType = 1) : null;" -->
+            <!-- @click="(!a.state && initInfo.type === Supplier.Dfm) ? (index = b, pasteType = 1) : null;" -->
             <div class="swiper-wrapper" v-if="a.fileList && a.fileList.length">
               <div
                 class="swiper-slide"
@@ -67,7 +67,7 @@
                 ></el-image>
                 <div
                   class="swiper-slide-delete"
-                  v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit"
+                  v-if="!a.state && initInfo.type === Supplier.Dfm"
                   @click="deleteReportFile({ index: b, key: d })"
                 >
                   +
@@ -75,24 +75,24 @@
               </div>
               <div
                 class="swiper-slide"
-                v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit"
+                v-if="!a.state && initInfo.type === Supplier.Dfm"
                 @click="index = b"
               >
                 <div class="swiper-slide-add" @click="selectFile(b, 1)">+</div>
               </div>
             </div>
-            <div class="swiper-tip" v-else-if="initInfo.type === Supplier.Dfm && a.canCommit">
+            <div class="swiper-tip" v-else-if="initInfo.type === Supplier.Dfm">
               <div class="swiper-tip-text" @click="selectFile(b, 1)">点击或ctrl+v粘贴上传图片</div>
             </div>
           </div>
           <div 
             class="item-flex"
-            @click="(!a.state && initInfo.type === Supplier.Dfm && a.canCommit) ? (index = b, pasteType = 2) : null;"
+            @click="(!a.state && initInfo.type === Supplier.Dfm) ? (index = b, pasteType = 2) : null;"
           >
             <div class="item-content">
               <div
                 class="item-content-textarea"
-                v-if="!a.state && initInfo.type === Supplier.Dfm  && a.canCommit"
+                v-if="!a.state && initInfo.type === Supplier.Dfm "
               >
                 <textarea
                   name=""
@@ -224,7 +224,7 @@
             </div>
             <!-- <div
               class="item-buttons"
-              v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit"
+              v-if="!a.state && initInfo.type === Supplier.Dfm"
             >
               <div
                 class="item-button item-button-blue"
@@ -676,7 +676,7 @@
                   </div>
                   <div
                     class="swiper-slide-delete"
-                    v-if="!a.state && initInfo.type === Supplier.Dfm && a.canCommit"
+                    v-if="!a.state && initInfo.type === Supplier.Dfm"
                     @click="deleteReportFile({ index: b, key: d })"
                   >
                     X
@@ -685,7 +685,7 @@
               </div>
               <div
                 class="swiper-slide"
-                v-if="!a.state && initInfo.type === Supplier.Dfm  && a.canCommit"
+                v-if="!a.state && initInfo.type === Supplier.Dfm "
                 @click="index = b"
               >
                 <div class="swiper-slide-box" :class="{'swiper-slide-box-active': index === b}" @paste="handlePaste">
