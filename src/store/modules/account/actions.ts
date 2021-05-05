@@ -10,7 +10,8 @@ import { Message, MessageBox } from "element-ui";
 import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 
 import {
-  UploadForm
+  UploadForm,
+  GetCompQualifyLabelInfo,
 } from "@/api";
 import {
   GetProvinceCityCountry,
@@ -48,6 +49,7 @@ export enum ActionTypes {
   GetPersonQualifyInfo = "GetPersonQualifyInfo",
   SavePersonQualifyInfo = "SavePersonQualifyInfo",
   GetCompQualifyInfo = "GetCompQualifyInfo",
+  GetCompQualifyLabelInfo = "GetCompQualifyLabelInfo",
   SaveCompanyQualifyInfo = "SaveCompanyQualifyInfo"
 }
 
@@ -343,6 +345,34 @@ export default {
       const { success, message, data }: any = await GetCompQualifyInfo({});
       if (success) {
         commit(MutationTypes.UpdateCompanyQualify, { ...(data || {})});
+        dispatch(ActionTypes.GetCompQualifyLabelInfo);
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  // 获取公司资质生产能力标签
+  async [ActionTypes.GetCompQualifyLabelInfo](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { companyQualify } = state;
+      const { label } = companyQualify;
+      const { success, message, data }: any = await GetCompQualifyLabelInfo({});
+      if (success) {
+        const list = data || [];
+        const labelList = ((list, label) => {
+          const labelList = label?.split(",") || [];
+          if (list && list.length) {
+            for (const [a, b] of list.entries()) {
+              const { id } = b;
+              list[a]["isSelected"] = labelList?.includes(id);
+            }
+          }
+          return list;
+        })(list, label);
+        commit(MutationTypes.UpdateCompanyQualify, { labelList });
       } else {
         Message.error(message);
       }
@@ -356,12 +386,12 @@ export default {
       const { state, dispatch, commit } = store;
       const { companyQualify } = state;
       const { businessLicenseImgId, creditCode, labelList = [], operIdcardBackendId, operIdcardFrontId, operIdcardNo, operName, operPhoneNo } = companyQualify || {};
-      const labelCodeList = (ls => {
+      const labelIdList = (ls => {
         const arr = [];
         for (const v of ls) {
-          const { isSelected, code } = v;
+          const { isSelected, id } = v;
           if (isSelected) {
-            arr.push(code);
+            arr.push(id);
           }
         }
         return arr;
@@ -394,11 +424,11 @@ export default {
         Message.error("请上传身份证背面照！");
         return;
       }
-      if (!labelCodeList.length) {
+      if (!labelIdList.length) {
         Message.error("请选择你拥有的生产能力标签！");
         return;
       }
-      const { success, message, data }: any = await SaveCompanyQualifyInfo({ businessLicenseImgId, creditCode, labelCodeList, operIdcardBackendId, operIdcardFrontId, operIdcardNo, operName, operPhoneNo });
+      const { success, message, data }: any = await SaveCompanyQualifyInfo({ businessLicenseImgId, creditCode, label: labelIdList.join(","), operIdcardBackendId, operIdcardFrontId, operIdcardNo, operName, operPhoneNo });
       if (success) {
         Message.success(message);
       } else {

@@ -12,6 +12,8 @@ import { getSessionStorage, setSessionStorage } from "@/utils/storage";
 import {
   GetMouldOrderType,
   GetOrderStatus,
+} from "@/api";
+import {
   GetMyBidAdvantage,
   GetOrderList,
   GetCountdown

@@ -12,6 +12,8 @@ import { BASE_IMAGE_URL } from "@/config";
 
 import {
   GetMouldOrderType,
+} from "@/api";
+import {
   GetSelectByUser,
   GetSelectMyBidding,
   JoinBidding,

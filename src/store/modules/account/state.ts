@@ -58,7 +58,8 @@ export interface CompanyQualify {
   businessLicenseImgId: number;
   businessLicenseImgUrl: string;
   creditCode: string;
-  labelList: Array<LabelList>;
+  label?: string;
+  labelList?: Array<LabelList>;
   operIdcardBackendId: number;
   operIdcardBackendUrl: string;
   operIdcardFrontId: number;
@@ -70,6 +71,7 @@ export interface CompanyQualify {
   stateDesc: string;
 }
 export interface LabelList {
+  id: string;
   code: string;
   isSelected: number;
   name: string;
