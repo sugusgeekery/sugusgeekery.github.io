@@ -183,7 +183,7 @@ export default {
       const dfmReportInfoList = [];
       if (reportList && reportList.length) {
         for (const [a, b] of reportList.entries()) {
-          const { describe, reportTitleId, fileList = [], required, canCommit } = b;
+          const { describe, reportTitleId, fileList = [], required } = b;
           const images = (fileList => {
             const images = [];
             if (fileList && fileList.length) {
@@ -206,7 +206,7 @@ export default {
               return;
             }
           }
-          dfmReportInfoList.push({ reportTitleId, required: Number(!required), images, describe, canCommit })
+          dfmReportInfoList.push({ reportTitleId, required: Number(!required), images, describe })
         }
       }
 
