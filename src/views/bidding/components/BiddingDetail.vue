@@ -20,7 +20,7 @@
             <div>
               <div class="model-flex-li">
                 <span class="model-flex-li-label">模具寿命：</span>
-                <span class="model-flex-li-text">{{ biddingDetail.lifetime || "--" }}</span>
+                <span class="model-flex-li-text">{{ biddingDetail.lifetime || "--" }}万啤</span>
               </div>
             </div>
             <div>
