@@ -49,10 +49,8 @@
           <div 
             class="item-flex swiper-container" 
             :class="{'swiper-container-active': index === b}"
-            @click="(index = b, pasteType = 1) "
+            @click="(!a.state && initInfo.type === Supplier.Dfm) ? (index = b, pasteType = 1) : null;"
           >
-          
-            <!-- @click="(!a.state && initInfo.type === Supplier.Dfm) ? (index = b, pasteType = 1) : null;" -->
             <div class="swiper-wrapper" v-if="a.fileList && a.fileList.length">
               <div
                 class="swiper-slide"
@@ -81,7 +79,7 @@
                 <div class="swiper-slide-add" @click="selectFile(b, 1)">+</div>
               </div>
             </div>
-            <div class="swiper-tip" v-else-if="initInfo.type === Supplier.Dfm">
+            <div class="swiper-tip" v-else-if="!a.state && initInfo.type === Supplier.Dfm">
               <div class="swiper-tip-text" @click="selectFile(b, 1)">点击或ctrl+v粘贴上传图片</div>
             </div>
           </div>
