@@ -41,10 +41,10 @@
         <div class="li-text">
           <span class="li-text-black">产品：</span>
           <span class="li-text-black">{{ a.realProductNo }}</span>
-          <span class="li-text-tips" v-if="a.isUpdateImage !== 2">
+          <!-- <span class="li-text-tips" v-if="a.isUpdateImage !== 2">
             <img src="../../../../assets/images/tip_3.png" class="li-text-icon" alt="">
             <span class="li-text-tip">需要更新图纸</span>
-          </span>
+          </span> -->
         </div>
         <div class="li-content">
           <div class="li-row">
