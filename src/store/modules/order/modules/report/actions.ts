@@ -206,7 +206,7 @@ export default {
               return;
             }
           }
-          dfmReportInfoList.push({ reportTitleId, required: Number(!required), images, describe })
+          dfmReportInfoList.push({ reportTitleId, required: Number(!required), images, describe: describe || "" })
         }
       }
 
