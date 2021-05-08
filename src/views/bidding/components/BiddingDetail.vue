@@ -35,7 +35,6 @@
               class="model-flex-cell"
               v-for="(a, b) in biddingDetail.productInfos"
               :key="'_产品列表_' + b"
-              v-show="b === biddingDetail.productInfoIndex"
             >
               <div class="model-flex-cell-title">
                 <span class="model-flex-cell-title-blue">产品：{{ a.productNo || "--" }}</span>
@@ -239,13 +238,13 @@
           </div>
           <div
             class="model-flex-title"
-            v-if="!biddingDetail.getBiddingStatus && biddingDetail.selectedUserBiddingInfo"
+            v-if="!biddingDetail.getBiddingStatus && biddingDetail.selectedUserBiddingInfo && (biddingDetail.biddingIndex === 2 || biddingDetail.biddingIndex === 3)"
           >
             中标信息
           </div>
           <div 
             class="model-flex-items"
-            v-if="!biddingDetail.getBiddingStatus && biddingDetail.selectedUserBiddingInfo"
+            v-if="!biddingDetail.getBiddingStatus && biddingDetail.selectedUserBiddingInfo && (biddingDetail.biddingIndex === 2 || biddingDetail.biddingIndex === 3)"
           >
             <div class="model-flex-item">
               <div class="model-flex-item-label">中标价格</div>
