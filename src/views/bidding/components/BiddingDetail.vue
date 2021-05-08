@@ -323,7 +323,10 @@ export default class BiddingDetail extends Vue {
 
   public onContextmenu(event: any) {
     const { biddingDetail } = this;
-    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+    const { productInfoIndex = -1, productInfos = [], biddingIndex } = biddingDetail || {};
+    if (biddingIndex < 2) {
+      return;
+    }
     const { fileUrlFull, productImageFull } = productInfos[productInfoIndex] || {};
     // @ts-ignore
     this.$contextmenu({
