@@ -8,6 +8,8 @@ import { Dispatch, Commit, GetterTree } from "vuex";
 import router from "@/router";
 import { Message, MessageBox } from "element-ui";
 import { getSessionStorage, setSessionStorage } from "@/utils/storage";
+import { BASE_IMAGE_URL } from "@/config";
+import downloadByUrl from "@/utils/downloadByUrl";
 
 import {
   GetMouldOrderType,
@@ -16,7 +18,8 @@ import {
 import {
   GetMyBidAdvantage,
   GetOrderList,
-  GetCountdown
+  GetCountdown,
+  ExportDfm
 } from "@/api/order";
 
 interface Store {
@@ -43,6 +46,7 @@ export enum ActionTypes {
   UpdateNavigationIndex = "UpdateNavigationIndex",
 
   GetCountdown = "GetCountdown",
+  ExportDfm = "ExportDfm"
 }
 
 export default {
@@ -319,4 +323,26 @@ export default {
       throw new Error(e);
     }
   },
+
+  // 下载dfm报告
+  async [ActionTypes.ExportDfm](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { order } = state;
+      const { list = [], index = -1 } = order || {};
+      const { id } = list[index] || {};
+      const { success, message, data }: any = await ExportDfm({ supplierOrderId: id });
+      if (success) {
+        if (data) {
+          downloadByUrl(BASE_IMAGE_URL + data, data);
+        }
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  
 }

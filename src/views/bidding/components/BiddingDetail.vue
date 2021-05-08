@@ -53,7 +53,7 @@
                     </span>
                   </div>
                   <div class="model-flex-cell-text">
-                    <span>产品数量：</span>
+                    <span>产品穴数：</span>
                     <span>
                       {{ a.productNum || "--" }}
                     </span>

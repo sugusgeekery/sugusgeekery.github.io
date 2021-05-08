@@ -196,7 +196,7 @@ export default {
             }
             return images;
           })(fileList);
-          if (!required) {
+          if (type === 2 && !required) {
             if (!describe) {
               Message.error("请输入报告描述");
               return;
