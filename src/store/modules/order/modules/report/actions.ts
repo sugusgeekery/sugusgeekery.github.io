@@ -71,8 +71,8 @@ export default {
       if (success) {
         const reportList = (ls => {
           for (const [a, b] of ls.entries()) {
-            const { fileList = [], machiningApprovalInfo, injectionApprovalInfo } = b;
-            ls[a]["required"] = false;
+            const { required, fileList = [], machiningApprovalInfo, injectionApprovalInfo } = b;
+            ls[a]["required"] = !!required;
             // if (fileList && fileList.length) {
             //   ls[a]["fileListUrl"] = (l => {
             //     const arr = [];
@@ -206,7 +206,7 @@ export default {
               return;
             }
           }
-          dfmReportInfoList.push({ reportTitleId, required: Number(!required), images, describe: describe || "" })
+          dfmReportInfoList.push({ reportTitleId, required: Number(!required), images, describe })
         }
       }
 
