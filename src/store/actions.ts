@@ -167,7 +167,12 @@ export default {
       const { isFirstExist } = loginInfo || {};
       const { success, message, data }: any = await GetAccountInfo({});
       if (success) {
+        const { openId } = data || {};
         commit(RootMutationTypes.UpdateAccountInfo, { ...(data || {}) });
+        if (!openId) {
+          Message.error("请先关注微信公众号！");
+          return;
+        }
         if (!isFirstExist) {
           router.push("/home");
         }
