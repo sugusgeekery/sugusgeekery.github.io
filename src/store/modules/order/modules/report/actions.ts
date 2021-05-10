@@ -71,8 +71,8 @@ export default {
       if (success) {
         const reportList = (ls => {
           for (const [a, b] of ls.entries()) {
-            const { fileList = [], machiningApprovalInfo, injectionApprovalInfo } = b;
-            ls[a]["required"] = false;
+            const { required, fileList = [], machiningApprovalInfo, injectionApprovalInfo } = b;
+            ls[a]["required"] = !required;
             // if (fileList && fileList.length) {
             //   ls[a]["fileListUrl"] = (l => {
             //     const arr = [];
@@ -196,7 +196,7 @@ export default {
             }
             return images;
           })(fileList);
-          if (!required) {
+          if (type === 2 && !required) {
             if (!describe) {
               Message.error("请输入报告描述");
               return;

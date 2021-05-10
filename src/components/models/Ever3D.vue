@@ -115,6 +115,10 @@ export default class Ever3D extends Vue {
       apiLoaded = true
     }
   }
+
+  public destroyed() {
+    window.removeEventListener('oneverapiloaded', () => {});
+  }
 }
 </script>
 

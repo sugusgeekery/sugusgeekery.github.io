@@ -423,14 +423,15 @@ export default {
   },
 
   // 获取竞价单二次工艺
-  async [ActionTypes.GetTechnology](store: Store) {
+  async [ActionTypes.GetTechnology](store: Store, productInfoIndex = -1) {
     try {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
-      const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+      const { productInfos = [] } = biddingDetail || {};
       const { id } = productInfos[productInfoIndex] || {};
       const { success, message, data }: any = await GetProductTechnology({ headId: id });
       if (success) {
+        commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex });
         commit(MutationTypes.UpdateTechnology, { list: data || [], isShow: true });
       } else {
         Message.error(message);
@@ -441,14 +442,15 @@ export default {
   },
 
   // 获取竞价单材料颜色
-  async [ActionTypes.GetMaterialAndColor](store: Store) {
+  async [ActionTypes.GetMaterialAndColor](store: Store, productInfoIndex = -1) {
     try {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
-      const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+      const { productInfos = [] } = biddingDetail || {};
       const { id } = productInfos[productInfoIndex] || {};
       const { success, message, data }: any = await GetMaterialAndColor({ headId: id });
       if (success) {
+        commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex });
         commit(MutationTypes.UpdateMaterialAndColor, { ...(data || {}), isShow: true });
       } else {
         Message.error(message);
@@ -459,11 +461,11 @@ export default {
   },
 
   // 获取合模方案
-  async [ActionTypes.GetArrangementScheme](store: Store) {
+  async [ActionTypes.GetArrangementScheme](store: Store, productInfoIndex = -1) {
     try {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
-      const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+      const { productInfos = [] } = biddingDetail || {};
       const { orderMouldId, moldingMaterialType } = productInfos[productInfoIndex] || {};
       let fn = null;
       switch(moldingMaterialType) {
@@ -489,6 +491,7 @@ export default {
         if (mouldLabeImages.length) {
           mouldLabeImages = mouldLabeImages.map((v: string) => BASE_IMAGE_URL + v);
         }
+        commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex });
         commit(MutationTypes.UpdateArrangementScheme, { ...temp, mouldLabeImages, isShow: true });
       } else {
         Message.error(message);
@@ -499,12 +502,13 @@ export default {
   },
 
   // 获取产品详情
-  [ActionTypes.GetProductInfo](store: Store) {
+  [ActionTypes.GetProductInfo](store: Store, productInfoIndex = -1) {
     try {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
-      const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+      const { productInfos = [] } = biddingDetail || {};
       const productInfo = productInfos[productInfoIndex] || {};
+      commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex });
       commit(MutationTypes.UpdateProductInfo, { ...productInfo, isShow: true });
       // const { success, message, data }: any = await GetArrangementScheme({ orderMouldId: id });
       // if (success) {

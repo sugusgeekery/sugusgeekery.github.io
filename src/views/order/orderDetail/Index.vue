@@ -24,7 +24,7 @@
           </div>
           <div class="nav-buttons">
             <div class="nav-button">平台标准</div>
-            <div class="nav-button">下载报告</div>
+            <div class="nav-button" @click="exportDfm()">下载报告</div>
           </div>
         </div>
         <div class="list-body">
@@ -68,6 +68,8 @@ export default class OrderDetailView extends Vue {
   public updateNavigationIndex!: Function;
   @Action(ActionTypes.GetCountdown)
   public getCountdown!: Function;
+  @Action(ActionTypes.ExportDfm)
+  public exportDfm!: Function;
 
   public created() {
     // this.getCountdown();

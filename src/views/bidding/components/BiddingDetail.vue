@@ -41,7 +41,7 @@
               </div>
               <div class="model-flex-cell-row">
                 <div class="model-flex-cell-left">
-                  <div class="model-flex-cell-image" @click="getProductInfo()" @contextmenu.prevent="onContextmenu($event)">
+                  <div class="model-flex-cell-image" @click="getProductInfo(b)" @contextmenu.prevent="onContextmenu($event, b)">
                     <img v-if="a.productImageFull" :src="a.productImageFull" alt="" />
                   </div>
                 </div>
@@ -53,7 +53,7 @@
                     </span>
                   </div>
                   <div class="model-flex-cell-text">
-                    <span>产品数量：</span>
+                    <span>产品穴数：</span>
                     <span>
                       {{ a.productNum || "--" }}
                     </span>
@@ -74,19 +74,19 @@
                   </div>
                   <div class="model-flex-cell-text">
                     <span>材料及颜色：</span>
-                    <span class="model-flex-cell-text-blue" @click="getMaterialAndColor()">
+                    <span class="model-flex-cell-text-blue" @click="getMaterialAndColor(b)">
                       点击查看
                     </span>
                   </div>
                   <div class="model-flex-cell-text">
                     <span>二次工艺：</span>
-                    <span class="model-flex-cell-text-blue" @click="getTechnology()">
+                    <span class="model-flex-cell-text-blue" @click="getTechnology(b)">
                       点击查看
                     </span>
                   </div>
                   <div class="model-flex-cell-text">
                     <span>排模方案：</span>
-                    <span class="model-flex-cell-text-blue" @click="getArrangementScheme()">
+                    <span class="model-flex-cell-text-blue" @click="getArrangementScheme(b)">
                       点击查看
                     </span>
                   </div>
@@ -301,29 +301,32 @@ export default class BiddingDetail extends Vue {
   @Mutation(MutationTypes.UpdateBiddingDetail)
   public updateBiddingDetail!: Function;
 
-  public updateProductInfoIndex(params: { type: number; index: number; }) {
+  // public updateProductInfoIndex(params: { type: number; index: number; }) {
+  //   const { biddingDetail } = this;
+  //   const { type, index } = params || {};
+  //   const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+  //   if (productInfoIndex < 0) {
+  //     return;
+  //   }
+  //   if (type === 1) {
+  //     if (productInfoIndex < productInfos.length - 1) {
+  //       this.updateBiddingDetail({ productInfoIndex: productInfoIndex + 1 });
+  //     }
+  //   } else if (type === 2) {
+  //     if (productInfoIndex > 0) {
+  //       this.updateBiddingDetail({ productInfoIndex: productInfoIndex - 1 });
+  //     }
+  //   } else if (type === 3) {
+  //     this.updateBiddingDetail({ productInfoIndex: index });
+  //   }
+  // }
+
+  public onContextmenu(event: any, productInfoIndex = -1) {
     const { biddingDetail } = this;
-    const { type, index } = params || {};
-    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
-    if (productInfoIndex < 0) {
+    const { productInfos = [], biddingIndex } = biddingDetail || {};
+    if (biddingIndex < 2) {
       return;
     }
-    if (type === 1) {
-      if (productInfoIndex < productInfos.length - 1) {
-        this.updateBiddingDetail({ productInfoIndex: productInfoIndex + 1 });
-      }
-    } else if (type === 2) {
-      if (productInfoIndex > 0) {
-        this.updateBiddingDetail({ productInfoIndex: productInfoIndex - 1 });
-      }
-    } else if (type === 3) {
-      this.updateBiddingDetail({ productInfoIndex: index });
-    }
-  }
-
-  public onContextmenu(event: any) {
-    const { biddingDetail } = this;
-    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
     const { fileUrlFull, productImageFull } = productInfos[productInfoIndex] || {};
     // @ts-ignore
     this.$contextmenu({

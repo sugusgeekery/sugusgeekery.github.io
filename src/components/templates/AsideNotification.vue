@@ -13,7 +13,7 @@
           alt=""
         />
       </div>
-      <div class="notification-item-text">实时提醒</div>
+      <div class="notification-item-text">微信公众号</div>
       <div class="notification-item-model">
         <img
           class="notification-item-model-icon"

@@ -537,9 +537,8 @@ export default class BiddingHome extends Vue {
           align-items flex-start
           padding 15px
         .item
-          // flex 1 1 300
-          min-width 300px
-          margin 15px
+          min-width 400px
+          margin 10px
           border-radius 4px
           border solid 1px #DDDDDD
           background #FBFCFE
