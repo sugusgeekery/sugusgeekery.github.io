@@ -149,7 +149,6 @@ export default {
       if (success) {
         const { exist, supplierInfo, token } = data || {};
         commit(RootMutationTypes.UpdateLoginInfo, { exist, supplierInfo, token, isFirstExist: true });
-        commit(RootMutationTypes.UpdateRegisterNavIndex, 2);
         dispatch(RootActionTypes.GetAccountInfo);
       } else {
         Message.error(message);
@@ -167,9 +166,16 @@ export default {
       const { isFirstExist } = loginInfo || {};
       const { success, message, data }: any = await GetAccountInfo({});
       if (success) {
+        const { openId } = data || {};
         commit(RootMutationTypes.UpdateAccountInfo, { ...(data || {}) });
+        if (!openId) {
+          Message.error("请先关注微信公众号！");
+          return;
+        }
         if (!isFirstExist) {
           router.push("/home");
+        } else {
+          commit(RootMutationTypes.UpdateRegisterNavIndex, 2);
         }
       } else {
         Message.error(message);
