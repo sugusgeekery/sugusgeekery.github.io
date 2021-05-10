@@ -35,14 +35,13 @@
               class="model-flex-cell"
               v-for="(a, b) in biddingDetail.productInfos"
               :key="'_产品列表_' + b"
-              @click="updateBiddingDetail({ productInfoIndex: b })"
             >
               <div class="model-flex-cell-title">
                 <span class="model-flex-cell-title-blue">产品：{{ a.productNo || "--" }}</span>
               </div>
               <div class="model-flex-cell-row">
                 <div class="model-flex-cell-left">
-                  <div class="model-flex-cell-image" @click="getProductInfo()" @contextmenu.prevent="onContextmenu($event)">
+                  <div class="model-flex-cell-image" @click="getProductInfo(b)" @contextmenu.prevent="onContextmenu($event, b)">
                     <img v-if="a.productImageFull" :src="a.productImageFull" alt="" />
                   </div>
                 </div>
@@ -75,19 +74,19 @@
                   </div>
                   <div class="model-flex-cell-text">
                     <span>材料及颜色：</span>
-                    <span class="model-flex-cell-text-blue" @click="getMaterialAndColor()">
+                    <span class="model-flex-cell-text-blue" @click="getMaterialAndColor(b)">
                       点击查看
                     </span>
                   </div>
                   <div class="model-flex-cell-text">
                     <span>二次工艺：</span>
-                    <span class="model-flex-cell-text-blue" @click="getTechnology()">
+                    <span class="model-flex-cell-text-blue" @click="getTechnology(b)">
                       点击查看
                     </span>
                   </div>
                   <div class="model-flex-cell-text">
                     <span>排模方案：</span>
-                    <span class="model-flex-cell-text-blue" @click="getArrangementScheme()">
+                    <span class="model-flex-cell-text-blue" @click="getArrangementScheme(b)">
                       点击查看
                     </span>
                   </div>
@@ -322,9 +321,9 @@ export default class BiddingDetail extends Vue {
   //   }
   // }
 
-  public onContextmenu(event: any) {
+  public onContextmenu(event: any, productInfoIndex = -1) {
     const { biddingDetail } = this;
-    const { productInfoIndex = -1, productInfos = [], biddingIndex } = biddingDetail || {};
+    const { productInfos = [], biddingIndex } = biddingDetail || {};
     if (biddingIndex < 2) {
       return;
     }
