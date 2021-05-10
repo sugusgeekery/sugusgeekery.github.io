@@ -149,7 +149,6 @@ export default {
       if (success) {
         const { exist, supplierInfo, token } = data || {};
         commit(RootMutationTypes.UpdateLoginInfo, { exist, supplierInfo, token, isFirstExist: true });
-        commit(RootMutationTypes.UpdateRegisterNavIndex, 2);
         dispatch(RootActionTypes.GetAccountInfo);
       } else {
         Message.error(message);
@@ -175,6 +174,8 @@ export default {
         }
         if (!isFirstExist) {
           router.push("/home");
+        } else {
+          commit(RootMutationTypes.UpdateRegisterNavIndex, 2);
         }
       } else {
         Message.error(message);
