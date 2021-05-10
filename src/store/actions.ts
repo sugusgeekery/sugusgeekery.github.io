@@ -166,10 +166,10 @@ export default {
       const { isFirstExist } = loginInfo || {};
       const { success, message, data }: any = await GetAccountInfo({});
       if (success) {
-        const { openId } = data || {};
+        const { wxOpenId } = data || {};
         commit(RootMutationTypes.UpdateAccountInfo, { ...(data || {}) });
-        if (!openId) {
-          Message.error("请先关注微信公众号！");
+        if (!wxOpenId) {
+          Message.error("请先关注公众号，已关注过公众号，请取消再重新关注即可登录!");
           return;
         }
         if (!isFirstExist) {

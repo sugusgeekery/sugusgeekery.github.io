@@ -20,8 +20,9 @@
           src="../../assets/images/wechat_image.jpg"
           alt=""
         />
-        <div class="notification-item-model-text">关注公众号</div>
-        <div class="notification-item-model-text">获取订单最新动态</div>
+        <!-- <div class="notification-item-model-text">关注公众号</div>
+        <div class="notification-item-model-text">如果未收到信息情况下，请取消再重新关注公众号</div> -->
+        <!-- <div class="notification-item-model-text">获取订单最新动态</div> -->
       </div>
     </div>
     <!-- <div class="notification-item">
@@ -119,16 +120,15 @@ export default class AsideNotification extends Vue {}
         justify-content center
         align-items center
         background $color-bg-white
-        padding 18px 36px
-        min-width 180px
-        min-height 180px
+        padding 18px
+        min-width 160px
+        min-height 160px
         box-shadow 0 2px 12px 0 rgb(245, 245, 245, 0.1)
         &-icon
-          width 130px
-          height 130px
+          height 140px
           object-fit contain
         &-text
-          font-size 14px
+          font-size 12px
           color $color-text-black
           margin-top 5px
         &-title
@@ -159,16 +159,16 @@ export default class AsideNotification extends Vue {}
         justify-content center
         align-items center
         background $color-bg-white
-        padding 18px 36px
-        min-width 180px
-        min-height 180px
+        padding 18px
+        min-width 160px
+        min-height 160px
         box-shadow 0 2px 12px 0 rgb(245, 245, 245, 0.1)
         &-icon
-          height 100px
+          height 140px
           object-fit contain
-          margin 10px auto 5px auto
+          // margin 10px auto 5px auto
         &-text
-          font-size 14px
+          font-size 12px
           color $color-text-black
           margin-top 5px
         &-title
