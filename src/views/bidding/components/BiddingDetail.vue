@@ -35,6 +35,7 @@
               class="model-flex-cell"
               v-for="(a, b) in biddingDetail.productInfos"
               :key="'_产品列表_' + b"
+              @click="updateBiddingDetail({ productInfoIndex: b })"
             >
               <div class="model-flex-cell-title">
                 <span class="model-flex-cell-title-blue">产品：{{ a.productNo || "--" }}</span>
@@ -301,25 +302,25 @@ export default class BiddingDetail extends Vue {
   @Mutation(MutationTypes.UpdateBiddingDetail)
   public updateBiddingDetail!: Function;
 
-  public updateProductInfoIndex(params: { type: number; index: number; }) {
-    const { biddingDetail } = this;
-    const { type, index } = params || {};
-    const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
-    if (productInfoIndex < 0) {
-      return;
-    }
-    if (type === 1) {
-      if (productInfoIndex < productInfos.length - 1) {
-        this.updateBiddingDetail({ productInfoIndex: productInfoIndex + 1 });
-      }
-    } else if (type === 2) {
-      if (productInfoIndex > 0) {
-        this.updateBiddingDetail({ productInfoIndex: productInfoIndex - 1 });
-      }
-    } else if (type === 3) {
-      this.updateBiddingDetail({ productInfoIndex: index });
-    }
-  }
+  // public updateProductInfoIndex(params: { type: number; index: number; }) {
+  //   const { biddingDetail } = this;
+  //   const { type, index } = params || {};
+  //   const { productInfoIndex = -1, productInfos = [] } = biddingDetail || {};
+  //   if (productInfoIndex < 0) {
+  //     return;
+  //   }
+  //   if (type === 1) {
+  //     if (productInfoIndex < productInfos.length - 1) {
+  //       this.updateBiddingDetail({ productInfoIndex: productInfoIndex + 1 });
+  //     }
+  //   } else if (type === 2) {
+  //     if (productInfoIndex > 0) {
+  //       this.updateBiddingDetail({ productInfoIndex: productInfoIndex - 1 });
+  //     }
+  //   } else if (type === 3) {
+  //     this.updateBiddingDetail({ productInfoIndex: index });
+  //   }
+  // }
 
   public onContextmenu(event: any) {
     const { biddingDetail } = this;
