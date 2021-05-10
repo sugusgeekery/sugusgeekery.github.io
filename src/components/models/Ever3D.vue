@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit, Watch } from "vue-property-decorator";
+import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 
 import { EVER_CRAFT, BASE_IMAGE_URL } from "@/config";
 import { GetStpRender } from "@/api";
@@ -44,11 +44,6 @@ export default class Ever3D extends Vue {
 
   public isShowImage = false;
   public fileList: Array<{ filename: string; url: string; }> = [];
-
-  @Watch("data")
-  public watchData(a: ProductInfoTypes, b: ProductInfoTypes) {
-    console.log(a, b);
-  }
 
   public created() {
 
@@ -75,7 +70,6 @@ export default class Ever3D extends Vue {
 
   public async getStpRender(filePath: string) {
     try {
-      console.log(filePath)
       const { success, message, data }: any = await GetStpRender({ filePath });
       if (success) {
         const { fileE3dx } = data || {};
@@ -117,7 +111,6 @@ export default class Ever3D extends Vue {
     // 此函数中调用 api 的 render 方法，在网页中加载出 api 窗口
     function loadApi (files: any) {
       // 此方法的第一个参数为放置 dom 元素的 id，第二个参数为需要在 api 中显示的模型的数组
-      console.log(files)
       api.render("ever3D", files)
       apiLoaded = true
     }
