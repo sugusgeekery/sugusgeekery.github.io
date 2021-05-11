@@ -177,7 +177,7 @@
                 </div>
               </div>
               <div class="item-rows">
-                <div class="item-row item-line">
+                <div class="item-row item-line" v-if="biddingIndex < 2">
                   <div class="item-flex" v-if="biddingIndex === 0">
                     <span class="item-text item-text-small">已有</span>
                     <span class="item-text item-text-small item-text-red">
@@ -185,11 +185,11 @@
                     </span>
                     <span class="item-text">公司参加</span>
                   </div>
-                  <div class="item-flex" v-else-if="biddingIndex === 2">
+                  <!-- <div class="item-flex" v-else-if="biddingIndex === 2">
                     <span class="item-text item-text-red">
                       {{ a.biddingStatusDesc || "--" }}
                     </span>
-                  </div>
+                  </div> -->
                   <div class="item-flex" v-if="a.countdown && a.countdown.isTimeout">
                     <span
                       class="item-button item-button-gray"
