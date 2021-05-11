@@ -7,6 +7,7 @@ export enum MutationTypes {
   UpdateNavigationList = "UpdateNavigationList",
   UpdateNavigationIndex = "UpdateNavigationIndex",
   UpdateCountdown = "UpdateCountdown",
+  UpdateContact = "UpdateContact"
 }
 
 export default {
@@ -65,4 +66,8 @@ export default {
       state.countdown = Object.assign({}, countdown, temp);
     })(state, params, temp);
   },
+  // 获取联系方式
+  [MutationTypes.UpdateContact](state: State, contact: Array<ContactTypes>) {
+    state.contact = contact;
+  }
 }

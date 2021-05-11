@@ -31,7 +31,10 @@
           <router-view />
         </div>
       </div>
-      <Countdown :data="countdown"></Countdown>
+      <div> 
+        <Countdown :data="countdown"></Countdown>
+        <Contact :data="contact"></Contact>
+      </div>
     </div>
   </div>
 </template>
@@ -46,11 +49,13 @@ import { GetterTypes } from "@/store/modules/order/getters";
 import { ActionTypes } from "@/store/modules/order/actions";
 
 import Countdown from "@/components/templates/Countdown.vue";
+import Contact from "@/components/templates/Contact.vue";
 
 @Component({
   name: "OrderDetailView",
   components: {
-    Countdown
+    Countdown,
+    Contact
   }
 })
 export default class OrderDetailView extends Vue {
@@ -60,6 +65,8 @@ export default class OrderDetailView extends Vue {
   public navigationList!: Array<NavigationList>;
   @State("countdown")
   public countdown!: CountdownTypes;
+  @State("contact")
+  public contact!: Array<ContactTypes>;
 
   @Getter(GetterTypes.OrderObject)
   public orderObject!: object;
@@ -68,11 +75,14 @@ export default class OrderDetailView extends Vue {
   public updateNavigationIndex!: Function;
   @Action(ActionTypes.GetCountdown)
   public getCountdown!: Function;
+  @Action(ActionTypes.GetContact)
+  public getContact!: Function;
   @Action(ActionTypes.ExportDfm)
   public exportDfm!: Function;
 
   public created() {
-    // this.getCountdown();
+    this.getCountdown();
+    this.getContact();
   }
 
   public beforeDestroy() {

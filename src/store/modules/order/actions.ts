@@ -19,6 +19,7 @@ import {
   GetMyBidAdvantage,
   GetOrderList,
   GetCountdown,
+  GetContact,
   ExportDfm
 } from "@/api/order";
 
@@ -46,6 +47,7 @@ export enum ActionTypes {
   UpdateNavigationIndex = "UpdateNavigationIndex",
 
   GetCountdown = "GetCountdown",
+  GetContact = "GetContact",
   ExportDfm = "ExportDfm"
 }
 
@@ -316,6 +318,28 @@ export default {
           }, 1000);
           commit(MutationTypes.UpdateCountdown, { ...tempCountdown });
         }
+      } else {
+        Message.error(message);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+
+  // 获取联系方式
+  async [ActionTypes.GetContact](store: Store) {
+    try {
+      const { state, dispatch, commit } = store;
+      const { order } = state;
+      const { list = [], index = -1 } = order || {};
+      const { orderNo, type } = list[index] || {};
+      if (Supplier.Dfm !== type || !orderNo) {
+        commit(MutationTypes.UpdateContact, []);
+        return;
+      }
+      const { success, message, data }: any = await GetContact({ orderNo });
+      if (success) {
+        commit(MutationTypes.UpdateContact, data || []);
       } else {
         Message.error(message);
       }

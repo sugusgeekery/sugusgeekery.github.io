@@ -5,6 +5,7 @@ export interface State {
   navigationIndex: number;
   navigationList: Array<NavigationList>;
   countdown: CountdownTypes;
+  contact: Array<ContactTypes>;
 };
 
 // 初始化参数
@@ -165,7 +166,8 @@ const state: State = {
     minute: 0,
     second: 0,
     setTimeInterval: 0,
-  }
+  },
+  contact: []
 };
 
 export default state;

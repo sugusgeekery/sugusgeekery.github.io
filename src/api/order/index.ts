@@ -11,6 +11,9 @@ export const GetMyBidAdvantage = (params: any = {}): object => fetch({ url: `/su
 // 获取订单倒计时
 export const GetCountdown = (params: any = {}): object => fetch({ url: `/supplier/orderCenter/getRemainTime`, method: "GET", params });
 
+// 获取联系方式
+export const GetContact = (params: any = {}): object => fetch({ url: `/supplier/dfmReport/getSupplierByOrderNo`, method: "GET", params });
+
 // 下载dfm报告
 export const ExportDfm = (params: any = {}): object => fetch({ url: `/supplier/dfmReport/exportDfm`, method: "GET", params });
 

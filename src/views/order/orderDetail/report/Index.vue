@@ -82,6 +82,9 @@
             <div class="swiper-tip" v-else-if="!a.state && initInfo.type === Supplier.Dfm">
               <div class="swiper-tip-text" @click="selectFile(b, 1)">点击或ctrl+v粘贴上传图片</div>
             </div>
+            <div class="swiper-tip" v-else-if="a.required">
+              <div class="swiper-tip-text swiper-tip-text-gray">该项已标记为非必填项</div>
+            </div>
           </div>
           <div 
             class="item-flex"
@@ -108,7 +111,8 @@
                   "
                 ></textarea>
               </div>
-              <div class="item-conent-text item-content-line" v-else>{{ a.describe }}</div>
+              <div class="item-content-text item-content-line" v-else-if="a.describe">{{ a.describe }}</div>
+              <div class="item-content-text item-content-text-gray item-content-line" v-else-if="a.required">该项已标记为非必填项</div>
             </div>
             <div
               class="item-cells"
@@ -1081,6 +1085,9 @@ export default class ReportView extends Vue {
       font-size 16px
       padding 5px
       cursor pointer
+      &-gray
+        color $color-text-gray
+        font-size 14px
 
 
 .form
@@ -1348,8 +1355,11 @@ export default class ReportView extends Vue {
         border-bottom solid 1px $color-bd
         padding-bottom 16px
       &-text
-        font-size 14px
-        color $color-text-gray
+        font-size 16px
+        color $color-text-black
+        &-gray
+          font-size 14px
+          color $color-text-gray
       &-textarea
         font-size 14px
         color $color-text-gray

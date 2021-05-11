@@ -90,6 +90,13 @@ interface CountdownTypes {
   second: number;
   setTimeInterval?: number;
 }
+// 联系方式
+interface ContactTypes {
+  phoneNo: string;
+  type: string;
+  userName: string;
+}
+
 
 // 产品详情
 interface ProductInfoTypes {
