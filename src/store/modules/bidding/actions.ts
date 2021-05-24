@@ -466,7 +466,7 @@ export default {
       const { state, dispatch, commit } = store;
       const { biddingDetail } = state;
       const { productInfos = [] } = biddingDetail || {};
-      const { orderMouldId, moldingMaterialType } = productInfos[productInfoIndex] || {};
+      const { orderMouldId, moldingMaterialType, productNo, id } = productInfos[productInfoIndex] || {};
       let fn = null;
       switch(moldingMaterialType) {
         case 1:
@@ -486,13 +486,22 @@ export default {
       if (success) {
         const temp = data || {};
         const { matchedPlan } = temp || {};
-        const { mouldLabeImage } = matchedPlan || {};
+        const { mouldLabeImage, gateItems } = matchedPlan || {};
+        matchedPlan.gateItems = ((gateItems, id, productNo) => {
+          if (gateItems && gateItems.length) {
+            for (const [a, b] of gateItems.entries()) {
+              const { productIds } = b;
+              gateItems[a]["productNo"] = productIds === id ? productNo : "";
+            }
+          }
+          return gateItems;
+        })(gateItems, id, productNo);
         let mouldLabeImages = mouldLabeImage ? mouldLabeImage.split(",") : [];
         if (mouldLabeImages.length) {
           mouldLabeImages = mouldLabeImages.map((v: string) => BASE_IMAGE_URL + v);
         }
         commit(MutationTypes.UpdateBiddingDetail, { productInfoIndex });
-        commit(MutationTypes.UpdateArrangementScheme, { ...temp, mouldLabeImages, isShow: true });
+        commit(MutationTypes.UpdateArrangementScheme, { ...temp, mouldLabeImages, matchedPlan, isShow: true });
       } else {
         Message.error(message);
       }

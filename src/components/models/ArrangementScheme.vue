@@ -47,7 +47,7 @@
         <div class="model-row" v-show="data.matchedPlan.gateItems.length" v-for="(a, b) in data.matchedPlan.gateItems" :key="b">
           <div class="model-flex">
             <div class="model-flex-label">转水口{{ a.gateSort || "" }}：</div>
-            <div class="model-flex-input">{{ a.productIds || "" }}</div>
+            <div class="model-flex-input">{{ a.productNo || "" }}</div>
             <!-- <div class="model-flex-label">{{ a.productIds || "" }}</div> -->
           </div>
         </div>
