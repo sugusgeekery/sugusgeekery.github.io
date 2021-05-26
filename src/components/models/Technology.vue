@@ -84,12 +84,15 @@
 import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 
 import downloadByUrl from "@/utils/downloadByUrl";
+import { BASE_IMAGE_URL } from "@/config";
 
 @Component({
   name: "Technology",
   components: {}
 })
 export default class Technology extends Vue {
+  public BASE_IMAGE_URL = BASE_IMAGE_URL;
+  
   @Prop(Object) 
   private readonly data!: TechnologyTypes;
 
@@ -100,7 +103,7 @@ export default class Technology extends Vue {
 
   public downloadFile(url: string, name: string) {
     if (url) {
-      downloadByUrl(url, name);
+      downloadByUrl(BASE_IMAGE_URL + url, name);
     }
   }
 }
