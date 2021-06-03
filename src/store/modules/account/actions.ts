@@ -364,11 +364,11 @@ export default {
       if (success) {
         const list = data || [];
         const labelList = ((list, label) => {
-          const labelList = label?.split(",") || [];
+          const labelList = label && label.split(",") || [];
           if (list && list.length) {
             for (const [a, b] of list.entries()) {
               const { id } = b;
-              list[a]["isSelected"] = labelList?.includes(id);
+              list[a]["isSelected"] = labelList && labelList.includes(id);
             }
           }
           return list;
