@@ -372,7 +372,7 @@ export default class DesignView extends Vue {
   }
   public downloadFile(url: string, name: string) {
     if (url) {
-      downloadByUrl(url, name);
+      downloadByUrl(BASE_IMAGE_URL + url, name);
     }
   }
   public alertMessage(content: string) {
