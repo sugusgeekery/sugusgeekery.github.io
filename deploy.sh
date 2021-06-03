@@ -2,7 +2,7 @@
 ###
  # @Author: your name
  # @Date: 2021-06-03 10:46:20
- # @LastEditTime: 2021-06-03 10:48:10
+ # @LastEditTime: 2021-06-03 10:48:50
  # @LastEditors: Please set LastEditors
  # @Description: In User Settings Edit
  # @FilePath: \supplier\deploy.sh
@@ -18,7 +18,7 @@ npm run build:test
 git init
 git add -A
 git commit -m 'deploy'
-git push -f git@github.com:sugusgeekery/sugusgeekery.github.io.git test
+git push -f git@github.com:sugusgeekery/sugusgeekery.github.io.git test:master
 
 # 进入构建文件夹
 cd supplier
