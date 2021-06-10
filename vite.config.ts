@@ -80,7 +80,7 @@ export default defineConfig({
   build: {
     target: "modules",
     polyfillDynamicImport: false,
-    outDir: "supplier",
+    outDir: "docs",
     assetsDir: "assets",
     assetsInlineLimit: 4096,
     cssCodeSplit: true,

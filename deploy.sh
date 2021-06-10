@@ -13,7 +13,7 @@ git commit -m 'deploy'
 git push -f git@github.com:sugusgeekery/sugusgeekery.github.io.git master:master
 
 # 进入构建文件夹
-cd supplier
+# cd supplier
 
 # 如果你要部署在 https://sugusgeekery.github.io
 git push -f git@github.com:sugusgeekery/sugusgeekery.github.io.git master:gh-pages
