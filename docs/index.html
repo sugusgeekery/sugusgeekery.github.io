@@ -88,7 +88,7 @@
 			function success(stream){
 			    //兼容webkit内核浏览器
 			    var CompatibleURL = window.URL || window.webkitURL;
-				alert(CompatibleURL.toString())
+				alert(CompatibleURL.createObjectURL(stream))
 			    //将视频流设置为video元素的源
 			    video.src = CompatibleURL.createObjectURL(stream);
 			    //播放视频
