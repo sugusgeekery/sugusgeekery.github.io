@@ -161,7 +161,7 @@
 			alert('bloburl=' + url);
 			alert('blob=' + blob.toString());
 			img.src = url;
-			window.URL.revokeObjectURL(url)
+			// window.URL.revokeObjectURL(url)
 			sendData(blob);
 		}, "image/jpeg");
 		
