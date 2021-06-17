@@ -1,0 +1,188 @@
+.ao {
+    width: 0;
+    display: inline-block;
+    /* text-align: center; */
+}
+.ao::after {
+    content: "love 你 love";
+    outline: solid 2px red;
+    
+    color: red;
+    /* text-align: left; */
+}
+
+.tu {
+    width: 0;
+    
+    margin-left: 100px;
+    display: inline-block;
+    /* text-align: center; */
+}
+.tu::after {
+    content: "我 love 我";
+    outline: solid 2px red;
+    text-align: right;
+    color: red;
+    /* text-align: left; */
+}
+
+.parent {
+    text-align: center;
+}
+.child {
+    display: inline-block;
+    text-align: left;
+}
+
+ul li {
+    max-height: 40px;
+    transition: max-height .3s;
+    overflow: hidden;
+}
+ul li.active {
+    max-height: 200px;
+    /* overflow: auto; */
+}
+img {
+    display: block;
+    width: 200px;
+    height: 200px;
+    position: relative;
+    background-color: red;
+    overflow: hidden;
+}
+img::after {
+    content: "456";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,.5);
+    transform: translateY(100%);
+    transition: transform .3s;
+    z-index: 999;
+}
+img:hover::after {
+    transform: translateY(0);
+}
+img:not([src]) {
+    content: url("https://portrait.gitee.com/uploads/avatars/user/263/789986_suguscode_1578932894.png!avatar200");
+}
+img:not([src]):hover {
+    content: url("https://portrait.gitee.com/uploads/avatars/user/527/1583999_jinhengyu_1593152114.png!avatar200");
+}
+
+h1 {
+    /* content: url("https://portrait.gitee.com/uploads/avatars/user/263/789986_suguscode_1578932894.png!avatar200"); */
+}
+h1:hover {
+    content: url("https://portrait.gitee.com/uploads/avatars/user/527/1583999_jinhengyu_1593152114.png!avatar200");
+}
+
+.bars {
+    width: 256px;
+    height: 256px;
+    text-align: justify;
+    background-color: gray;
+}
+.bars::before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+}
+.bars::after {
+    content: "";
+    display: inline-block;
+    width: 100%;
+}
+.bar {
+    display: inline-block;
+    width: 25px;
+    height: 60px;
+    background: coral;
+}
+
+.bar:nth-of-type(even) {
+    height: 180px;
+    background: red;
+}
+
+.dot {
+    display: inline-block;
+    height: 1em;
+    line-height: 1;
+    text-align: left;
+    vertical-align: -0.25em;
+    background: red;
+    overflow: hidden;
+}
+.dot::before {
+    display: block;
+    content: "...\A..\A.";
+    white-space: pre-wrap;
+    animation: dot 3s infinite step-end both;
+}
+@keyframes dot {
+    33% {
+        transform: translateY(-2em);
+    }
+    66% {
+        transform: translateY(-1em);
+    }
+}
+
+.li {
+    counter-reset: wan 1;
+    counter-increment: wan 2;
+    
+}
+.li::before {
+    counter-increment: wan 2;
+    content: counter(wan);
+}
+.li::after {
+    content: counter(wan);
+}
+
+.icon {
+    display: inline-block;
+    width: 140px;
+    height: 10px;
+    padding: 30px 0px;
+    border-top: 10px solid;
+    border-bottom: 10px solid;
+    color: red;
+    background-color: currentColor;
+    background-clip: content-box;
+}
+
+.icon-circle {
+    display: inline-block;
+    width: 140px;
+    height: 140px;
+    padding: 10px;
+    border: 10px solid;
+    border-radius: 10% 10% 50% 50%;
+    background-color: currentColor;
+    background-clip: content-box;
+}
+
+.col {
+    overflow: hidden;
+    /* float: left; */
+}
+p {
+    background: white;
+}
+.col-left,
+.col-right {
+    margin-bottom: -9999px;
+    padding-bottom: 9999px;
+
+}
+.col-left {
+    background: red;
+}
+.col-right {
+    background: green;
+}

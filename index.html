@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div class="ao"></div>
+    <div class="tu"></div>
+    <div class="parent">
+        <div class="child">afsdfsf发送到发阿发送到发送到发送到发送到发送到发顺丰按时sf</div>
+    </div>
+    <ul id="app">
+        <li :class="{'active': a.isSelected }" v-for="(a, b) in list" :key="b" @click="updateActive(b)">
+            <p>{{ a.text }}</p>
+            <p>{{ a.text }}</p>
+            <p>{{ a.text }}</p>
+            <p>{{ a.text }}</p>
+        </li>
+    </ul>
+    <img alt="fff" />
+    <h1>safsdfsfasf</h1>
+    <div class="bars"><i class="bar"></i>
+        <i class="bar"></i>
+        <i class="bar"></i>
+        <i class="bar"></i>
+        <i class="bar"></i>
+    </div>
+    <div class="dot">......</div>
+    <ul>
+        <li class="li"></li>
+        <li class="li"></li>
+        <li class="li"></li>
+        <li class="li"></li>
+    </ul>
+    <div class="icon"></div>
+    <div class="icon-circle"></div>
+    <div class="col">
+        <div class="col-left">asdfasdfasd</div>
+        <p>s</p>
+        <div class="col-right">
+            asfdasdfasfa
+            <p>asfdasdfasfa</p>
+            <p>asfdasdfasfa</p>
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                list: [
+                    {
+                        isSelected: false,
+                        text: "asdfasfdafsdfasdfasfd"
+                    },
+                    {
+                        isSelected: false,
+                        text: "asdfasfdafsdfasdfasfd"
+                    },
+                    {
+                        isSelected: false,
+                        text: "asdfasfdafsdfasdfasfd"
+                    },
+                ]
+            },
+            methods: {
+                updateActive: function(e) {
+                    this.list[e].isSelected = !this.list[e].isSelected
+                }
+            },
+        })
+    </script>
+</body>
+</html>
