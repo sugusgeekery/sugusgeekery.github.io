@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <video id="video" controls style="position:relative;top:0;left:0;width: 100%; height: 100%;">
+  <video id="video" controls style="position:relative;top:0;left:0;width: 100%;object-fit: contain;">
 	  <!-- <source src="https://www.flexclip.com/media/pages/video/home-banner-video.mp4" type="video/mp4"></source> -->
 	  <!-- <source src="myvideo.ogv" type="video/ogg"></source>
 	  <source src="myvideo.webm" type="video/webm"></source>
@@ -96,30 +96,52 @@
     
 
     document.getElementById('capture').addEventListener('click', function () {
-      context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-		var fullQuality = canvas.toDataURL("image/jpeg", 1.0);
-		console.log(fullQuality)
-		img.src = fullQuality;
+		console.log(width, height,video.width, video.height, video.videoWidth, video.videoHeight)
+		context.drawImage(video, 0, 0, video.width, video.width / video.videoWidth * video.videoHeight);
 		
+		// base64
+		// var base64 = canvas.toDataURL("image/jpeg", 1.0);
+		// img.src = base64;
+		// sendData(base64);
+		
+		// Blob
+		canvas.toBlob(function(blob) {
+			const url = window.URL.createObjectURL(blob)
+			img.src = url;
+			window.URL.revokeObjectURL(url)
+			sendData(blob);
+		}, "image/jpeg");
+		
+    })
+	
+	function sendData(img) {
 		let url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
 		alert('userId=' + userId);
 		alert('url=' + url);
-		axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-		// axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 		
-		axios.post(url, {
-		    img: fullQuality,
-		    userId: userId
-		  })
-		  .then(function (response) {
-			  alert('response=' + response.toString());
-		    console.log(response);
-		  })
-		  .catch(function (error) {
-			 alert('error=' + error.toString());
-		    console.log(error);
-		  });
-    })
+		// json
+		// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+		// let data = {
+		// 	img: img,
+		// 	userId: userId
+		// };
+		
+		// form
+		axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+		let data = new FormData()
+		data.append("img", img)
+		data.append("userId", userId)
+		
+		axios.post(url, data)
+		.then(function (response) {
+			alert('response=' + response.toString());
+			console.log(response);
+		})
+		.catch(function (error) {
+			alert('error=' + error.toString());
+			console.log(error);
+		});
+	}
 	
 	window.onload = function() {
 		if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
