@@ -90,7 +90,8 @@
 			    var CompatibleURL = window.URL || window.webkitURL;
 				alert(CompatibleURL.createObjectURL(stream))
 			    //将视频流设置为video元素的源
-			    video.src = CompatibleURL.createObjectURL(stream);
+			    // video.src = CompatibleURL.createObjectURL(stream);
+				video.srcObject = stream;
 			    //播放视频
 			    video.play();
 			}
