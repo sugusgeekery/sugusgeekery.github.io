@@ -68,7 +68,7 @@
       //video.src = CompatibleURL.createObjectURL(stream);
       video.srcObject = stream;
       video.play();
-	  context.drawImage(stream, 0, 0, width, height);
+	  context.drawImage(video, 0, 0, width, height);
     }
 
     function error(error) {
