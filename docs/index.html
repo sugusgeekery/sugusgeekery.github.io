@@ -16,7 +16,15 @@
   </style>
 </head>
 <body>
-  <video id="video" style="object-fit: cover;" controls>
+  <video id="video" controls preload autoplay>
+	  <source src="https://www.flexclip.com/media/pages/video/home-banner-video.mp4" type="video/mp4"></source>
+	  <!-- <source src="myvideo.ogv" type="video/ogg"></source>
+	  <source src="myvideo.webm" type="video/webm"></source>
+	  <object width="" height="" type="application/x-shockwave-flash" data="myvideo.swf">
+		<param name="movie" value="myvideo.swf" />
+		<param name="flashvars" value="autostart=true&amp;file=myvideo.swf" />
+	  </object>
+	  当前浏览器不支持 video直接播放，点击这里下载视频： <a href="myvideo.webm">下载视频</a> -->
   </video>
   <div>
     <button id="capture">拍照</button>
@@ -49,6 +57,7 @@
     let context = canvas.getContext('2d');
 	video.width = canvas.width = width;
 	video.height = canvas.height = height;
+	
 
     function success(stream) {
       //兼容webkit核心浏览器
@@ -59,22 +68,33 @@
       //video.src = CompatibleURL.createObjectURL(stream);
       video.srcObject = stream;
       video.play();
+	  context.drawImage(stream, 0, 0, width, height);
     }
 
     function error(error) {
       console.log(`访问用户媒体设备失败${error.name}, ${error.message}`);
     }
 
-    if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
-      //调用用户媒体设备, 访问摄像头
-      getUserMedia({video : {width: width, height: height}}, success, error);
-    } else {
-      alert('不支持访问用户媒体');
-    }
+    
 
     document.getElementById('capture').addEventListener('click', function () {
       context.drawImage(video, 0, 0, width, height);      
     })
+	
+	window.onload = function() {
+		if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
+		  //调用用户媒体设备, 访问摄像头
+		  getUserMedia({video : {width: width, height: height}}, success, error);
+		} else {
+		  alert('不支持访问用户媒体');
+		}
+		// video.src = "https://www.flexclip.com/media/pages/video/home-banner-video.mp4";
+		// video.onload = function(e) {
+		// 	console.log(e)
+		// 	video.play();
+		// }
+		
+	}
   </script>
 </body>
 </html>
