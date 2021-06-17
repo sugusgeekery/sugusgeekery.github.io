@@ -21,7 +21,7 @@
 		</style>
 	</head>
 	<body>
-		<div id="app">
+		<!-- <div id="app"> -->
 			<!-- <section v-for="(a, b) in list" :key="a.text">
 				{{ a.text }}
 			</section> -->
@@ -35,32 +35,32 @@
 				<!--描绘video截图-->
 				<canvas id="canvas" width="480" height="320"></canvas>
 			</section>
-		</div>
-		<script src="https://unpkg.com/vue@next"></script>
+		<!-- </div> -->
+		<!-- <script src="https://unpkg.com/vue@next"></script> -->
 		<script>
-			var datas = {
-		        data() {
-					return {
-						message: 'Hello Vue!',
-						list: [
-							{
-								isSelected: false,
-								text: "asdfasfdafsdfasdfasfd"
-							},
-							{
-								isSelected: false,
-								text: "asdfasfdafsdfasdfasfd"
-							},
-							{
-								isSelected: false,
-								text: "asdfasfdafsdfasdfasfd"
-							},
-						]
-					}
-				},
-		        methods: {},
-		    };
-		    var app = Vue.createApp(datas).mount('#app');
+			// var datas = {
+		 //        data() {
+			// 		return {
+			// 			message: 'Hello Vue!',
+			// 			list: [
+			// 				{
+			// 					isSelected: false,
+			// 					text: "asdfasfdafsdfasdfasfd"
+			// 				},
+			// 				{
+			// 					isSelected: false,
+			// 					text: "asdfasfdafsdfasdfasfd"
+			// 				},
+			// 				{
+			// 					isSelected: false,
+			// 					text: "asdfasfdafsdfasdfasfd"
+			// 				},
+			// 			]
+			// 		}
+			// 	},
+		 //        methods: {},
+		 //    };
+		 //    var app = Vue.createApp(datas).mount('#app');
 			
 			
 			//访问用户媒体设备的兼容方法
@@ -88,7 +88,7 @@
 			function success(stream){
 			    //兼容webkit内核浏览器
 			    var CompatibleURL = window.URL || window.webkitURL;
-				alert(CompatibleURL.createObjectURL(stream))
+				alert(stream)
 			    //将视频流设置为video元素的源
 			    // video.src = CompatibleURL.createObjectURL(stream);
 				video.srcObject = stream;
