@@ -7,13 +7,14 @@
   <title>摄像头拍照</title>
 </head>
 <body>
-  <video id="video" width="480" height="320" controls>
+  <video id="video" controls>
   </video>
   <div>
     <button id="capture">拍照</button>
   </div>
-  <canvas id="canvas" width="480" height="320"></canvas>
+  <canvas id="canvas"></canvas>
   <script>
+	
     //访问用户媒体设备的兼容方法
     function getUserMedia(constraints, success, error) {
       if (navigator.mediaDevices.getUserMedia) {
@@ -31,9 +32,14 @@
       }
     }
 
+	
+	let width = window.innerWidth;
+	let height = window.innerHeight;
     let video = document.getElementById('video');
     let canvas = document.getElementById('canvas');
     let context = canvas.getContext('2d');
+	video.width = canvas.width = width;
+	video.height = canvas.height = height;
 
     function success(stream) {
       //兼容webkit核心浏览器
@@ -52,13 +58,13 @@
 
     if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
       //调用用户媒体设备, 访问摄像头
-      getUserMedia({video : {width: 480, height: 320}}, success, error);
+      getUserMedia({video : {width: width, height: height}}, success, error);
     } else {
       alert('不支持访问用户媒体');
     }
 
     document.getElementById('capture').addEventListener('click', function () {
-      context.drawImage(video, 0, 0, 480, 320);      
+      context.drawImage(video, 0, 0, width, height);      
     })
   </script>
 </body>
