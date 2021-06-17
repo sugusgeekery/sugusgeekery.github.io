@@ -168,7 +168,8 @@
     })
 	
 	function sendData(img) {
-		let url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
+		// let url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
+		let url = 'http://developsys.hotpick.com/sys/common/uploadForm';
 		alert('userId=' + userId);
 		alert('url=' + url);
 		
@@ -182,8 +183,9 @@
 		// form
 		axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 		let data = new FormData()
-		data.append("img", img)
-		data.append("userId", userId)
+		data.append("files", img);
+		// data.append("img", img)
+		// data.append("userId", userId)
 		alert('data=' + data.toString());
 		
 		axios.post(url, data)
