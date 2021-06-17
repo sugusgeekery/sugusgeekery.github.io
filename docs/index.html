@@ -99,8 +99,10 @@
 		console.log(fullQuality)
 		img.src = fullQuality;
 		
+		let url = 'http://developsupplierapi.hotpick.com/sys/oauth/loginByFace';
 		alert('userId=' + userId);
-		axios.post('http://developsupplierapi.hotpick.com/sys/oauth/loginByFace', {
+		alert('url=' + url);
+		axios.post(url, {
 		    img: fullQuality,
 		    userId: userId
 		  })
