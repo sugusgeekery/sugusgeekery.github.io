@@ -65,6 +65,57 @@
 	   }
 	   return(false);
 	}
+	
+	function _url2xml2file(url, exportImageType = 0) {
+	    url =
+	      url + (/\?/.test(url) ? "&" : "?") + "timestamp=" + new Date().getTime();
+	    return new Promise((resolve, reject) => {
+	      const xhr = new XMLHttpRequest();
+	      if (!xhr) {
+	        throw new Error("CORS not supported");
+	      }
+	      xhr.open("get", url);
+	      xhr.responseType = "blob";
+	      xhr.onload = function() {
+	        if (this.status == 200) {
+	          if (exportImageType == 1) {
+	            // 导出base64格式
+	            const reader = new FileReader();
+	            reader.readAsDataURL(this.response);
+	            reader.onload = function() {
+	              resolve(this.result);
+	            };
+	          } else {
+	            // 默认导出blobURL格式
+	            resolve(URL.createObjectURL(this.response));
+	          }
+	        } else {
+	          reject();
+	        }
+	      };
+	      // xhr.onloadstart	= function (e) {
+	      //     console.log('开始', e)
+	      // }
+	      // xhr.onprogress = function (e) {
+	      //     console.log('请求中', e)
+	      // }
+	      // xhr.onabort	= function (e) {
+	      //     console.log('打断', e)
+	      // }
+	      xhr.onerror = function(e) {
+	        // console.log('错误', e)
+	        reject(e);
+	      };
+	      xhr.ontimeout = function(e) {
+	        // console.log('超时', e)
+	        reject(e);
+	      };
+	      // xhr.onloadend = function (e) {
+	      //     console.log('加载完成', e)
+	      // }
+	      xhr.send();
+	    });
+	  }
 
 	
 	let width = window.innerWidth;
@@ -107,6 +158,8 @@
 		// Blob
 		canvas.toBlob(function(blob) {
 			const url = window.URL.createObjectURL(blob)
+			alert('bloburl=' + url);
+			alert('blob=' + blob.toString());
 			img.src = url;
 			window.URL.revokeObjectURL(url)
 			sendData(blob);
@@ -131,6 +184,7 @@
 		let data = new FormData()
 		data.append("img", img)
 		data.append("userId", userId)
+		alert('data=' + data.toString());
 		
 		axios.post(url, data)
 		.then(function (response) {
@@ -151,6 +205,10 @@
 		  alert('不支持访问用户媒体');
 		}
 		userId = getQueryVariable("userId");
+		// _url2xml2file("https://www.flexclip.com/media/pages/video/home-banner-video.mp4").then(res => {
+		// 	video.src = res;
+		// })
+		// video.src = "./home-banner-video.mp4";
 		// video.src = "https://www.flexclip.com/media/pages/video/home-banner-video.mp4";
 		// video.onload = function(e) {
 		// 	console.log(e)
