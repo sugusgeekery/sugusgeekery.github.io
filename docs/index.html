@@ -202,7 +202,7 @@
 						//兼容webkit核心浏览器
 						var CompatibleURL = window.URL || window.webkitURL;
 						//将视频流设置为video元素的源
-						alert('stream=', stream);
+						// alert('stream=', stream);
 						console.log('stream=', stream);
 					
 						//video.src = CompatibleURL.createObjectURL(stream);
@@ -273,9 +273,6 @@
 					// var url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
 					// var url = 'http://192.168.0.22:8090/sys/oauth/loginByFace';
 					var url = 'http://120.79.166.92:9001/sys/oauth/loginByFace';
-					alert('userId=' + userId);
-					alert('url=' + url);
-				
 				
 					// json
 					// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -289,20 +286,22 @@
 					var data = new FormData()
 					// data.append("files", file);
 					data.append("img", img);
-					alert('img=' + img.toString());
 					data.append("userId", userId);
-					alert('data=' + data.toString());
 				
 					axios.post(url, data)
 						.then(function(response) {
-							if (response.success === false) {
+							if (response.success) {
+								alert('识别成功');
+								window.close();
+							} else {
 								getData();
 							}
-							alert('response=' + response.toString());
+							// alert('response=' + response.toString());
 							console.log('response=', response);
 						})
 						.catch(function(error) {
-							alert('error=' + error.toString());
+							alert('识别失败');
+							// alert('error=' + error.toString());
 							console.log('error=', error);
 						});
 				}
