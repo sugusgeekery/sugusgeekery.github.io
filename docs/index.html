@@ -138,9 +138,9 @@
 	let img = document.getElementById('img');
     let context = canvas.getContext('2d');
 	let userId = "121";
-	// img.width = width;
+	img.width = width;
 	video.width = width;
-	// canvas.width = width;
+	canvas.width = width;
 	// img.height = height;
 	video.height = height * (1 - 0.5);
 	// canvas.height = height;
@@ -198,7 +198,7 @@
 			alert('blob=' + blob.toString());
 			img.src = url;
 			// window.URL.revokeObjectURL(url)
-			download(url, '123.jpg');
+			// download(url, '123.jpg');
 			sendData(blob);
 		}, "image/jpeg");
 		
@@ -206,7 +206,8 @@
 	
 	function sendData(img) {
 		// let url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
-		let url = 'http://192.168.0.22:8090/sys/oauth/loginByFace';
+		// let url = 'http://192.168.0.22:8090/sys/oauth/loginByFace';
+		let url = 'http://120.79.166.92:9001/sys/oauth/loginByFace'
 		// let url = 'http://developsys.hotpick.com/sys/common/uploadForm';
 		alert('userId=' + userId);
 		alert('url=' + url);
@@ -223,7 +224,7 @@
 		axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 		let data = new FormData()
 		// data.append("files", file);
-		data.append("img", file);
+		data.append("img", img);
 		alert('img=' + img.toString());
 		data.append("userId", userId);
 		alert('data=' + data.toString());
