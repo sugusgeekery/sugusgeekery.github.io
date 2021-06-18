@@ -184,20 +184,21 @@
 		context.drawImage(video, 0, 0, video.width, video.width / video.videoWidth * video.videoHeight);
 		
 		// base64
-		// var base64 = canvas.toDataURL("image/jpeg", 1.0);
-		// img.src = base64;
-		// sendData(base64);
+		var base64 = canvas.toDataURL("image/jpeg", 1.0);
+		img.src = base64;
+		sendData(base64);
+		download(base64, +new Date());
 		
 		// Blob
-		canvas.toBlob(function(blob) {
-			const url = window.URL.createObjectURL(blob)
-			alert('bloburl=' + url);
-			alert('blob=' + blob.toString());
-			img.src = url;
-			// window.URL.revokeObjectURL(url)
-			download(url, +new Date());
-			sendData(blob);
-		}, "image/png");
+		// canvas.toBlob(function(blob) {
+		// 	const url = window.URL.createObjectURL(blob)
+		// 	alert('bloburl=' + url);
+		// 	alert('blob=' + blob.toString());
+		// 	img.src = url;
+		// 	// window.URL.revokeObjectURL(url)
+		// 	download(url, +new Date());
+		// 	sendData(blob);
+		// }, "image/png");
 		
     })
 	
