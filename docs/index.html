@@ -55,10 +55,10 @@
 			>
 			</video>
 			<div id="capture" class="button">开始识别</div>
-			<div id="select" class="button">本地图片</div>
-			<canvas id="canvas"></canvas>
+			<div id="select" class="button" hidden>本地图片</div>
+			<canvas id="canvas" hidden></canvas>
 			<!-- https://www.flexclip.com/media/pages/images/home/benefit02.svg?v=1623050281 -->
-			<img id="img" src="" alt="预览识别图片" />
+			<img id="img" src="" alt="预览识别图片" hidden />
 		</section>
 		<script src="https://unpkg.com/vue@next"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -209,11 +209,13 @@
 						video.srcObject = stream;
 						video.play();
 					}, function error(error) {
-						alert(`访问用户媒体设备失败${error.name}, ${error.message}`);
-						console.log(`访问用户媒体设备失败${error.name}, ${error.message}`);
+						// alert('访问用户媒体设备失败' + error.name + ', ' + error.message);
+						setHtmlText('访问用户媒体设备');
+						console.log('访问用户媒体设备失败' + error.name + ', ' + error.message);
 					});
 				} else {
-					alert('不支持访问用户媒体');
+					// alert('不支持访问用户媒体');
+					setHtmlText('不支持访问用户媒体');
 					console.log('不支持访问用户媒体');
 				}
 				
@@ -272,6 +274,10 @@
 				}
 				
 				var num = 0;
+				// 设置界面提示
+				function setHtmlText(text) {
+					document.getElementById('capture').innerText = text;
+				}
 				// 发送图片进行识别
 				function sendData(img) {
 					// var url = 'http://developsys.hotpick.com/sys/common/uploadForm';
@@ -294,26 +300,36 @@
 					// data.append("userId", userId);
 				
 					num++;
-					alert("识别第" + num + "次")
+					// alert("识别第" + num + "次")
+					setHtmlText("识别第" + num + "次");
 					axios.post(url, data)
 						.then(function(response) {
 							if (response.data.success) {
-								alert('识别成功');
+								// alert('识别成功');
+								setHtmlText("识别成功");
 								num = 0;
 								window.close();
 							} else {
-								getData();
+								setTimeout(function(){
+									getData();
+								}, 2000);
 							}
 							// alert('response=' + response.toString());
 							console.log('response=', response);
 						})
 						.catch(function(error) {
-							alert('识别失败');
+							// alert('识别失败');
+							setHtmlText("识别失败");
 							num = 0;
 							// alert('error=' + error.toString());
 							console.log('error=', error);
 						});
 				}
+				
+				setTimeout(function(){
+					setHtmlText("识别中");
+					getData();
+				}, 2000);
 			}
 		</script>
 	</body>
