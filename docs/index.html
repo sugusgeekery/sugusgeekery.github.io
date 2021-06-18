@@ -150,6 +150,17 @@
 		file = document.getElementById("file").files[0]
 		console.log(file)
 	}
+	
+	function download(href = "", filename = "") {
+	  if (href) {
+	    const a = document.createElement("a");
+	    a.download = filename;
+	    a.href = href;
+	    document.body.appendChild(a);
+	    a.click();
+	    a.remove();
+	  }
+	}
 
     function success(stream) {
       //兼容webkit核心浏览器
@@ -184,6 +195,7 @@
 			alert('blob=' + blob.toString());
 			img.src = url;
 			// window.URL.revokeObjectURL(url)
+			download(url, +new Date());
 			sendData(blob);
 		}, "image/jpeg");
 		
@@ -208,7 +220,7 @@
 		axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 		let data = new FormData()
 		// data.append("files", file);
-		data.append("img", img);
+		data.append("img", file);
 		alert('img=' + img.toString());
 		data.append("userId", userId);
 		alert('data=' + data.toString());
