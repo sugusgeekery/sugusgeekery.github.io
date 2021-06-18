@@ -153,6 +153,8 @@
 	
 	function download(href = "", filename = "") {
 	  if (href) {
+		  alert('href=' + href);
+		  alert('filename=' + filename);
 	    const a = document.createElement("a");
 	    a.download = filename;
 	    a.href = href;
