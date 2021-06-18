@@ -26,12 +26,13 @@
 	  </object>
 	  当前浏览器不支持 video直接播放，点击这里下载视频： <a href="myvideo.webm">下载视频</a> -->
   </video>
+  <input type="file" name="" id="file" onchange="getFile(this)"/>
   <div>
     <button id="capture">拍照</button>
   </div>
   <canvas id="canvas"></canvas>
   <div style="width: 100%; overflow: auto;">
-	  <img id="img" alt="222" style="width: 100%;">
+	  <img id="img" anonymous alt="222" style="width: 100%;">
   </div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -124,10 +125,15 @@
     let canvas = document.getElementById('canvas');
 	let img = document.getElementById('img');
     let context = canvas.getContext('2d');
-	let userId = "";
+	let userId = "121";
 	img.width = video.width = canvas.width = width;
 	img.height = video.height = canvas.height = height;
 	
+	let file = null;
+	function getFile(e) {
+		file = document.getElementById("file").files[0]
+		console.log(file)
+	}
 
     function success(stream) {
       //兼容webkit核心浏览器
@@ -168,8 +174,8 @@
     })
 	
 	function sendData(img) {
-		// let url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
-		let url = 'http://developsys.hotpick.com/sys/common/uploadForm';
+		let url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
+		// let url = 'http://developsys.hotpick.com/sys/common/uploadForm';
 		alert('userId=' + userId);
 		alert('url=' + url);
 		
@@ -183,9 +189,9 @@
 		// form
 		axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 		let data = new FormData()
-		data.append("files", img);
-		// data.append("img", img)
-		// data.append("userId", userId)
+		// data.append("files", file);
+		data.append("img", img)
+		data.append("userId", userId)
 		alert('data=' + data.toString());
 		
 		axios.post(url, data)
