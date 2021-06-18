@@ -228,6 +228,9 @@
 					var file = e.target.files[0];
 					fileByBase64(file, function(base64){
 						console.log('base64=', base64);
+						var b = base64.replace(/^data:image\/\w+;base64,/, "");
+						console.log(b, base64)
+						sendData(b);
 						base64ByBlob(base64, function(blob){
 							console.log('blob=', blob);
 							var url = window.URL.createObjectURL(blob);
@@ -251,7 +254,8 @@
 					// base64
 					var base64 = canvas.toDataURL("image/jpeg", 1.0);
 					img.src = base64;
-					sendData(base64);
+					var b = base64.replace(/^data:image\/\w+;base64,/, "");
+					sendData(b);
 					// download(base64, '123.jpg');
 				
 					// Blob
@@ -276,24 +280,24 @@
 					// var url = 'http://120.79.166.92:9001/sys/oauth/loginByFace';
 				
 					// json
-					// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-					// var data = {
-					// 	img: img,
-					// 	userId: userId
-					// };
+					axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+					var data = {
+						img: img,
+						userId: userId
+					};
 				
 					// form
-					axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
-					var data = new FormData()
-					// data.append("files", file);
-					data.append("img", img);
-					data.append("userId", userId);
+					// axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+					// var data = new FormData()
+					// // data.append("files", file);
+					// data.append("img", img);
+					// data.append("userId", userId);
 				
 					num++;
 					alert("识别第" + num + "次")
 					axios.post(url, data)
 						.then(function(response) {
-							if (response.success) {
+							if (response.data.success) {
 								alert('识别成功');
 								num = 0;
 								window.close();
