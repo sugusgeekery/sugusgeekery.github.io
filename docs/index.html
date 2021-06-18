@@ -187,7 +187,7 @@
 		var base64 = canvas.toDataURL("image/jpeg", 1.0);
 		img.src = base64;
 		sendData(base64);
-		download(base64);
+		download(base64, '123.jpg');
 		
 		// Blob
 		// canvas.toBlob(function(blob) {
