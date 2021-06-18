@@ -179,6 +179,7 @@
 		alert('userId=' + userId);
 		alert('url=' + url);
 		
+		
 		// json
 		// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 		// let data = {
@@ -190,8 +191,9 @@
 		axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 		let data = new FormData()
 		// data.append("files", file);
-		data.append("img", img)
-		data.append("userId", userId)
+		data.append("img", img);
+		alert('img=' + img.toString());
+		data.append("userId", userId);
 		alert('data=' + data.toString());
 		
 		axios.post(url, data)
