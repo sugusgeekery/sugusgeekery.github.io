@@ -16,7 +16,19 @@
   </style>
 </head>
 <body>
-  <video id="video" controls style="position:relative;top:0;left:0;width: 100%;object-fit: cover;">
+  <video id="video" 
+	controls 
+	controlslist="nodownload" 
+	disablePictureInPicture 
+	x5-video-player-type='h5'
+	x5-video-player-fullscreen='true' 
+	playsinline 
+	webkit-playsinline 
+	x-webkit-airplay="allow" 
+	x5-video-orientation="portraint"
+	poster=""
+	style="position:relative;top:0;left:0;width: 100%;object-fit: fill;"
+	>
 	  <!-- <source src="https://www.flexclip.com/media/pages/video/home-banner-video.mp4" type="video/mp4"></source> -->
 	  <!-- <source src="myvideo.ogv" type="video/ogg"></source>
 	  <source src="myvideo.webm" type="video/webm"></source>
@@ -126,8 +138,12 @@
 	let img = document.getElementById('img');
     let context = canvas.getContext('2d');
 	let userId = "121";
-	img.width = video.width = canvas.width = width;
-	img.height = video.height = canvas.height = height;
+	img.width = width;
+	video.width = width;
+	canvas.width = width;
+	img.height = height;
+	video.height = height;
+	canvas.height = height;
 	
 	let file = null;
 	function getFile(e) {
