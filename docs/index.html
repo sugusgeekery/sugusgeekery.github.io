@@ -208,6 +208,11 @@
 						//video.src = CompatibleURL.createObjectURL(stream);
 						video.srcObject = stream;
 						video.play();
+						
+						setTimeout(function(){
+							setHtmlText("识别中");
+							getData();
+						}, 3000);
 					}, function error(error) {
 						// alert('访问用户媒体设备失败' + error.name + ', ' + error.message);
 						setHtmlText('访问用户媒体设备');
@@ -243,7 +248,7 @@
 				})
 
 				// 触发拍照
-				document.getElementById('capture').addEventListener('click', getData)
+				// document.getElementById('capture').addEventListener('click', getData)
 				
 				// 获取拍照图片
 				function getData() {
@@ -325,11 +330,6 @@
 							console.log('error=', error);
 						});
 				}
-				
-				setTimeout(function(){
-					setHtmlText("识别中");
-					getData();
-				}, 3000);
 			}
 		</script>
 	</body>
