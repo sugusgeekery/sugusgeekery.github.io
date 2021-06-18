@@ -1,264 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>摄像头拍照</title>
-  <style type="text/css">
-  	html, body {
-  		margin: 0;
-  		padding: 0;
-  		background: #FFFFFF;
-  		color: #B1B1B1;
-  		font-size: 16px;
-  	}
-  </style>
-</head>
-<body>
-  <video id="video" 
-	controls 
-	controlslist="nodownload" 
-	disablePictureInPicture 
-	x5-video-player-type='h5'
-	x5-video-player-fullscreen='true' 
-	playsinline 
-	webkit-playsinline 
-	x-webkit-airplay="allow" 
-	x5-video-orientation="portraint"
-	poster=""
-	style="position:relative;top:0;left:0;width: 100%;object-fit: cover;"
-	>
-	  <!-- <source src="https://www.flexclip.com/media/pages/video/home-banner-video.mp4" type="video/mp4"></source> -->
-	  <!-- <source src="myvideo.ogv" type="video/ogg"></source>
-	  <source src="myvideo.webm" type="video/webm"></source>
-	  <object width="" height="" type="application/x-shockwave-flash" data="myvideo.swf">
-		<param name="movie" value="myvideo.swf" />
-		<param name="flashvars" value="autostart=true&amp;file=myvideo.swf" />
-	  </object>
-	  当前浏览器不支持 video直接播放，点击这里下载视频： <a href="myvideo.webm">下载视频</a> -->
-  </video>
-  <input type="file" name="" id="file" onchange="getFile(this)"/>
-  <div>
-    <button id="capture">拍照</button>
-  </div>
-  <canvas id="canvas"></canvas>
-  <div style="width: 100%; overflow: auto;">
-	  <img id="img" anonymous alt="222" style="width: 100%;">
-  </div>
-  <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script>
-	
-    //访问用户媒体设备的兼容方法
-    function getUserMedia(constraints, success, error) {
-      if (navigator.mediaDevices.getUserMedia) {
-        //最新的标准API
-        navigator.mediaDevices.getUserMedia(constraints).then(success).catch(error);
-      } else if (navigator.webkitGetUserMedia) {
-        //webkit核心浏览器
-        navigator.webkitGetUserMedia(constraints,success, error)
-      } else if (navigator.mozGetUserMedia) {
-        //firfox浏览器
-        navigator.mozGetUserMedia(constraints, success, error);
-      } else if (navigator.getUserMedia) {
-        //旧版API
-        navigator.getUserMedia(constraints, success, error);
-      }
-    }
-	
-	function getQueryVariable(variable) {
-	   var query = window.location.search.substring(1);
-	   var vars = query.split("&");
-	   for (var i=0;i<vars.length;i++) {
-			var pair = vars[i].split("=");
-			if(pair[0] == variable){
-			   return pair[1];
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>人脸识别</title>
+		<style type="text/css">
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				background: #FFFFFF;
+				color: #B1B1B1;
+				font-size: 16px;
 			}
-	   }
-	   return(false);
-	}
-	
-	function _url2xml2file(url, exportImageType = 0) {
-	    url =
-	      url + (/\?/.test(url) ? "&" : "?") + "timestamp=" + new Date().getTime();
-	    return new Promise((resolve, reject) => {
-	      const xhr = new XMLHttpRequest();
-	      if (!xhr) {
-	        throw new Error("CORS not supported");
-	      }
-	      xhr.open("get", url);
-	      xhr.responseType = "blob";
-	      xhr.onload = function() {
-	        if (this.status == 200) {
-	          if (exportImageType == 1) {
-	            // 导出base64格式
-	            const reader = new FileReader();
-	            reader.readAsDataURL(this.response);
-	            reader.onload = function() {
-	              resolve(this.result);
-	            };
-	          } else {
-	            // 默认导出blobURL格式
-	            resolve(URL.createObjectURL(this.response));
-	          }
-	        } else {
-	          reject();
-	        }
-	      };
-	      // xhr.onloadstart	= function (e) {
-	      //     console.log('开始', e)
-	      // }
-	      // xhr.onprogress = function (e) {
-	      //     console.log('请求中', e)
-	      // }
-	      // xhr.onabort	= function (e) {
-	      //     console.log('打断', e)
-	      // }
-	      xhr.onerror = function(e) {
-	        // console.log('错误', e)
-	        reject(e);
-	      };
-	      xhr.ontimeout = function(e) {
-	        // console.log('超时', e)
-	        reject(e);
-	      };
-	      // xhr.onloadend = function (e) {
-	      //     console.log('加载完成', e)
-	      // }
-	      xhr.send();
-	    });
-	  }
+			video {
+				width: 100%;
+				object-fit: cover;
+			}
+			canvas,
+			img {
+				width: 100%;
+			}
+			.button {
+				padding: 18px;
+				margin: 40px 80px;
+				border-radius: 4px;
+				background: #3A78F4;
+				color: white;
+				text-align: center;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<section>
+			<input id="file" type="file" hidden />
+			<!-- https://www.flexclip.com/media/pages/video/home-banner-video.mp4?v=1623050291 -->
+			<video 
+				id="video" 
+				controls
+				preload="auto"
+				autoplay="autoplay"
+				controlslist="nodownload" 
+				disablePictureInPicture 
+				playsinline
+				webkit-playsinline 
+				x-webkit-airplay="allow"
+				x5-video-player-type='h5'
+				x5-video-player-fullscreen='true' 
+				x5-video-orientation="portraint"
+				poster=""
+				src=""
+			>
+			</video>
+			<div id="capture" class="button">拍照</div>
+			<div id="select" class="button">图片</div>
+			<canvas id="canvas"></canvas>
+			<!-- https://www.flexclip.com/media/pages/images/home/benefit02.svg?v=1623050281 -->
+			<img id="img" src="" alt="预览识别图片" />
+		</section>
+		<script src="https://unpkg.com/vue@next"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script>
+			//访问用户媒体设备的兼容方法
+			function getUserMedia(constraints, success, error) {
+				if (navigator.mediaDevices.getUserMedia) {
+					//最新的标准API
+					navigator.mediaDevices.getUserMedia(constraints).then(success).catch(error);
+				} else if (navigator.webkitGetUserMedia) {
+					//webkit核心浏览器
+					navigator.webkitGetUserMedia(constraints, success, error)
+				} else if (navigator.mozGetUserMedia) {
+					//firfox浏览器
+					navigator.mozGetUserMedia(constraints, success, error);
+				} else if (navigator.getUserMedia) {
+					//旧版API
+					navigator.getUserMedia(constraints, success, error);
+				}
+			}
 
-	
-	let width = window.innerWidth;
-	let height = window.innerHeight;
-    let video = document.getElementById('video');
-    let canvas = document.getElementById('canvas');
-	let img = document.getElementById('img');
-    let context = canvas.getContext('2d');
-	let userId = "121";
-	img.width = width;
-	video.width = width;
-	canvas.width = width;
-	// img.height = height;
-	video.height = width;
-	// canvas.height = height;
-	
-	let file = null;
-	function getFile(e) {
-		file = document.getElementById("file").files[0]
-		console.log(file)
-	}
-	
-	function download(href = "", filename = "") {
-	  if (href) {
-		  alert('href=' + href);
-		  alert('filename=' + filename);
-	    const a = document.createElement("a");
-	    a.download = filename;
-	    a.href = href;
-	    document.body.appendChild(a);
-	    a.click();
-	    a.remove();
-	  }
-	}
+			// 获取页面传参字段值
+			function getQueryVariable(variable) {
+				var query = window.location.search.substring(1);
+				var vars = query.split("&");
+				for (var i = 0; i < vars.length; i++) {
+					var pair = vars[i].split("=");
+					if (pair[0] == variable) {
+						return pair[1];
+					}
+				}
+				return (false);
+			}
+			
+			// file转base64
+			function fileByBase64(file, callback) {
+			  var reader = new FileReader();
+			  reader.readAsDataURL(file);
+			  reader.onload = function (e) {
+			    callback(e.target.result)
+			  };
+			}
+			
+			// base64转blob
+			function base64ByBlob (base64, callback) {
+				var arr = base64.split(','), 
+						mime = arr[0].match(/:(.*?);/)[1],
+						bstr = atob(arr[1]), 
+						n = bstr.length, 
+						u8arr = new Uint8Array(n);
+				while (n--) {
+					u8arr[n] = bstr.charCodeAt(n);
+				}
+				callback(new Blob([u8arr], { type: mime }))
+			}
 
-    function success(stream) {
-      //兼容webkit核心浏览器
-      let CompatibleURL = window.URL || window.webkitURL;
-      //将视频流设置为video元素的源
-      console.log(stream);
+			// 外网图片路径转成文件资源
+			function _url2xml2file(url, exportImageType = 0) {
+				url =
+					url + (/\?/.test(url) ? "&" : "?") + "timestamp=" + new Date().getTime();
+				return new Promise((resolve, reject) => {
+					const xhr = new XMLHttpRequest();
+					if (!xhr) {
+						throw new Error("CORS not supported");
+					}
+					xhr.open("get", url);
+					xhr.responseType = "blob";
+					xhr.onload = function() {
+						if (this.status == 200) {
+							if (exportImageType == 1) {
+								// 导出base64格式
+								const reader = new FileReader();
+								reader.readAsDataURL(this.response);
+								reader.onload = function() {
+									resolve(this.result);
+								};
+							} else {
+								// 默认导出blobURL格式
+								resolve(URL.createObjectURL(this.response));
+							}
+						} else {
+							reject();
+						}
+					};
+					// xhr.onloadstart	= function (e) {
+					//     console.log('开始', e)
+					// }
+					// xhr.onprogress = function (e) {
+					//     console.log('请求中', e)
+					// }
+					// xhr.onabort	= function (e) {
+					//     console.log('打断', e)
+					// }
+					xhr.onerror = function(e) {
+						// console.log('错误', e)
+						reject(e);
+					};
+					xhr.ontimeout = function(e) {
+						// console.log('超时', e)
+						reject(e);
+					};
+					// xhr.onloadend = function (e) {
+					//     console.log('加载完成', e)
+					// }
+					xhr.send();
+				});
+			}
 
-      //video.src = CompatibleURL.createObjectURL(stream);
-      video.srcObject = stream;
-      video.play();
-    }
+			// 下载文件
+			function download(href = "", filename = "") {
+				if (href) {
+					const a = document.createElement("a");
+					a.download = filename;
+					a.href = href;
+					document.body.appendChild(a);
+					a.click();
+					a.remove();
+				}
+			}
 
-    function error(error) {
-      console.log(`访问用户媒体设备失败${error.name}, ${error.message}`);
-    }
+			// 页面加载完触发
+			window.onload = function() {
+				var width = window.innerWidth;
+				var height = window.innerHeight;
+				var video = document.getElementById('video');
+				var canvas = document.getElementById('canvas');
+				var img = document.getElementById('img');
+				var context = canvas.getContext('2d');
+				var userId = getQueryVariable("userId");
+				video.width = width;
+				video.height = width;
+				
+				if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
+					//调用用户媒体设备, 访问摄像头
+					getUserMedia({
+						video: {
+							width: width,
+							height: height
+						}
+					}, function success(stream) {
+						//兼容webkit核心浏览器
+						var CompatibleURL = window.URL || window.webkitURL;
+						//将视频流设置为video元素的源
+						alert('stream=', stream);
+						console.log('stream=', stream);
+					
+						//video.src = CompatibleURL.createObjectURL(stream);
+						video.srcObject = stream;
+						video.play();
+					}, function error(error) {
+						alert(`访问用户媒体设备失败${error.name}, ${error.message}`);
+						console.log(`访问用户媒体设备失败${error.name}, ${error.message}`);
+					});
+				} else {
+					alert('不支持访问用户媒体');
+					console.log('不支持访问用户媒体');
+				}
+				
+				// 选择本地图片
+				document.getElementById('select').addEventListener('click', function() {
+					var el = document.getElementById("file");
+					el.click();
+					el.value = "";
+				})
+				// 获取本地图片
+				document.getElementById('file').addEventListener('change', function(e) {
+					var file = e.target.files[0];
+					fileByBase64(file, function(base64){
+						console.log('base64=', base64);
+						base64ByBlob(base64, function(blob){
+							console.log('blob=', blob);
+							var url = window.URL.createObjectURL(blob);
+							console.log('url=', url);
+						})
+					})
+					// sendData(file);
+				})
 
-    
-
-    document.getElementById('capture').addEventListener('click', function () {
-		console.log(width, height,video.width, video.height, video.videoWidth, video.videoHeight)
-		context.drawImage(video, 0, 0, video.width, video.width / video.videoWidth * video.videoHeight);
-		
-		// base64
-		// var base64 = canvas.toDataURL("image/jpeg", 1.0);
-		// img.src = base64;
-		// sendData(base64);
-		// download(base64, '123.jpg');
-		
-		// Blob
-		canvas.toBlob(function(blob) {
-			const url = window.URL.createObjectURL(blob)
-			alert('bloburl=' + url);
-			alert('blob=' + blob.toString());
-			img.src = url;
-			// window.URL.revokeObjectURL(url)
-			// download(url, '123.jpg');
-			sendData(blob);
-		}, "image/jpeg");
-		
-    })
-	
-	function sendData(img) {
-		// let url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
-		// let url = 'http://192.168.0.22:8090/sys/oauth/loginByFace';
-		let url = 'http://120.79.166.92:9001/sys/oauth/loginByFace'
-		// let url = 'http://developsys.hotpick.com/sys/common/uploadForm';
-		alert('userId=' + userId);
-		alert('url=' + url);
-		
-		
-		// json
-		// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-		// let data = {
-		// 	img: img,
-		// 	userId: userId
-		// };
-		
-		// form
-		axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
-		let data = new FormData()
-		// data.append("files", file);
-		data.append("img", img);
-		alert('img=' + img.toString());
-		data.append("userId", userId);
-		alert('data=' + data.toString());
-		
-		axios.post(url, data)
-		.then(function (response) {
-			alert('response=' + response.toString());
-			console.log(response);
-		})
-		.catch(function (error) {
-			alert('error=' + error.toString());
-			console.log(error);
-		});
-	}
-	
-	window.onload = function() {
-		if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
-		  //调用用户媒体设备, 访问摄像头
-		  getUserMedia({video : {width: width, height: height}}, success, error);
-		} else {
-		  alert('不支持访问用户媒体');
-		}
-		userId = getQueryVariable("userId");
-		// _url2xml2file("https://www.flexclip.com/media/pages/video/home-banner-video.mp4").then(res => {
-		// 	video.src = res;
-		// })
-		// video.src = "./home-banner-video.mp4";
-		// video.src = "https://www.flexclip.com/media/pages/video/home-banner-video.mp4";
-		// video.onload = function(e) {
-		// 	console.log(e)
-		// 	video.play();
-		// }
-		
-	}
-  </script>
-</body>
+				// 触发拍照
+				document.getElementById('capture').addEventListener('click', getData)
+				
+				// 获取拍照图片
+				function getData() {
+					var canvasWidth = video.width;
+					var canvasHeight = video.width / video.videoWidth * video.videoHeight;
+					canvas.width = canvasWidth;
+					canvas.height = canvasHeight;
+					context.drawImage(video, 0, 0, canvasWidth, canvasHeight);
+				
+					// base64
+					// var base64 = canvas.toDataURL("image/jpeg", 1.0);
+					// img.src = base64;
+					// sendData(base64);
+					// download(base64, '123.jpg');
+				
+					// Blob
+					canvas.toBlob(function(blob) {
+						const url = window.URL.createObjectURL(blob)
+						alert('bloburl=' + url);
+						alert('blob=' + blob.toString());
+						img.src = url;
+						// window.URL.revokeObjectURL(url)
+						// download(url, '123.jpg');
+						sendData(blob);
+					}, "image/jpeg");
+				
+				}
+				
+				// 发送图片进行识别
+				function sendData(img) {
+					// var url = 'http://developsys.hotpick.com/sys/common/uploadForm';
+					// var url = 'http://developsys.hotpick.com/sys/oauth/loginByFace';
+					// var url = 'http://192.168.0.22:8090/sys/oauth/loginByFace';
+					var url = 'http://120.79.166.92:9001/sys/oauth/loginByFace';
+					alert('userId=' + userId);
+					alert('url=' + url);
+				
+				
+					// json
+					// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+					// var data = {
+					// 	img: img,
+					// 	userId: userId
+					// };
+				
+					// form
+					axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+					var data = new FormData()
+					// data.append("files", file);
+					data.append("img", img);
+					alert('img=' + img.toString());
+					data.append("userId", userId);
+					alert('data=' + data.toString());
+				
+					axios.post(url, data)
+						.then(function(response) {
+							if (response.success === false) {
+								getData();
+							}
+							alert('response=' + response.toString());
+							console.log('response=', response);
+						})
+						.catch(function(error) {
+							alert('error=' + error.toString());
+							console.log('error=', error);
+						});
+				}
+			}
+		</script>
+	</body>
 </html>
