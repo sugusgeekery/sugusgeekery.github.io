@@ -267,6 +267,7 @@
 				
 				}
 				
+				var num = 0;
 				// 发送图片进行识别
 				function sendData(img) {
 					// var url = 'http://developsys.hotpick.com/sys/common/uploadForm';
@@ -288,10 +289,13 @@
 					data.append("img", img);
 					data.append("userId", userId);
 				
+					num++;
+					alert("识别第" + num + "次")
 					axios.post(url, data)
 						.then(function(response) {
 							if (response.success) {
 								alert('识别成功');
+								num = 0;
 								window.close();
 							} else {
 								getData();
@@ -301,6 +305,7 @@
 						})
 						.catch(function(error) {
 							alert('识别失败');
+							num = 0;
 							// alert('error=' + error.toString());
 							console.log('error=', error);
 						});
